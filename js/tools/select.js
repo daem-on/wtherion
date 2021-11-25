@@ -160,6 +160,11 @@ pg.tools.select = function() {
 			type: 'button',
 			label: 'Text to outlines',
 			click: 'pg.text.convertSelectionToOutlines'
+		},
+		lineTypeTest: {
+			type: 'button',
+			label: 'Changle line type',
+			click: 'pg.editTH2.lineTypeTest'
 		}
 	};
 

@@ -54,8 +54,17 @@ pg.tools.detailselect = function() {
 			type: 'button',
 			label: 'Split path',
 			click: 'pg.selection.splitPathAtSelectedSegments'
-		}
-		
+		},
+		test3: {
+			type: 'button',
+			label: 'Subtype test',
+			click: 'pg.editTH2.subtypeTest'
+		},
+		test4: {
+			type: 'button',
+			label: 'Clear subtype',
+			click: 'pg.editTH2.clearSubtype'
+		},
 	};
 
 	var activateTool = function() {		

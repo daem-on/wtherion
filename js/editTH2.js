@@ -40,5 +40,15 @@ pg.editTH2 = {
 	setupData: function(item) {
 		if (!("therionData" in item.data))
 			item.data.therionData = {};
-	}
+	},
+
+	createPoint: function() {
+		var circle = new paper.Shape.Circle({
+			center: new paper.Point(10, 10),
+			radius: 10,
+			fillColor: 'red'
+		});
+		circle.data.noDrawHandle = true;
+		// circle.selectedColor = "white";
+	},
 }

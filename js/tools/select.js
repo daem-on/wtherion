@@ -23,6 +23,7 @@ pg.tools.select = function() {
 	var boundsPath;
 	var boundsScaleHandles = [];
 	var boundsRotHandles = [];
+	var thPointRotHandle = null;
 	 
 	var options = {};
 	
@@ -216,7 +217,10 @@ pg.tools.select = function() {
 					
 				} else if(hitResult.item.data && hitResult.item.data.isRotHandle) {
 					mode = 'rotate';
-					rotGroupPivot = boundsPath.bounds.center;
+					if (boundsPath)
+						rotGroupPivot = boundsPath.bounds.center;
+					else
+						rotGroupPivot = pg.selection.getSelectedItems()[0].position;
 					rotItems = pg.selection.getSelectedItems();
 					
 					jQuery.each(rotItems, function(i, item) {
@@ -477,6 +481,29 @@ pg.tools.select = function() {
 		var items = pg.selection.getSelectedItems();
 		if(items.length <= 0) return;
 		
+		if (items.some(function(item) {
+			return (item.data && item.data.noDrawHandle)
+		})) {
+			thPointRotHandle =
+				new paper.Path.Line({
+					data: {
+						isRotHandle: true,
+						isHelperItem: true,
+						noSelect: true,
+						noHover: true
+					},
+					from: items[0].position + new paper.Point(0, 15),
+					to: items[0].position + new paper.Point(0, 60),
+					strokeColor: pg.guides.getGuideColor('blue'),
+					strokeWidth: 2 / paper.view.zoom,
+					parent: pg.layer.getGuideLayer()
+				});
+			thPointRotHandle.rotate(items[0].rotation, items[0].position);
+			// thPointRotHandle
+			// console.log(thPointRotHandle);
+			return;
+		}
+
 		var rect;
 		jQuery.each(items, function(index, item) {
 			if(rect) {

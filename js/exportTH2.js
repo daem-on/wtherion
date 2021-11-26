@@ -1,5 +1,7 @@
 function toGlobal(global, local= [0, 0]) {
-	return `${global[0]+local[0]} ${-(global[1]+local[1])}`
+	x = Math.round((global[0]+local[0])*100)/100;
+	y = -Math.round((global[1]+local[1])*100)/100;
+	return `${x} ${y}`
 }
 
 _exportText = ""
@@ -7,61 +9,100 @@ function logText(...data) {
 	_exportText += data.join(" ") + "\n";
 }
 
-exportTh2 = function () {
-	_exportText = ""
-	data = paper.project.exportJSON({asString: false});
+var exporterTh2 = {
+	exportTh2: function() {
+		_exportText = ""
 
-	items = data[0][1].children;
-
-	for (item of items) {
-		if (item[0] == "Path") {
-			segments = item[1].segments;
-			if (segments.length == 0) continue;
-
-			var settings = "";
-			var segmentOptions = {};
-			if (item[1].data && "therionData" in item[1].data) {
-				thData = item[1].data.therionData;
-				if ("lineType" in thData)
-					settings += thData.lineType;
-				if ("segmentOptions" in thData)
-					segmentOptions = thData.segmentOptions;
+		//prepare items
+		for (item of paper.project.getItems({className:"Shape"})) {
+			if (item.className == "Shape" && item.data && item.data.therionData) {
+				var rot = item.rotation % 360;
+	
+				if (rot < 0) rot += 360;
+				item.data.therionData.rotation = rot;
 			}
-			logText("line " + settings);
-			
-			if (item[1].closed) logText("close on");
+		}
+	
+		data = paper.project.exportJSON({asString: false, precision: 2});
+	
+		items = data[0][1].children;
+	
+		for (item of items) {
+			if (item[0] == "Path") {
+				this.processLine(item[1])
+			} else if (item[0] == "CompoundPath") {
+				this.processCompoundPath(item[1])
+			} else if (item[0] == "Shape") {
+				this.processShape(item[1])
+			}
+		}
+	
+		console.log(_exportText);
+	},
 
-			firstPrinted = false;
-			prevControlPoint = "";
-			for ([index, segment] of segments.entries()) {
-				var isCurved = (segment.length >= 3);
+	processLine: function(item) {
+		segments = item.segments;
+		if (segments.length == 0) return;
 
-				if (!firstPrinted) {
-					logText(toGlobal(isCurved ? segment[0] : segment));
-					firstPrinted = true;
-				}
-				else isCurved ? logText(
-					prevControlPoint,
-					toGlobal(segment[0], segment[1]),
-					toGlobal(segment[0])
-				) : logText(
-					toGlobal(segment)
-				);
+		var settings = "";
+		var segmentOptions = {};
+		if (item.data && "therionData" in item.data) {
+			thData = item.data.therionData;
+			if ("lineType" in thData)
+				settings += thData.lineType;
+			if ("segmentOptions" in thData)
+				segmentOptions = thData.segmentOptions;
+		}
+		logText("line " + settings);
+		
+		if (item.closed) logText("close on");
 
-				if (index in segmentOptions) {
-					logText(segmentOptions[index]);
-				}
+		var firstPrinted = false;
+		var prevControlPoint = "";
+		var firstOutput
+		for ([index, segment] of segments.entries()) {
+			var isCurved = (segment.length >= 3);
 
-				prevControlPoint = isCurved ?
-					toGlobal(segment[0], segment[2])
-					: toGlobal(segment);
+			if (!firstPrinted) {
+				firstOutput = toGlobal(isCurved ? segment[0] : segment)
+				logText(firstOutput);
+				firstPrinted = true;
+			}
+			else isCurved ? logText(
+				prevControlPoint,
+				toGlobal(segment[0], segment[1]),
+				toGlobal(segment[0])
+			) : logText(
+				toGlobal(segment)
+			);
+
+			if (index in segmentOptions) {
+				logText(segmentOptions[index]);
 			}
 
-			logText("endline")
-		} else if (item[0] == "CompoundPath") {
-			items.concat(item[1].children);
+			prevControlPoint = isCurved ?
+				toGlobal(segment[0], segment[2])
+				: toGlobal(segment);
+		}
+
+		if (item.closed) logText(firstOutput);
+		logText("endline")
+	},
+
+	processCompoundPath: function(item) {
+		for (child of item.children)
+			this.processLine(child);
+	},
+
+	processShape: function(item) {
+		var shape = item;
+		if (shape.data && "therionData" in shape.data) {
+			logText(
+				"point",
+				toGlobal(shape.matrix.slice(4, 6)),
+				shape.data.therionData.pointSettings,
+				"-orient", shape.data.therionData.rotation
+			);
 		}
 	}
-
-	console.log(_exportText);
 }

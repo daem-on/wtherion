@@ -249,7 +249,9 @@ pg.selection = function() {
 		var selectedItems = getSelectedItems();
 		for(var i = 0; i < selectedItems.length; i++) {
 			var item = selectedItems[i];
-			item.clone();
+			var cloned = item.clone();
+			if (item.data && item.data.therionData)
+				cloned.data = JSON.parse(JSON.stringify(item.data))
 			item.selected = false;
 		}
 		pg.undo.snapshot('cloneSelection');

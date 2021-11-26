@@ -6,6 +6,7 @@ pg.editTH2 = {
 			item.data.therionData.lineType =
 				prompt("Type", "wall");
 		}
+		pg.undo.snapshot('setLineType');
 	},
 
 	subtypeTest: function() {
@@ -22,6 +23,19 @@ pg.editTH2 = {
 						"subtype " + prompt("Subtype", "sand");
 			}
 		}
+		pg.undo.snapshot('setSubtype');
+	},
+
+	pointSettings: function() {
+		var items = pg.selection.getSelectedItems();
+		for (var item of items) {
+			if (item.className != "Shape") continue;
+			this.setupData(item);
+
+			thData = item.data.therionData;
+			thData.pointSettings = prompt("Point settings", thData.pointSettings)
+		}
+		pg.undo.snapshot('setPointSettings');
 	},
 
 	clearSubtype: function() {
@@ -35,6 +49,7 @@ pg.editTH2 = {
 					delete opt[segment.index];
 			}
 		}
+		pg.undo.snapshot('clearSubtype');
 	},
 
 	setupData: function(item) {
@@ -49,6 +64,7 @@ pg.editTH2 = {
 			fillColor: 'red'
 		});
 		circle.data.noDrawHandle = true;
+		pg.undo.snapshot('createPoint');
 		// circle.selectedColor = "white";
 	},
 }

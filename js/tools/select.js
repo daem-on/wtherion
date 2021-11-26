@@ -204,6 +204,7 @@ pg.tools.select = function() {
 			
 			var hitResult = paper.project.hitTest(event.point, hitOptions);
 			if (hitResult) {
+				if (hitResult.item.layer != paper.project.activeLayer) return;
 				
 				if(hitResult.item.data && hitResult.item.data.isScaleHandle) {
 					mode = 'scale';
@@ -492,15 +493,13 @@ pg.tools.select = function() {
 						noSelect: true,
 						noHover: true
 					},
-					from: items[0].position + new paper.Point(0, 15),
-					to: items[0].position + new paper.Point(0, 60),
+					from: items[0].position - new paper.Point(0, 15),
+					to: items[0].position - new paper.Point(0, 60),
 					strokeColor: pg.guides.getGuideColor('blue'),
 					strokeWidth: 2 / paper.view.zoom,
 					parent: pg.layer.getGuideLayer()
 				});
 			thPointRotHandle.rotate(items[0].rotation, items[0].position);
-			// thPointRotHandle
-			// console.log(thPointRotHandle);
 			return;
 		}
 

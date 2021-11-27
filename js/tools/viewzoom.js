@@ -9,18 +9,18 @@ pg.tools.registerTool({
 
 pg.tools.viewzoom = function() {
 	var tool;
-	var ePoint;
+	// var ePoint;
 	
 	var options = {};
 	
 	var activateTool = function() {
 		tool = new Tool();
 		
-		ePoint = paper.view.center;
+		// ePoint = paper.view.center;
 		
-		tool.onMouseMove = function(event) {
-			ePoint = event.point;
-		};
+		// tool.onMouseMove = function(event) {
+		// 	ePoint = event.event;
+		// };
 		
 		tool.activate();
 	};
@@ -36,9 +36,16 @@ pg.tools.viewzoom = function() {
 			// scroll down / zoom out
 			factor = 1 / factor;
 		}
-		
-		paper.view.center = ePoint;
+
 		pg.view.zoomBy(factor);
+		var viewPosition = paper.view.getEventPoint(updateInfo.originalEvent);
+			
+		var mpos = viewPosition;
+		var ctr = paper.view.center;
+		
+		var pc = mpos.subtract(ctr);
+		var offset = mpos.subtract(pc.multiply(factor)).subtract(ctr).multiply(-1);
+		paper.view.center = paper.view.center.add(offset);
 	};
 	
 	

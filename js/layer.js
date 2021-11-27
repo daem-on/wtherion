@@ -63,7 +63,7 @@ pg.layer = function() {
 		}
 		
 		if(setActive) {
-			newLayer.activate();
+			setActiveLayer(newLayer);
 		}
 		
 		if(elementsToAdd) {
@@ -106,6 +106,8 @@ pg.layer = function() {
 	
 	
 	var setActiveLayer = function(activeLayer) {
+		if (paper.project.activeLayer === activeLayer) return;
+		pg.selection.clearSelection();
 		activeLayer.activate();
 	}
 	

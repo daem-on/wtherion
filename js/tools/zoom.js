@@ -30,12 +30,19 @@ pg.tools.zoom = function() {
 		tool.onMouseUp = function(event) {
 			if(event.event.button > 0) return; // only first mouse button
 			
-			var factor = 1.5;
+			var factor = 1.4;
 			if (event.modifiers.option) {
 				factor = 1 / factor;
 			}
 			pg.view.zoomBy(factor);
-			paper.view.center = event.point;
+			var viewPosition = paper.view.getEventPoint(event.event);
+			
+			var mpos = viewPosition;
+			var ctr = paper.view.center;
+			
+			var pc = mpos.subtract(ctr);
+			var offset = mpos.subtract(pc.multiply(factor)).subtract(ctr).multiply(-1);
+			paper.view.center = paper.view.center.add(offset);
 		};
 		
 		var keyDownFired = false;

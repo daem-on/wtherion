@@ -88,6 +88,13 @@ pg.menu = function() {
 				pg.document.loadJSONDocument(data);
 			});
 		});
+
+		// handle change on hidden file input in menu item
+		jQuery('#fileUploadTH2').on('change', function(event) {
+			pg.helper.processFileInput('text', event.target, function(data) {
+				importerTh2.import(data);
+			});
+		});
 		
 		jQuery('.undo_button').click(function() {
 			pg.undo.undo();

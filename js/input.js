@@ -250,7 +250,7 @@ pg.input = function() {
 		});
 		
 
-		jQuery(window).bind('mousewheel DOMMouseScroll', function(event){
+		jQuery(window).on('mousewheel DOMMouseScroll', function(event){
 			if(event.altKey) {
 				if (pg.toolbar.getActiveTool().options.id !== 'viewzoom') {
 					pg.toolbar.switchTool('viewzoom');

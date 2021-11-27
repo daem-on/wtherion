@@ -204,7 +204,6 @@ pg.tools.select = function() {
 			
 			var hitResult = paper.project.hitTest(event.point, hitOptions);
 			if (hitResult) {
-				if (hitResult.item.layer != paper.project.activeLayer) return;
 				
 				if(hitResult.item.data && hitResult.item.data.isScaleHandle) {
 					mode = 'scale';
@@ -229,6 +228,7 @@ pg.tools.select = function() {
 					});
 										
 				} else {
+					if (hitResult.item.layer != paper.project.activeLayer) return;
 					// deselect all by default if the shift key isn't pressed
 					// also needs some special love for compound paths and groups,
 					// as their children are not marked as "selected"

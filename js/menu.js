@@ -95,6 +95,13 @@ pg.menu = function() {
 				importerTh2.import(data);
 			});
 		});
+
+		// handle change on hidden file input in menu item
+		jQuery('#fileUploadXVI').on('change', function(event) {
+			pg.helper.processFileInput('text', event.target, function(data) {
+				importerXvi.import(data);
+			});
+		});
 		
 		jQuery('.undo_button').click(function() {
 			pg.undo.undo();

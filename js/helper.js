@@ -24,6 +24,8 @@ pg.helper = function() {
 		var allItems = [];
 		for(var i=0; i<paper.project.layers.length; i++) {
 			var layer = paper.project.layers[i];
+			if (!includeGuides && layer.data && layer.data.isGuideLayer)
+				continue;
 			for(var j=0; j<layer.children.length; j++) {
 				var child = layer.children[j];
 				// don't give guides back

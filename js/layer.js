@@ -143,7 +143,7 @@ pg.layer = function() {
 	var getGuideLayer = function() {
 		for(var i=0; i<paper.project.layers.length; i++) {
 			var layer = paper.project.layers[i];
-			if(layer.data && layer.data.isGuideLayer) {
+			if(layer.name === "pg.internalGuideLayer") {
 				return layer;
 			}
 		}

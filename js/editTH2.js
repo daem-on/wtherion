@@ -66,5 +66,6 @@ pg.editTH2 = {
 		circle.data.noDrawHandle = true;
 		pg.undo.snapshot('createPoint');
 		// circle.selectedColor = "white";
+		return circle;
 	},
 }

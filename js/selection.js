@@ -260,6 +260,7 @@ pg.selection = function() {
 	
 	
 	var setItemSelection = function(item, state) {
+		if (item.layer != paper.project.activeLayer) return;
 		var parentGroup = pg.group.getItemsGroup(item);
 		var itemsCompoundPath = pg.compoundPath.getItemsCompoundPath(item);
 		

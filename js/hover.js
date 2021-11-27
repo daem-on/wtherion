@@ -8,6 +8,7 @@ pg.hover = function() {
 			if((hitResult.item.data && hitResult.item.data.noHover)) {
 				return;
 			}
+			if (hitResult.item.layer != paper.project.activeLayer) return;
 			if(hitResult !== hoveredItem) {
 				clearHoveredItem();
 			}

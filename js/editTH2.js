@@ -9,6 +9,10 @@ pg.editTH2 = {
 		pg.undo.snapshot('setLineType');
 	},
 
+	newPath: function() {
+		return new paper.Path();
+	},
+
 	subtypeTest: function() {
 		var items = pg.selection.getSelectedItems();
 		for (var item of items) {

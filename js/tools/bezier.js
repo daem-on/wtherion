@@ -43,7 +43,7 @@ pg.tools.bezier = function() {
 			if(!path) {
 				if(!hoveredItem) {
 					pg.selection.clearSelection();
-					path = new Path();
+					path = pg.editTH2.newPath();
 					path = pg.stylebar.applyActiveToolbarStyle(path);
 					
 				} else {

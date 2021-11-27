@@ -70,7 +70,7 @@ var importerTh2 = {
 	},
 
 	createLine: function(line) {
-		this._currentPath = new paper.Path();
+		this._currentPath = pg.editTH2.newPath();
 		this._currentPath.strokeColor = "black";
 		this._currentSegments = [];
 		this._linedef = true;

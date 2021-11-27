@@ -74,7 +74,7 @@ pg.tools.draw = function() {
 		
 			for( var i=0; i < lineCount; i++) {
 				var path = paths[i];
-				path = new Path();
+				path = pg.editTH2.newPath();
 				
 				path = pg.stylebar.applyActiveToolbarStyle(path);
 				

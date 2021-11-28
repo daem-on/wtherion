@@ -10,6 +10,23 @@ toPoint = function(global, global2 = undefined) {
 	]
 }
 
+getOptions = function(source) {
+	var options = {};
+
+	var re = /-([a-z]+) ['"\[]([^'"\[\]]+)['"\]]/g;
+	var matches = source.matchAll(re);
+	for (var match of matches) {
+		options[match[1]] = match[2];
+	}
+	var singleOptions = source.replace(re, "");
+	var split = singleOptions.split(" ");
+	for (var i = 0; i < split.length; i+=2) {
+		if (split[i].trim().startsWith("-"))
+			options[split[i].slice(1)] = split[i+1];
+	}
+	return options;
+} 
+
 var importerTh2 = {
 
 	_linedef: false,
@@ -22,6 +39,7 @@ var importerTh2 = {
 	import: function(source) {
 		for (line of source.split("\n")) {
 			line = line.trim();
+			if (line.startsWith("#")) continue;
 			if (this._linedef === true) {
 				if (isNaN(line.slice(0, 2))) {
 					if (line.startsWith("close")) this._closeLine = true;

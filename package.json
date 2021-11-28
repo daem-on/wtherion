@@ -1,0 +1,30 @@
+{
+  "name": "wtherion",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "build": "webpack --mode=production --node-env=production",
+    "build:dev": "webpack --mode=development",
+    "build:prod": "webpack --mode=production --node-env=production",
+    "watch": "webpack --watch",
+    "serve": "webpack serve"
+  },
+  "repository": "https://github.com/daem-on/wtherion.git",
+  "author": "daem-on <daem_on@icloud.com>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {},
+  "devDependencies": {
+    "@webpack-cli/generators": "^2.4.1",
+    "css-loader": "^6.5.1",
+    "html-webpack-plugin": "^5.5.0",
+    "style-loader": "^3.3.1",
+    "ts-loader": "^9.2.6",
+    "typescript": "^4.5.2",
+    "webpack": "^5.64.4",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.6.0",
+    "workbox-webpack-plugin": "^6.4.1"
+  },
+  "description": ""
+}

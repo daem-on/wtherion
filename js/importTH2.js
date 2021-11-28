@@ -30,7 +30,7 @@ var importerTh2 = {
 				else this.addSegment(line);
 			} else {
 				if (line.startsWith("line")) {
-					this.createLine()
+					this.createLine(line)
 				} else if (line.startsWith("scrap")) {
 					this.createScrap(line);
 				} else if (line.startsWith("point")) {
@@ -70,15 +70,19 @@ var importerTh2 = {
 	},
 
 	createLine: function(line) {
+		var split = line.split(" ");
 		this._currentPath = pg.editTH2.newPath();
 		this._currentPath.strokeColor = "black";
 		this._currentSegments = [];
 		this._linedef = true;
 		this._closeLine = false;
+		this._currentPath.data
+		this._currentPath.data.therionData.type = split[1];
 	},
 
 	createScrap: function(line) {
-		var nl = pg.layer.addNewLayer("scrap1", true);
+		var split = line.split(" ");
+		var nl = pg.layer.addNewLayer(split[1], true);
 		nl.data.therionData = {
 			createdFrom: line,
 		};

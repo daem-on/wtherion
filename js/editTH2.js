@@ -10,7 +10,11 @@ pg.editTH2 = {
 	},
 
 	newPath: function() {
-		return new paper.Path();
+		var path = new paper.Path();
+		path.data = {
+			therionData: {}
+		};
+		return path;
 	},
 
 	subtypeTest: function() {
@@ -64,7 +68,7 @@ pg.editTH2 = {
 	createPoint: function() {
 		var circle = new paper.Shape.Circle({
 			center: new paper.Point(10, 10),
-			radius: 10,
+			radius: 5,
 			fillColor: 'red'
 		});
 		circle.data.noDrawHandle = true;

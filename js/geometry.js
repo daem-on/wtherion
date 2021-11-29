@@ -1,6 +1,6 @@
 // functions relating to modifying paths, segments and points
 
-pg.geometry = function() {
+module.exports = function() {
 	
 	var switchHandle = function(seg, mode) {
 		// simplest first, when we have a mode and its linear
@@ -14,10 +14,9 @@ pg.geometry = function() {
 			seg.clearHandles(); // reset to linear before smoothing
 
 			// get angle between previous and next segment
-			var cornerAngle = (
-							(seg.previous.point - seg.point).angle -
-							(seg.next.point - seg.point).angle
-							);
+			var cornerAngle = 
+				seg.previous.point.subtract(seg.point).angle
+				- seg.next.point.subtract(seg.point).angle;
 			// convert angle to 360°-type angle for less brain hurt
 			if (cornerAngle < 0) {
 				cornerAngle += 360;
@@ -27,8 +26,8 @@ pg.geometry = function() {
 
 			// get shorter dist to neigbour points and max it with
 			// 20 elefants, then use it to normalize the handleSize
-			var nextDist = (seg.next.point - seg.point).length;
-			var prevDist = (seg.previous.point - seg.point).length;
+			var nextDist = (seg.next.point.subtract(seg.point)).length;
+			var prevDist = (seg.previous.point.subtract(seg.point)).length;
 			var shorterDist = nextDist;
 			if (nextDist > prevDist)
 				shorterDist = prevDist;
@@ -37,14 +36,14 @@ pg.geometry = function() {
 				shorterDist = 20;
 
 			//create handle vector to next point and normalize it
-			var offset = (seg.next.point - seg.point).normalize(shorterDist);
+			var offset = (seg.next.point.subtract(seg.point)).normalize(shorterDist);
 
 			// then rotate that handle vector by the tangentAngle
 			var rotOffset = offset.rotate(-tangAngle, 0);
 
 			// and apply the whole thing to the handles
 			seg.handleOut = rotOffset;
-			seg.handleIn = -rotOffset;
+			seg.handleIn = rotOffset.multiply(-1);
 
 
 			// segment is linear or mode=smooth and has not both neighbours
@@ -54,23 +53,23 @@ pg.geometry = function() {
 			// handle end points differently since they don't have
 			// a corner to start from
 			if (seg.next) {
-				var handleDist = (seg.point - seg.next.point).length;
+				var handleDist = (seg.point.subtract(seg.next.point)).length;
 				handleDist *= 0.3;
 				if (handleDist > 20)
 					handleDist = 20;
 
-				var vec = (seg.point - seg.next.point).normalize(handleDist);
+				var vec = (seg.point.subtract(seg.next.point)).normalize(handleDist);
 				seg.handleIn = vec;
-				seg.handleOut = -vec;
+				seg.handleOut = vec.multiply(-1);
 
 			} else if (seg.previous) {
-				var handleDist = (seg.point - seg.previous.point).length;
+				var handleDist = (seg.point.subtract(seg.previous.point)).length;
 				handleDist *= 0.3;
 				if (handleDist > 20)
 					handleDist = 20;
 
-				var vec = (seg.point - seg.previous.point).normalize(handleDist);
-				seg.handleIn = -vec;
+				var vec = (seg.point.subtract(seg.previous.point)).normalize(handleDist);
+				seg.handleIn = vec.multiply(-1);
 				seg.handleOut = vec;
 			}
 

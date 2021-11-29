@@ -1,14 +1,6 @@
 // scale tool
 
-pg.tools.registerTool({
-	id: 'scale',
-	name: 'Scale',
-	usedKeys : {
-		toolbar : 's'
-	}
-});
-
-pg.tools.scale = function() {
+module.exports = function() {
 	var tool;
 	
 	var options = {

@@ -1,6 +1,6 @@
 // function related to groups and grouping
 
-pg.group = function() {
+module.exports = function() {
 
 	var groupSelection = function() {
 		var items = pg.selection.getSelectedItems();

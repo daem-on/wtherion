@@ -1,6 +1,6 @@
 // functions related to math
 
-pg.math = function() {
+module.exports = function() {
 	
 	var checkPointsClose = function(startPos, eventPoint, threshold) {
 		var xOff = Math.abs(startPos.x - eventPoint.x);

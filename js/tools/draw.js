@@ -1,12 +1,7 @@
 // drawing tool
 // adapted from resources on http://paperjs.org
 
-pg.tools.registerTool({
-	id: 'draw',
-	name: 'Draw'
-});
-
-pg.tools.draw = function() {
+module.exports = function() {
 	var tool;
 	
 	var options = {
@@ -57,7 +52,7 @@ pg.tools.draw = function() {
 		// get options from local storage if present
 		options = pg.tools.getLocalOptions(options);
 		
-		tool = new Tool();
+		tool = new paper.Tool();
 		
 		var lineCount;
 
@@ -90,7 +85,7 @@ pg.tools.draw = function() {
 			for( var i=0; i < lineCount; i++) {
 				var path = paths[i];
 				offset.length = options.lineDistance * i;
-				path.add(event.middlePoint + offset);
+				path.add(event.middlePoint.add(offset));
 			}
 		};
 
@@ -103,7 +98,7 @@ pg.tools.draw = function() {
 			
 			var group;
 			if(lineCount > 1) {
-				group = new Group();
+				group = new paper.Group();
 			}
 			
 			var nearStart = pg.math.checkPointsClose(paths[0].firstSegment.point, event.point, 30);

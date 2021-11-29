@@ -1,4 +1,4 @@
-pg.toolOptionPanel = function() {
+module.exports = function() {
 	
 	var setup = function(options, components, changeCallback) {
 		var $panel = jQuery('<div class="toolOptionPanel">');
@@ -113,7 +113,7 @@ pg.toolOptionPanel = function() {
 			$options.append($optionSection);
 		});
 
-		var $resetButton = $('<button class="toolOptionResetButton" title="Reset Tool Settings">R</button>').click(function() {
+		var $resetButton = jQuery('<button class="toolOptionResetButton" title="Reset Tool Settings">R</button>').click(function() {
 			if(confirm('Reset tool options to default?')) {
 				pg.tools.deleteLocalOptions(options.id);
 				pg.toolbar.switchTool(options.id, true);
@@ -126,10 +126,10 @@ pg.toolOptionPanel = function() {
 		$panel.css({
 			'min-width': $title.outerWidth()+30+'px'
 		});
-		$panel.draggable({
-			containment: '#paperCanvas',
-			handle: '.panelTitle'
-		});
+		// $panel.draggable({
+		// 	containment: '#paperCanvas',
+		// 	handle: '.panelTitle'
+		// });
 		processInputRequirements();
 		
 		// shows/hides option-sections based on predefined requirements

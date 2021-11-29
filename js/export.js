@@ -1,6 +1,6 @@
 // functions related to exporting
 
-pg.export = function() {
+module.exports = function() {
 	var exportRect;
 	var canvas;
 	

@@ -2,15 +2,7 @@
 // adapted from resources on http://paperjs.org and 
 // https://github.com/memononen/stylii
 
-pg.tools.registerTool({
-	id: 'detailselect',
-	name: 'Detail select',
-	usedKeys : {
-		toolbar : 'a'
-	}
-});
-
-pg.tools.detailselect = function() {
+module.exports = function() {
 	var tool;
 	var keyModifiers = {};
 	
@@ -68,7 +60,7 @@ pg.tools.detailselect = function() {
 	};
 
 	var activateTool = function() {		
-		tool = new Tool();
+		tool = new paper.Tool();
 				
 		var hitOptions = {
 			segments: true,
@@ -219,7 +211,7 @@ pg.tools.detailselect = function() {
 				selectionDragged = true;
 				
 				var selectedItems = pg.selection.getSelectedItems();
-				var dragVector = (event.point - event.downPoint);
+				var dragVector = (event.point.subtract(event.downPoint));
 				
 				for(var i=0; i < selectedItems.length; i++) {
 					var item = selectedItems[i];
@@ -239,11 +231,12 @@ pg.tools.detailselect = function() {
 						}
 
 						if (event.modifiers.shift) {
-							item.position = item.origPos + 
-							pg.math.snapDeltaToAngle(dragVector, Math.PI*2/8);
+							item.position = item.origPos.add(
+								pg.math.snapDeltaToAngle(dragVector, Math.PI*2/8)
+							);
 
 						} else {
-							item.position += event.delta;
+							item.position = item.position.add(event.delta);
 						}
 
 					} else {
@@ -261,11 +254,12 @@ pg.tools.detailselect = function() {
 								hitType === 'curve')){
 
 								if (event.modifiers.shift) {
-									seg.point = seg.origPoint + 
-									pg.math.snapDeltaToAngle(dragVector, Math.PI*2/8);
+									seg.point = seg.origPoint.add(
+										pg.math.snapDeltaToAngle(dragVector, Math.PI*2/8)
+									);
 
 								} else {
-									seg.point += event.delta;
+									seg.point = seg.point.add(event.delta);
 								}
 
 							} else if(seg.handleOut.selected && 
@@ -274,11 +268,11 @@ pg.tools.detailselect = function() {
 								//they're no longer parallel and move independently
 								if( event.modifiers.option ||
 									!seg.handleOut.isColinear(seg.handleIn)) {
-									seg.handleOut += event.delta;
+									seg.handleOut = seg.handleOut.add(event.delta);
 
 								} else {
-									seg.handleIn -= event.delta;
-									seg.handleOut += event.delta;
+									seg.handleIn = seg.handleIn.subtract(event.delta);
+									seg.handleOut = seg.handleOut.add(event.delta);
 								}
 
 							} else if(seg.handleIn.selected && 
@@ -288,11 +282,11 @@ pg.tools.detailselect = function() {
 								//they're no longer parallel and move independently
 								if( event.modifiers.option ||
 									!seg.handleOut.isColinear(seg.handleIn)) {
-									seg.handleIn += event.delta;
+									seg.handleIn = seg.handleIn.add(event.delta);
 
 								} else {
-									seg.handleIn += event.delta;
-									seg.handleOut -= event.delta;
+									seg.handleIn = seg.handleIn.add(event.delta);
+									seg.handleOut = seg.handleOut.subtract(event.delta);
 								}	
 							}
 						}

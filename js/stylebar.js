@@ -1,6 +1,6 @@
 
 
-pg.stylebar = function() {
+module.exports = function() {
 	var colorsAreDefault = true;
 	
 	

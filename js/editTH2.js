@@ -1,4 +1,4 @@
-pg.editTH2 = {
+export default {
 	lineTypeTest: function() {
 		var items = pg.selection.getSelectedItems();
 		for (var item of items) {

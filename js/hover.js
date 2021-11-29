@@ -1,5 +1,5 @@
 
-pg.hover = function() {
+module.exports = function() {
 
 	var hoveredItem;
 	var handleHoveredItem = function(hitOptions, event) {

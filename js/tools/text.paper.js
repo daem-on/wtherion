@@ -1,14 +1,7 @@
 // text tool
 
-pg.tools.registerTool({
-	id: 'text',
-	name: 'Text',
-	usedKeys : {
-		toolbar : 't'
-	}
-});
 
-pg.tools.text = function () {
+module.exports = function () {
 	var tool;
 	
 	var options = {

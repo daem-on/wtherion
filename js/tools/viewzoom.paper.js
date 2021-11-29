@@ -1,13 +1,7 @@
 // view zoom tool
 // adapted from http://sketch.paperjs.org/
 
-pg.tools.registerTool({
-	id: 'viewzoom',
-	name: 'View zoom',
-	type: 'hidden'
-});
-
-pg.tools.viewzoom = function() {
+module.exports = function() {
 	var tool;
 	// var ePoint;
 	

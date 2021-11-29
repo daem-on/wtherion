@@ -2,21 +2,7 @@
 // adapted from resources on http://paperjs.org and 
 // https://github.com/memononen/stylii
 
-pg.tools.registerTool({
-	id: 'select',
-	name: 'Item select',
-	usedKeys : {
-		toolbar : 'v',
-		selectAll : 'ctrl-a',
-		invertSelection: 'ctrl-i',
-		groupSelection : 'ctrl-g',
-		ungroupSelection : 'ctrl-shift-g',
-		copySelection: 'ctrl-c',
-		pasteSelection : 'ctrl-v'
-	}
-});
-
-pg.tools.select = function() {
+module.exports = function() {
 	var tool;
 	var keyModifiers = {};
 			
@@ -172,7 +158,7 @@ pg.tools.select = function() {
 	var activateTool = function() {		
 		setSelectionBounds();
 		preProcessSelection();
-		tool = new Tool();
+		tool = new paper.Tool();
 
 		var hitOptions = {
 			segments: true,
@@ -224,7 +210,7 @@ pg.tools.select = function() {
 					rotItems = pg.selection.getSelectedItems();
 					
 					jQuery.each(rotItems, function(i, item) {
-						prevRot[i] = (event.point - rotGroupPivot).angle;
+						prevRot[i] = (event.point.subtract(rotGroupPivot)).angle;
 					});
 										
 				} else {
@@ -327,13 +313,13 @@ pg.tools.select = function() {
 				
 				jQuery.each(boundsRotHandles, function(index, handle) {
 					if(handle) {
-						handle.position = itemGroup.bounds[getRectCornerNameByIndex(index)]+handle.data.offset;
+						handle.position = itemGroup.bounds[getRectCornerNameByIndex(index)].add(handle.data.offset);
 						handle.bringToFront();
 					}
 				});
 				
 			} else if(mode === 'rotate') {
-				var rotAngle = (event.point - rotGroupPivot).angle;
+				var rotAngle = (event.point.subtract(rotGroupPivot)).angle;
 				
 				jQuery.each(rotItems, function(i, item) {
 					
@@ -355,7 +341,7 @@ pg.tools.select = function() {
 				
 			} else if(mode === 'move' || mode === 'cloneMove') {
 				
-				var dragVector = (event.point - event.downPoint);
+				var dragVector = (event.point.subtract(event.downPoint));
 				var selectedItems = pg.selection.getSelectedItems();
 
 				for(var i=0; i<selectedItems.length; i++) {
@@ -367,11 +353,12 @@ pg.tools.select = function() {
 					}
 
 					if (event.modifiers.shift) {
-						item.position = item.data.origPos + 
-						pg.math.snapDeltaToAngle(dragVector, Math.PI*2/8);
+						item.position = item.data.origPos.add(
+							pg.math.snapDeltaToAngle(dragVector, Math.PI*2/8)
+						);
 
 					} else {
-						item.position += event.delta;
+						item.position = item.position.add(event.delta);
 					}
 				}
 			}
@@ -493,8 +480,8 @@ pg.tools.select = function() {
 						noSelect: true,
 						noHover: true
 					},
-					from: items[0].position - new paper.Point(0, 15),
-					to: items[0].position - new paper.Point(0, 60),
+					from: items[0].position.subtract(new paper.Point(0, 15)),
+					to: items[0].position.subtract(new paper.Point(0, 60)),
 					strokeColor: pg.guides.getGuideColor('blue'),
 					strokeWidth: 2 / paper.view.zoom,
 					parent: pg.layer.getGuideLayer()
@@ -535,10 +522,10 @@ pg.tools.select = function() {
 			}
 			
 			if(index === 7) {
-				var offset = new Point(0, 10/paper.view.zoom);
+				var offset = new paper.Point(0, 10/paper.view.zoom);
 				boundsRotHandles[index] =
 				new paper.Path.Circle({
-					center: segment.point + offset,
+					center: segment.point.add(offset),
 					data: {
 						offset: offset,
 						isRotHandle: true,

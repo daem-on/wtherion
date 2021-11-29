@@ -1,4 +1,4 @@
-pg.layerPanel = function() {
+module.exports = function() {
 		
 	var toggleVisibility = function() {
 		var $panel = jQuery('.layerPanel');

@@ -1,5 +1,5 @@
 
-pg.document = function() {
+module.exports = function() {
 	var center;
 	var clipboard = [];
 

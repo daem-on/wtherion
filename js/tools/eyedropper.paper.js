@@ -1,14 +1,7 @@
 // eyedropper tool
 
-pg.tools.registerTool({
-	id: 'eyedropper',
-	name: 'Eyedropper',
-	usedKeys : {
-		toolbar : 'i'
-	}
-});
 
-pg.tools.eyedropper = function() {
+module.exports = function() {
 	var tool;
 
 	var options = {};

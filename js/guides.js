@@ -1,6 +1,6 @@
 // functions related to guide items
 
-pg.guides = function() {
+module.exports = function() {
 	
 	var guideBlue = '#009dec';
 	var guideGrey = '#aaaaaa';

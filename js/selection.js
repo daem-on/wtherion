@@ -1,6 +1,6 @@
 // functions related to selecting stuff
 
-pg.selection = function() {
+module.exports = function() {
 	
 	var getSelectionMode = function() {
 		var activeTool = pg.toolbar.getActiveTool();

@@ -1,4 +1,4 @@
-pg.text = function() {
+module.exports = function() {
 	var importedFonts = [];
 	
 	var setup = function() {

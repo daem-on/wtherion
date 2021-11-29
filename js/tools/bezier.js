@@ -1,21 +1,13 @@
 // bezier tool
 // adapted from the paperjs examples (Tools/BezierTool.html)
 
-pg.tools.registerTool({
-	id: 'bezier',
-	name: 'Bezier',
-	usedKeys : {
-		toolbar : 'p'
-	}
-});
-
-pg.tools.bezier = function() {
+module.exports = function() {
 	var tool;
 	
 	var options = {};
 	
 	var activateTool = function() {
-		tool = new Tool();
+		tool = new paper.Tool();
 		
 		var path;
 
@@ -138,10 +130,10 @@ pg.tools.bezier = function() {
 			
 			var delta = event.delta.clone();
 			if (type === 'handleOut' || mode === 'add') {
-				delta = -delta;
+				delta = delta.multiply(-1);
 			}
-			currentSegment.handleIn += delta;
-			currentSegment.handleOut -= delta;
+			currentSegment.handleIn = currentSegment.handleIn.add(delta);
+			currentSegment.handleOut = currentSegment.handleOut.subtract(delta);
 		};
 		
 		tool.onMouseUp = function(event) {
@@ -167,7 +159,7 @@ pg.tools.bezier = function() {
 				var segment = path.segments[i];
 				var segmentPoint = type === 'point'
 						? segment.point
-						: segment.point + segment[type];
+						: segment.point.add(segment[type]);
 				var distance = (point - segmentPoint).length;
 				if (distance < 6) {
 					return {

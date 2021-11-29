@@ -2,3 +2,5 @@
 /dev/
 /assets/tools/icons.ai
 node_modules
+dist/
+js/lib/

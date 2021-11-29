@@ -1,14 +1,6 @@
 // rotation tool
 
-pg.tools.registerTool({
-	id: 'rotate',
-	name: 'Rotate',
-	usedKeys : {
-		toolbar : 'r'
-	}
-});
-
-pg.tools.rotate = function() {
+module.exports = function() {
 	var tool;
 	
 	var options = {

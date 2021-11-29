@@ -1,5 +1,5 @@
 
-pg.helper = function() {
+module.exports = function() {
 	
 	var selectedItemsToJSONString = function() {
 		var selectedItems = pg.selection.getSelectedItems();

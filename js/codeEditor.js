@@ -1,5 +1,5 @@
 
-pg.codeEditor = function(){
+module.exports = function(){
 	
 	var $codeEditor;
 	var wasInit;

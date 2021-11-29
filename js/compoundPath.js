@@ -1,6 +1,6 @@
 
 
-pg.compoundPath = function() {
+module.exports = function() {
 	
 	
 	var isCompoundPath = function(item) {

@@ -1,6 +1,6 @@
 // function related to the main menu
 
-pg.menu = function() {
+module.exports = function() {
 	
 	var setup = function() {
 		setupNavigationLogic();

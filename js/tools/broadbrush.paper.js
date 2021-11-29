@@ -2,12 +2,8 @@
 // http://paperjs.org/tutorials/interaction/working-with-mouse-vectors/
 // improved with additional options
 
-pg.tools.registerTool({
-	id: 'broadbrush',
-	name: 'Broad brush'
-});
 
-pg.tools.broadbrush = function() {
+module.exports = function() {
 	var tool;
 	var path;
 

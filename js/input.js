@@ -1,6 +1,6 @@
 // functions releated to input (mouse, keyboard)
 
-pg.input = function() {
+module.exports = function() {
 	
 	var downKeys = [];
 	var mouseIsDown = false;

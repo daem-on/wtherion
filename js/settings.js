@@ -1,32 +1,22 @@
 // functions related to settings / localstorage
 
-pg.settings = function () {
+module.exports = function () {
 	var config;
 	
 	var setup = function() {
-		jQuery.ajax({
-			dataType: "json",
-			url: 'config.json',
-			async: false
-		}).done(function(data) {
-			
-			config = data;
-			var storageVersionNumber = localStorage.getItem("pg.version");
-			if(storageVersionNumber && storageVersionNumber !== config.appVersion) {
-				console.warn('Settings version mismatch. Reverting all settings to default for now.');
-				// version mismatch. removing old settings for now...
-				// some sort of version mismatch handling is needed here
-				clearSettings();
+		config = {"appVersion": "0.42"};
+		var storageVersionNumber = localStorage.getItem("pg.version");
+		if(storageVersionNumber && storageVersionNumber !== config.appVersion) {
+			console.warn('Settings version mismatch. Reverting all settings to default for now.');
+			// version mismatch. removing old settings for now...
+			// some sort of version mismatch handling is needed here
+			clearSettings();
 
-			} else if(!storageVersionNumber) {
-				setVersionNumber();
-			}
-			
-			document.title = 'Papergrapher '+config.appVersion;
-			
-		}).error(function(jqXHR, textStatus, errorThrown) {
-			console.error('Loading config.json failed: '+errorThrown);
-		});
+		} else if(!storageVersionNumber) {
+			setVersionNumber();
+		}
+		
+		document.title = 'Papergrapher '+config.appVersion;
 	};
 	
 	

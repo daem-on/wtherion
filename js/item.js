@@ -1,6 +1,6 @@
 
 
-pg.item = function() {
+module.exports = function() {
 	
 	var isBoundsItem = function(item) {
 		if( item.className === 'PointText' || 

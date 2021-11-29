@@ -1,4 +1,4 @@
-pg.statusbar = function() {
+module.exports = function() {
 	
 	var setup = function() {
 		setupZoomSelect();

@@ -1,7 +1,7 @@
 // undo functionality
 // slightly modifed from https://github.com/memononen/stylii
 
-pg.undo = function() {
+module.exports = function() {
 	var states = [];
 	var head = -1;
 	var maxUndos = 80;

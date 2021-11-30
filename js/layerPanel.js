@@ -1,3 +1,5 @@
+require("jquery-ui/ui/widgets/sortable");
+
 module.exports = function() {
 		
 	var toggleVisibility = function() {
@@ -36,15 +38,15 @@ module.exports = function() {
 		$header.append($newLayerButton);
 
 		var $layerEntries = jQuery('<div class="layerEntries">');
-		// $layerEntries.sortable({
-		// 	containment: 'parent',
-		// 	forcePlaceholderSize: true,
-		// 	tolerance: 'pointer',
-		// 	delay: 300,
-		// 	stop: function(event, ui) {
-		// 		handleLayerOrderChange();
-		// 	}
-		// });
+		$layerEntries.sortable({
+			containment: 'parent',
+			forcePlaceholderSize: true,
+			tolerance: 'pointer',
+			delay: 300,
+			stop: function(event, ui) {
+				handleLayerOrderChange();
+			}
+		});
 		
 		$panel.append($header,$layerEntries);
 		jQuery('body').append($panel);

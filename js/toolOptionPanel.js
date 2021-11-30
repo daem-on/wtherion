@@ -1,3 +1,5 @@
+require("jquery-ui/ui/widgets/draggable");
+
 module.exports = function() {
 	
 	var setup = function(options, components, changeCallback) {
@@ -126,10 +128,10 @@ module.exports = function() {
 		$panel.css({
 			'min-width': $title.outerWidth()+30+'px'
 		});
-		// $panel.draggable({
-		// 	containment: '#paperCanvas',
-		// 	handle: '.panelTitle'
-		// });
+		$panel.draggable({
+			containment: '#paperCanvas',
+			handle: '.panelTitle'
+		});
 		processInputRequirements();
 		
 		// shows/hides option-sections based on predefined requirements

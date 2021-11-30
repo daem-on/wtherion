@@ -55,6 +55,7 @@ export default function(source: string) {
 			}
 		}
 	}
+	pg.layerPanel.updateLayerList();
 }
 
 function addSegment(line: string) {

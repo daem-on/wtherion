@@ -29,6 +29,14 @@
 	margin-top: 1em;
 }
 
+.toolOptionPanel .titleSection h4 {
+	margin-bottom: 0.5em;
+}
+
+.toolOptionPanel .titleSection.collapsed .option-section {
+	display: none
+}
+
 .toolOptionPanel h3 {
 	font-size: 0.85em;
 	margin: -7px -10px 6px -10px;

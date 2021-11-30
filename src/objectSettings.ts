@@ -1,3 +1,4 @@
+import { componentList } from "../js/toolOptionPanel";
 import pg from "./init";
 
 function removeWindow() {
@@ -9,7 +10,7 @@ const components = {
 
 	},
 	point: {
-		
+
 	}
 }
 
@@ -24,12 +25,37 @@ export function updateWindow() {
 		name: "O",
 		option1: 50
 	}
-	let components = {
+	let components: componentList = {
 		option1: {
 			type: 'int',
 			label: 'Point distance',
 			min: 1
-		}
+		},
+		string1: {
+			type: 'text',
+			label: 'test',
+		},
+		subSection: {
+			type: "title",
+			text: "Advanced"
+		},
+		option2: {
+			type: 'int',
+			label: 'Hey look at me',
+			min: 1
+		},
+		string2: {
+			type: 'text',
+			label: 'test',
+		},
+		string3: {
+			type: 'text',
+			label: 'test',
+		},
+		subSectio2n: {
+			type: "title",
+			text: "Advanced2"
+		},
 	}
 
 	pg.toolOptionPanel.setup(options, components, () => {

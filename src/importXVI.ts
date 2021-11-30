@@ -26,6 +26,7 @@ export default {
 				this.createShot(x1, y1, x2, y2);
 			}
 		}
+		pg.layerPanel.updateLayerList();
 	},
 
 	createStation(x: string, y: string, n: string) {

@@ -8,7 +8,7 @@ module.exports = function() {
 	var options = {};
 	
 	var activateTool = function() {
-		tool = new Tool();
+		tool = new paper.Tool();
 		
 		// ePoint = paper.view.center;
 		

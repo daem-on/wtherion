@@ -36,15 +36,15 @@ module.exports = function() {
 		$header.append($newLayerButton);
 
 		var $layerEntries = jQuery('<div class="layerEntries">');
-		$layerEntries.sortable({
-			containment: 'parent',
-			forcePlaceholderSize: true,
-			tolerance: 'pointer',
-			delay: 300,
-			stop: function(event, ui) {
-				handleLayerOrderChange();
-			}
-		});
+		// $layerEntries.sortable({
+		// 	containment: 'parent',
+		// 	forcePlaceholderSize: true,
+		// 	tolerance: 'pointer',
+		// 	delay: 300,
+		// 	stop: function(event, ui) {
+		// 		handleLayerOrderChange();
+		// 	}
+		// });
 		
 		$panel.append($header,$layerEntries);
 		jQuery('body').append($panel);
@@ -188,7 +188,7 @@ module.exports = function() {
 	
 	
 	var loadResources = function() {
-		if(!jQuery('#layerPanelCSS').exists()) {
+		if(!jQuery('#layerPanelCSS').length) {
 			jQuery("<link />", {
 				href: "css/layerPanel.css",
 				rel: "stylesheet",

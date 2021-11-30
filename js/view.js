@@ -1,5 +1,5 @@
 
-pg.view = function() {
+module.exports = function() {
 	
 	var zoomBy = function(factor) {
 		paper.view.zoom *= factor;

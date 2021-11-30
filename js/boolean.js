@@ -1,4 +1,4 @@
-pg.boolean = function() {
+module.exports = function() {
 	
 	var booleanUnite = function(items, replaceWithResult) {
 		items = items || pg.selection.getSelectedItems();

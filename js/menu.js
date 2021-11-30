@@ -1,5 +1,7 @@
 // function related to the main menu
 
+const importerXvi = require("../src/importXVI.ts").default;
+
 module.exports = function() {
 	
 	var setup = function() {

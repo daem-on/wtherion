@@ -1,15 +1,15 @@
-var importerXvi = {
+import pg from "../js/init";
 
+export default {
 	_state: 0,
 	_commonColor: new paper.Color(0.2, 0.2, 0.2),
 
-	/**	@param source {String} */
-	import: function(source) {
-		var layer = pg.layer.addNewLayer("therion.xviLayer");
+	import(source: string) {
+		let layer = pg.layer.addNewLayer("therion.xviLayer");
 		layer.locked = true;
 		layer.data.isGuideLayer = true;
 
-		for (line of source.split("\n")) {
+		for (let line of source.split("\n")) {
 			line = line.trim();
 			if (this._state === 0) {
 				if (line.startsWith("set XVIstations")) this._state = 1;
@@ -17,19 +17,19 @@ var importerXvi = {
 			} else if (this._state === 1) {
 				if (line.startsWith("}")) {this._state = 0; continue;}
 
-				[x, y, n] = line.slice(1, line.length-1).split(" ").filter(i => i);
+				let [x, y, n] = line.slice(1, line.length-1).split(" ").filter(i => i);
 				this.createStation(x, y, n);
 			} else if (this._state === 2) {
 				if (line.startsWith("}")) {this._state = 0; continue;}
 
-				[x1, y1, x2, y2] = line.slice(1, line.length-1).split(" ").filter(i => i);
+				let [x1, y1, x2, y2] = line.slice(1, line.length-1).split(" ").filter(i => i);
 				this.createShot(x1, y1, x2, y2);
 			}
 		}
 	},
 
-	createStation(x, y, n) {
-		var circle = new paper.Shape.Circle({
+	createStation(x: string, y: string, n: string) {
+		let circle = new paper.Shape.Circle({
 			center: new paper.Point(
 				Number.parseFloat(x),
 				Number.parseFloat(y)
@@ -43,8 +43,8 @@ var importerXvi = {
 		};
 	},
 
-	createShot(x1, y1, x2, y2) {
-		var path = new paper.Path({
+	createShot(x1: string, y1: string, x2: string, y2: string) {
+		let path = new paper.Path({
 			segments: [
 				[Number.parseFloat(x1), Number.parseFloat(y1)],
 				[Number.parseFloat(x2), Number.parseFloat(y2)]

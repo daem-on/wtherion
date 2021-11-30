@@ -127,6 +127,7 @@ module.exports = function() {
 		
 		tool.onMouseDrag = function(event) {
 			if(event.event.button > 0) return;  // only first mouse button
+			if (!currentSegment) return;
 			
 			var delta = event.delta.clone();
 			if (type === 'handleOut' || mode === 'add') {
@@ -160,7 +161,7 @@ module.exports = function() {
 				var segmentPoint = type === 'point'
 						? segment.point
 						: segment.point.add(segment[type]);
-				var distance = (point - segmentPoint).length;
+				var distance = (point.subtract(segmentPoint)).length;
 				if (distance < 6) {
 					return {
 						type: type,

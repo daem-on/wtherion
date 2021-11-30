@@ -6,15 +6,6 @@ export default [
 			toolbar : 'p'
 		}
 	},
-
-	{
-		id: 'broadbrush',
-		name: 'Broad brush'
-	},
-	{
-		id: 'circle',
-		name: 'Circle'
-	},
 	{
 		id: 'zoom',
 		name: 'Zoom',
@@ -27,7 +18,6 @@ export default [
 		name: 'View zoom',
 		type: 'hidden'
 	},
-
 	{
 		id: 'viewgrab',
 		name: 'View grab',
@@ -53,7 +43,6 @@ export default [
 			pasteSelection : 'ctrl-v'
 		}
 	},
-
 	{
 		id: 'scale',
 		name: 'Scale',
@@ -61,7 +50,6 @@ export default [
 			toolbar : 's'
 		}
 	},
-
 	{
 		id: 'rotate',
 		name: 'Rotate',
@@ -69,24 +57,6 @@ export default [
 			toolbar : 'r'
 		}
 	},
-
-	{
-		id: 'rectangle',
-		name: 'Rectangle'
-	},
-
-	{
-		id: 'eyedropper',
-		name: 'Eyedropper',
-		usedKeys : {
-			toolbar : 'i'
-		}
-	},
-	{
-		id: 'exportrect',
-		name: 'Export area'
-	},
-
 	{
 		id: 'draw',
 		name: 'Draw'
@@ -98,10 +68,5 @@ export default [
 		usedKeys : {
 			toolbar : 'a'
 		}
-	},
-
-	{
-		id: 'cloud',
-		name: 'Cloud'
 	},
 ]

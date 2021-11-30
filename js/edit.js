@@ -1,5 +1,5 @@
 
-pg.edit = function() {
+module.exports = function() {
 	
 	var copySelectionToClipboard = function() {
 		pg.document.clearClipboard();

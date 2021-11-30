@@ -1,5 +1,5 @@
 
-pg.order = function() {
+module.exports = function() {
 	
 
 	var bringSelectionToFront = function() {

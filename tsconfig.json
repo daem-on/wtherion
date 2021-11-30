@@ -3,12 +3,16 @@
     "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": false,
+    "noImplicitThis": true,
     "module": "es6",
     "target": "es5",
     "allowJs": true,
     "outDir": "./dist"
   },
   "files": ["src/index.ts"],
+  "include": [
+    "./src/**/*"
+  ],
   "exclude": [
     "./dist/**/*"
   ]

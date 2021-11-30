@@ -23,7 +23,11 @@ import compoundPath from "./compoundPath.js"
 import toolOptionPanel from "./toolOptionPanel.js"
 import math from "./math.js"
 import geometry from "./geometry.js"
-// import codeEditor from "../js/codeEditor.js";
+import view from "./view.js"
+import boolean from "./boolean.js"
+import edit from "./edit.js"
+import importHelper from "./import.js"
+import order from "./order.js"
 
 import paper from "paper";
 
@@ -54,7 +58,11 @@ export default {
 	toolOptionPanel: toolOptionPanel,
 	math: math,
 	geometry: geometry,
-	// codeEditor: codeEditor,
+	view: view,
+	boolean: boolean,
+	edit: edit,
+	import: importHelper,
+	order: order,
 	
 	init: function() {
 		paper.setup('paperCanvas');

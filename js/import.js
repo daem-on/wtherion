@@ -1,6 +1,6 @@
 // functions related to importing
 
-pg.import = function () {
+module.exports = function () {
 	
 	var importAndAddExternalImage = function (url){
 		var xhr = new XMLHttpRequest();

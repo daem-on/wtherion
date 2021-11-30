@@ -1,6 +1,7 @@
 // function related to the main menu
 
 const importerXvi = require("../src/importXVI.ts").default;
+const importerTh2 = require("../src/importTH2.ts").default;
 
 module.exports = function() {
 	
@@ -94,7 +95,7 @@ module.exports = function() {
 		// handle change on hidden file input in menu item
 		jQuery('#fileUploadTH2').on('change', function(event) {
 			pg.helper.processFileInput('text', event.target, function(data) {
-				importerTh2.import(data);
+				importerTh2(data);
 			});
 		});
 

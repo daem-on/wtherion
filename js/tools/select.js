@@ -2,6 +2,8 @@
 // adapted from resources on http://paperjs.org and 
 // https://github.com/memononen/stylii
 
+const { updateWindow } = require("../../src/objectSettings");
+
 module.exports = function() {
 	var tool;
 	var keyModifiers = {};
@@ -444,6 +446,7 @@ module.exports = function() {
 		
 		jQuery(document).on('DeleteItems Undo Redo Grouped Ungrouped SelectionChanged', function(){
 			setSelectionBounds();
+			updateWindow();
 		});
 		
 		// setup floating tool options panel in the editor

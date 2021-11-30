@@ -1,8 +1,8 @@
-import pg from "../js/init";
+import pg from "./init";
+const COMMMON_COLOR = new paper.Color(0.2, 0.2, 0.2);
 
 export default {
 	_state: 0,
-	_commonColor: new paper.Color(0.2, 0.2, 0.2),
 
 	import(source: string) {
 		let layer = pg.layer.addNewLayer("therion.xviLayer");
@@ -35,7 +35,7 @@ export default {
 				Number.parseFloat(y)
 			),
 			radius: 5,
-			fillColor: this._commonColor,
+			fillColor: COMMMON_COLOR,
 		});
 		circle.data.noDrawHandle = true;
 		circle.data.therionData = {
@@ -49,7 +49,7 @@ export default {
 				[Number.parseFloat(x1), Number.parseFloat(y1)],
 				[Number.parseFloat(x2), Number.parseFloat(y2)]
 			],
-			strokeColor: this._commonColor
+			strokeColor: COMMMON_COLOR
 		})
 	}
 

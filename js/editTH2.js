@@ -11,6 +11,8 @@ export default {
 
 	newPath: function() {
 		var path = new paper.Path();
+		path.strokeColor = new paper.Color(0, 0, 0);
+		path.strokeWidth = 4;
 		path.data = {
 			therionData: {}
 		};

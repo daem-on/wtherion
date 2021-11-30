@@ -1,4 +1,4 @@
-import pg from "../js/init";
+import pg from "./init";
 import jQuery from "jquery";
 
 import spectrumSetup from "../js/lib/spectrum.js";

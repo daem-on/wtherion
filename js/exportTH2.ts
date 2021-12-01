@@ -1,20 +1,22 @@
+import paper from "paper";
+
 function toGlobal(global, local= [0, 0]) {
-	x = Math.round((global[0]+local[0])*100)/100;
-	y = -Math.round((global[1]+local[1])*100)/100;
+	let x = Math.round((global[0]+local[0])*100)/100;
+	let y = -Math.round((global[1]+local[1])*100)/100;
 	return `${x} ${y}`
 }
 	
-_exportText = ""
+let _exportText = ""
 function logText(...data) {
 	_exportText += data.join(" ") + "\n";
 }
 	
-var exporterTh2 = {
+export default {
 	exportTh2: function() {
 		_exportText = ""
 	
 		//prepare items
-		for (item of paper.project.getItems({className:"Shape"})) {
+		for (let item of paper.project.getItems({className:"Shape"})) {
 			if (item.className == "Shape" && item.data && item.data.therionData) {
 				var rot = item.rotation % 360;
 		
@@ -23,14 +25,14 @@ var exporterTh2 = {
 			}
 		}
 		
-		data = paper.project.exportJSON({asString: false, precision: 2});
+		let data = paper.project.exportJSON({asString: false, precision: 2}) as any;
 	
-		for (layer of data) {
+		for (let layer of data) {
 			if (layer[0] != "Layer") continue;
 			if (layer[1].data && layer[1].data.isGuideLayer) continue;
 			this.processLayer(layer[1]);
 		}
-		items = data[0][1].children;
+		let items = data[0][1].children;
 	
 		
 		console.log(_exportText);
@@ -42,7 +44,7 @@ var exporterTh2 = {
 		if (!layer.children || layer.children.length == 0) return;
 		
 		logText("scrap", layer.name, this._testSettings);
-		for (item of layer.children) {
+		for (let item of layer.children) {
 			switch (item[0]) {
 			case "Path":
 				this.processLine(item[1]);
@@ -59,13 +61,13 @@ var exporterTh2 = {
 	},
 	
 	processLine: function(item) {
-		segments = item.segments;
+		let segments = item.segments;
 		if (segments.length == 0) return;
 	
 		var settings = "";
 		var segmentOptions = {};
 		if (item.data && "therionData" in item.data) {
-			thData = item.data.therionData;
+			let thData = item.data.therionData;
 			if ("lineType" in thData)
 				settings += thData.lineType;
 			if ("segmentOptions" in thData)
@@ -78,7 +80,7 @@ var exporterTh2 = {
 		var firstPrinted = false;
 		var prevControlPoint = "";
 		var firstOutput
-		for ([index, segment] of segments.entries()) {
+		for (let [index, segment] of segments.entries()) {
 			var isCurved = (segment.length >= 3);
 	
 			if (!firstPrinted) {
@@ -108,7 +110,7 @@ var exporterTh2 = {
 	},
 	
 	processCompoundPath: function(item) {
-		for (child of item.children)
+		for (let child of item.children)
 			this.processLine(child);
 	},
 	

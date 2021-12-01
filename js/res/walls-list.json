@@ -1,0 +1,41 @@
+{
+  "passages": [
+    "wall",
+    "contour",
+    "slope",
+    "floor-step",
+    "pit",
+    "ceiling-step",
+    "chimney",
+    "overhang",
+    "ceiling-meander",
+    "floor-meander",
+    "low-ceiling",
+    "pit-chimney"
+  ],
+  "passage fills": [
+    "flowstone",
+    "moonmilk",
+    "rock-border",
+    "rock-edge",
+    "water-flow",
+    "abyssentrance",
+    "dripline",
+    "fault",
+    "joint",
+    "rimstone-dam",
+    "rimstone-pool",
+    "walkway"
+  ],
+  "labels": [
+    "label"
+  ],
+  "special": [
+    "border",
+    "arrow",
+    "section",
+    "survey",
+    "map-connection",
+    "u"
+  ]
+}

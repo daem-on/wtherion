@@ -16,14 +16,17 @@ const components = {
 
 export function updateWindow() {
 	let selected = pg.selection.getSelectedItems();
+	
+	removeWindow();
 	if (selected.length !== 1) {
-		removeWindow();
 		return;
 	}
 
 	let options = {
 		name: "O",
-		option1: 50
+		option1: 50,
+		option2: 4,
+		list: "how",
 	}
 	let components: componentList = {
 		option1: {
@@ -55,6 +58,20 @@ export function updateWindow() {
 		subSectio2n: {
 			type: "title",
 			text: "Advanced2"
+		},
+		list: {
+			type: 'list',
+			label: 'a',
+			options: [
+				"what", "how", "why"
+			],
+		},
+		customLineInput: {
+			label: 'b',
+			type: 'customLine',
+			options: [
+				"wall", "contour", "slope", "floor-step", "moonmilk", "flowstone"
+			],
 		},
 	}
 

@@ -181,3 +181,10 @@
 	background-color: #ddd;
 }
 
+.limited-height {
+	height: 300px;
+}
+
+.crop-svg {
+	width:100px
+}

@@ -5,8 +5,9 @@
 	left: 84px;
 	background-color: #fff;
 	padding: 8px 10px 10px 10px;
-	border-radius: 0 0 3px 3px;
+	border-radius: 5px;
 	min-width: 90px;
+	box-shadow: rgb(0 0 0 / 30%) 0 3px 10px 0;
 }
 
 .toolOptionPanel .options {

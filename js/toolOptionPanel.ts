@@ -1,8 +1,9 @@
 import "jquery-ui/ui/widgets/draggable";
 import pg from "../src/init";
+import {convertCustomLineInput} from "./customToolbarInput";
 
 type component = {
-	type?: "int" | "list" | "float" | "text" | "button" | "boolean" | "title",
+	type?: "int" | "list" | "float" | "text" | "button" | "boolean" | "title" | "customLine",
 	min?: any,
 	max?: any,
 	label?: any,
@@ -20,7 +21,7 @@ export type componentList = {
 
 export default {
 	
-	setup(options, components: componentList, changeCallback) {
+	setup(options, components: componentList, changeCallback: () => void) {
 		var $panel = jQuery('<div class="toolOptionPanel">');
 		var $title = jQuery('<h3 class="panelTitle">'+options.name+'</h3>');
 		var $options = jQuery('<div class="options">');
@@ -48,7 +49,7 @@ export default {
 				}
 				$input = jQuery('<input type="number" data-type="'+comp.type+'" name="'+key+'" value="'+options[key]+'"'+minAttr+'>');
 				
-			} else if(comp.type == 'list') {
+			} else if(comp.type == 'list' || comp.type == 'customLine') {
 				$input = jQuery('<select data-type="'+comp.type+'" name="'+key+'">');
 				jQuery.each(comp.options, function(index, value) {
 					var $opt = jQuery('<option value="'+value+'">'+value+'</option>');
@@ -180,6 +181,10 @@ export default {
 				}
 			});
 		};
+
+		convertCustomLineInput(
+			$panel.find("[data-type='customLine']") as any
+		);
 		
 		return $panel;
 	},

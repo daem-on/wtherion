@@ -1,4 +1,5 @@
 import paper from "paper";
+import LineSettings, { getSettings } from "../src/objectSettings/LineSettings";
 
 function toGlobal(global, local= [0, 0]) {
 	let x = Math.round((global[0]+local[0])*100)/100;
@@ -62,24 +63,17 @@ export default {
 	
 	processLine: function(item) {
 		let segments = item.segments;
-		if (segments.length == 0) return;
-	
-		var settings = "";
-		var segmentOptions = {};
-		if (item.data && "therionData" in item.data) {
-			let thData = item.data.therionData;
-			if ("lineType" in thData)
-				settings += thData.lineType;
-			if ("segmentOptions" in thData)
-				segmentOptions = thData.segmentOptions;
-		}
-		logText("line " + settings);
-			
+		if (!segments || segments.length == 0) return;
+		
+		let lineSettings = getSettings(item);
+		let segmentOptions = lineSettings.subtypes;
+		logText("line " + this.settingsToString(lineSettings));
+
 		if (item.closed) logText("close on");
 	
 		var firstPrinted = false;
 		var prevControlPoint = "";
-		var firstOutput
+		var firstOutput: string;
 		for (let [index, segment] of segments.entries()) {
 			var isCurved = (segment.length >= 3);
 	
@@ -106,7 +100,30 @@ export default {
 		}
 	
 		if (item.closed) logText(firstOutput);
-		logText("endline")
+		logText("endline");
+	},
+	
+
+	settingsToString(settings: LineSettings) {
+		let o = [];
+		if (settings.id !== undefined && settings.id !== "")
+			o.push("-id " + settings.id);
+		if (settings.clip !== undefined)
+			o.push("-clip " + settings.clip ? "on" : "off");
+		if (settings.invisible !== undefined)
+			o.push("-visibility " + settings.invisible ? "on" : "off");
+		if (settings.reverse !== undefined)
+			o.push("-reverse " + settings.reverse ? "on" : "off");
+		if (settings.outline !== undefined)
+			o.push("-outline " + ["in", "out", "none"][settings.outline]);
+		if (settings.place !== undefined) {
+			o.push("-place " + ["bottom", "default", "top"][settings.outline]);
+		if (settings.size !== undefined)
+			o.push("-size " + settings.size);
+		if (settings.otherSettings !== undefined)
+			o.push(settings.otherSettings);
+		return o.join(" ");
+		}
 	},
 	
 	processCompoundPath: function(item) {

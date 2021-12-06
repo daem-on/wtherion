@@ -1,3 +1,5 @@
+import LineSettings from "../src/objectSettings/LineSettings";
+
 export default {
 	lineTypeTest: function() {
 		var items = pg.selection.getSelectedItems();
@@ -9,12 +11,12 @@ export default {
 		pg.undo.snapshot('setLineType');
 	},
 
-	newPath: function() {
+	createPath: function() {
 		var path = new paper.Path();
 		path.strokeColor = new paper.Color(0, 0, 0);
-		path.strokeWidth = 4;
+		path.strokeWidth = 2;
 		path.data = {
-			therionData: {}
+			therionData: LineSettings.defaultSettings()
 		};
 		return path;
 	},

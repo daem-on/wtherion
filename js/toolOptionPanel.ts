@@ -6,12 +6,12 @@ type component = {
 	type?: "int" | "list" | "float" | "text" | "button" | "boolean" | "title" | "customLine",
 	min?: any,
 	max?: any,
-	label?: any,
-	options?: any,
+	label?: string,
+	options?: string[],
 	click?: any,
 	maxWidth?: any,
 	minWidth?: any,
-	text?: any,
+	text?: string,
 	requirements?: any,
 }
 
@@ -22,19 +22,21 @@ export type componentList = {
 export default {
 	
 	setup(options, components: componentList, changeCallback: () => void) {
+		let panelTitle = options.name || "Settings";
+		
 		var $panel = jQuery('<div class="toolOptionPanel">');
-		var $title = jQuery('<h3 class="panelTitle">'+options.name+'</h3>');
+		var $title = jQuery(`<h3 class="panelTitle">${panelTitle}</h3>`);
 		var $options = jQuery('<div class="options">');
 		
 		let lastSubSection: JQuery<HTMLElement> = null;
 		jQuery.each(components, function(key: string, comp) {
-			var $optionSection = jQuery('<div class="option-section" data-id="'+key+'">');
-			var $label = jQuery('<label for="'+key+'">'+comp.label+'</label>');
+			var $optionSection = jQuery(`<div class="option-section" data-id="${key}">`);
+			var $label = jQuery(`<label for="${key}">${comp.label}</label>`);
 			var $input: JQuery<HTMLInputElement>;
 			var $button: JQuery<HTMLButtonElement>;
 			var $sectionTitle: JQuery<HTMLTitleElement>;
 			if(comp.type == 'boolean') {
-				$input = jQuery('<input type="checkbox" name="'+key+'">');
+				$input = jQuery(`<input type="checkbox" name="${key}">`);
 				if(options[key]) {
 					$input.prop('checked', true);
 				}
@@ -42,17 +44,17 @@ export default {
 			} else if(comp.type == 'int' || comp.type == 'float') {
 				var minAttr = '';
 				if(comp.min != undefined && comp.type == 'int') {
-					minAttr = ' min="'+parseInt(comp.min)+'"';
+					minAttr = ` min="${parseInt(comp.min)}"`;
 					
 				} else if(comp.min != undefined && comp.type == 'float') {
-					minAttr = ' min="'+parseFloat(comp.min)+'"';
+					minAttr = ` min="${parseFloat(comp.min)}"`;
 				}
-				$input = jQuery('<input type="number" data-type="'+comp.type+'" name="'+key+'" value="'+options[key]+'"'+minAttr+'>');
+				$input = jQuery(`<input type="number" data-type="${comp.type}" name="${key}" value="${options[key]}"${minAttr}>`);
 				
 			} else if(comp.type == 'list' || comp.type == 'customLine') {
 				$input = jQuery('<select data-type="'+comp.type+'" name="'+key+'">');
 				jQuery.each(comp.options, function(index, value) {
-					var $opt = jQuery('<option value="'+value+'">'+value+'</option>');
+					var $opt = jQuery(`<option value="${value}">${value}</option>`);
 					if(value == options[key]) {
 						$opt.prop('selected', true);
 					}
@@ -63,14 +65,15 @@ export default {
 				});
 				
 			} else if(comp.type == 'text') {
-				$input = jQuery('<input type="text" id="textToolInput" data-type="'+comp.type+'" name="'+key+'" value="">');
+				let val = options[key] ?? "";
+				$input = jQuery(`<input type="text" id="textToolInput" data-type="${comp.type}" name="${key}" value="${val}">`);
 				
 			} else if(comp.type == 'button') {
-				$button = jQuery('<button data-click="'+comp.click+'">'+comp.label+'</button>');
+				$button = jQuery(`<button data-click="${comp.click}">${comp.label}</button>`);
 				
 			} else if(comp.type == 'title') {
-				$sectionTitle = jQuery('<h4>'+comp.text+'</h4>');
-				$optionSection.addClass('titleSection');
+				$sectionTitle = jQuery(`<h4>${comp.text}</h4>`);
+				$optionSection.addClass('titleSection collapsed');
 			}
 			
 			if($input) {
@@ -79,7 +82,8 @@ export default {
 					var val;
 					if(e.target.type == 'checkbox') {
 						val = e.target.checked;
-
+					} else if (e.target.type == "text") {
+						val = e.target.value;
 					} else if(e.target.type == 'number') {
 						var dataType = e.target.dataset.type;
 
@@ -111,7 +115,7 @@ export default {
 
 					// set values for tool and save in local options
 					options[key] = val;
-					pg.tools.setLocalOptions(options);
+					// pg.tools.setLocalOptions(options);
 
 					processInputRequirements();
 					changeCallback();

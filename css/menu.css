@@ -188,3 +188,8 @@
 .crop-svg {
 	width:100px
 }
+
+.option-section.titleSection h4 {
+	text-transform: uppercase;
+	color: #777;
+}

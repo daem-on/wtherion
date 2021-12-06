@@ -69,7 +69,7 @@ module.exports = function() {
 		
 			for( var i=0; i < lineCount; i++) {
 				var path = paths[i];
-				path = pg.editTH2.newPath();
+				path = pg.editTH2.createPath();
 				
 				path = pg.stylebar.applyActiveToolbarStyle(path);
 				

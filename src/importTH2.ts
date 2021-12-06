@@ -1,4 +1,5 @@
 import pg from "./init"
+import { getSettings } from "./objectSettings/LineSettings"
 
 const toPoint = function(global: string[], global2: string[] = undefined) {
 	if (global2)
@@ -34,6 +35,8 @@ let _currentPath: paper.Path =  null;
 let _currentSegments: string[][] =  null;
 let _closeLine: boolean =  null;
 let _lineCommands: string[] =  ["reverse", "close"];
+let _subtypes: Record<number, string> = {};
+let _segmentIndex: number;
 
 export default function(source: string) {
 	for (let line of source.split("\n")) {
@@ -43,8 +46,12 @@ export default function(source: string) {
 			if (isNaN(line.slice(0, 2) as any)) {
 				if (line.startsWith("close")) _closeLine = true;
 				if (line.startsWith("endline")) endLine();
+				if (line.startsWith("subtype")) addSubtype(line);
 			}
-			else addSegment(line);
+			else {
+				_segmentIndex++;
+				addSegment(line);
+			}
 		} else {
 			if (line.startsWith("line")) {
 				createLine(line)
@@ -68,9 +75,7 @@ function endLine() {
 	for (let i = 0; i < segments.length; i++) {
 		let segment = segments[i];
 		if (segment.length == 2) {
-			_currentPath.add(new paper.Point(
-				toPoint(segment)
-			));
+			_currentPath.add(new paper.Point(toPoint(segment)));
 			lastpoint = segment;
 		} else if (segment.length == 6) {
 			_currentPath.lastSegment.handleOut =
@@ -85,17 +90,27 @@ function endLine() {
 	}
 	if (_closeLine) _currentPath.closed = true;
 	_linedef = false;
+
+	let lineSettings = getSettings(_currentPath);
+	lineSettings.subtypes = _subtypes;
+}
+
+function addSubtype(line: string) {
+	_subtypes[_segmentIndex] = line.split(" ")[1];
 }
 
 function createLine(line: string) {
 	let split = line.split(" ");
-	_currentPath = pg.editTH2.newPath();
+	_currentPath = pg.editTH2.createPath();
 	_currentPath.strokeColor = new paper.Color("black");
 	_currentSegments = [];
 	_linedef = true;
 	_closeLine = false;
-	_currentPath.data
-	_currentPath.data.therionData.type = split[1];
+	_segmentIndex = 0;
+	_subtypes = [];
+
+	let lineSettings = getSettings(_currentPath);
+	lineSettings.type = split[1];
 }
 
 function createScrap(line: string) {

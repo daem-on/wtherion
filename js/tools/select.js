@@ -2,7 +2,7 @@
 // adapted from resources on http://paperjs.org and 
 // https://github.com/memononen/stylii
 
-const { updateWindow } = require("../../src/objectSettings");
+const { updateWindow } = require("../../src/objectSettings/objectOptionPanel");
 
 module.exports = function() {
 	var tool;

@@ -35,7 +35,7 @@ module.exports = function() {
 			if(!path) {
 				if(!hoveredItem) {
 					pg.selection.clearSelection();
-					path = pg.editTH2.newPath();
+					path = pg.editTH2.createPath();
 					path = pg.stylebar.applyActiveToolbarStyle(path);
 					
 				} else {

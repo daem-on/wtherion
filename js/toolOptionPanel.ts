@@ -1,6 +1,6 @@
 import "jquery-ui/ui/widgets/draggable";
 import pg from "../src/init";
-import {convertCustomLineInput} from "./customToolbarInput";
+import {convertCustomLineInput} from "../src/objectSettings/customToolbarInput";
 
 type component = {
 	type?: "int" | "list" | "float" | "text" | "button" | "boolean" | "title" | "customLine",

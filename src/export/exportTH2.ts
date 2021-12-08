@@ -1,5 +1,5 @@
 import paper from "paper";
-import LineSettings, { getSettings } from "../src/objectSettings/LineSettings";
+import LineSettings, { getSettings } from "../objectSettings/LineSettings";
 
 function toGlobal(global, local= [0, 0]) {
 	let x = Math.round((global[0]+local[0])*100)/100;

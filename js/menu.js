@@ -1,7 +1,7 @@
 // function related to the main menu
 
-const importerXvi = require("../src/importXVI.ts").default;
-const importerTh2 = require("../src/importTH2.ts").default;
+const importerXvi = require("../src/import/importXVI.ts").default;
+const importerTh2 = require("../src/import/importTH2.ts").default;
 
 module.exports = function() {
 	

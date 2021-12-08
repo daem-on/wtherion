@@ -1,5 +1,5 @@
-import pg from "./init"
-import { getSettings } from "./objectSettings/LineSettings"
+import pg from "../init"
+import { getSettings } from "../objectSettings/LineSettings"
 
 const toPoint = function(global: string[], global2: string[] = undefined) {
 	if (global2)

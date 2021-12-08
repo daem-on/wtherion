@@ -1,4 +1,4 @@
-import pg from "./init";
+import pg from "../init";
 const COMMMON_COLOR = new paper.Color(0.2, 0.2, 0.2);
 
 export default {

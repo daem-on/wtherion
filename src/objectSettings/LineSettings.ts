@@ -1,6 +1,6 @@
-type Place = "bottom" | "default" | "top";
-type Outline = "in" | "out" | "none";
-type Clip = "-" | "on" | "off";
+enum Place { Default, Bottom, Top }
+enum Outline { Default, In, Out, None }
+enum Clip { Default, On, Off }
 
 export default class LineSettings {
 	otherSettings: string;
@@ -17,11 +17,11 @@ export default class LineSettings {
 	get type() { return this._type }
 	set type(val: string) {
 		this._type = val;
-		if (val === "wall") {
-			this.outline = "out";
-		} else {
-			this.outline = "none";
-		}
+		// if (val === "wall") {
+		// 	this.outline = Outline.Out;
+		// } else {
+		// 	this.outline = Outline.None;
+		// }
 	}
 
 	static defaultSettings(): LineSettings {
@@ -29,10 +29,10 @@ export default class LineSettings {
 		ls.otherSettings = "";
 		ls.subtypes = {};
 		ls.reverse = false;
-		ls.place = "default";
-		ls.clip = "-";
+		ls.place = Place.Default;
+		ls.clip = Clip.Default;
 		ls.invisible = false;
-		ls.outline = "out";
+		ls.outline = Outline.Default;
 		ls.id = "";
 		ls._type = "wall";
 		return ls;

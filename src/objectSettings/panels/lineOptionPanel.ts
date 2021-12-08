@@ -2,7 +2,12 @@ import { componentList } from "../../../js/toolOptionPanel";
 import LineSettings, { getSettings } from "../LineSettings";
 import { objectOptionPanelConfig } from "../objectOptionPanel";
 import pg from "../../init";
-import wallTypes from "../../../js/res/walls-list.json";
+import wallList from "../../../js/res/walls-list.json";
+
+const wallTypes = wallList.labels
+	.concat(wallList.passages)
+	.concat(wallList["passage fills"])
+	.concat(wallList.special);
 
 let optionsCache = {
 	reverse: undefined,
@@ -20,7 +25,7 @@ const components: componentList = {
 	type: {
 		type: "customLine",
 		label: "Type",
-		options: wallTypes.passages,
+		options: wallTypes,
 	},
 	reverse: {
 		type: "boolean",
@@ -33,7 +38,12 @@ const components: componentList = {
 	outline: {
 		type: "list",
 		label: "Outline",
-		options: ["in", "out", "none"]
+		optionValuePairs: [
+			["default", 0],
+			["in", 1],
+			["out", 2],
+			["none", 3]
+		],
 	},
 	advancedSection: {
 		type: "title",
@@ -50,12 +60,20 @@ const components: componentList = {
 	clip: {
 		type: "list",
 		label: "Clip",
-		options: ["-", "on", "off"],
+		optionValuePairs: [
+			["default", 0],
+			["on", 1],
+			["off", 2]
+		],
 	},
 	place: {
 		type: "list",
 		label: "Place",
-		options: ["bottom", "default", "top"]
+		optionValuePairs: [
+			["top ▲", 2],
+			["bottom ▼", 1],
+			["default ⦿", 0]
+		]
 	},
 }
 

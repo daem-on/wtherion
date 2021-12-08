@@ -8,6 +8,7 @@ type component = {
 	max?: any,
 	label?: string,
 	options?: string[],
+	optionValuePairs?: [string, any][],
 	click?: any,
 	maxWidth?: any,
 	minWidth?: any,
@@ -53,16 +54,23 @@ export default {
 				
 			} else if(comp.type == 'list' || comp.type == 'customLine') {
 				$input = jQuery('<select data-type="'+comp.type+'" name="'+key+'">');
-				jQuery.each(comp.options, function(index, value) {
-					var $opt = jQuery(`<option value="${value}">${value}</option>`);
-					if(value == options[key]) {
-						$opt.prop('selected', true);
+
+				if (comp.options) {
+					for (let value of comp.options) {
+						var $opt = jQuery(`<option value="${value}">${value}</option>`);
+						if(value == options[key]) $opt.prop('selected', true);
+						$input.append($opt);
 					}
-					if(comp.maxWidth) {
-						$input.css({'maxWidth': comp.maxWidth+'px'});
+				} else if (comp.optionValuePairs) {
+					for (let [display, value] of comp.optionValuePairs) {
+						var $opt = jQuery(`<option value="${value}">${display}</option>`);
+						if(value == options[key]) $opt.prop('selected', true);
+						
+						$input.append($opt);
 					}
-					$input.append($opt);
-				});
+				}
+
+				if(comp.maxWidth) $input.css({'maxWidth': comp.maxWidth+'px'});
 				
 			} else if(comp.type == 'text') {
 				let val = options[key] ?? "";
@@ -72,7 +80,7 @@ export default {
 				$button = jQuery(`<button data-click="${comp.click}">${comp.label}</button>`);
 				
 			} else if(comp.type == 'title') {
-				$sectionTitle = jQuery(`<h4>${comp.text}</h4>`);
+				$sectionTitle = jQuery(`<h4>${comp.text} ▼</h4>`);
 				$optionSection.addClass('titleSection collapsed');
 			}
 			

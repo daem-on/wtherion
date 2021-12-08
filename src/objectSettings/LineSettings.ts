@@ -17,11 +17,6 @@ export default class LineSettings {
 	get type() { return this._type }
 	set type(val: string) {
 		this._type = val;
-		// if (val === "wall") {
-		// 	this.outline = Outline.Out;
-		// } else {
-		// 	this.outline = Outline.None;
-		// }
 	}
 
 	static defaultSettings(): LineSettings {

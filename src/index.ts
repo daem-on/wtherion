@@ -1,8 +1,9 @@
 import pg from "./init";
 import jQuery from "jquery";
-import exporter from "./export/exportTH2";
+import * as exporter from "./export/exportTH2";
 
-import spectrumSetup from "../js/lib/spectrum.js";
+// import spectrumSetup from "../js/lib/spectrum.js";
+// spectrumSetup(window, jQuery);
 
 declare global {
     interface Window { pg: any; }
@@ -10,7 +11,6 @@ declare global {
 
 window["pg"] = pg;
 window["exporter"] = exporter;
-spectrumSetup(window, jQuery);
 // set pg up on window load
 jQuery(window).on("load", function() {
 	pg.init();
@@ -22,3 +22,6 @@ jQuery(window).on("load", function() {
 		});
 	;
 });
+
+if (module.hot)
+  module.hot.accept()

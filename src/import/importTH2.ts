@@ -1,6 +1,6 @@
 import pg from "../init"
 import { getSettings } from "../objectSettings/LineSettings"
-
+				
 const toPoint = function(global: string[], global2: string[] = undefined) {
 	if (global2)
 	return new paper.Point([
@@ -12,32 +12,33 @@ const toPoint = function(global: string[], global2: string[] = undefined) {
 		-Number.parseFloat(global[1])
 	])
 }
-
+				
 const getOptions = function(source: string) {
-	let options = {};
-
+	let options: Record<string, string> = {};
+				
 	let re = /-([a-z]+) ['"\[]([^'"\[\]]+)['"\]]/g;
 	let matches = source.matchAll(re);
 	for (let match of matches) {
-		options[match[1]] = match[2];
+		options[match[1].toLowerCase()] = match[2].toLowerCase();
 	}
 	let singleOptions = source.replace(re, "");
 	let split = singleOptions.split(" ");
 	for (let i = 0; i < split.length; i+=2) {
 		if (split[i].trim().startsWith("-"))
-			options[split[i].slice(1)] = split[i+1];
+			options[split[i].slice(1).toLowerCase()] = split[i+1].toLowerCase();
 	}
 	return options;
 }
-
+				
 let _linedef: boolean =  false;
 let _currentPath: paper.Path =  null;
 let _currentSegments: string[][] =  null;
 let _closeLine: boolean =  null;
 let _lineCommands: string[] =  ["reverse", "close"];
+let _parsedOptions: Record<string, string> = null;
 let _subtypes: Record<number, string> = {};
 let _segmentIndex: number;
-
+				
 export default function(source: string) {
 	for (let line of source.split("\n")) {
 		line = line.trim();
@@ -64,11 +65,51 @@ export default function(source: string) {
 	}
 	pg.layerPanel.updateLayerList();
 }
-
+				
 function addSegment(line: string) {
 	_currentSegments.push(line.split(" "));
 }
-
+				
+function saveLineSettings() {
+	let o = _parsedOptions;
+	let s = getSettings(_currentPath);
+	if (o.subtype) {};
+	if (o.close === "on") {
+		_closeLine = true; delete o.close;
+	}
+	if (o.reverse === "on") {
+		s.reverse = true; delete o.reverse;
+	}
+	if (o.place) {
+		if (o.place === "bottom") s.place = 1;
+		if (o.place === "top") s.place = 2;
+		delete o.place;
+	}
+	if (o.clip) {
+		if (o.clip === "on") s.clip = 1;
+		if (o.clip === "off") s.clip = 2;
+		delete o.clip;
+	}
+	if (o.visibility === "off") {
+		s.invisible = true; delete o.visibility;
+	}
+	if (o.outline) {
+		if (o.outline === "in") s.outline = 1;
+		if (o.outline === "out") s.outline = 2;
+		if (o.outline === "none") s.outline = 3;
+		delete o.outline;
+	}
+	if (o.id) {
+		s.id = o.id; delete o.id;
+	}
+				
+	for (const key in o) {
+		if (Object.prototype.hasOwnProperty.call(o, key)) {
+			s.otherSettings += ` -${key}  ${o[key]}`;
+		}
+	}
+}
+				
 function endLine() {
 	let segments = _currentSegments;
 	let lastpoint: string[];
@@ -88,31 +129,37 @@ function endLine() {
 			lastpoint = segment.slice(4, 6);
 		}
 	}
+				
+	saveLineSettings();
+				
 	if (_closeLine) _currentPath.closed = true;
 	_linedef = false;
-
+				
 	let lineSettings = getSettings(_currentPath);
 	lineSettings.subtypes = _subtypes;
 }
-
+				
 function addSubtype(line: string) {
 	_subtypes[_segmentIndex] = line.split(" ")[1];
 }
-
+				
 function createLine(line: string) {
 	let split = line.split(" ");
 	_currentPath = pg.editTH2.createPath();
 	_currentPath.strokeColor = new paper.Color("black");
 	_currentSegments = [];
+	_parsedOptions = {};
 	_linedef = true;
 	_closeLine = false;
 	_segmentIndex = 0;
 	_subtypes = [];
-
+				
 	let lineSettings = getSettings(_currentPath);
 	lineSettings.type = split[1];
+					
+	_parsedOptions = getOptions(line);
 }
-
+				
 function createScrap(line: string) {
 	let split = line.split(" ");
 	let nl = pg.layer.addNewLayer(split[1], true);
@@ -120,7 +167,7 @@ function createScrap(line: string) {
 		createdFrom: line,
 	};
 }
-
+				
 function createPoint(line: string) {
 	let point = pg.editTH2.createPoint();
 	let split = line.split(" ");

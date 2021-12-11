@@ -48,6 +48,10 @@ module.exports = function() {
 			label: 'Split path',
 			click: 'pg.selection.splitPathAtSelectedSegments'
 		},
+		testTitle: {
+			type : 'title',
+			text :'EditTh2'
+		},
 		test3: {
 			type: 'button',
 			label: 'Subtype test',
@@ -57,6 +61,11 @@ module.exports = function() {
 			type: 'button',
 			label: 'Clear subtype',
 			click: 'pg.editTH2.clearSubtype'
+		},
+		test4: {
+			type: 'button',
+			label: 'Merge lines',
+			click: 'pg.editTH2.mergeLines'
 		},
 	};
 

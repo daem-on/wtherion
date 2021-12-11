@@ -39,17 +39,16 @@ module.exports = function() {
 					path = pg.stylebar.applyActiveToolbarStyle(path);
 					
 				} else {
-					if(!hoveredItem.item.closed) {
+					path = hoveredItem.item;
+					if(!hoveredItem.item.closed
+						&& findHandle(path, event.point)) {
 						mode = 'continue';
-						path = hoveredItem.item;
 						currentSegment = hoveredItem.segment;
 						if(hoveredItem.item.lastSegment !== hoveredItem.segment) {
 							path.reverse();
 						}
 						
-					} else {
-						path = hoveredItem.item;
-					}
+					} 
 				}
 				
 			}

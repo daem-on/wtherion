@@ -80,4 +80,19 @@ export default {
 		// circle.selectedColor = "white";
 		return circle;
 	},
+
+	mergeLines: function() {
+		let selection = pg.selection.getSelectedItems();
+		if (selection.length !== 2) {
+			console.error("Only possible with 2 lines");
+			return;
+		}
+		if (selection[0].className !== "Path" || selection[0].className !== "Path") {
+			console.error("Only lines");
+			return;
+		}
+
+		selection[0].join(selection[1], 6);
+		pg.undo.snapshot("mergeLines");
+	}
 }

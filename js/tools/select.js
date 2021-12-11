@@ -385,6 +385,8 @@ module.exports = function() {
 				pg.undo.snapshot('moveSelection');
 				
 			} else if(mode === 'scale') {
+				// this means the original setting is lost, but whatever
+				itemGroup.strokeScaling = true;
 				itemGroup.applyMatrix = true;
 				
 				// mark text items as scaled (for later use on font size calc)

@@ -62,7 +62,7 @@ module.exports = function() {
 			label: 'Clear subtype',
 			click: 'pg.editTH2.clearSubtype'
 		},
-		test4: {
+		test5: {
 			type: 'button',
 			label: 'Merge lines',
 			click: 'pg.editTH2.mergeLines'

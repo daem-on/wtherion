@@ -2,7 +2,7 @@ import paper from "paper";
 import LineSettings, { getSettings } from "../objectSettings/LineSettings";
 import { saveAs } from "file-saver";
 
-function toGlobal(global, local= [0, 0]) {
+function toGlobal(global: number[], local = [0, 0]) {
 	let x = Math.round((global[0]+local[0])*100)/100;
 	let y = -Math.round((global[1]+local[1])*100)/100;
 	return `${x} ${y}`
@@ -62,7 +62,11 @@ function processLayer(layer) {
 	for (let item of layer.children) {
 		switch (item[0]) {
 		case "Path":
-			processLine(item[1]);
+			let className = getSettings(item[1]).className;
+			if (className == "LineSettings")
+				processLine(item[1]);
+			else if (className == "AreaSettings")
+				processArea(item[1]);
 			break;
 		case "CompoundPath":
 			processCompoundPath(item[1]);
@@ -75,11 +79,17 @@ function processLayer(layer) {
 	logText("endscrap");
 }
 
-function processLine(item) {
+type paperExportedPath = {
+	closed: boolean,
+	segments: any[][],
+	data: { therionData: {}; };
+}
+
+function processLine(item: paperExportedPath) {
 	let segments = item.segments;
 	if (!segments || segments.length == 0) return;
 	
-	let lineSettings = getSettings(item);
+	let lineSettings = getSettings(item) as LineSettings;
 	let segmentOptions = lineSettings.subtypes;
 
 	let optionsString = "";
@@ -159,4 +169,8 @@ function processShape(item) {
 			out.push("-orient", shape.data.therionData.rotation);
 		logText(out);
 	}
+}
+
+function processArea(item: paperExportedPath) {
+	
 }

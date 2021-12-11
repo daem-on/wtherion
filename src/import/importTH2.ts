@@ -1,5 +1,5 @@
 import pg from "../init"
-import { getSettings } from "../objectSettings/LineSettings"
+import LineSettings, { AreaSettings, getSettings } from "../objectSettings/LineSettings"
 				
 const toPoint = function(global: string[], global2: string[] = undefined) {
 	if (global2)
@@ -34,16 +34,20 @@ let _linedef: boolean =  false;
 let _currentPath: paper.Path =  null;
 let _currentSegments: string[][] =  null;
 let _closeLine: boolean =  null;
-let _lineCommands: string[] =  ["reverse", "close"];
 let _parsedOptions: Record<string, string> = null;
 let _subtypes: Record<number, string> = {};
 let _segmentIndex: number;
-				
+
+let _areadef: boolean = false;
+let _linesWithIds: Record<string, paper.Path> = {};
+let _areaLine: paper.Path = null;
+let _areaType: string = null;
+
 export default function(source: string) {
 	for (let line of source.split("\n")) {
 		line = line.trim();
 		if (line.startsWith("#")) continue;
-		if (_linedef === true) {
+		if (_linedef) {
 			if (isNaN(line.slice(0, 2) as any)) {
 				if (line.startsWith("close")) _closeLine = true;
 				if (line.startsWith("endline")) endLine();
@@ -53,9 +57,19 @@ export default function(source: string) {
 				_segmentIndex++;
 				addSegment(line);
 			}
+		} else if (_areadef) {
+			if (line.startsWith("endarea")) endArea()
+			else if (line.startsWith("place")
+				|| line.startsWith("clip")
+				|| line.startsWith("context")
+				|| line.startsWith("visibility"))
+				continue;
+			else addLineToArea(line);
 		} else {
 			if (line.startsWith("line")) {
 				createLine(line)
+			} else if (line.startsWith("area")) {
+				createArea(line);
 			} else if (line.startsWith("scrap")) {
 				createScrap(line);
 			} else if (line.startsWith("point")) {
@@ -65,14 +79,14 @@ export default function(source: string) {
 	}
 	pg.layerPanel.updateLayerList();
 }
-				
+
 function addSegment(line: string) {
 	_currentSegments.push(line.split(" "));
 }
 				
 function saveLineSettings() {
 	let o = _parsedOptions;
-	let s = getSettings(_currentPath);
+	let s = getSettings(_currentPath) as LineSettings;
 	if (o.subtype) {};
 	if (o.close === "on") {
 		_closeLine = true; delete o.close;
@@ -100,6 +114,7 @@ function saveLineSettings() {
 		delete o.outline;
 	}
 	if (o.id) {
+		_linesWithIds[o.id] = _currentPath;
 		s.id = o.id; delete o.id;
 	}
 				
@@ -135,7 +150,7 @@ function endLine() {
 	if (_closeLine) _currentPath.closed = true;
 	_linedef = false;
 				
-	let lineSettings = getSettings(_currentPath);
+	let lineSettings = getSettings(_currentPath) as LineSettings;
 	lineSettings.subtypes = _subtypes;
 }
 				
@@ -158,6 +173,28 @@ function createLine(line: string) {
 	lineSettings.type = split[1];
 					
 	_parsedOptions = getOptions(line);
+}
+
+function createArea(line: string) {
+	_areadef = true;
+	_areaLine = null;
+	_areaType = line.split(" ")[1];
+}
+
+function addLineToArea(line: string) {
+	if (_areaLine) return;
+	let id = line;
+	if (id in _linesWithIds) {
+		_areaLine = _linesWithIds[id];
+	}
+}
+				
+function endArea() {
+	_areadef = false;
+	let oldSettings = getSettings(_areaLine);
+	_areaLine.data.therionData = AreaSettings.defaultSettings();
+	_areaLine.data.therionData.lineSettings = oldSettings;
+	_areaLine.data.therionData.type = _areaType;
 }
 				
 function createScrap(line: string) {

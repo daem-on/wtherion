@@ -16,7 +16,7 @@ import selection from "../js/selection.js";
 import guides from "../js/guides.js"
 import helper from "../js/helper.js"
 import hover from "../js/hover.js"
-import editTH2 from "../js/editTH2.js"
+import editTH2 from "./editTH2"
 import group from "../js/group.js"
 import item from "../js/item.js"
 import compoundPath from "../js/compoundPath.js"

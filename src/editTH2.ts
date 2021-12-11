@@ -1,4 +1,5 @@
-import LineSettings from "../src/objectSettings/LineSettings";
+import LineSettings from "./objectSettings/LineSettings";
+import pg from "./init";
 
 export default {
 	lineTypeTest: function() {
@@ -21,15 +22,19 @@ export default {
 		return path;
 	},
 
+	updateStyle: function(p: paper.Path) {
+		
+	},
+
 	subtypeTest: function() {
 		var items = pg.selection.getSelectedItems();
 		for (var item of items) {
-			if (!"segments" in item) continue;
+			if (!("segments" in item)) continue;
 			this.setupData(item);
 
-			thData = item.data.therionData;
+			let thData = item.data.therionData;
 			if (!thData.segmentOptions) thData.segmentOptions = {};
-			for (segment of item.segments) {
+			for (let segment of item.segments) {
 				if (segment.selected)
 					thData.segmentOptions[segment.index] =
 						"subtype " + prompt("Subtype", "sand");
@@ -44,7 +49,7 @@ export default {
 			if (item.className != "Shape") continue;
 			this.setupData(item);
 
-			thData = item.data.therionData;
+			let thData = item.data.therionData;
 			thData.pointSettings = prompt("Point settings", thData.pointSettings)
 		}
 		pg.undo.snapshot('setPointSettings');
@@ -53,10 +58,10 @@ export default {
 	clearSubtype: function() {
 		var items = pg.selection.getSelectedItems();
 		for (var item of items) {
-			if (!"segments" in item) continue;
+			if (!("segments" in item)) continue;
 			if (!item.data.therionData?.segmentOptions) continue;
 			var opt = item.data.therionData.segmentOptions;
-			for (segment of item.segments) {
+			for (let segment of item.segments) {
 				if (segment.selected && opt[segment.index])
 					delete opt[segment.index];
 			}

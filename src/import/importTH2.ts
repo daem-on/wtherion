@@ -151,7 +151,7 @@ function createLine(line: string) {
 	_parsedOptions = {};
 	_linedef = true;
 	_closeLine = false;
-	_segmentIndex = 0;
+	_segmentIndex = 1;
 	_subtypes = [];
 				
 	let lineSettings = getSettings(_currentPath);

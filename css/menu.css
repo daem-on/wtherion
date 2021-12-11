@@ -190,6 +190,6 @@
 }
 
 .option-section.titleSection h4 {
-	text-transform: uppercase;
+	/* text-transform: uppercase; */
 	color: #777;
 }

@@ -1,6 +1,7 @@
 // select tool
 // adapted from resources on http://paperjs.org and 
 // https://github.com/memononen/stylii
+const { updateWindow } = require("../../src/objectSettings/objectOptionPanel");
 
 module.exports = function() {
 	var tool;
@@ -143,14 +144,16 @@ module.exports = function() {
 			} else if(hitResult.type === 'segment') {
 				hitType = 'point';
 
-				if(hitResult.segment.selected) {
-					// selected points with no handles get handles if selected again
-					hitResult.segment.selected = true;
-					if(event.modifiers.shift) {
-						hitResult.segment.selected = false;
-					}
+				// // we could use this but not right now
+				// if(hitResult.segment.selected) {
+				// 	// selected points with no handles get handles if selected again
+				// 	hitResult.segment.selected = true;
+				// 	if(event.modifiers.shift) {
+				// 		hitResult.segment.selected = false;
+				// 	}
 
-				} else {
+				// } else
+				{
 					if(event.modifiers.shift) {
 						hitResult.segment.selected = true;
 					} else {
@@ -329,7 +332,8 @@ module.exports = function() {
 			
 			doRectSelection = false;
 			selectionRect = null;
-
+			
+			updateWindow();
 		};
 		
 		tool.onKeyDown = function(event) {

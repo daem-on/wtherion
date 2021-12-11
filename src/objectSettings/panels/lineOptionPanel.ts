@@ -101,9 +101,6 @@ export default function(line: paper.Path): objectOptionPanelConfig {
 				}
 			}
 		}
-		pg.toolOptionPanel.update({
-			outline: settings.outline,
-		});
 	}
 	return {
 		options: optionsCache,

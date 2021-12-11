@@ -13,6 +13,12 @@ function logText(...data) {
 	_exportText += data.join(" ") + "\n";
 }
 
+export function runWorker() {
+	let worker = new Worker(new URL('./worker', import.meta.url));
+	worker.postMessage({question: "asdfasd"});
+	worker.onmessage = data => {console.log(data)}
+}
+
 export function asBlob() {
 	return new Blob([exportTh2()], {type: "text/th2"});
 }

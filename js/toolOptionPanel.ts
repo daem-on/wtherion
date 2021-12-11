@@ -13,7 +13,10 @@ type component = {
 	maxWidth?: any,
 	minWidth?: any,
 	text?: string,
-	requirements?: any,
+	tooltip?: string,
+	requirements?: {
+		[reqKey: string]: any
+	},
 }
 
 export type componentList = {
@@ -36,6 +39,9 @@ export default {
 			var $input: JQuery<HTMLInputElement>;
 			var $button: JQuery<HTMLButtonElement>;
 			var $sectionTitle: JQuery<HTMLTitleElement>;
+
+			if (comp.tooltip) $label.attr("title", comp.tooltip);
+
 			if(comp.type == 'boolean') {
 				$input = jQuery(`<input type="checkbox" name="${key}">`);
 				if(options[key]) {
@@ -80,7 +86,7 @@ export default {
 				$button = jQuery(`<button data-click="${comp.click}">${comp.label}</button>`);
 				
 			} else if(comp.type == 'title') {
-				$sectionTitle = jQuery(`<h4>${comp.text} ▼</h4>`);
+				$sectionTitle = jQuery(`<h4>${comp.text} ⯆</h4>`);
 				$optionSection.addClass('titleSection collapsed');
 			}
 			
@@ -154,6 +160,8 @@ export default {
 				$optionSection.append($label, $input);
 			} else if($button) {
 				$optionSection.append($button);
+			} else if (!$sectionTitle) {
+				$optionSection.append($label);
 			}
 			
 			(lastSubSection || $options).append($optionSection);

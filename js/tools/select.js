@@ -150,11 +150,25 @@ module.exports = function() {
 			label: 'Text to outlines',
 			click: 'pg.text.convertSelectionToOutlines'
 		},
-		lineTypeTest: {
+		editTH2Title: {
+			type: 'title',
+			text: 'EditTh2'
+		},
+		mergeLines: {
 			type: 'button',
-			label: 'Changle line type',
-			click: 'pg.editTH2.lineTypeTest'
-		}
+			label: 'Merge lines',
+			click: 'pg.editTH2.mergeLines'
+		},
+		smoothLine: {
+			type: 'button',
+			label: 'Smooth',
+			click: 'pg.editTH2.smooth'
+		},
+		simplifyLine: {
+			type: 'button',
+			label: 'Simplify',
+			click: 'pg.editTH2.simplify'
+		},
 	};
 
 	var activateTool = function() {		

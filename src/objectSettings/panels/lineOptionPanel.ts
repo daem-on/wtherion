@@ -102,6 +102,7 @@ export default function(line: paper.Path): objectOptionPanelConfig {
 				}
 			}
 		}
+		pg.editTH2.drawLine(line);
 	}
 	return {
 		options: optionsCache,

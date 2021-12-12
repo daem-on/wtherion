@@ -11,7 +11,7 @@ function toGlobal(global: number[], local = [0, 0]) {
 }
 		
 let _exportText = ""
-function logText(...data) {
+function logText(...data: any[]) {
 	_exportText += data.join(" ") + "\n";
 }
 	
@@ -64,10 +64,10 @@ function processLayer(layer) {
 	for (let item of layer.children) {
 		switch (item[0]) {
 		case "Path":
-			let className = getSettings(item[1]).className;
-			if (className == "LineSettings")
+			let s = getSettings(item[1]);
+			if (s.className == "LineSettings")
 				processLine(item[1]);
-			else if (className == "AreaSettings")
+			else if (s.className == "AreaSettings")
 				processArea(item[1]);
 			break;
 		case "CompoundPath":
@@ -111,7 +111,7 @@ function processLine(item: paperExportedPath, settings?: LineSettings) {
 			o.push("-outline " + ["","in","out","none"][s.outline]);
 		if (s.place !== 0)
 			o.push("-place " + ["","bottom","default","top"][s.outline]);
-		if (s.size !== undefined)
+		if (s.size !== undefined || s.size !== 0)
 			o.push("-size " + s.size);
 		if (s.otherSettings !== "")
 			o.push(s.otherSettings);

@@ -26,10 +26,15 @@ let optionsCache = {
 };
 
 const components: componentList = {
+	// lineType: {
+	// 	type: "customList",
+	// 	label: "Outline Type",
+	// 	options: wallTypes,
+	// },
 	lineType: {
-		type: "customList",
+		type: "list",
 		label: "Outline Type",
-		options: wallTypes,
+		options: ["border", "rock-border"],
 	},
 	areaType: {
 		type: "customList",
@@ -75,6 +80,7 @@ export default function(line: paper.Path): objectOptionPanelConfig {
 		settings.invisible = optionsCache.areaInvisible;
 		settings.lineSettings.id = optionsCache.id;
 		settings.lineSettings.otherSettings = optionsCache.otherSettings;
+		pg.editTH2.drawArea(line);
 	}
 
 	return {

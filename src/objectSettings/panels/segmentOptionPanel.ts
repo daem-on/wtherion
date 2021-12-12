@@ -58,7 +58,9 @@ export default function(line: paper.Path): objectOptionPanelConfig {
 		subTypeEnable: false,
 		subType: undefined,
 	};
-	let settings = getSettings(line) as LineSettings;
+	let settings = getSettings(line);
+	if (settings.className !== "LineSettings") return;
+
 	for (let segment of line.segments)
 		if (segment.selected) selectedSegment = segment;
 	
@@ -89,12 +91,13 @@ export default function(line: paper.Path): objectOptionPanelConfig {
 		components.lastSubtypeLabel.label = "This line contains no subtype definitions";
 		components.nextSubtypeLabel.label = "";
 	}
-		
+
+	let s = settings as LineSettings;
 	let modifyObject = () => {
 		if (optionsCache.subTypeEnable) {
-			settings.subtypes[selectedSegment.index] = optionsCache.subType;
-		} else if (settings.subtypes[selectedSegment.index]) {
-			delete settings.subtypes[selectedSegment.index];
+			s.subtypes[selectedSegment.index] = optionsCache.subType;
+		} else if (s.subtypes[selectedSegment.index]) {
+			delete s.subtypes[selectedSegment.index];
 		}
 	}
 	return {

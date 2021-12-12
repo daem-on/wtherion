@@ -14,7 +14,7 @@ const toPoint = function(global: string[], global2: string[] = undefined) {
 		-Number.parseFloat(global[1])
 	])
 }
-				
+
 const getOptions = function(source: string) {
 	let options: Record<string, string> = {};
 				
@@ -31,7 +31,7 @@ const getOptions = function(source: string) {
 	}
 	return options;
 }
-				
+
 let _linedef: boolean =  false;
 let _currentPath: paper.Path =  null;
 let _currentSegments: string[][] =  null;
@@ -154,6 +154,7 @@ function endLine() {
 				
 	let lineSettings = getSettings(_currentPath) as LineSettings;
 	lineSettings.subtypes = _subtypes;
+	pg.editTH2.drawLine(_currentPath);
 }
 				
 function addSubtype(line: string) {
@@ -198,6 +199,7 @@ function endArea() {
 	_areaLine.data.therionData = AreaSettings.defaultSettings();
 	_areaLine.data.therionData.lineSettings = oldSettings;
 	_areaLine.data.therionData.type = _areaType;
+	pg.editTH2.drawArea(_areaLine);
 }
 				
 function createScrap(line: string) {

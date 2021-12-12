@@ -48,6 +48,7 @@ export function updateWindow() {
 		return;
 	}
 
+	if (!config) return;
 	pg.toolOptionPanel.setup(
 		config.options,
 		config.components,

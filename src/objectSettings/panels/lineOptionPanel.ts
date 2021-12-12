@@ -14,11 +14,11 @@ let optionsCache = {
 	clip: undefined,
 	outline: undefined,
 	invisible: undefined,
-	advancedSection: undefined,
 	id: undefined,
 	otherSettings: undefined,
 	place: undefined,
 	type: undefined,
+	size: undefined,
 };
 
 const components: componentList = {
@@ -34,6 +34,13 @@ const components: componentList = {
 	invisible: {
 		type: "boolean",
 		label: "Invisible"
+	},
+	size: {
+		type: "int",
+		label: "Size",
+		requirements: {
+			type: "slope"
+		}
 	},
 	outline: {
 		type: "list",
@@ -75,13 +82,6 @@ const components: componentList = {
 			["default ⦿", 0]
 		]
 	},
-}
-
-const sizeComponent: componentList = {
-	size: {
-		type: "int",
-		label: "Size"
-	}
 }
 
 export default function(line: paper.Path): objectOptionPanelConfig {

@@ -57,7 +57,7 @@ export default function(line: paper.Path): objectOptionPanelConfig {
 		subTypeEnable: false,
 		subType: undefined,
 	};
-	let settings = getSettings(line);
+	let settings = getSettings(line) as LineSettings;
 	for (let segment of line.segments)
 		if (segment.selected) selectedSegment = segment;
 	

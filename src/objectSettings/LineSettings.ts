@@ -28,6 +28,7 @@ export default class LineSettings {
 		ls.outline = Outline.Default;
 		ls.id = "";
 		ls.type = "wall";
+		ls.size = 0;
 		return ls;
 	}
 }
@@ -36,10 +37,12 @@ export class AreaSettings {
 	readonly className = "AreaSettings";
 	type: string;
 	lineSettings: LineSettings;
+	invisible: boolean;
 
 	static defaultSettings(): AreaSettings {
 		let as = new AreaSettings();
 		as.type = "water";
+		as.invisible = false;
 		return as;
 	}
 }

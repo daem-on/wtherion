@@ -19,13 +19,13 @@ const getOptions = function(source: string) {
 	let re = /-([a-z]+) ['"\[]([^'"\[\]]+)['"\]]/g;
 	let matches = source.matchAll(re);
 	for (let match of matches) {
-		options[match[1].toLowerCase()] = match[2].toLowerCase();
+		options[match[1]] = match[2];
 	}
 	let singleOptions = source.replace(re, "");
 	let split = singleOptions.split(" ");
 	for (let i = 0; i < split.length; i+=2) {
 		if (split[i].trim().startsWith("-"))
-			options[split[i].slice(1).toLowerCase()] = split[i+1].toLowerCase();
+			options[split[i].slice(1)] = split[i+1];
 	}
 	return options;
 }
@@ -190,6 +190,7 @@ function addLineToArea(line: string) {
 }
 				
 function endArea() {
+	if (!_areaLine) return;
 	_areadef = false;
 	let oldSettings = getSettings(_areaLine);
 	_areaLine.data.therionData = AreaSettings.defaultSettings();

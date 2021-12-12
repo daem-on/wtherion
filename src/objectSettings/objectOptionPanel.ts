@@ -1,7 +1,9 @@
 import { componentList } from "../../js/toolOptionPanel";
 import pg from "../init";
+import { getSettings } from "./LineSettings";
 import lineOptionPanel from "./panels/lineOptionPanel";
 import segmentOptionPanel from "./panels/segmentOptionPanel";
+import areaOptionPanel from "./panels/areaOptionPanel";
 
 export type objectOptionPanelConfig = {
 	options: {},
@@ -36,7 +38,12 @@ export function updateWindow() {
 	}
 
 	else if (selected[0].className === "Path") {
-		config = lineOptionPanel(selected[0] as paper.Path);
+		let therionType = getSettings(selected[0]).className
+		if (therionType == "LineSettings")
+			config = lineOptionPanel(selected[0] as paper.Path);
+		else if (therionType == "AreaSettings") {
+			config = areaOptionPanel(selected[0] as paper.Path);
+		}
 	} else {
 		return;
 	}

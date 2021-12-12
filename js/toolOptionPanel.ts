@@ -202,9 +202,9 @@ export default {
 			});
 		};
 
-		convertCustomLineInput(
-			$panel.find("[data-type='customLine']") as any
-		);
+		$panel.find("[data-type='customLine']").each((i, e) => {
+			convertCustomLineInput(jQuery(e as HTMLSelectElement));
+		})
 		
 		return $panel;
 	},

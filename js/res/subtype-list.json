@@ -1,0 +1,21 @@
+{
+	"wall": [
+		"invisible",
+		"bedrock",
+		"sand",
+		"clay",
+		"pebbles",
+		"debris",
+		"blocks",
+		"ice",
+		"underlying",
+		"overlying",
+		"unsurveyed",
+		"presumed",
+		"pit",
+		"flowstone",
+		"moonmilk"
+	],
+	"border": ["visible", "invisible", "temporary", "presumed"],
+	"water-flow": ["permanent", "conjectural", "intermittent"]
+}

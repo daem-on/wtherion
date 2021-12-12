@@ -1,5 +1,6 @@
 import { componentList } from "../../../js/toolOptionPanel";
-import LineSettings, { getSettings } from "../LineSettings";
+import LineSettings from "../model/LineSettings";
+import getSettings from "../model/getSettings";
 import { objectOptionPanelConfig } from "../objectOptionPanel";
 import pg from "../../init";
 import wallList from "../../../js/res/walls-list.json";
@@ -28,7 +29,7 @@ const components: componentList = {
 		label: "Define subtype"
 	},
 	subType: {
-		type: "customLine",
+		type: "customList",
 		label: "Type",
 		options: wallTypes,
 		requirements: {

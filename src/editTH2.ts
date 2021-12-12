@@ -1,4 +1,4 @@
-import LineSettings from "./objectSettings/LineSettings";
+import LineSettings from "./objectSettings/model/LineSettings";
 import pg from "./init";
 
 export default {

@@ -1,6 +1,6 @@
 import "jquery-ui/ui/widgets/selectmenu";
 
-export function convertCustomLineInput(selectInput: JQuery<HTMLSelectElement>) {
+export function convertToCustomInput(selectInput: JQuery<HTMLSelectElement>) {
 
 	if (!selectInput.length) return;
 	// for (const item of list) {

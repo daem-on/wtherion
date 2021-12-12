@@ -1,5 +1,7 @@
 import paper from "paper";
-import LineSettings, { AreaSettings, getSettings } from "../objectSettings/LineSettings";
+import LineSettings from "../objectSettings/model/LineSettings";
+import getSettings from "../objectSettings/model/getSettings";
+import AreaSettings from "../objectSettings/model/AreaSettings";
 import { saveAs } from "file-saver";
 	
 function toGlobal(global: number[], local = [0, 0]) {

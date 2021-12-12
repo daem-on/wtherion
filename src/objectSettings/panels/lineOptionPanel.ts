@@ -1,5 +1,6 @@
 import { componentList } from "../../../js/toolOptionPanel";
-import LineSettings, { getSettings } from "../LineSettings";
+import LineSettings from "../model/LineSettings";
+import getSettings from "../model/getSettings";
 import { objectOptionPanelConfig } from "../objectOptionPanel";
 import pg from "../../init";
 import wallList from "../../../js/res/walls-list.json";
@@ -23,7 +24,7 @@ let optionsCache = {
 
 const components: componentList = {
 	type: {
-		type: "customLine",
+		type: "customList",
 		label: "Type",
 		options: wallTypes,
 	},

@@ -1,3 +1,4 @@
+
 enum Place { Default, Bottom, Top }
 enum Outline { Default, In, Out, None }
 enum Clip { Default, On, Off }
@@ -31,26 +32,4 @@ export default class LineSettings {
 		ls.size = 0;
 		return ls;
 	}
-}
-
-export class AreaSettings {
-	readonly className = "AreaSettings";
-	type: string;
-	lineSettings: LineSettings;
-	invisible: boolean;
-
-	static defaultSettings(): AreaSettings {
-		let as = new AreaSettings();
-		as.type = "water";
-		as.invisible = false;
-		return as;
-	}
-}
-
-export function getSettings(path: paper.Path | {data: {therionData: {}}}) {
-	let d = path.data.therionData;
-	if (d.className == "LineSettings")
-		return d as LineSettings;
-	if (d.className == "AreaSettings")
-		return d as AreaSettings;
 }

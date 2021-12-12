@@ -1,6 +1,6 @@
 import { componentList } from "../../js/toolOptionPanel";
 import pg from "../init";
-import { getSettings } from "./LineSettings";
+import getSettings from "./model/getSettings";
 import lineOptionPanel from "./panels/lineOptionPanel";
 import segmentOptionPanel from "./panels/segmentOptionPanel";
 import areaOptionPanel from "./panels/areaOptionPanel";

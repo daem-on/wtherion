@@ -42,8 +42,7 @@ let _segmentIndex: number;
 
 let _areadef: boolean = false;
 let _linesWithIds: Record<string, paper.Path> = {};
-let _areaLine: paper.Path = null;
-let _areaType: string = null;
+let _areas: {type: string, ids: string[]}[] = [];
 
 export default function(source: string) {
 	for (let line of source.split("\n")) {
@@ -79,6 +78,7 @@ export default function(source: string) {
 			}
 		}
 	}
+	applyAreas();
 	pg.layerPanel.updateLayerList();
 }
 
@@ -180,26 +180,38 @@ function createLine(line: string) {
 
 function createArea(line: string) {
 	_areadef = true;
-	_areaLine = null;
-	_areaType = line.split(" ")[1];
+	_areas.push({
+		type: line.split(" ")[1],
+		ids: []
+	});
 }
 
 function addLineToArea(line: string) {
-	if (_areaLine) return;
 	let id = line;
-	if (id in _linesWithIds) {
-		_areaLine = _linesWithIds[id];
-	}
+	_areas[_areas.length-1].ids.push(line);
 }
 				
 function endArea() {
-	if (!_areaLine) return;
 	_areadef = false;
-	let oldSettings = getSettings(_areaLine);
-	_areaLine.data.therionData = AreaSettings.defaultSettings();
-	_areaLine.data.therionData.lineSettings = oldSettings;
-	_areaLine.data.therionData.type = _areaType;
-	pg.editTH2.drawArea(_areaLine);
+}
+
+function applyAreas() {
+	for (let area of _areas) {
+		if (area.ids.length > 1) {
+			console.warn("This importer is designed to work with one-to-one associations between lines and areas.")
+		}
+		for (let id of area.ids) {
+			if (id in _linesWithIds) {
+				let line = _linesWithIds[id]
+
+				let oldSettings = getSettings(line);
+				line.data.therionData = AreaSettings.defaultSettings();
+				line.data.therionData.lineSettings = oldSettings;
+				line.data.therionData.type = area.type;
+				pg.editTH2.drawArea(line);
+			}
+		}
+	}
 }
 				
 function createScrap(line: string) {

@@ -19,7 +19,7 @@ const config = {
         path: path.resolve(__dirname, 'dist'),
     },
     devServer: {
-        open: true,
+        open: false,
         host: 'localhost',
     },
     plugins: [
@@ -78,6 +78,7 @@ module.exports = () => {
         
     } else {
         config.mode = 'development';
+        config.devtool = "eval-source-map";
     }
     return config;
 };

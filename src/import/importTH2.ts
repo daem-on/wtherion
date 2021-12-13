@@ -2,6 +2,7 @@ import pg from "../init"
 import LineSettings from "../objectSettings/model/LineSettings"
 import getSettings from "../objectSettings/model/getSettings"
 import AreaSettings from "../objectSettings/model/AreaSettings"
+import PointSettings from "../objectSettings/model/PointSettings"
 				
 const toPoint = function(global: string[], global2: string[] = undefined) {
 	if (global2)
@@ -164,7 +165,6 @@ function addSubtype(line: string) {
 function createLine(line: string) {
 	let split = line.split(" ");
 	_currentPath = pg.editTH2.createPath();
-	_currentPath.strokeColor = new paper.Color("black");
 	_currentSegments = [];
 	_parsedOptions = {};
 	_linedef = true;
@@ -225,8 +225,44 @@ function createScrap(line: string) {
 function createPoint(line: string) {
 	let point = pg.editTH2.createPoint();
 	let split = line.split(" ");
+	let options = getOptions(line);
+	options.type = split[3]
+	savePointSettings(point, options);
 	point.position = new paper.Point(toPoint(split.slice(1, 3)))
-	const index = split.findIndex(s => s=="-orient" || s=="-orientation");
-	if (index !== -1)
-		point.rotation = Number.parseFloat(split[index+1]);
+	if ("orient" in options || "orientation" in options) {
+		point.rotation = Number.parseFloat(options.orient || options.orientation)
+	}
+	pg.editTH2.drawPoint(point);
+}
+
+function savePointSettings(point: paper.Shape, options: Record<string, string>) {
+	let o = options;
+	let s = getSettings(point) as PointSettings;
+
+	const stringOptions = ["type", "name", "scale", "text", "value", "id"];
+	for (let key of stringOptions) {
+		if (key in options) {
+			s[key] = o[key]; delete o[key];
+		}
+	}
+
+	if (o.place) {
+		if (o.place === "bottom") s.place = 1;
+		if (o.place === "top") s.place = 2;
+		delete o.place;
+	}
+	if (o.clip) {
+		if (o.clip === "on") s.clip = 1;
+		if (o.clip === "off") s.clip = 2;
+		delete o.clip;
+	}
+	if (o.visibility === "off") {
+		s.invisible = true; delete o.visibility;
+	}
+
+	for (const key in o) {
+		if (Object.prototype.hasOwnProperty.call(o, key)) {
+			s.otherSettings += ` -${key}  ${o[key]}`;
+		}
+	}
 }

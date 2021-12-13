@@ -1,7 +1,7 @@
 
-enum Place { Default, Bottom, Top }
+export enum Place { Default, Bottom, Top }
 enum Outline { Default, In, Out, None }
-enum Clip { Default, On, Off }
+export enum Clip { Default, On, Off }
 
 export default class LineSettings {
 	readonly className = "LineSettings";

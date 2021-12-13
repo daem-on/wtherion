@@ -2,6 +2,7 @@ import LineSettings from "./objectSettings/model/LineSettings";
 import pg from "./init";
 import getSettings from "./objectSettings/model/getSettings";
 import AreaSettings from "./objectSettings/model/AreaSettings";
+import PointSettings from "./objectSettings/model/PointSettings";
 	
 const typeColors = {
 	"default": new paper.Color(0, 0, 0),
@@ -11,6 +12,10 @@ const typeColors = {
 	"pit": new paper.Color(0.6875 ,0.13671875, 0.61328125),
 	"wall": new paper.Color(0.14453125 ,0.1640625, 0.3671875),
 	"slope": new paper.Color(0.875 ,0.7734375, 0.18359375),
+}
+const pointColors = {
+	"default": new paper.Color(1, 0, 0),
+	"station": new paper.Color(0.875 ,0.7734375, 0.18359375),
 }
 	
 export default {
@@ -38,6 +43,16 @@ export default {
 		let settings = getSettings(a) as AreaSettings;
 		this.drawLine(a, settings.lineSettings);
 		a.fillColor = new paper.Color(0.2, 0.2, 0.2, 0.2);
+	},
+
+	drawPoint: function(p: paper.Shape) {
+		let settings = getSettings(p) as PointSettings;
+		let isStation = settings.type === "station"
+
+		p.radius = isStation ? 3 : 5;
+		p.fillColor = isStation ? pointColors.station : pointColors.default;
+		// p.strokeColor = pointColors.default;
+		// p.strokeWidth = 2;
 	},
 	
 	drawLine: function(l: paper.Path, lineSettings?: LineSettings) {
@@ -118,8 +133,7 @@ export default {
 			fillColor: 'red'
 		});
 		circle.data.noDrawHandle = true;
-		pg.undo.snapshot('createPoint');
-		// circle.selectedColor = "white";
+		circle.data.therionData = PointSettings.defaultSettings();
 		return circle;
 	},
 	

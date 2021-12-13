@@ -101,6 +101,8 @@ function processLine(item: paperExportedPath, settings?: LineSettings) {
 		o.push(s.type);
 		if (s.id !== "")
 			o.push("-id " + s.id);
+		if (s.subtype !== "")
+			o.push("-subtype " + s.subtype);
 		if (s.clip !== 0)
 			o.push("-clip " + ["","on","off"][s.clip]);
 		if (s.invisible === true)

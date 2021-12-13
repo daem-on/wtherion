@@ -499,10 +499,12 @@ module.exports = function() {
 						noSelect: true,
 						noHover: true
 					},
-					from: items[0].position.subtract(new paper.Point(0, 15)),
-					to: items[0].position.subtract(new paper.Point(0, 60)),
+					from: items[0].position
+						.subtract(new paper.Point(0, 6)),
+					to: items[0].position
+						.subtract(new paper.Point(0, 10 + (paper.view.zoom / 60))),
 					strokeColor: pg.guides.getGuideColor('blue'),
-					strokeWidth: 2 / paper.view.zoom,
+					strokeWidth: 4 / paper.view.zoom,
 					parent: pg.layer.getGuideLayer()
 				});
 			thPointRotHandle.rotate(items[0].rotation, items[0].position);

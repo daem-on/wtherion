@@ -4,6 +4,7 @@ import getSettings from "./model/getSettings";
 import lineOptionPanel from "./panels/lineOptionPanel";
 import segmentOptionPanel from "./panels/segmentOptionPanel";
 import areaOptionPanel from "./panels/areaOptionPanel";
+import pointOptionPanel from "./panels/pointOptionPanel";
 
 export type objectOptionPanelConfig = {
 	options: {},
@@ -38,12 +39,14 @@ export function updateWindow() {
 	}
 
 	else if (selected[0].className === "Path") {
-		let therionType = getSettings(selected[0]).className
-		if (therionType == "LineSettings")
+		let settings = getSettings(selected[0])
+		if (settings.className == "LineSettings")
 			config = lineOptionPanel(selected[0] as paper.Path);
-		else if (therionType == "AreaSettings") {
+		else if (settings.className == "AreaSettings") 
 			config = areaOptionPanel(selected[0] as paper.Path);
-		}
+	} else if (selected[0].className === "Shape") {
+		if (getSettings(selected[0]).className == "PointSettings") 
+			config = pointOptionPanel(selected[0] as paper.Shape);
 	} else {
 		return;
 	}

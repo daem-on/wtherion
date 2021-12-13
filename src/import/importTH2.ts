@@ -90,7 +90,9 @@ function addSegment(line: string) {
 function saveLineSettings() {
 	let o = _parsedOptions;
 	let s = getSettings(_currentPath) as LineSettings;
-	if (o.subtype) {};
+	if (o.subtype) {
+		s.subtype = o.subtype; delete o.subtype;
+	}
 	if (o.close === "on") {
 		_closeLine = true; delete o.close;
 	}
@@ -262,7 +264,7 @@ function savePointSettings(point: paper.Shape, options: Record<string, string>) 
 
 	for (const key in o) {
 		if (Object.prototype.hasOwnProperty.call(o, key)) {
-			s.otherSettings += ` -${key}  ${o[key]}`;
+			s.otherSettings += ` -${key} ${o[key]}`;
 		}
 	}
 }

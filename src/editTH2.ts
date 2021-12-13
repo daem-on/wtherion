@@ -7,6 +7,7 @@ import PointSettings from "./objectSettings/model/PointSettings";
 const typeColors = {
 	"default": new paper.Color(0, 0, 0),
 	"rock-border": new paper.Color(0.3125 ,0.2421875, 0.3984375),
+	"rock-edge": new paper.Color(0.3125 ,0.2421875, 0.3984375),
 	"contour": new paper.Color(0.24609375 ,0.4375, 0.25),
 	"border": new paper.Color(0.26953125 ,0.70703125, 0.671875),
 	"pit": new paper.Color(0.6875 ,0.13671875, 0.61328125),
@@ -59,7 +60,13 @@ export default {
 		let settings = lineSettings || getSettings(l) as LineSettings;
 		l.strokeScaling = true;
 	
-		l.strokeWidth = settings.type == "wall" ? 2 : 1;
+		if (settings.type == "wall")
+			l.strokeWidth = 2;
+		else if (settings.type == "rock-edge")
+			l.strokeWidth = 0.8;
+		else
+			l.strokeWidth = 1;
+		
 		if (settings.type in typeColors)
 			l.strokeColor = typeColors[settings.type];
 		else

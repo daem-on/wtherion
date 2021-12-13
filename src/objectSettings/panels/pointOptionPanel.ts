@@ -1,0 +1,99 @@
+import { componentList } from "../../../js/toolOptionPanel";
+import LineSettings from "../model/LineSettings";
+import getSettings from "../model/getSettings";
+import { objectOptionPanelConfig } from "../objectOptionPanel";
+import pg from "../../init";
+
+let optionsCache = {
+	type: undefined,
+	otherSettings: undefined,
+	name: undefined,
+	clip: undefined,
+	place: undefined,
+	invisible: undefined,
+	text: undefined,
+	value: undefined,
+	id: undefined,
+};
+
+const components: componentList = {
+	type: {
+		type: "text",
+		label: "Type",
+	},
+	invisible: {
+		type: "boolean",
+		label: "Invisible"
+	},
+	name: {
+		type: "text",
+		label: "Station reference",
+		requirements: {
+			type: "station"
+		}
+	},
+	advancedSection: {
+		type: "title",
+		text: "Advanced"
+	},
+	id: {
+		type: "text",
+		label: "id"
+	},
+	otherSettings: {
+		type: "text",
+		label: "Other settings"
+	},
+	text: {
+		type: "text",
+		label: "Text"
+	},
+	value: {
+		type: "text",
+		label: "Value"
+	},
+	clip: {
+		type: "list",
+		label: "Clip",
+		optionValuePairs: [
+			["default", 0],
+			["on", 1],
+			["off", 2]
+		],
+	},
+	place: {
+		type: "list",
+		label: "Place",
+		optionValuePairs: [
+			["top ▲", 2],
+			["bottom ▼", 1],
+			["default ⦿", 0]
+		]
+	},
+}
+
+export default function(shape: paper.Shape): objectOptionPanelConfig {
+	let settings = getSettings(shape);
+	
+	for (const key in optionsCache) {
+		if (Object.prototype.hasOwnProperty.call(optionsCache, key)) {
+			optionsCache[key] = settings[key];
+		}
+	}
+	
+	let modifyObject = () => {
+		for (const key in optionsCache) {
+			if (Object.prototype.hasOwnProperty.call(optionsCache, key)) {
+				if (optionsCache[key] != settings[key]) {
+					settings[key] = optionsCache[key];
+				}
+			}
+		}
+		pg.editTH2.drawPoint(shape);
+	}
+	return {
+		options: optionsCache,
+		components: components,
+		callback: modifyObject,
+	}
+}

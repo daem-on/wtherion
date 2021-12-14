@@ -3,12 +3,7 @@ import LineSettings from "../model/LineSettings";
 import getSettings from "../model/getSettings";
 import { objectOptionPanelConfig } from "../objectOptionPanel";
 import pg from "../../init";
-import wallList from "../../../js/res/walls-list.json";
-	
-const wallTypes = wallList.labels
-	.concat(wallList.passages)
-	.concat(wallList["passage fills"])
-	.concat(wallList.special);
+import subtypes from "../../../js/res/subtype-list.json";
 	
 let optionsCache = {
 	subTypeEnable: false,
@@ -31,7 +26,7 @@ const components: componentList = {
 	subType: {
 		type: "customList",
 		label: "Type",
-		options: wallTypes,
+		options: subtypes.wall,
 		requirements: {
 			subTypeEnable: true
 		}

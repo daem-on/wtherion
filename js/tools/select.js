@@ -56,34 +56,6 @@ module.exports = function() {
 			label: 'Invert selection',
 			click: 'pg.selection.invertItemSelection'
 		},
-		randomSelection: {
-			type: 'button',
-			label: 'Random items',
-			click: 'pg.selection.selectRandomItems'
-		},
-		groupingTitle: {
-			type : 'title',
-			text :'Group'
-		},
-		groupSelection: {
-			type: 'button',
-			label: 'Group',
-			click: 'pg.group.groupSelection'
-		},
-		ungroupSelection: {
-			type: 'button',
-			label: 'Ungroup',
-			click: 'pg.group.ungroupSelection'
-		},
-		layerTitle: {
-			type : 'title',
-			text :'Layer'
-		},
-		moveToLayer: {
-			type: 'button',
-			label: 'Move to active Layer',
-			click: 'pg.layer.addSelectedItemsToActiveLayer'
-		},
 		orderTitle: {
 			type : 'title',
 			text :'Order'
@@ -98,61 +70,9 @@ module.exports = function() {
 			label: 'Send to back',
 			click: 'pg.order.sendSelectionToBack'
 		},
-		compoundTitle: {
-			type : 'title',
-			text :'Compound path'
-		},
-		createCompoundPath: {
-			type: 'button',
-			label: 'Create compound path',
-			click: 'pg.compoundPath.createFromSelection'
-		},
-		releaseCompoundPath: {
-			type: 'button',
-			label: 'Release compound path',
-			click: 'pg.compoundPath.releaseSelection'
-		},
-		booleanTitle: {
-			type : 'title',
-			text :'Boolean operations'
-		},
-		booleanUnite: {
-			type: 'button',
-			label: 'Unite',
-			click: 'pg.boolean.booleanUnite'
-		},
-		booleanIntersect: {
-			type: 'button',
-			label: 'Intersect',
-			click: 'pg.boolean.booleanIntersect'
-		},
-		booleanSubtract: {
-			type: 'button',
-			label: 'Subtract',
-			click: 'pg.boolean.booleanSubtract'
-		},
-		booleanExclude: {
-			type: 'button',
-			label: 'Exclude',
-			click: 'pg.boolean.booleanExclude'
-		},
-		booleanDivide: {
-			type: 'button',
-			label: 'Divide',
-			click: 'pg.boolean.booleanDivide'
-		},
-		textTitle: {
-			type: 'title',
-			text: 'Text'
-		},
-		convertButton: {
-			type: 'button',
-			label: 'Text to outlines',
-			click: 'pg.text.convertSelectionToOutlines'
-		},
 		editTH2Title: {
 			type: 'title',
-			text: 'EditTh2'
+			text: 'Lines'
 		},
 		mergeLines: {
 			type: 'button',

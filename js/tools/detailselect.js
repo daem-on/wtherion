@@ -35,7 +35,7 @@ module.exports = function() {
 		},
 		switchHandles: {
 			type: 'button',
-			label: 'Switch handles',
+			label: 'Toggle handles',
 			click: 'pg.selection.switchSelectedHandles'
 		},
 		removeSegments: {
@@ -50,17 +50,7 @@ module.exports = function() {
 		},
 		testTitle: {
 			type : 'title',
-			text :'EditTh2'
-		},
-		test3: {
-			type: 'button',
-			label: 'Subtype test',
-			click: 'pg.editTH2.subtypeTest'
-		},
-		test4: {
-			type: 'button',
-			label: 'Clear subtype',
-			click: 'pg.editTH2.clearSubtype'
+			text :'Lines'
 		},
 		test5: {
 			type: 'button',

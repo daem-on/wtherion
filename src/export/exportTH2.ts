@@ -3,6 +3,7 @@ import LineSettings from "../objectSettings/model/LineSettings";
 import getSettings from "../objectSettings/model/getSettings";
 import AreaSettings from "../objectSettings/model/AreaSettings";
 import { saveAs } from "file-saver";
+import PointSettings from "../objectSettings/model/PointSettings";
 	
 function toGlobal(global: number[], local = [0, 0]) {
 	let x = Math.round((global[0]+local[0])*100)/100;
@@ -89,7 +90,7 @@ type paperExportedPath = {
 	
 function processLine(item: paperExportedPath, settings?: LineSettings) {
 	let segments = item.segments;
-	if (!segments || segments.length == 0) return;
+	if (!segments || segments.length < 2) return;
 		
 	let lineSettings = settings || getSettings(item) as LineSettings;
 	let segmentOptions = lineSettings.subtypes;
@@ -113,8 +114,10 @@ function processLine(item: paperExportedPath, settings?: LineSettings) {
 			o.push("-outline " + ["","in","out","none"][s.outline]);
 		if (s.place !== 0)
 			o.push("-place " + ["","bottom","default","top"][s.outline]);
-		if (s.size !== undefined || s.size !== 0)
+		if (s.size !== undefined && s.size !== 0)
 			o.push("-size " + s.size);
+		else if (s.type === "slope") 
+			o.push("-size 1")
 		if (s.otherSettings !== "")
 			o.push(s.otherSettings);
 		optionsString = o.join(" ");
@@ -144,7 +147,7 @@ function processLine(item: paperExportedPath, settings?: LineSettings) {
 		);
 	
 		if (index in segmentOptions) {
-			logText(segmentOptions[index]);
+			logText("subtype " + segmentOptions[index]);
 		}
 	
 		prevControlPoint = isCurved ?
@@ -162,17 +165,20 @@ function processCompoundPath(item) {
 }
 	
 function processShape(item) {
-	var shape = item;
-	if (shape.data && "therionData" in shape.data) {
-		var out = [
-			"point",
-			toGlobal(shape.matrix.slice(4, 6)),
-			shape.data.therionData.pointSettings
-		];
-		if (shape.data.therionData.orientation !== 0)
-			out.push("-orient", shape.data.therionData.rotation);
-		logText(out);
+	let shape = item;
+	let settings = getSettings(item) as PointSettings;
+	let position = toGlobal(shape.matrix.slice(4, 6));
+	let options = "";
+	{
+		options += settings.type;
+
+		if (settings.invisible)
+			options += " -visibility off";
+		if (settings.name)
+			options += " -name " + settings.name;
 	}
+
+	logText("point", position, options);
 }
 	
 function generateId() {

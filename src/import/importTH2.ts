@@ -39,6 +39,7 @@ let _currentSegments: string[][] =  null;
 let _closeLine: boolean =  null;
 let _parsedOptions: Record<string, string> = null;
 let _subtypes: Record<number, string> = {};
+let _segmentOptions: Record<number, string> = {};
 let _segmentIndex: number;
 
 let _areadef: boolean = false;
@@ -52,8 +53,9 @@ export default function(source: string) {
 		if (_linedef) {
 			if (isNaN(line.slice(0, 2) as any)) {
 				if (line.startsWith("close")) _closeLine = true;
-				if (line.startsWith("endline")) endLine();
-				if (line.startsWith("subtype")) addSubtype(line);
+				else if (line.startsWith("endline")) endLine();
+				else if (line.startsWith("subtype")) addSubtype(line);
+				else addSegmentOption(line);
 			}
 			else {
 				_segmentIndex++;
@@ -157,11 +159,20 @@ function endLine() {
 				
 	let lineSettings = getSettings(_currentPath) as LineSettings;
 	lineSettings.subtypes = _subtypes;
+	lineSettings.segmentSettings = _segmentOptions;
 	pg.editTH2.drawLine(_currentPath);
 }
 				
 function addSubtype(line: string) {
 	_subtypes[_segmentIndex] = line.split(" ")[1];
+}
+
+function addSegmentOption(line: string) {
+	if (_segmentOptions[_segmentIndex]) {
+		_segmentOptions[_segmentIndex] += ";" + line;
+	} else {
+		_segmentOptions[_segmentIndex] = line;
+	}
 }
 				
 function createLine(line: string) {
@@ -171,9 +182,10 @@ function createLine(line: string) {
 	_parsedOptions = {};
 	_linedef = true;
 	_closeLine = false;
-	_segmentIndex = 0;
-	_subtypes = [];
-				
+	_segmentIndex = -1;
+	_subtypes = {};
+	_segmentOptions = {};
+
 	let lineSettings = getSettings(_currentPath);
 	lineSettings.type = split[1];
 					

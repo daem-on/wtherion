@@ -93,7 +93,8 @@ function processLine(item: paperExportedPath, settings?: LineSettings) {
 	if (!segments || segments.length < 2) return;
 		
 	let lineSettings = settings || getSettings(item) as LineSettings;
-	let segmentOptions = lineSettings.subtypes;
+	let subtypes = lineSettings.subtypes;
+	let segmentSettings = lineSettings.segmentSettings;
 	
 	let optionsString = "";
 	{
@@ -114,10 +115,9 @@ function processLine(item: paperExportedPath, settings?: LineSettings) {
 			o.push("-outline " + ["","in","out","none"][s.outline]);
 		if (s.place !== 0)
 			o.push("-place " + ["","bottom","default","top"][s.outline]);
-		if (s.size !== undefined && s.size !== 0)
-			o.push("-size " + s.size);
-		else if (s.type === "slope") 
-			o.push("-size 1")
+		// // not sure what's up with this, apparently can't be set here
+		// if (s.size !== undefined && s.size !== 0)
+		// 	o.push("-size " + s.size);
 		if (s.otherSettings !== "")
 			o.push(s.otherSettings);
 		optionsString = o.join(" ");
@@ -146,8 +146,11 @@ function processLine(item: paperExportedPath, settings?: LineSettings) {
 			toGlobal(segment)
 		);
 	
-		if (index in segmentOptions) {
-			logText("subtype " + segmentOptions[index]);
+		if (index in subtypes) {
+			logText("subtype " + subtypes[index]);
+		}
+		if (index in segmentSettings) {
+			logText(segmentSettings[index].replace(";", "\n"));
 		}
 	
 		prevControlPoint = isCurved ?
@@ -156,6 +159,8 @@ function processLine(item: paperExportedPath, settings?: LineSettings) {
 	}
 	
 	if (item.closed) logText(firstOutput);
+	if (lineSettings.size !== undefined
+		&& lineSettings.size !== 0) logText("size " + lineSettings.size);
 	logText("endline");
 }
 	

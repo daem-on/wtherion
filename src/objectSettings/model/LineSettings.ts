@@ -8,6 +8,7 @@ export default class LineSettings {
 	otherSettings: string;
 	subtype: string;
 	subtypes: Record<number, string>;
+	segmentSettings: Record<number, string>;
 	reverse: boolean;
 	place: Place;
 	clip: Clip;
@@ -22,6 +23,7 @@ export default class LineSettings {
 		ls.otherSettings = "";
 		ls.subtype = "";
 		ls.subtypes = {};
+		ls.segmentSettings = {};
 		ls.reverse = false;
 		ls.place = Place.Default;
 		ls.clip = Clip.Default;

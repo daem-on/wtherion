@@ -8,6 +8,7 @@ import subtypes from "../../../js/res/subtype-list.json";
 let optionsCache = {
 	subTypeEnable: false,
 	subType: undefined,
+	otherSettings: undefined,
 };
 	
 let selectedSegment: paper.Segment = undefined;
@@ -35,9 +36,9 @@ const components: componentList = {
 		type: "title",
 		text: "Advanced"
 	},
-	id: {
+	otherSettings: {
 		type: "text",
-		label: "id"
+		label: "Other settings"
 	},
 }
 	
@@ -51,17 +52,21 @@ const sizeComponent: componentList = {
 export default function(line: paper.Path): objectOptionPanelConfig {
 	optionsCache = {
 		subTypeEnable: false,
-		subType: undefined,
+		subType: "",
+		otherSettings: ""
 	};
 	let settings = getSettings(line);
 	if (settings.className !== "LineSettings") return;
-
+	
 	for (let segment of line.segments)
-		if (segment.selected) selectedSegment = segment;
+	if (segment.selected) selectedSegment = segment;
 	
 	if (settings.subtypes[selectedSegment.index]) {
 		optionsCache.subTypeEnable = true;
 		optionsCache.subType = settings.subtypes[selectedSegment.index];
+	}
+	if (settings.segmentSettings[selectedSegment.index]) {
+		optionsCache.otherSettings = settings.segmentSettings[selectedSegment.index];
 	}
 	
 	if (Object.keys(settings.subtypes).length >= 1) {
@@ -93,6 +98,11 @@ export default function(line: paper.Path): objectOptionPanelConfig {
 			s.subtypes[selectedSegment.index] = optionsCache.subType;
 		} else if (s.subtypes[selectedSegment.index]) {
 			delete s.subtypes[selectedSegment.index];
+		}
+		if (optionsCache.otherSettings !== "") {
+			s.segmentSettings[selectedSegment.index] = optionsCache.otherSettings;
+		} else if (s.segmentSettings[selectedSegment.index]) {
+			delete s.segmentSettings[selectedSegment.index];
 		}
 	}
 	return {

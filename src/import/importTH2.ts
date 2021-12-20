@@ -3,6 +3,7 @@ import LineSettings from "../objectSettings/model/LineSettings"
 import getSettings from "../objectSettings/model/getSettings"
 import AreaSettings from "../objectSettings/model/AreaSettings"
 import PointSettings from "../objectSettings/model/PointSettings"
+import { requestImportXVI } from "./importXVI"
 				
 const toPoint = function(global: string[], global2: string[] = undefined) {
 	if (global2)
@@ -33,10 +34,12 @@ const getOptions = function(source: string) {
 	return options;
 }
 
-let _linedef: boolean =  false;
-let _currentPath: paper.Path =  null;
-let _currentSegments: string[][] =  null;
-let _closeLine: boolean =  null;
+let _xthSettings: string[] = [];
+
+let _linedef: boolean = false;
+let _currentPath: paper.Path = null;
+let _currentSegments: string[][] = null;
+let _closeLine: boolean = null;
 let _parsedOptions: Record<string, string> = null;
 let _subtypes: Record<number, string> = {};
 let _segmentOptions: Record<number, string> = {};
@@ -49,7 +52,11 @@ let _areas: {type: string, ids: string[]}[] = [];
 export default function(source: string) {
 	for (let line of source.split("\n")) {
 		line = line.trim();
-		if (line.startsWith("#")) continue;
+		if (line.startsWith("#")) {
+			if (line.startsWith("##XTHERION##"))
+				_xthSettings.push(line);
+			else continue;
+		}
 		if (_linedef) {
 			if (isNaN(line.slice(0, 2) as any)) {
 				if (line.startsWith("close")) _closeLine = true;
@@ -82,6 +89,7 @@ export default function(source: string) {
 		}
 	}
 	applyAreas();
+	loadImages();
 	pg.layerPanel.updateLayerList();
 }
 
@@ -280,3 +288,15 @@ function savePointSettings(point: paper.Shape, options: Record<string, string>) 
 		}
 	}
 }
+function loadImages() {
+	for (let line of _xthSettings) {
+		if (line.startsWith("##XTHERION## xth_me_image_insert")) {
+			let params = line.slice(33).split(" ");
+			let x = Number.parseFloat(params[0].slice(1));
+			let y = -Number.parseFloat(params[3].slice(1));
+			let name = params[5];
+			requestImportXVI(name, x, y);
+		}
+	}
+}
+

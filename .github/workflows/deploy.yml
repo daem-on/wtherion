@@ -1,0 +1,24 @@
+name: NodeJS with Webpack
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install
+      run: yarn
+
+    - name: Build
+      run: yarn build
+
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@4.1.8
+      with:
+        branch: deploy
+        folder: dist

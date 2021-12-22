@@ -1,4 +1,4 @@
-name: NodeJS with Webpack
+name: Webpack & Deploy
 
 on:
   push:
@@ -17,8 +17,15 @@ jobs:
     - name: Build
       run: yarn build
 
-    - name: Deploy to GitHub Pages
-      uses: JamesIves/github-pages-deploy-action@4.1.8
+    - name: Archive build output
+      run: tar --dereference --hard-dereference --directory _site/ -cvf artifact.tar .
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@main
       with:
-        branch: deploy
-        folder: dist
+        name: github-pages
+        path: ./artifact.tar
+        if-no-files-found: warn
+      
+    - name: Deploy to GitHub Pages w/ beta action
+      uses: actions/deploy-pages@v1-beta

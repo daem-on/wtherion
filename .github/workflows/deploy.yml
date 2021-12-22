@@ -5,9 +5,9 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
     - uses: actions/checkout@v2
 
@@ -17,19 +17,11 @@ jobs:
     - name: Build
       run: yarn build
 
-    - name: Archive build output
-      run: tar --dereference --hard-dereference --directory dist/ -cvf artifact.tar .
+    - name: Add .nojekyll file
+      run: touch dist/.nojekyll
 
-    - name: Upload artifact
-      uses: actions/upload-artifact@main
+    - name: Deploy to branch
+      uses: JamesIves/github-pages-deploy-action@4.1.8
       with:
-        name: github-pages
-        path: ./artifact.tar
-        if-no-files-found: warn
-      
-  deploy:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Deploy to GitHub Pages w/ beta action
-      uses: actions/deploy-pages@v1-beta
+        branch: deploy
+        folder: dist

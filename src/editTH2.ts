@@ -59,7 +59,8 @@ export default {
 	drawLine: function(l: paper.Path, lineSettings?: LineSettings) {
 		let settings = lineSettings || getSettings(l) as LineSettings;
 		l.strokeScaling = true;
-	
+		l.fillColor = null;
+
 		if (settings.type == "wall")
 			l.strokeWidth = 2;
 		else if (settings.type == "rock-edge")
@@ -133,15 +134,41 @@ export default {
 			item.data.therionData = {};
 	},
 	
-	createPoint: function() {
+	createPoint: function(pos: paper.Point = new paper.Point(0, 0)) {
 		var circle = new paper.Shape.Circle({
-			center: new paper.Point(10, 10),
-			radius: 5,
-			fillColor: 'red'
+			center: pos,
 		});
 		circle.data.noDrawHandle = true;
 		circle.data.therionData = PointSettings.defaultSettings();
 		return circle;
+	},
+
+	lineToArea: function() {
+		let selection = pg.selection.getSelectedItems();
+		if (selection.length !== 1) return;
+
+		let line = selection[0]
+		let settings = getSettings(line);
+		if (!settings || settings.className !== "LineSettings") return;
+
+		let oldSettings = settings
+		line.data.therionData = AreaSettings.defaultSettings();
+		line.data.therionData.lineSettings = oldSettings;
+		line.data.therionData.type = "water";
+		this.drawArea(line);
+	},
+
+	areaToLine: function() {
+		let selection = pg.selection.getSelectedItems();
+		if (selection.length !== 1) return;
+
+		let area = selection[0]
+		let settings = getSettings(area);
+		if (!settings || settings.className !== "AreaSettings") return;
+
+		let newSettings = area.data.therionData.lineSettings;
+		area.data.therionData = newSettings;
+		this.drawLine(area);
 	},
 	
 	mergeLines: function() {

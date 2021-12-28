@@ -55,7 +55,8 @@ module.exports = function() {
 	var switchTool = function(toolID, forced) {
 		try {
 			var opts = pg.tools.getToolInfoByID(toolID);
-			var tool = new pg.tools[toolID]();
+			var tool = pg.tools[toolID];
+			if (typeof tool === "function") tool = new tool();
 			
 			// writing the tool infos back into the tool.options object
 			jQuery.each(opts, function(name, value) {

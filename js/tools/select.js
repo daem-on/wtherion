@@ -56,6 +56,20 @@ module.exports = function() {
 			label: 'Invert selection',
 			click: 'pg.selection.invertItemSelection'
 		},
+		areasTitle: {
+			type: "title",
+			text: "Area"
+		},
+		lineToArea: {
+			type: "button",
+			label: "Convert line → area",
+			click: "pg.editTH2.lineToArea"
+		},
+		areaToLine: {
+			type: "button",
+			label: "Convert area → line",
+			click: "pg.editTH2.areaToLine"
+		},
 		orderTitle: {
 			type : 'title',
 			text :'Order'
@@ -125,7 +139,7 @@ module.exports = function() {
 			pg.hover.clearHoveredItem();
 			
 			var hitResult = paper.project.hitTest(event.point, hitOptions);
-			if (hitResult) {
+			hit: if (hitResult) {
 				
 				if(hitResult.item.data && hitResult.item.data.isScaleHandle) {
 					mode = 'scale';
@@ -150,7 +164,7 @@ module.exports = function() {
 					});
 										
 				} else {
-					if (hitResult.item.layer != paper.project.activeLayer) return;
+					if (hitResult.item.layer != paper.project.activeLayer) break hit;
 					// deselect all by default if the shift key isn't pressed
 					// also needs some special love for compound paths and groups,
 					// as their children are not marked as "selected"
@@ -182,15 +196,15 @@ module.exports = function() {
 				}
 				// while transforming object, never show the bounds stuff
 				removeBoundsPath();
-
-			} else {
-				if (!event.modifiers.shift) {
-					removeBoundsPath();
-					pg.selection.clearSelection();
-				}
-				mode = 'rectSelection';
+				return;
 			}
+			// else:
 
+			if (!event.modifiers.shift) {
+				removeBoundsPath();
+				pg.selection.clearSelection();
+			}
+			mode = 'rectSelection';
 		};
 
 		tool.onMouseMove = function(event) {			

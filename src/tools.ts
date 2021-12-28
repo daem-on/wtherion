@@ -4,6 +4,7 @@ import select from "../js/tools/select.js";
 import detailselect from "../js/tools/detailselect.js";
 import draw from "../js/tools/draw.js";
 import bezier from "../js/tools/bezier.js";
+import * as point from "./tools/point";
 import text from "../js/tools/text.paper.js";
 import rotate from "../js/tools/rotate.paper.js";
 import scale from "../js/tools/scale.paper.js";
@@ -18,6 +19,7 @@ export default {
 	detailselect: detailselect,
 	draw: draw,
 	bezier: bezier,
+	point: point,
 	text: text,
 	rotate: rotate,
 	scale: scale,

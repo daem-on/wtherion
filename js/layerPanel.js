@@ -21,12 +21,12 @@ module.exports = function() {
 		loadResources();
 		
 		var $panel = jQuery('<div class="layerPanel">');
-		var baseTopOffset = jQuery('.appNav').height()+jQuery('.settingsBarContainer').height();
+		var baseTopOffset = jQuery('.appNav').height();
 		$panel.css({
 			'top': baseTopOffset+'px',
 			'max-height': jQuery(window).height()-baseTopOffset+'px' 
 		});
-		var $header = jQuery('<header class="layerPanelHeader"><h2>Layers</h2></header>');
+		var $header = jQuery('<header class="layerPanelHeader"><h2>Scraps</h2></header>');
 		var $newLayerButton = jQuery('<button class="newLayerButton">Add</button>');
 		
 		$newLayerButton.click(function() {

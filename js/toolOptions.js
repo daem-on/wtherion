@@ -61,12 +61,18 @@ export default [
 		id: 'draw',
 		name: 'Draw'
 	},
-
 	{
 		id: 'detailselect',
 		name: 'Detail select',
 		usedKeys : {
 			toolbar : 'a'
+		}
+	},
+	{
+		id: 'point',
+		name: 'Add point',
+		usedKeys : {
+			toolbar : 'k'
 		}
 	},
 ]

@@ -1,0 +1,66 @@
+.custom-select {
+	position: relative;
+	font-family: Arial;
+	font-size: 13.3333px;
+	max-width: 50ch;
+	min-width: 20ch;
+	width: fit-content;
+	user-select: none;
+}
+
+.custom-select select {
+	display: none !important;
+}
+
+.select-button {
+	background-color: rgb(255, 255, 255);
+	cursor: default;
+	padding: 1px 3px;
+	border-radius: 2px;
+	border: rgb(112, 112, 112) 1px solid;
+}
+
+.custom-select .select-button:after {
+	position: absolute;
+	content: "";
+	top: 6px;
+	right: 10px;
+	width: 0;
+	height: 0;
+	border: 6px solid transparent;
+	border-color: rgb(0, 0, 0) transparent transparent transparent;
+}
+
+.custom-select.open .select-button:after {
+	border-color: transparent transparent rgb(0, 0, 0) transparent;
+	top: 0px;
+}
+
+.select-options div {
+	padding: 1px 3px;
+	border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+	cursor: default;
+}
+
+.custom-select.open .select-options {
+	display: unset;
+	position: absolute;
+	background-color: rgb(255, 255, 255);
+	border-radius: 2px;
+	border: rgb(112, 112, 112) 1px solid;
+	box-shadow: #0000006b 0px 3px 8px;
+	top: 100%;
+	left: 0;
+	right: 0;
+	z-index: 99;
+	max-height: 50vh;
+	overflow-y: auto;
+}
+
+.custom-select .select-options {
+	display: none;
+}
+
+.select-options div:hover, .same-as-selected {
+	background-color: rgba(0, 0, 0, 0.1);
+}

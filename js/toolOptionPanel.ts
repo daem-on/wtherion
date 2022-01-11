@@ -157,6 +157,11 @@ export default {
 				return;
 			}
 			if($input) {
+				if (comp.type == 'customList') {
+					let $wrapper = jQuery(`<div class="custom-select"></div>`);
+					$wrapper.append($input);
+					$optionSection.append($label, $wrapper);
+				} else
 				$optionSection.append($label, $input);
 			} else if($button) {
 				$optionSection.append($button);
@@ -203,7 +208,7 @@ export default {
 		};
 
 		$panel.find("[data-type='customList']").each((i, e) => {
-			convertToCustomInput(jQuery(e as HTMLSelectElement));
+			convertToCustomInput(e as HTMLSelectElement);
 		})
 		
 		return $panel;

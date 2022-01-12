@@ -26,15 +26,10 @@ let optionsCache = {
 };
 
 const components: componentList = {
-	// lineType: {
-	// 	type: "customList",
-	// 	label: "Outline Type",
-	// 	options: wallTypes,
-	// },
 	lineType: {
-		type: "list",
+		type: "customList",
 		label: "Outline Type",
-		options: ["border", "rock-border"],
+		options: wallTypes,
 	},
 	areaType: {
 		type: "customList",

@@ -4,12 +4,13 @@ import getSettings from "../model/getSettings";
 import { objectOptionPanelConfig } from "../objectOptionPanel";
 import pg from "../../init";
 import wallList from "../../../js/res/walls-list.json";
-
+import subtypeList from "../../../js/res/subtype-list.json";
+	
 const wallTypes = wallList.labels
 	.concat(wallList.passages)
 	.concat(wallList["passage fills"])
 	.concat(wallList.special);
-
+	
 let optionsCache = {
 	reverse: undefined,
 	clip: undefined,
@@ -20,13 +21,34 @@ let optionsCache = {
 	place: undefined,
 	type: undefined,
 	size: undefined,
+	_subtypeWall: undefined,
+	_subtypeBorder: undefined,
+	_subtypeWater: undefined,
 };
-
+	
 const components: componentList = {
 	type: {
 		type: "customList",
 		label: "Type",
 		options: wallTypes,
+	},
+	_subtypeWall: {
+		type: "customList",
+		label: "Subtype",
+		requirements: {type: "wall"},
+		options: subtypeList.wall,
+	},
+	_subtypeBorder: {
+		type: "customList",
+		label: "Subtype",
+		requirements: {type: "border"},
+		options: subtypeList.border,
+	},
+	_subtypeWater: {
+		type: "customList",
+		label: "Subtype",
+		requirements: {type: "water-flow"},
+		options: subtypeList["water-flow"],
 	},
 	reverse: {
 		type: "boolean",
@@ -84,14 +106,19 @@ const components: componentList = {
 		]
 	},
 }
-
+	
 export default function(line: paper.Path): objectOptionPanelConfig {
-	let settings = getSettings(line);
+	let settings = getSettings(line) as LineSettings;
 	
 	for (const key in optionsCache) {
 		if (Object.prototype.hasOwnProperty.call(optionsCache, key)) {
 			optionsCache[key] = settings[key];
 		}
+	}
+	switch (settings.type) {
+		case "wall": optionsCache._subtypeWall = settings.subtype; break;
+		case "border": optionsCache._subtypeBorder = settings.subtype; break;
+		case "water-flow": optionsCache._subtypeWater = settings.subtype; break;
 	}
 	
 	let modifyObject = () => {
@@ -101,6 +128,12 @@ export default function(line: paper.Path): objectOptionPanelConfig {
 					settings[key] = optionsCache[key];
 				}
 			}
+		}
+		switch (optionsCache.type) {
+			case "wall": settings.subtype = optionsCache._subtypeWall; break;
+			case "border": settings.subtype = optionsCache._subtypeBorder; break;
+			case "water-flow": settings.subtype = optionsCache._subtypeWater; break;
+			default: settings.subtype = "";
 		}
 		pg.editTH2.drawLine(line);
 	}

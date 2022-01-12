@@ -7,11 +7,10 @@
    viewBox="-1610 -940 100 10"
    version="1.1"
    id="svg27"
-   sodipodi:docname="wall.svg"
+   sodipodi:docname="fallback.svg"
    inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <sodipodi:namedview
@@ -74,34 +73,15 @@
          id="path14" />
     </clipPath>
   </defs>
-  <g
-     transform="scale(1,-1)"
-     fill="#000000"
-     stroke="#000000"
-     stroke-linecap="round"
-     stroke-linejoin="round"
-     stroke-miterlimit="10"
-     fill-rule="evenodd"
-     clip-rule="evenodd"
-     clip-path="url(#clip_viewBox)"
-     id="g25"
-     style="fill:none">
-    <g
-       fill="#ffffff"
-       id="g21"
-       style="fill:none">
-      <use
-         x="-1608.510"
-         y="928.040"
-         xlink:href="#I_aaaaaaa_out.svg"
-         id="use19"
-         style="fill:none" />
-    </g>
-    <use
-       x="-1609.510"
-       y="927.040"
-       xlink:href="#E_aaaaaaa_out.svg"
-       id="use23"
-       style="fill:none" />
-  </g>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-weight:normal;font-size:20.1741px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.504353"
+     x="-1597.931"
+     y="-927.15503"
+     id="text8463"><tspan
+       sodipodi:role="line"
+       id="tspan8461"
+       style="stroke-width:0.504353"
+       x="-1597.931"
+       y="-927.15503">missing</tspan></text>
 </svg>

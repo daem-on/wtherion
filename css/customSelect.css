@@ -1,7 +1,7 @@
 .custom-select {
 	position: relative;
 	font-family: Arial;
-	font-size: 13.3333px;
+	font-size: 0.85em;
 	max-width: 50ch;
 	min-width: 20ch;
 	width: fit-content;
@@ -13,11 +13,13 @@
 }
 
 .select-button {
-	background-color: rgb(255, 255, 255);
-	cursor: default;
-	padding: 1px 3px;
-	border-radius: 2px;
-	border: rgb(112, 112, 112) 1px solid;
+    border: 1px solid #aaa;
+    outline: none;
+    padding: 0 4px;
+    height: 22px;
+    box-shadow: none;
+	display: flex;
+	align-items: center;
 }
 
 .custom-select .select-button:after {
@@ -40,6 +42,9 @@
 	padding: 1px 3px;
 	border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
 	cursor: default;
+	display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .custom-select.open .select-options {

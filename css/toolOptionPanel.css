@@ -87,7 +87,12 @@
 .toolOptionPanel input,
 .toolOptionPanel select {
 	text-align: right;
-	display:inline-block;
+	/* display:inline-block; */
+	float:right;
+}
+
+.toolOptionPanel .act-as-input {
+	/* display:inline-block; */
 	float:right;
 }
 

@@ -1,10 +1,6 @@
 import "jquery-ui/ui/widgets/selectmenu";
 
-export function convertToCustomInput(selectInput: HTMLSelectElement) {
-	constructSelect(selectInput.parentElement as HTMLDivElement);
-}
-
-function constructSelect(element: HTMLDivElement) {
+export function constructSelect(element: HTMLDivElement, imageRoot?: string) {
 	element.classList.add("act-as-input")
 	let selectElement = element.getElementsByTagName("select")[0];
 	let selectButtonDiv = document.createElement("div");
@@ -14,7 +10,7 @@ function constructSelect(element: HTMLDivElement) {
 	let selectOptionsDiv = document.createElement("div");
 	selectOptionsDiv.setAttribute("class", "select-options");
 	for (let option of selectElement.options) {
-		let optionItemDiv = constructOptionItem(option);
+		let optionItemDiv = constructOptionItem(option, imageRoot);
 		selectOptionsDiv.appendChild(optionItemDiv);
 	}
 	element.appendChild(selectOptionsDiv);
@@ -25,12 +21,12 @@ function constructSelect(element: HTMLDivElement) {
 	});
 }
 
-function constructOptionItem(option: HTMLOptionElement) {
+function constructOptionItem(option: HTMLOptionElement, imageRoot?: string) {
 	let container = document.createElement("div");
 	container.setAttribute("select-val", option.value);
 
 	let previewImg = document.createElement("img");
-	previewImg.src = `assets/rendered/${option.value}.svg`;
+	previewImg.src = (imageRoot ?? "assets/rendered") + `/${option.value}.svg`;
 	previewImg.onerror = function () { this.src = "assets/rendered/fallback.svg"; };
 	previewImg.classList.add("crop-svg");
 

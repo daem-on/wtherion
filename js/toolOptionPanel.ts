@@ -1,6 +1,6 @@
 import "jquery-ui/ui/widgets/draggable";
 import pg from "../src/init";
-import {convertToCustomInput} from "../src/objectSettings/customToolbarInput";
+import {constructSelect} from "../src/objectSettings/customToolbarInput";
 
 type component = {
 	type?: "int" | "list" | "float" | "text" | "button" | "boolean" | "title" | "customList",
@@ -14,6 +14,7 @@ type component = {
 	minWidth?: any,
 	text?: string,
 	tooltip?: string,
+	imageRoot?: string,
 	requirements?: {
 		[reqKey: string]: any
 	},
@@ -170,6 +171,10 @@ export default {
 			}
 			
 			(lastSubSection || $options).append($optionSection);
+
+			if ($input && comp.type == "customList") {
+				constructSelect($input.parent()[0] as HTMLDivElement, comp.imageRoot);
+			}
 		});
 
 		var $resetButton = jQuery('<button class="toolOptionResetButton" title="Reset Tool Settings">R</button>').click(function() {
@@ -206,10 +211,6 @@ export default {
 				}
 			});
 		};
-
-		$panel.find("[data-type='customList']").each((i, e) => {
-			convertToCustomInput(e as HTMLSelectElement);
-		})
 		
 		return $panel;
 	},

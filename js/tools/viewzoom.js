@@ -23,7 +23,7 @@ module.exports = function() {
 	var updateTool = function(updateInfo) {
 						
 		var factor = 1.25;
-		if (updateInfo.originalEvent.wheelDelta > 0 || updateInfo.originalEvent.detail < 0) {
+		if (updateInfo.wheelDelta > 0 || updateInfo.detail < 0) {
 			// scroll up / zoom in
 
 		} else {
@@ -32,7 +32,7 @@ module.exports = function() {
 		}
 
 		pg.view.zoomBy(factor);
-		var viewPosition = paper.view.getEventPoint(updateInfo.originalEvent);
+		var viewPosition = paper.view.getEventPoint(updateInfo);
 			
 		var mpos = viewPosition;
 		var ctr = paper.view.center;

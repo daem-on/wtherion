@@ -3,6 +3,10 @@ import LineSettings from "../model/LineSettings";
 import getSettings from "../model/getSettings";
 import { objectOptionPanelConfig } from "../objectOptionPanel";
 import pg from "../../init";
+import symbolList from "../../../js/res/symbol-list.json";
+
+const types = symbolList["special objects"]
+	.concat(symbolList["symbolic passage fills"]);
 
 let optionsCache = {
 	type: undefined,
@@ -18,8 +22,10 @@ let optionsCache = {
 
 const components: componentList = {
 	type: {
-		type: "text",
+		type: "customList",
 		label: "Type",
+		imageRoot: "/assets/rendered/symbol",
+		options: types
 	},
 	invisible: {
 		type: "boolean",

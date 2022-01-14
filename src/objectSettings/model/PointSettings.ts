@@ -15,7 +15,7 @@ export default class PointSettings {
 
 	static defaultSettings(): PointSettings {
 		let ls = new PointSettings();
-		ls.type = "wall";
+		ls.type = "station";
 		ls.otherSettings = "";
 		ls.name = "";
 		ls.clip = Clip.Default;

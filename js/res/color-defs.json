@@ -1,0 +1,16 @@
+{
+	"typeColors": {
+		"default": "#000",
+		"rock-border": "rgb(80,62,102)",
+		"rock-edge": "rgb(80,62,102)",
+		"contour": "rgb(63,112,64)",
+		"border": "rgb(69,180,171)",
+		"pit": "rgb(175,35,156)",
+		"wall": "#001d7a",
+		"slope": "rgb(223,197,47)"
+	},
+	"pointColors": {
+		"default": "#f00",
+		"station": "#eba800"
+	}
+}

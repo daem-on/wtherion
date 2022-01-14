@@ -3,22 +3,20 @@ import pg from "./init";
 import getSettings from "./objectSettings/model/getSettings";
 import AreaSettings from "./objectSettings/model/AreaSettings";
 import PointSettings from "./objectSettings/model/PointSettings";
-	
-const typeColors = {
-	"default": new paper.Color(0, 0, 0),
-	"rock-border": new paper.Color(0.3125 ,0.2421875, 0.3984375),
-	"rock-edge": new paper.Color(0.3125 ,0.2421875, 0.3984375),
-	"contour": new paper.Color(0.24609375 ,0.4375, 0.25),
-	"border": new paper.Color(0.26953125 ,0.70703125, 0.671875),
-	"pit": new paper.Color(0.6875 ,0.13671875, 0.61328125),
-	"wall": new paper.Color(0.14453125 ,0.1640625, 0.3671875),
-	"slope": new paper.Color(0.875 ,0.7734375, 0.18359375),
+
+import colorDefs from "../js/res/color-defs.json";
+
+const typeColors: Record<string, paper.Color>
+	= generateColors(colorDefs.typeColors);
+const pointColors: Record<string, paper.Color>
+	= generateColors(colorDefs.pointColors);
+
+function generateColors(from: Record<string, string>) {
+	let r: Record<string, paper.Color> = {};
+	for (let entry in from) r[entry] = new paper.Color(from[entry]);
+	return r;
 }
-const pointColors = {
-	"default": new paper.Color(1, 0, 0),
-	"station": new paper.Color(0.875 ,0.7734375, 0.18359375),
-}
-	
+
 export default {
 	lineTypeTest: function() {
 		var items = pg.selection.getSelectedItems();

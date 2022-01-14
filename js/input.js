@@ -101,9 +101,9 @@ module.exports = function() {
 			}
 
 
-			// alt
-			if(event.keyCode === 18) {
-				// if viewZoom is active and we just released alt,
+			// ctrl
+			if(event.key == "Control") {
+				// if viewZoom is active and we just released ctrl,
 				// reset tool to previous
 				if(pg.toolbar.getActiveTool().options.id === 'viewzoom') {
 					pg.toolbar.switchTool(pg.toolbar.getPreviousTool().options.id);
@@ -249,9 +249,10 @@ module.exports = function() {
 			pg.menu.showContextMenu(e);
 		});
 		
-
-		jQuery(window).on('mousewheel DOMMouseScroll', function(event){
-			if(event.altKey) {
+		// jQuery(window).on('mousewheel DOMMouseScroll', function(event){
+		window.addEventListener("wheel", function (event) {
+			if(event.ctrlKey) {
+				event.preventDefault();
 				if (pg.toolbar.getActiveTool().options.id !== 'viewzoom') {
 					pg.toolbar.switchTool('viewzoom');
 				}
@@ -259,7 +260,7 @@ module.exports = function() {
 					pg.toolbar.getActiveTool().updateTool(event);
 				}
 			}
-		});
+		}, {passive: false});
 	};
 	
 	

@@ -2,6 +2,7 @@
 
 const importerXvi = require("../src/import/importXVI.ts");
 const importerTh2 = require("../src/import/importTH2.ts").default;
+const exportTh2 = require("../src/export/exportTH2.ts");
 
 module.exports = function() {
 	
@@ -147,6 +148,10 @@ module.exports = function() {
 
 		jQuery('.exportImage_button').click(function() {
 			pg.export.exportAndPromptImage();
+		});
+
+		jQuery('.exportTH2_button').on("click", function() {
+			exportTh2.save();
 		});
 		
 		jQuery('.zoomIn_button').click(function() {

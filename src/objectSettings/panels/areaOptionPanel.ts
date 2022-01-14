@@ -35,6 +35,7 @@ const components: componentList = {
 		type: "customList",
 		label: "Area Type",
 		options: areaList,
+		imageRoot: "/assets/rendered/area"
 	},
 	invisible: {
 		type: "boolean",

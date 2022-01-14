@@ -27,6 +27,8 @@ export function updateWindow() {
 	let config: objectOptionPanelConfig;
 
 	if (pg.toolbar.getActiveTool().options.id == "detailselect") {
+		// only supporting wall for subtypes editor (currently)
+		if (selected[0].data.therionData.type !== "wall") return;
 		// ensure only one segment is editable
 		let selection = false;
 		for (let segment of (selected[0] as paper.Path).segments) {

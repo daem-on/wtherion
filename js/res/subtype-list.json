@@ -1,5 +1,6 @@
 {
 	"wall": [
+		"",
 		"invisible",
 		"bedrock",
 		"sand",
@@ -16,6 +17,6 @@
 		"flowstone",
 		"moonmilk"
 	],
-	"border": ["visible", "invisible", "temporary", "presumed"],
-	"water-flow": ["permanent", "conjectural", "intermittent"]
+	"border": ["", "visible", "invisible", "temporary", "presumed"],
+	"water-flow": ["", "permanent", "conjectural", "intermittent"]
 }

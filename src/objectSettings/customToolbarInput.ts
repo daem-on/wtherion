@@ -26,12 +26,12 @@ function constructOptionItem(option: HTMLOptionElement, imageRoot?: string) {
 	container.setAttribute("select-val", option.value);
 
 	let previewImg = document.createElement("img");
-	previewImg.src = (imageRoot ?? "assets/rendered") + `/${option.value}.svg`;
+	previewImg.src = (imageRoot ?? "assets/rendered") + `/${option.value || "empty"}.svg`;
 	previewImg.onerror = function () { this.src = "assets/rendered/fallback.svg"; };
 	previewImg.classList.add("crop-svg");
 
 	let label = document.createElement("p");
-	label.innerHTML = option.innerHTML;
+	label.innerHTML = option.innerHTML || "(none)";
 
 	container.appendChild(previewImg);
 	container.appendChild(label);

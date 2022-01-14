@@ -27,10 +27,11 @@ const components: componentList = {
 	subType: {
 		type: "customList",
 		label: "Type",
-		options: subtypes.wall,
+		options: subtypes.wall.slice(1),
 		requirements: {
 			subTypeEnable: true
-		}
+		},
+		imageRoot: "/assets/rendered/subtype"
 	},
 	advancedSection: {
 		type: "title",
@@ -52,7 +53,7 @@ const sizeComponent: componentList = {
 export default function(line: paper.Path): objectOptionPanelConfig {
 	optionsCache = {
 		subTypeEnable: false,
-		subType: "",
+		subType: "bedrock",
 		otherSettings: ""
 	};
 	let settings = getSettings(line);

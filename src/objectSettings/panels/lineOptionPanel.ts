@@ -37,9 +37,10 @@ const components: componentList = {
 		label: "Subtype",
 		requirements: {type: "wall"},
 		options: subtypeList.wall,
+		imageRoot: "/assets/rendered/subtype"
 	},
 	_subtypeBorder: {
-		type: "customList",
+		type: "list",
 		label: "Subtype",
 		requirements: {type: "border"},
 		options: subtypeList.border,
@@ -49,6 +50,7 @@ const components: componentList = {
 		label: "Subtype",
 		requirements: {type: "water-flow"},
 		options: subtypeList["water-flow"],
+		imageRoot: "/assets/rendered/subtype"
 	},
 	reverse: {
 		type: "boolean",

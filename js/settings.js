@@ -16,7 +16,7 @@ module.exports = function () {
 			setVersionNumber();
 		}
 		
-		document.title = 'Papergrapher '+config.appVersion;
+		document.title = 'wtherion '+config.appVersion;
 	};
 	
 	

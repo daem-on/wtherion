@@ -5,10 +5,10 @@ import detailselect from "../js/tools/detailselect.js";
 import draw from "../js/tools/draw.js";
 import bezier from "../js/tools/bezier.js";
 import * as point from "./tools/point";
-import text from "../js/tools/text.paper.js";
-import rotate from "../js/tools/rotate.paper.js";
-import scale from "../js/tools/scale.paper.js";
-import zoom from "../js/tools/zoom.paper.js";
+// import text from "../js/tools/text.paper.js";
+// import rotate from "../js/tools/rotate.paper.js";
+// import scale from "../js/tools/scale.paper.js";
+// import zoom from "../js/tools/zoom.paper.js";
 import viewgrab from "../js/tools/viewgrab.js";
 import viewzoom from "../js/tools/viewzoom.js";
 
@@ -20,10 +20,10 @@ export default {
 	draw: draw,
 	bezier: bezier,
 	point: point,
-	text: text,
-	rotate: rotate,
-	scale: scale,
-	zoom: zoom,
+	// text: text,
+	// rotate: rotate,
+	// scale: scale,
+	// zoom: zoom,
 	viewgrab: viewgrab,
 	viewzoom: viewzoom,
 	toolList: toolOptions,

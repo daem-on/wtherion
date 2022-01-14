@@ -61,7 +61,7 @@ const _testSettings = "-projection plan -scale [2416.0 -1364.5 2451.0 -1364.5 0.
 function processLayer(layer) {
 	if (!layer.children || layer.children.length == 0) return;
 		
-	logText("scrap", layer.name, _testSettings);
+	logText("scrap", layer.name.replace(" ", "_"), _testSettings);
 	for (let item of layer.children) {
 		switch (item[0]) {
 		case "Path":

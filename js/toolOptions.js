@@ -1,19 +1,5 @@
 export default [
 	{
-		id: 'bezier',
-		name: 'Bezier',
-		usedKeys : {
-			toolbar : 'p'
-		}
-	},
-	{
-		id: 'zoom',
-		name: 'Zoom',
-		usedKeys : {
-			toolbar : 'z'
-		}
-	},
-	{
 		id: 'viewzoom',
 		name: 'View zoom',
 		type: 'hidden'
@@ -23,13 +9,34 @@ export default [
 		name: 'View grab',
 		type: 'hidden'
 	},
-	{
-		id: 'text',
-		name: 'Text',
-		usedKeys : {
-			toolbar : 't'
-		}
-	},
+	// {
+	// 	id: 'zoom',
+	// 	name: 'Zoom',
+	// 	usedKeys : {
+	// 		toolbar : 'z'
+	// 	}
+	// },
+	// {
+	// 	id: 'text',
+	// 	name: 'Text',
+	// 	usedKeys : {
+	// 		toolbar : 't'
+	// 	}
+	// },
+	// {
+	// 	id: 'scale',
+	// 	name: 'Scale',
+	// 	usedKeys : {
+	// 		toolbar : 's'
+	// 	}
+	// },
+	// {
+	// 	id: 'rotate',
+	// 	name: 'Rotate',
+	// 	usedKeys : {
+	// 		toolbar : 'r'
+	// 	}
+	// },
 	{
 		id: 'select',
 		name: 'Item select',
@@ -44,17 +51,10 @@ export default [
 		}
 	},
 	{
-		id: 'scale',
-		name: 'Scale',
+		id: 'detailselect',
+		name: 'Detail select',
 		usedKeys : {
-			toolbar : 's'
-		}
-	},
-	{
-		id: 'rotate',
-		name: 'Rotate',
-		usedKeys : {
-			toolbar : 'r'
+			toolbar : 'a'
 		}
 	},
 	{
@@ -62,10 +62,10 @@ export default [
 		name: 'Draw'
 	},
 	{
-		id: 'detailselect',
-		name: 'Detail select',
+		id: 'bezier',
+		name: 'Bezier',
 		usedKeys : {
-			toolbar : 'a'
+			toolbar : 'p'
 		}
 	},
 	{

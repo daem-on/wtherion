@@ -24,7 +24,7 @@ const components: componentList = {
 	type: {
 		type: "customList",
 		label: "Type",
-		imageRoot: "/assets/rendered/symbol",
+		imageRoot: "assets/rendered/symbol",
 		options: types
 	},
 	invisible: {

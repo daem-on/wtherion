@@ -31,7 +31,7 @@ const components: componentList = {
 		requirements: {
 			subTypeEnable: true
 		},
-		imageRoot: "/assets/rendered/subtype"
+		imageRoot: "assets/rendered/subtype"
 	},
 	advancedSection: {
 		type: "title",

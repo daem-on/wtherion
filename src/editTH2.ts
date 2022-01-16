@@ -6,10 +6,12 @@ import PointSettings from "./objectSettings/model/PointSettings";
 
 import colorDefs from "../js/res/color-defs.json";
 
-const typeColors: Record<string, paper.Color>
+const typeColors
 	= generateColors(colorDefs.typeColors);
-const pointColors: Record<string, paper.Color>
+const pointColors
 	= generateColors(colorDefs.pointColors);
+const areaColors
+	= generateColors(colorDefs.areaColors);
 
 function generateColors(from: Record<string, string>) {
 	let r: Record<string, paper.Color> = {};
@@ -42,6 +44,8 @@ export default {
 		let settings = getSettings(a) as AreaSettings;
 		this.drawLine(a, settings.lineSettings);
 		a.fillColor = new paper.Color(0.2, 0.2, 0.2, 0.2);
+		a.fillColor = (settings.type in areaColors) ?
+			areaColors[settings.type] : areaColors.default;
 	},
 
 	drawPoint: function(p: paper.Shape) {

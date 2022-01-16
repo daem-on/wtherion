@@ -12,5 +12,10 @@
 	"pointColors": {
 		"default": "#f00",
 		"station": "#eba800"
+	},
+	"areaColors": {
+		"default": "#4444",
+		"sand": "#bdac7d44",
+		"water": "rgba(28, 110, 186, 0.2)"
 	}
 }

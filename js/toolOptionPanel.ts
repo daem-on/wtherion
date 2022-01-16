@@ -60,21 +60,19 @@ export default {
 				$input = jQuery(`<input type="number" data-type="${comp.type}" name="${key}" value="${options[key]}"${minAttr}>`);
 				
 			} else if(comp.type == 'list' || comp.type == 'customList') {
-				$input = jQuery('<select data-type="'+comp.type+'" name="'+key+'">');
+				$input = jQuery(`<select data-type="${comp.type}" name="${key}">`);
 
 				if (comp.options) {
 					for (let value of comp.options) {
-						var $opt = jQuery(`<option value="${value}">${value}</option>`);
-						if(value == options[key]) $opt.prop('selected', true);
-						$input.append($opt);
+						if (typeof value === "string")
+							$input.append(createOption(value, value, options[key]));
+						else $input.append(
+							createOptionCategory("Category", value, options[key])
+						);
 					}
 				} else if (comp.optionValuePairs) {
-					for (let [display, value] of comp.optionValuePairs) {
-						var $opt = jQuery(`<option value="${value}">${display}</option>`);
-						if(value == options[key]) $opt.prop('selected', true);
-						
-						$input.append($opt);
-					}
+					for (let [display, value] of comp.optionValuePairs)
+						$input.append(createOption(value, display, options[key]));
 				}
 
 				if(comp.maxWidth) $input.css({'maxWidth': comp.maxWidth+'px'});
@@ -230,4 +228,17 @@ export default {
 		});
 	}
 	
+}
+
+function createOption(value: string, display: string, selected: string) {
+	var $opt = jQuery(`<option value="${value}">${display}</option>`);
+	if (value === selected) $opt.prop('selected', true);
+	return $opt;
+}
+
+function createOptionCategory(name: string, category: Array<string>, selected: string) {
+	var $category = jQuery(`<optgroup label="${name}"></optgroup>`);
+	for (let option of category)
+		$category.append(createOption(option, option, selected));
+	return $category;
 }

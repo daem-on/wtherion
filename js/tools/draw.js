@@ -95,6 +95,9 @@ module.exports = function() {
 			// accidental clicks produce a path but no segments
 			// so return if an accidental click happened
 			if(paths[0].segments.length === 0) return;
+			if(paths[0].segments.length === 1) {
+				paths[0].remove();
+			}
 			
 			var group;
 			if(lineCount > 1) {

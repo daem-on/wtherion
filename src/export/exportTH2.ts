@@ -1,5 +1,5 @@
 import paper from "paper";
-import LineSettings from "../objectSettings/model/LineSettings";
+import LineSettings, { Place } from "../objectSettings/model/LineSettings";
 import getSettings from "../objectSettings/model/getSettings";
 import AreaSettings from "../objectSettings/model/AreaSettings";
 import { saveAs } from "file-saver";
@@ -114,7 +114,7 @@ function processLine(item: paperExportedPath, settings?: LineSettings) {
 		if (s.outline !== 0)
 			o.push("-outline " + ["","in","out","none"][s.outline]);
 		if (s.place !== 0)
-			o.push("-place " + ["","bottom","default","top"][s.outline]);
+			o.push("-place " + ["","bottom","top"][s.place]);
 		// // not sure what's up with this, apparently can't be set here
 		// if (s.size !== undefined && s.size !== 0)
 		// 	o.push("-size " + s.size);
@@ -176,11 +176,20 @@ function processShape(item) {
 	let options = "";
 	{
 		options += settings.type;
-
-		if (settings.invisible)
-			options += " -visibility off";
-		if (settings.name)
-			options += " -name " + settings.name;
+ 
+		const s = settings;
+		if (s.invisible) options += " -visibility off";
+		if (s.name) options += " -name " + s.name;
+		if (s.clip !== 0)
+			options += "-clip " + ["","on","off"][s.clip];
+		if (s.place !== 0)
+			options += "-place " + ["","bottom","top"][s.place];
+		if (s.id) options += " -id " + s.id;
+		if (s.scale !== "m") options += " -scale " + s.scale;
+		if (s.text) options += " -text " + s.text;
+		if (s.value) options += " -value " + s.value;
+		if (s.rotation !== 0) options += " -orientation " + s.rotation;
+		if (s.otherSettings) options += s.otherSettings
 	}
 
 	logText("point", position, options);

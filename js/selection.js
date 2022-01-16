@@ -198,7 +198,13 @@ module.exports = function() {
 		}
 	};
 	
-	
+	/**
+	 * 
+	 * @param {paper.Path} path 
+	 * @param {number} index 
+	 * @param {boolean} deselectSplitSegments 
+	 * @returns {void}
+	 */
 	var splitPathRetainSelection = function(path, index, deselectSplitSegments) {
 		var selectedPoints = [];
 		
@@ -216,6 +222,8 @@ module.exports = function() {
 		
 		var newPath = path.split(index, 0);
 		if(!newPath) return;
+		if (path.data && path.data.therionData)
+				newPath.data = JSON.parse(JSON.stringify(path.data))
 		
 		// reselect all of the newPaths segments that are in the exact same location
 		// as the ones that are stored in selectedPoints

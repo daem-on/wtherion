@@ -7,6 +7,7 @@ module.exports = function() {
 	var lastPoint;
 	
 	var options = {};
+	var currentCursor = "";
 	
 	var activateTool = function() {
 		tool = new paper.Tool();
@@ -61,10 +62,12 @@ module.exports = function() {
 	
 	
 	var setCursor = function(cursorString) {
+		if (cursorString === currentCursor) return;
 		var $body = jQuery('body');
 		$body.removeClass('grab');
 		$body.removeClass('grabbing');
 		
+		currentCursor = cursorString;
 		if(cursorString && cursorString.length > 0) {
 			$body.addClass(cursorString);
 		}

@@ -11,6 +11,7 @@ export default class PointSettings {
 	scale: string;
 	text: string;
 	value: string;
+	rotation: number;
 	id: string;
 
 	static defaultSettings(): PointSettings {
@@ -24,6 +25,7 @@ export default class PointSettings {
 		ls.scale = "m";
 		ls.text = "";
 		ls.value = "";
+		ls.rotation = 0;
 		ls.id = "";
 		return ls;
 	}

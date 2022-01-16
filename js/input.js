@@ -79,13 +79,13 @@ module.exports = function() {
 				event.preventDefault();
 			}
 
-			// esc
-			if(event.keyCode === 27) {
-				pg.stylebar.blurInputs();
+			// esc: blur all inputs
+			if(event.key === "Escape") {
+				jQuery('input, select, textarea, button').trigger("blur");
 			}
 
 			// space / pan tool
-			if(event.keyCode === 32 && !userIsTyping(event)) {
+			if(event.key === " " && !userIsTyping(event)) {
 				event.preventDefault();
 				pg.toolbar.switchTool('viewgrab');
 			}

@@ -5,8 +5,11 @@ import { objectOptionPanelConfig } from "../objectOptionPanel";
 import pg from "../../init";
 import symbolList from "../../../js/res/symbol-list.json";
 
-const types = symbolList["special objects"]
-	.concat(symbolList["symbolic passage fills"]);
+// const types = symbolList["special objects"]
+// 	.concat(symbolList["symbolic passage fills"]);
+const types = [];
+for (let category in symbolList)
+	types.push(symbolList[category]);
 
 let optionsCache = {
 	type: undefined,
@@ -22,9 +25,10 @@ let optionsCache = {
 
 const components: componentList = {
 	type: {
-		type: "customList",
+		// type: "customList",
+		// imageRoot: "assets/rendered/symbol",
+		type: "list",
 		label: "Type",
-		imageRoot: "assets/rendered/symbol",
 		options: types
 	},
 	invisible: {

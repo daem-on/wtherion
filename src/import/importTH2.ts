@@ -247,13 +247,12 @@ function createScrap(line: string) {
 function createPoint(line: string) {
 	let point = pg.editTH2.createPoint();
 	let split = line.split(" ");
-	let options = getOptions(line);
+	let options = getOptions(split.slice(4).join(" "));
 	options.type = split[3]
-	savePointSettings(point, options);
-	point.position = new paper.Point(toPoint(split.slice(1, 3)))
-	if ("orient" in options || "orientation" in options) {
+	if ("orient" in options || "orientation" in options)
 		point.rotation = Number.parseFloat(options.orient || options.orientation)
-	}
+	point.position = new paper.Point(toPoint(split.slice(1, 3)))
+	savePointSettings(point, options);
 	pg.editTH2.drawPoint(point);
 }
 
@@ -281,6 +280,8 @@ function savePointSettings(point: paper.Shape, options: Record<string, string>) 
 	if (o.visibility === "off") {
 		s.invisible = true; delete o.visibility;
 	}
+	if (o.orient) delete o.orient;
+	if (o.orientation) delete o.orientation;
 
 	for (const key in o) {
 		if (Object.prototype.hasOwnProperty.call(o, key)) {

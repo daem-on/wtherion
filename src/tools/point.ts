@@ -8,7 +8,6 @@ export function activateTool() {
 
 		let point = pg.editTH2.createPoint(event.point);
 		pg.editTH2.drawPoint(point);
-		console.error("Not implemented");
 	}
 
 	tool.activate();

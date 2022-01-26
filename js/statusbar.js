@@ -14,6 +14,9 @@ module.exports = function() {
 		});
 	};
 	
+	var showCustom = function(customText) {
+		jQuery('#selectionTypeLabel').html(customText).removeClass('none');
+	}
 	
 	var update = function() {
 		jQuery('#zoomInput').val(Math.round(paper.view.zoom*100));
@@ -29,7 +32,8 @@ module.exports = function() {
 	
 	return {
 		setup: setup,
-		update: update
+		update: update,
+		showCustom: showCustom,
 	};
 	
 }();

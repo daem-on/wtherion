@@ -19,7 +19,6 @@
     "rock-border",
     "rock-edge",
     "water-flow",
-    "abyssentrance",
     "dripline",
     "fault",
     "joint",
@@ -28,14 +27,10 @@
     "walkway"
   ],
   "labels": [
-    "label"
   ],
   "special": [
     "border",
     "arrow",
-    "section",
-    "survey",
-    "map-connection",
     "u"
   ]
 }

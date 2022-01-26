@@ -6,12 +6,12 @@ import layerPanel from "../js/layerPanel.js";
 import pgExport from "../js/export.js";
 import text from "../js/text.js";
 import menu from "../js/menu.js";
-import toolbar from "../js/toolbar.js";
+import toolbar from "../js/toolbar";
 import stylebar from "../js/stylebar.js";
 import statusbar from "../js/statusbar.js";
 import input from "../js/input.js";
 import undo from "../js/undo.js";
-import tools from "./tools";
+import * as tools from "./tools";
 import selection from "../js/selection.js";
 import guides from "../js/guides.js"
 import helper from "../js/helper.js"

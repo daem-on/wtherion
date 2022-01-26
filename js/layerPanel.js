@@ -95,9 +95,9 @@ module.exports = function() {
 			});
 			
 			
-			if(layer.data.isDefaultLayer) {
-				$layerNameInput.attr('disabled', true);
-			}
+			// if(layer.data.isDefaultLayer) {
+			// 	$layerNameInput.attr('disabled', true);
+			// }
 			
 			
 			$layerNameInput.on('change', function() {

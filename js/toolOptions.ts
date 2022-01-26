@@ -1,4 +1,6 @@
-export default [
+import {PGToolOptions} from "./toolbar";
+
+let options: PGToolOptions[] = [
 	{
 		id: 'viewzoom',
 		name: 'View zoom',
@@ -75,4 +77,12 @@ export default [
 			toolbar : 'k'
 		}
 	},
+	{
+		id: 'inspect',
+		name: 'Inspect',
+		usedKeys : {
+			toolbar : 'k'
+		}
+	},
 ]
+export default options;

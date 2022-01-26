@@ -9,7 +9,7 @@ type component = {
 	label?: string,
 	options?: string[],
 	optionValuePairs?: [string, any][],
-	click?: any,
+	click?: Function,
 	maxWidth?: any,
 	minWidth?: any,
 	text?: string,
@@ -24,9 +24,13 @@ export type componentList = {
 	[componentName: string]: component
 }
 
+type optionsType = {
+	[key: string]: any;
+};
+
 export default {
 	
-	setup(options, components: componentList, changeCallback: () => void) {
+	setup(options: optionsType, components: componentList, changeCallback: () => void) {
 		let panelTitle = options.name || "Settings";
 		
 		var $panel = jQuery('<div class="toolOptionPanel">');
@@ -82,7 +86,7 @@ export default {
 				$input = jQuery(`<input type="text" id="textToolInput" data-type="${comp.type}" name="${key}" value="${val}">`);
 				
 			} else if(comp.type == 'button') {
-				$button = jQuery(`<button data-click="${comp.click}">${comp.label}</button>`);
+				$button = jQuery(`<button>${comp.label}</button>`);
 				
 			} else if(comp.type == 'title') {
 				$sectionTitle = jQuery(`<h4>${comp.text} ⯆</h4>`);
@@ -136,9 +140,8 @@ export default {
 			};
 			
 			if($button) {
-				$button.click(function() {
-					var func = jQuery(this).attr('data-click');
-					pg.helper.executeFunctionByName(func, window);
+				$button.on("click", function() {
+					if (comp.click) comp.click();
 				});
 			}
 			if($sectionTitle) {
@@ -200,7 +203,7 @@ export default {
 				if(comp.requirements) {
 					jQuery.each(comp.requirements, function(reqkey, req){
 						var $el = jQuery('.option-section[data-id="'+reqid+'"]');
-						if(options[reqkey] == req) {
+						if(compareInputRequirement(options[reqkey], req)) {
 							$el.removeClass('hidden');
 						} else {
 							$el.addClass('hidden');
@@ -213,13 +216,13 @@ export default {
 		return $panel;
 	},
 	
-	update(options) {
+	update(options: optionsType) {
 		jQuery.each(options, function(key: string, opt) {
-			var $el = jQuery('[name="'+key+'"]');
+			var $el = jQuery(`[name="${key}"]`);
 			if($el.attr('data-type') == 'int') {
-				$el.val(parseInt(opt));
+				$el.val(opt);
 			} else if($el.attr('data-type') == 'float') {
-				$el.val(parseFloat(opt));
+				$el.val(opt);
 			} else if( $el.attr('data-type') == 'text') {
 				$el.val(opt);
 			} else if($el.attr('data-type') == 'list'){
@@ -228,6 +231,14 @@ export default {
 		});
 	}
 	
+}
+
+
+function compareInputRequirement(value: any, requirement: any) {
+	if (typeof requirement == "string"
+	 || typeof requirement == "number")
+		return value === requirement;
+	if (Array.isArray(requirement)) return requirement.includes(value);
 }
 
 function createOption(value: string, display: string, selected: string) {

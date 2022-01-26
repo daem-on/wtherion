@@ -2,6 +2,7 @@
 module.exports = function() {
 
 	var hoveredItem;
+	var hitResultItem;
 	var handleHoveredItem = function(hitOptions, event) {
 		var hitResult = paper.project.hitTest(event.point, hitOptions);
 		if(hitResult) {
@@ -13,6 +14,7 @@ module.exports = function() {
 				clearHoveredItem();
 			}
 			if(	hoveredItem === undefined && hitResult.item.selected === false) {
+				hitResultItem = hitResult.item;
 				if(pg.item.isBoundsItem(hitResult.item)) {
 					hoveredItem = pg.guides.hoverBounds(hitResult.item);
 
@@ -29,8 +31,8 @@ module.exports = function() {
 		}
 	};
 	
-	
 	var clearHoveredItem = function() {
+		hitResultItem = undefined;
 		if(hoveredItem !== undefined) {
 			hoveredItem.remove();
 			hoveredItem = undefined;
@@ -41,6 +43,7 @@ module.exports = function() {
 	
 	return {
 		handleHoveredItem: handleHoveredItem,
-		clearHoveredItem: clearHoveredItem
+		clearHoveredItem: clearHoveredItem,
+		getHoveredItem: () => hitResultItem,
 	};
 }();

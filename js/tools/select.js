@@ -103,6 +103,15 @@ module.exports = function() {
 			label: 'Simplify',
 			click: 'pg.editTH2.simplify'
 		},
+		pointsTitle: {
+			type: 'title',
+			text: 'Points'
+		},
+		randomizeRotation: {
+			type: "button",
+			label: "Randomize rotation",
+			click: "pg.editTH2.randomizeRotation"
+		}
 	};
 
 	var activateTool = function() {		
@@ -231,7 +240,7 @@ module.exports = function() {
 
 				if (event.modifiers.alt) {
 					pivot = origCenter;
-					modOrigSize = origSize*0.5;
+					modOrigSize = origSize.multiply(0.5);
 				} else {
 					pivot = origPivot; 
 				}

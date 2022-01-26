@@ -173,6 +173,19 @@ export default {
 		this.drawLine(area);
 	},
 	
+	randomizeRotation: function() {
+		let selection: paper.Item[] = pg.selection.getSelectedItems();
+		for (let item of selection) {
+			if (item.className === "Shape") {
+				let s = getSettings(item);
+				if (s.className === "PointSettings") {
+					item.rotation = Math.floor(Math.random() * 360);
+					s.rotation = item.rotation;
+				}
+			}
+		}
+	},
+	
 	mergeLines: function() {
 		let selection = pg.selection.getSelectedItems();
 		if (selection.length !== 2) {

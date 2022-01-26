@@ -33,7 +33,7 @@ const components: componentList = {
 	execute: {
 		type: "button",
 		click: modifyObject,
-		label: "Execute change",
+		label: "Apply",
 	}
 }
 

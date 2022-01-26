@@ -1,10 +1,18 @@
 // drawing tool
 // adapted from resources on http://paperjs.org
 
+const wallList = require("../res/walls-list.json");
+const subtypeList = require("../res/subtype-list.json");
+const { default: getSettings } = require("../../src/objectSettings/model/getSettings");
+
 module.exports = function() {
 	var tool;
 	
 	var options = {
+		id: "draw",
+		type: "wall",
+		subtype: "",
+		size: 0,
 		pointDistance: 20,
 		drawParallelLines: false,
 		lines: 3,
@@ -13,7 +21,31 @@ module.exports = function() {
 		smoothPath : true
 	};
 	
+	/** @type {import("../toolOptionPanel").componentList} */
 	var components = {
+		type: {
+			type: "customList",
+			label: "Type",
+			options: wallList.passages,
+		},
+		subtype: {
+			type: "customList",
+			label: "Subtype",
+			requirements: {type: ["wall", "border", "water-flow"]},
+			options: subtypeList.wall,
+			imageRoot: "assets/rendered/subtype"
+		},
+		size: {
+			type: "int",
+			label: "Size",
+			requirements: {
+				type: "slope"
+			}
+		},
+		toolOptions: {
+			type: "title",
+			text: "Tool options"
+		},
 		pointDistance: {
 			type: 'int',
 			label: 'Point distance',
@@ -71,7 +103,14 @@ module.exports = function() {
 				var path = paths[i];
 				path = pg.editTH2.createPath();
 				
-				path = pg.stylebar.applyActiveToolbarStyle(path);
+				settings = getSettings(path);
+				settings.type = options.type;
+				if (["wall", "border", "water-flow"].includes(options.type))
+					settings.subtype = options.subtype;
+				if (options.type === "slope") {
+					settings.size = options.size;
+				}
+				pg.editTH2.drawLine(path);
 				
 				paths.push(path);
 			}
@@ -127,6 +166,7 @@ module.exports = function() {
 		
 		// setup floating tool options panel in the editor
 		pg.toolOptionPanel.setup(options, components, function() {
+			pg.tools.setLocalOptions(options);
 			lineCount = options.lines;
 			tool.fixedDistance = options.pointDistance;
 		});

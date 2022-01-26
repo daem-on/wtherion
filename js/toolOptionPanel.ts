@@ -235,10 +235,8 @@ export default {
 
 
 function compareInputRequirement(value: any, requirement: any) {
-	if (typeof requirement == "string"
-	 || typeof requirement == "number")
-		return value === requirement;
 	if (Array.isArray(requirement)) return requirement.includes(value);
+	else return value === requirement;
 }
 
 function createOption(value: string, display: string, selected: string) {

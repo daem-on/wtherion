@@ -1,16 +1,65 @@
+import { componentList } from "../../js/toolOptionPanel";
 import pg from "../init";
+import symbolList from "../../js/res/symbol-list.json";
+import getSettings from "../objectSettings/model/getSettings";
+import PointSettings from "../objectSettings/model/PointSettings";
+
+const types = [];
+for (let category in symbolList)
+	types.push(symbolList[category]);
+
+export let options = {
+	id: "point",
+	type: "station",
+	stationName: "",
+};
+
+let components: componentList = {
+	type: {
+		type: "list",
+		label: "Type",
+		options: types
+	},
+	stationName: {
+		type: "text",
+		label: "Station reference",
+		requirements: {
+			type: "station"
+		}
+	},
+}
 
 export function activateTool() {
 	let tool = new paper.Tool();
+
+	// get options from local storage if present
+	options = pg.tools.getLocalOptions(options) as any;
 
 	tool.onMouseDown = function(event: any) {
 		if (event.event.button > 0) return;
 
 		let point = pg.editTH2.createPoint(event.point);
+		let settings = getSettings(point) as PointSettings;
+		settings.type = options.type;
+		if (options.type === "station") {
+			increaseStationNumber();
+			settings.name = options.stationName;
+		}
 		pg.editTH2.drawPoint(point);
 	}
+
+	pg.toolOptionPanel.setup(options, components, function() {
+		pg.tools.setLocalOptions(options);
+	});
 
 	tool.activate();
 }
 
-export let options = {};
+function increaseStationNumber() {
+	if (options.stationName.includes("@")) {
+		let split = options.stationName.split("@")
+		options.stationName = (Number.parseInt(split[0])+1) + "@" + split[1];
+		pg.tools.setLocalOptions(options)
+		pg.toolOptionPanel.update(options);
+	}
+}

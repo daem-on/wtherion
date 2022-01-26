@@ -6,6 +6,7 @@ import segmentOptionPanel from "./panels/segmentOptionPanel";
 import areaOptionPanel from "./panels/areaOptionPanel";
 import pointOptionPanel from "./panels/pointOptionPanel";
 import multipleLineOptionPanel from "./panels/multipleLineOptionPanel";
+import multiplePointOptionPanel from "./panels/multiplePointOptionPanel";
 
 export type objectOptionPanelConfig = {
 	options: {},
@@ -32,10 +33,12 @@ export function updateWindow() {
 		for (let item of selected) {
 			if (item.className !== className) return;
 		}
-		if (pg.toolbar.getActiveTool().options.id == "select"
-			&& selected[0].className === "Path"
+		if (pg.toolbar.getActiveTool().options.id == "select")
+		if (selected[0].className === "Path"
 			&& getSettings(selected[0]).className == "LineSettings") {
 			config = multipleLineOptionPanel(selected as paper.Path[]);
+		} else if (selected[0].className === "Shape") {
+			config = multiplePointOptionPanel(selected as paper.Shape[]);
 		} else return;
 
 	// Single selection

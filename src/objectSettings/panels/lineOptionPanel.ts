@@ -126,7 +126,7 @@ export default function(line: paper.Path): objectOptionPanelConfig {
 	let modifyObject = () => {
 		for (const key in optionsCache) {
 			if (Object.prototype.hasOwnProperty.call(optionsCache, key)) {
-				if (optionsCache[key] != settings[key]) {
+				if (optionsCache[key] !== settings[key]) {
 					settings[key] = optionsCache[key];
 				}
 			}

@@ -8,7 +8,7 @@ type component = {
 	max?: any,
 	label?: string,
 	options?: string[],
-	optionValuePairs?: [string, any][],
+	optionValuePairs?: [string, string|number][],
 	click?: Function,
 	maxWidth?: any,
 	minWidth?: any,
@@ -128,6 +128,7 @@ export default {
 
 					} else if(e.target.type == 'select-one') {
 						val = e.target.value;
+						if (!isNaN(val)) val = Number.parseInt(val);
 					}
 
 					// set values for tool and save in local options
@@ -239,7 +240,7 @@ function compareInputRequirement(value: any, requirement: any) {
 	else return value === requirement;
 }
 
-function createOption(value: string, display: string, selected: string) {
+function createOption(value: string | number, display: string, selected: string | number) {
 	var $opt = jQuery(`<option value="${value}">${display}</option>`);
 	if (value === selected) $opt.prop('selected', true);
 	return $opt;

@@ -1,3 +1,5 @@
+let paper = require("paper");
+const { default: ScrapSettings } = require("../src/objectSettings/model/ScrapSettings");
 
 module.exports = function() {
 	
@@ -55,6 +57,7 @@ module.exports = function() {
 		var newLayer = new paper.Layer();
 		
 		newLayer.data.id = getUniqueLayerID();
+		newLayer.data.therionData = ScrapSettings.defaultSettings();
 		
 		if(layerName) {
 			newLayer.name = layerName;

@@ -1,5 +1,5 @@
 import pg from "../src/init";
-let paperAlias: any = paper;
+import paper from "paper";
 
 export type PGToolOptions = {
 	id: string;
@@ -53,8 +53,8 @@ var setupToolList = function() {
 
 	// set select tool as starting tool. timeout is needed...
 	setTimeout(function(){
-		if(paperAlias.tools.length > 0) {
-			paperAlias.tools[0].remove(); // remove default tool
+		if(paper.tools.length > 0) {
+			paper.tools[0].remove(); // remove default tool
 		}
 		setDefaultTool();
 	},300);
@@ -117,8 +117,8 @@ var resetTools = function() {
 		} catch(e) {
 			// this tool has no (optional) deactivateTool function
 		}
-		for(var i=0; i < paperAlias.tools.length; i++) {
-			paperAlias.tools[i].remove();
+		for(var i=0; i < paper.tools.length; i++) {
+			paper.tools[i].remove();
 		}
 	}
 	jQuery('.toolOptionPanel').remove();

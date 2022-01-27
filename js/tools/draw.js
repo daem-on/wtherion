@@ -133,16 +133,17 @@ module.exports = function() {
 			//
 			// accidental clicks produce a path but no segments
 			// so return if an accidental click happened
-			if(paths[0].segments.length === 0) return;
-			if(paths[0].segments.length === 1) {
+			if (paths[0].segments.length <= 1) {
 				paths[0].remove();
+				paths = [];
+				return;
 			}
-			
+
 			var group;
 			if(lineCount > 1) {
 				group = new paper.Group();
 			}
-			
+
 			var nearStart = pg.math.checkPointsClose(paths[0].firstSegment.point, event.point, 30);
 			for( var i=0; i < lineCount; i++) {
 				var path = paths[i];
@@ -158,10 +159,9 @@ module.exports = function() {
 					group.addChild(path);
 				}
 			}
-			
+
 			paths = [];
 			pg.undo.snapshot('draw');
-			
 		};
 		
 		// setup floating tool options panel in the editor

@@ -4,6 +4,7 @@ import getSettings from "../objectSettings/model/getSettings";
 import AreaSettings from "../objectSettings/model/AreaSettings";
 import { saveAs } from "file-saver";
 import PointSettings from "../objectSettings/model/PointSettings";
+import ScrapSettings from "../objectSettings/model/ScrapSettings";
 	
 function toGlobal(global: number[], local = [0, 0]) {
 	let x = Math.round((global[0]+local[0])*100)/100;
@@ -58,10 +59,29 @@ export function exportTh2() {
 	
 const _testSettings = "-projection plan -scale [2416.0 -1364.5 2451.0 -1364.5 0.0 0.0 1.5 0.0 m]";
 	
-function processLayer(layer) {
+function processLayer(layer: paper.Layer) {
 	if (!layer.children || layer.children.length == 0) return;
-		
-	logText("scrap", layer.name.replace(" ", "_"), _testSettings);
+
+	let settings = layer.data.therionData as ScrapSettings;
+
+	let optionsString = "";
+	{
+		let s = settings;
+		let o = [];
+		if (s.projection !== 1)
+			o.push("-projection " + ["none","plan","elevation","extended"][s.projection]);
+		if (s.scale !== "")
+			o.push(" -scale" + s.scale);
+		if (s.author !== "")
+			o.push(" -author" + s.author);
+		if (s.copyright !== "")
+			o.push(" -copyright" + s.copyright);
+		if (s.otherSettings !== "")
+			o.push(s.otherSettings);
+		optionsString = o.join(" ");
+	}
+
+	logText("scrap", layer.name.replace(" ", "_"), settings);
 	for (let item of layer.children) {
 		switch (item[0]) {
 		case "Path":

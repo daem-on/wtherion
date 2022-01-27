@@ -118,6 +118,7 @@ module.exports = function() {
 
 				} else {
 					pg.selection.clearSelection();
+					jQuery('.toolOptionPanel').remove();
 
 					var items = pg.helper.getPaperItemsByLayerID(layer.data.id);
 					jQuery.each(items, function(index, item) {

@@ -5,6 +5,7 @@ import AreaSettings from "./objectSettings/model/AreaSettings";
 import PointSettings from "./objectSettings/model/PointSettings";
 
 import colorDefs from "../js/res/color-defs.json";
+import * as scrapOptions from "./scrapOptions";
 
 const typeColors
 	= generateColors(colorDefs.typeColors);
@@ -20,15 +21,6 @@ function generateColors(from: Record<string, string>) {
 }
 
 export default {
-	lineTypeTest: function() {
-		var items = pg.selection.getSelectedItems();
-		for (var item of items) {
-			this.setupData(item);
-			item.data.therionData.lineType =
-				prompt("Type", "wall");
-		}
-		pg.undo.snapshot('setLineType');
-	},
 	
 	createPath: function() {
 		var path = new paper.Path();
@@ -86,35 +78,6 @@ export default {
 		} else if (settings.className == "LineSettings") {
 			this.drawLine(object as paper.Path);
 		}
-	},
-	
-	subtypeTest: function() {
-		var items = pg.selection.getSelectedItems();
-		for (var item of items) {
-			if (!("segments" in item)) continue;
-			this.setupData(item);
-	
-			let thData = item.data.therionData;
-			if (!thData.segmentOptions) thData.segmentOptions = {};
-			for (let segment of item.segments) {
-				if (segment.selected)
-					thData.segmentOptions[segment.index] =
-						"subtype " + prompt("Subtype", "sand");
-			}
-		}
-		pg.undo.snapshot('setSubtype');
-	},
-	
-	pointSettings: function() {
-		var items = pg.selection.getSelectedItems();
-		for (var item of items) {
-			if (item.className != "Shape") continue;
-			this.setupData(item);
-	
-			let thData = item.data.therionData;
-			thData.pointSettings = prompt("Point settings", thData.pointSettings)
-		}
-		pg.undo.snapshot('setPointSettings');
 	},
 	
 	clearSubtype: function() {
@@ -217,5 +180,9 @@ export default {
 			if (item.className == "Path") item.simplify();
 	
 		pg.undo.snapshot("simplifyLine");
-	}
+	},
+
+	showScrapOptionsPanel: function() {
+		scrapOptions.show();
+	},
 }

@@ -4,6 +4,7 @@ import getSettings from "../objectSettings/model/getSettings"
 import AreaSettings from "../objectSettings/model/AreaSettings"
 import PointSettings from "../objectSettings/model/PointSettings"
 import { requestImportXVI } from "./importXVI"
+import ScrapSettings from "../objectSettings/model/ScrapSettings"
 				
 const toPoint = function(global: string[], global2: string[] = undefined) {
 	if (global2)
@@ -194,7 +195,7 @@ function createLine(line: string) {
 	_subtypes = {};
 	_segmentOptions = {};
 
-	let lineSettings = getSettings(_currentPath);
+	let lineSettings = getSettings(_currentPath) as LineSettings;
 	lineSettings.type = split[1];
 					
 	_parsedOptions = getOptions(line);
@@ -239,9 +240,33 @@ function applyAreas() {
 function createScrap(line: string) {
 	let split = line.split(" ");
 	let nl = pg.layer.addNewLayer(split[1], true);
-	nl.data.therionData = {
-		createdFrom: line,
-	};
+	nl.data.therionData.createdFrom = line;
+
+	let settings = nl.data.therionData as ScrapSettings;
+	let options = getOptions(split.slice(2).join(" "));
+
+	const stringOptions = ["scale", "author", "copyright"];
+	for (let key of stringOptions) {
+		if (key in options) {
+			settings[key] = options[key];
+			delete options[key];
+		}
+	}
+	if (options.projection) {
+		switch (options.projection) {
+			case "none": settings.projection = 0; break;
+			case "elevation": settings.projection = 2; break;
+			case "extended": settings.projection = 3; break;
+			default: settings.projection = 1; break;
+		}
+		delete options.projection;
+	}
+
+	for (const key in options) {
+		if (Object.prototype.hasOwnProperty.call(options, key)) {
+			settings.otherSettings += ` -${key} ${options[key]}`;
+		}
+	}
 }
 				
 function createPoint(line: string) {

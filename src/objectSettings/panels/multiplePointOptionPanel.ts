@@ -45,7 +45,7 @@ export default function(points: paper.Shape[]): objectOptionPanelConfig {
 	pointSettingsArray = [];
 	optionsCache = defaultOptions();
 	for (let point of points)
-		pointSettingsArray.push(getSettings(point) as PointSettings);
+		pointSettingsArray.push(getSettings(point));
 
 	return {
 		options: optionsCache,

@@ -1,6 +1,6 @@
 import LineSettings from "./objectSettings/model/LineSettings";
 import pg from "./init";
-import getSettings from "./objectSettings/model/getSettings";
+import getSettings, { PaperItemType } from "./objectSettings/model/getSettings";
 import AreaSettings from "./objectSettings/model/AreaSettings";
 import PointSettings from "./objectSettings/model/PointSettings";
 
@@ -70,7 +70,7 @@ export default {
 			l.dashArray = [3, 6];
 	},
 	
-	drawObject: function(object: paper.Item) {
+	drawObject: function(object: PaperItemType) {
 		let settings = getSettings(object);
 		if (!settings) return;
 		if (settings.className == "AreaSettings") {
@@ -140,7 +140,7 @@ export default {
 		let selection: paper.Item[] = pg.selection.getSelectedItems();
 		for (let item of selection) {
 			if (item.className === "Shape") {
-				let s = getSettings(item);
+				let s = getSettings(item as paper.Shape);
 				if (s.className === "PointSettings") {
 					item.rotation = Math.floor(Math.random() * 360);
 					s.rotation = item.rotation;

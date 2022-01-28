@@ -1,5 +1,6 @@
 import { componentList } from "../js/toolOptionPanel";
 import pg from "./init";
+import getSettings from "./objectSettings/model/getSettings";
 import ScrapSettings from "./objectSettings/model/ScrapSettings";
 
 let optionsCache = {
@@ -40,7 +41,7 @@ let components: componentList = {
 
 export function show() {
 	let scrap = pg.layer.getActiveLayer();
-	let settings = scrap.data.therionData as ScrapSettings;
+	let settings = getSettings(scrap);
 
 	for (const key in optionsCache) {
 		if (Object.prototype.hasOwnProperty.call(optionsCache, key)) {

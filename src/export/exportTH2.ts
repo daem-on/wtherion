@@ -62,7 +62,7 @@ const _testSettings = "-projection plan -scale [2416.0 -1364.5 2451.0 -1364.5 0.
 function processLayer(layer: paper.Layer) {
 	if (!layer.children || layer.children.length == 0) return;
 
-	let settings = layer.data.therionData as ScrapSettings;
+	let settings = getSettings(layer);
 
 	let optionsString = "";
 	{
@@ -112,7 +112,7 @@ function processLine(item: paperExportedPath, settings?: LineSettings) {
 	let segments = item.segments;
 	if (!segments || segments.length < 2) return;
 		
-	let lineSettings = settings || getSettings(item) as LineSettings;
+	let lineSettings = settings || getSettings(item as any) as LineSettings;
 	let subtypes = lineSettings.subtypes;
 	let segmentSettings = lineSettings.segmentSettings;
 	
@@ -220,7 +220,7 @@ function generateId() {
 }
 	
 function processArea(item: paperExportedPath) {
-	let areaSettings = getSettings(item) as AreaSettings;
+	let areaSettings = getSettings(item as any) as AreaSettings;
 	let lineSettings = areaSettings.lineSettings;
 	
 	if (lineSettings.id === "") lineSettings.id = generateId()

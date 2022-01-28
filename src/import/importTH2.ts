@@ -91,6 +91,7 @@ export default function(source: string) {
 	}
 	applyAreas();
 	loadImages();
+	pg.layer.activateDefaultLayer();
 	pg.layerPanel.updateLayerList();
 }
 
@@ -242,7 +243,7 @@ function createScrap(line: string) {
 	let nl = pg.layer.addNewLayer(split[1], true);
 	nl.data.therionData.createdFrom = line;
 
-	let settings = nl.data.therionData as ScrapSettings;
+	let settings = getSettings(nl);
 	let options = getOptions(split.slice(2).join(" "));
 
 	const stringOptions = ["scale", "author", "copyright"];

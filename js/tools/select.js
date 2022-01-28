@@ -201,6 +201,14 @@ module.exports = function() {
 						} else {
 							mode = 'move';
 						}
+
+						// // Use this for selection and moving being separate clicks
+						// if (hitResult.item.selected) {
+						// 	if(event.modifiers.alt) {
+						// 		mode = 'cloneMove';
+						// 		pg.selection.cloneSelection();
+						// 	} else mode = 'move';
+						// } else pg.selection.setItemSelection(hitResult.item, true);
 					}
 				}
 				// while transforming object, never show the bounds stuff
@@ -431,9 +439,9 @@ module.exports = function() {
 		var items = pg.selection.getSelectedItems();
 		if(items.length <= 0) return;
 		
-		if (items.some(function(item) {
-			return (item.data && item.data.noDrawHandle)
-		})) {
+		if (
+			items.some(item => (item.data && item.data.noDrawHandle))
+		) {
 			thPointRotHandle =
 				new paper.Path.Line({
 					data: {

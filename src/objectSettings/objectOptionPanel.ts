@@ -1,6 +1,6 @@
 import { componentList } from "../../js/toolOptionPanel";
 import pg from "../init";
-import getSettings from "./model/getSettings";
+import getSettings, { PaperItemType } from "./model/getSettings";
 import lineOptionPanel from "./panels/lineOptionPanel";
 import segmentOptionPanel from "./panels/segmentOptionPanel";
 import areaOptionPanel from "./panels/areaOptionPanel";
@@ -19,7 +19,7 @@ function removeWindow() {
 }
 
 export function updateWindow() {
-	let selected: paper.Item[] = pg.selection.getSelectedItems();
+	let selected: PaperItemType[] = pg.selection.getSelectedItems();
 	
 	removeWindow();
 	
@@ -34,10 +34,10 @@ export function updateWindow() {
 			if (item.className !== className) return;
 		}
 		if (pg.toolbar.getActiveTool().options.id == "select")
-		if (selected[0].className === "Path"
+		if (isPath(selected[0])
 			&& getSettings(selected[0]).className == "LineSettings") {
 			config = multipleLineOptionPanel(selected as paper.Path[]);
-		} else if (selected[0].className === "Shape") {
+		} else if (isShape(selected[0])) {
 			config = multiplePointOptionPanel(selected as paper.Shape[]);
 		} else return;
 
@@ -60,13 +60,13 @@ export function updateWindow() {
 		}
 		
 		// Non-detail select
-		else if (selected[0].className === "Path") {
+		else if (isPath(selected[0])) {
 			let settings = getSettings(selected[0])
 			if (settings.className == "LineSettings")
 				config = lineOptionPanel(selected[0] as paper.Path);
-			else if (settings.className == "AreaSettings") 
+			else if (settings.className == "AreaSettings")
 				config = areaOptionPanel(selected[0] as paper.Path);
-		} else if (selected[0].className === "Shape") {
+		} else if (isShape(selected[0])) {
 			if (getSettings(selected[0]).className == "PointSettings") 
 				config = pointOptionPanel(selected[0] as paper.Shape);
 		} else return;
@@ -79,3 +79,12 @@ export function updateWindow() {
 		config.callback
 	);
 }
+
+function isPath(selected: PaperItemType): selected is paper.Path {
+	return selected.className === "Path";
+}
+
+function isShape(selected: PaperItemType): selected is paper.Shape {
+	return selected.className === "Shape";
+}
+

@@ -38,6 +38,11 @@ module.exports = function() {
 			label: 'Toggle handles',
 			click: 'pg.selection.switchSelectedHandles'
 		},
+		smoothHandles: {
+			type: 'button',
+			label: 'Reset handles to smooth',
+			click: 'pg.selection.smoothHandles'
+		},
 		removeSegments: {
 			type: 'button',
 			label: 'Remove segments',

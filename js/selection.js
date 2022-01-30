@@ -384,7 +384,10 @@ module.exports = function() {
 		return paths;
 	};
 	
-	
+	var smoothHandles = function() {
+		switchSelectedHandles("smooth");
+	}
+
 	var switchSelectedHandles = function(mode) {
 		var items = getSelectedItems();
 		for(var i=0; i<items.length; i++) {
@@ -583,6 +586,7 @@ module.exports = function() {
 		getSelectedItems: getSelectedItems,
 		getSelectionType: getSelectionType,
 		getSelectedPaths: getSelectedPaths,
+		smoothHandles: smoothHandles,
 		switchSelectedHandles: switchSelectedHandles,
 		removeSelectedSegments: removeSelectedSegments,
 		processRectangularSelection: processRectangularSelection

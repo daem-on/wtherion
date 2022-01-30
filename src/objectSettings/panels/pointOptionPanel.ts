@@ -16,6 +16,7 @@ let optionsCache = {
 	otherSettings: undefined,
 	name: undefined,
 	clip: undefined,
+	scale: undefined,
 	place: undefined,
 	invisible: undefined,
 	text: undefined,
@@ -69,6 +70,13 @@ const components: componentList = {
 			["default", 0],
 			["on", 1],
 			["off", 2]
+		],
+	},
+	scale: {
+		type: "list",
+		label: "Scale",
+		options: [
+			"xs", "s", "m", "l", "xl"
 		],
 	},
 	place: {

@@ -71,17 +71,17 @@ function processLayer(layer: paper.Layer) {
 		if (s.projection !== 1)
 			o.push("-projection " + ["none","plan","elevation","extended"][s.projection]);
 		if (s.scale !== "")
-			o.push(" -scale" + s.scale);
+			o.push("-scale " + s.scale);
 		if (s.author !== "")
-			o.push(" -author" + s.author);
+			o.push("-author " + s.author);
 		if (s.copyright !== "")
-			o.push(" -copyright" + s.copyright);
+			o.push("-copyright " + s.copyright);
 		if (s.otherSettings !== "")
 			o.push(s.otherSettings);
 		optionsString = o.join(" ");
 	}
 
-	logText("scrap", layer.name.replace(" ", "_"), settings);
+	logText("scrap", layer.name.replace(" ", "_"), optionsString);
 	for (let item of layer.children) {
 		switch (item[0]) {
 		case "Path":
@@ -201,15 +201,15 @@ function processShape(item) {
 		if (s.invisible) options += " -visibility off";
 		if (s.name) options += " -name " + s.name;
 		if (s.clip !== 0)
-			options += "-clip " + ["","on","off"][s.clip];
+			options += " -clip " + ["","on","off"][s.clip];
 		if (s.place !== 0)
-			options += "-place " + ["","bottom","top"][s.place];
+			options += " -place " + ["","bottom","top"][s.place];
 		if (s.id) options += " -id " + s.id;
 		if (s.scale !== "m") options += " -scale " + s.scale;
 		if (s.text) options += " -text " + s.text;
 		if (s.value) options += " -value " + s.value;
 		if (s.rotation !== 0) options += " -orientation " + s.rotation;
-		if (s.otherSettings) options += s.otherSettings
+		if (s.otherSettings) options += " " + s.otherSettings;
 	}
 
 	logText("point", position, options);

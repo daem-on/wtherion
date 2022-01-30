@@ -128,7 +128,7 @@ export default {
 
 					} else if(e.target.type == 'select-one') {
 						val = e.target.value;
-						if (!isNaN(val)) val = Number.parseInt(val);
+						val = asNumOrString(val);
 					}
 
 					// set values for tool and save in local options
@@ -251,4 +251,9 @@ function createOptionCategory(name: string, category: Array<string>, selected: s
 	for (let option of category)
 		$category.append(createOption(option, option, selected));
 	return $category;
+}
+
+function asNumOrString(val: string) {
+	if (/^\d+$/.test(val)) return Number.parseInt(val);
+	return val;
 }

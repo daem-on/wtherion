@@ -113,10 +113,17 @@ function processLayer(layer: paper.Layer) {
 	
 type paperExportedPath = {
 	closed: boolean,
-	segments: any[][],
+	segments: segment[],
 	data: { therionData: {}; };
 }
-	
+
+type cornerSegment = [x: number, y: number]
+type curvedSegment = [center: number[], handleIn: number[], handleOut: number[]]
+type segment = cornerSegment | curvedSegment;
+function isCurved(segment: segment): segment is curvedSegment {
+	return segment.length >= 3;
+}
+
 function processLine(item: paperExportedPath, settings?: LineSettings) {
 	let segments = item.segments;
 	if (!segments || segments.length < 2) return;
@@ -156,45 +163,34 @@ function processLine(item: paperExportedPath, settings?: LineSettings) {
 	_exportWhitespace++;
 	
 	if (item.closed) logText("close on");
-	
-	var firstPrinted = false;
-	var prevControlPoint = "";
-	var firstOutput: string;
-	for (let [index, segment] of segments.entries()) {
-		var isCurved = (segment.length >= 3);
-	
-		if (!firstPrinted) {
-			firstOutput = toGlobal(isCurved ? segment[0] : segment)
-			logText(firstOutput);
-			firstPrinted = true;
+
+	for (let i = 0; i < segments.length + (item.closed?1:0); i++) {
+		let output = [];
+		const current = segments.at(i%segments.length);
+		const last = segments.at(i-1);
+
+		if (isCurved(last)) {
+			if (isCurved(current))		output.push(toGlobal(last[0], last[2]), toGlobal(current[0], current[1]));
+			else 						output.push(toGlobal(last[0], last[2]), toGlobal(current));
+		} else if (isCurved(current))	output.push(toGlobal(last), toGlobal(current[0], current[1]));
+
+		output.push(isCurved(current) ? toGlobal(current[0]) : toGlobal(current));
+
+		logText(output.join(" "));
+		if (i in subtypes) {
+			logText("subtype " + subtypes[i]);
 		}
-		else isCurved ? logText(
-			prevControlPoint,
-			toGlobal(segment[0], segment[1]),
-			toGlobal(segment[0])
-		) : logText(
-			toGlobal(segment)
-		);
-	
-		if (index in subtypes) {
-			logText("subtype " + subtypes[index]);
+		if (i in segmentSettings) {
+			logText(segmentSettings[i].replace(";", "\n"));
 		}
-		if (index in segmentSettings) {
-			logText(segmentSettings[index].replace(";", "\n"));
-		}
-	
-		prevControlPoint = isCurved ?
-			toGlobal(segment[0], segment[2])
-			: toGlobal(segment);
 	}
-	
-	if (item.closed) logText(firstOutput);
+
 	if (lineSettings.size !== undefined
 		&& lineSettings.size !== 0) logText("size " + lineSettings.size);
 	_exportWhitespace--;
 	logText("endline");
 }
-	
+
 function processCompoundPath(item) {
 	for (let child of item.children)
 		processLine(child);
@@ -207,7 +203,7 @@ function processShape(item) {
 	let options = "";
 	{
 		options += settings.type;
- 
+	
 		const s = settings;
 		if (s.invisible) options += " -visibility off";
 		if (s.name) options += " -name " + s.name;

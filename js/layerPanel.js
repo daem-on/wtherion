@@ -29,9 +29,9 @@ module.exports = function() {
 		var $header = jQuery('<header class="layerPanelHeader"><h2>Scraps</h2></header>');
 		var $newLayerButton = jQuery('<button class="newLayerButton">Add</button>');
 		
-		$newLayerButton.click(function() {
+		$newLayerButton.on("click", function() {
 			var newLayer = pg.layer.addNewLayer();
-			newLayer.activate();
+			pg.selection.clearSelection();
 			updateLayerList();
 		});
 		
@@ -86,11 +86,11 @@ module.exports = function() {
 			var $layerSelectSection = jQuery('<li class="layerSelectSection">');
 			var $layerSelectButton = jQuery('<input type="radio" class="layerSelectToggle" title="Select all/none">');
 			
-			$layerEntry.click(function() {
+			$layerEntry.on("click", function() {
 				setActiveLayerEntry(layer);
 			});
 			
-			$layerVisButton.click(function() {
+			$layerVisButton.on("click", function() {
 				layer.visible = !layer.visible;
 			});
 			
@@ -104,14 +104,14 @@ module.exports = function() {
 				layer.name = jQuery(this).val();
 			});
 			
-			$layerDeleteButton.click(function() {
+			$layerDeleteButton.on("click", function() {
 				if(confirm('Delete this layer and all its children?')) {
 					pg.layer.deleteLayer(jQuery(this).attr('data-layer-id'));
 					updateLayerList();
 				};
 			});
 
-			$layerSelectButton.click(function() {
+			$layerSelectButton.on("click", function() {
 				if(jQuery(this).attr('checked')) {
 					pg.selection.clearSelection();
 					jQuery(this).removeAttr('checked');

@@ -6,10 +6,13 @@ module.exports = function() {
 	var handleHoveredItem = function(hitOptions, event) {
 		var hitResult = paper.project.hitTest(event.point, hitOptions);
 		if(hitResult) {
-			if((hitResult.item.data && hitResult.item.data.noHover)) {
+			if(
+				(hitResult.item.data && hitResult.item.data.noHover)
+				|| hitResult.item.layer != paper.project.activeLayer
+			) {
+				clearHoveredItem();
 				return;
 			}
-			if (hitResult.item.layer != paper.project.activeLayer) return;
 			if(hitResult !== hoveredItem) {
 				clearHoveredItem();
 			}
@@ -25,7 +28,6 @@ module.exports = function() {
 					hoveredItem = pg.guides.hoverItem(hitResult);
 				}
 			}
-
 		} else {
 			clearHoveredItem();
 		}

@@ -102,7 +102,7 @@ module.exports = function() {
 			hitType = null;
 			pg.hover.clearHoveredItem();
 			var hitResult = paper.project.hitTest(event.point, hitOptions);
-			if (!hitResult) {
+			if (!hitResult || (hitResult.item.layer != paper.project.activeLayer)) {
 				if (!event.modifiers.shift) {
 					pg.selection.clearSelection();
 				}

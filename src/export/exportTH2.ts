@@ -11,12 +11,13 @@ function toGlobal(global: number[], local = [0, 0]) {
 	let y = -Math.round((global[1]+local[1])*100)/100;
 	return `${x} ${y}`
 }
-		
+
+let _exportWhitespace = 0;
 let _exportText = ""
 function logText(...data: any[]) {
-	_exportText += data.join(" ") + "\n";
+	_exportText += "\t".repeat(_exportWhitespace) + data.join(" ") + "\n";
 }
-	
+
 export function runWorker() {
 	let worker = new Worker(new URL('./worker', import.meta.url));
 	worker.postMessage({question: "asdfasd"});
@@ -81,7 +82,10 @@ function processLayer(layer: paper.Layer) {
 		optionsString = o.join(" ");
 	}
 
+	let backupText = _exportText;
+	let exportedChildren = 0;
 	logText("scrap", layer.name.replace(" ", "_"), optionsString);
+	_exportWhitespace++;
 	for (let item of layer.children) {
 		switch (item[0]) {
 		case "Path":
@@ -90,16 +94,21 @@ function processLayer(layer: paper.Layer) {
 				processLine(item[1]);
 			else if (s.className == "AreaSettings")
 				processArea(item[1]);
+			exportedChildren++;
 			break;
 		case "CompoundPath":
 			processCompoundPath(item[1]);
+			exportedChildren++;
 			break;
 		case "Shape":
 			processShape(item[1]);
+			exportedChildren++;
 			break;
 		}
 	}
+	_exportWhitespace--;
 	logText("endscrap");
+	if (exportedChildren === 0) _exportText = backupText;
 }
 	
 type paperExportedPath = {
@@ -144,6 +153,7 @@ function processLine(item: paperExportedPath, settings?: LineSettings) {
 	}
 	
 	logText("line " + optionsString); 
+	_exportWhitespace++;
 	
 	if (item.closed) logText("close on");
 	
@@ -181,6 +191,7 @@ function processLine(item: paperExportedPath, settings?: LineSettings) {
 	if (item.closed) logText(firstOutput);
 	if (lineSettings.size !== undefined
 		&& lineSettings.size !== 0) logText("size " + lineSettings.size);
+	_exportWhitespace--;
 	logText("endline");
 }
 	
@@ -227,6 +238,8 @@ function processArea(item: paperExportedPath) {
 	processLine(item, lineSettings);
 	
 	logText(`area ${areaSettings.type}`);
+	_exportWhitespace++;
 	logText(lineSettings.id);
+	_exportWhitespace--;
 	logText("endarea");
 }

@@ -1,6 +1,6 @@
 // functions related to tools
 
-import select from "../js/tools/select.js";
+import select from "../js/tools/select";
 import detailselect from "../js/tools/detailselect.js";
 import draw from "../js/tools/draw.js";
 import bezier from "../js/tools/bezier.js";

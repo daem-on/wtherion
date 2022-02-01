@@ -19,7 +19,7 @@ function removeWindow() {
 }
 
 export function updateWindow() {
-	let selected: PaperItemType[] = pg.selection.getSelectedItems();
+	let selected = pg.selection.getSelectedItems() as PaperItemType[];
 	
 	removeWindow();
 	

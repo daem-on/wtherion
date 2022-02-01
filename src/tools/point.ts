@@ -42,8 +42,8 @@ export function activateTool() {
 		let settings = getSettings(point) as PointSettings;
 		settings.type = options.type;
 		if (options.type === "station") {
-			increaseStationNumber();
 			settings.name = options.stationName;
+			increaseStationNumber();
 		}
 		pg.editTH2.drawPoint(point);
 	}

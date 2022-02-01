@@ -12,13 +12,13 @@ import statusbar from "../js/statusbar.js";
 import input from "../js/input.js";
 import undo from "../js/undo.js";
 import * as tools from "./tools";
-import selection from "../js/selection.js";
+import * as selection from "../js/selection";
 import guides from "../js/guides.js"
 import helper from "../js/helper.js"
 import hover from "../js/hover.js"
 import editTH2 from "./editTH2"
-import group from "../js/group.js"
-import item from "../js/item.js"
+import * as group from "../js/group"
+import * as item from "../js/item"
 import compoundPath from "../js/compoundPath.js"
 import toolOptionPanel from "../js/toolOptionPanel"
 import math from "../js/math.js"

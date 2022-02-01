@@ -80,20 +80,6 @@ export default {
 		}
 	},
 	
-	clearSubtype: function() {
-		var items = pg.selection.getSelectedItems();
-		for (var item of items) {
-			if (!("segments" in item)) continue;
-			if (!item.data.therionData?.segmentOptions) continue;
-			var opt = item.data.therionData.segmentOptions;
-			for (let segment of item.segments) {
-				if (segment.selected && opt[segment.index])
-					delete opt[segment.index];
-			}
-		}
-		pg.undo.snapshot('clearSubtype');
-	},
-	
 	setupData: function(item) {
 		if (!("therionData" in item.data))
 			item.data.therionData = {};
@@ -113,14 +99,14 @@ export default {
 		if (selection.length !== 1) return;
 
 		let line = selection[0]
-		let settings = getSettings(line);
+		let settings = getSettings(line as PaperItemType);
 		if (!settings || settings.className !== "LineSettings") return;
 
 		let oldSettings = settings
 		line.data.therionData = AreaSettings.defaultSettings();
 		line.data.therionData.lineSettings = oldSettings;
 		line.data.therionData.type = "water";
-		this.drawArea(line);
+		this.drawArea(line as paper.Path);
 	},
 
 	areaToLine: function() {
@@ -128,12 +114,12 @@ export default {
 		if (selection.length !== 1) return;
 
 		let area = selection[0]
-		let settings = getSettings(area);
+		let settings = getSettings(area as PaperItemType);
 		if (!settings || settings.className !== "AreaSettings") return;
 
 		let newSettings = area.data.therionData.lineSettings;
 		area.data.therionData = newSettings;
-		this.drawLine(area);
+		this.drawLine(area as paper.Path);
 	},
 	
 	randomizeRotation: function() {
@@ -155,7 +141,7 @@ export default {
 			console.error("Only possible with 2 lines");
 			return;
 		}
-		if (selection[0].className !== "Path" || selection[1].className !== "Path") {
+		if (!pg.item.isPathItem(selection[0]) || !pg.item.isPathItem(selection[1])) {
 			console.error("Only lines");
 			return;
 		}
@@ -168,7 +154,7 @@ export default {
 		let selection = pg.selection.getSelectedItems();
 		
 		for (let item of selection)
-			if (item.className == "Path") item.smooth();
+			if (pg.item.isPathItem(item)) item.smooth();
 	
 		pg.undo.snapshot("smoothLine");
 	},
@@ -177,7 +163,7 @@ export default {
 		let selection = pg.selection.getSelectedItems();
 		
 		for (let item of selection)
-			if (item.className == "Path") item.simplify();
+			if (pg.item.isPathItem(item)) item.simplify();
 	
 		pg.undo.snapshot("simplifyLine");
 	},

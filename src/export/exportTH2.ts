@@ -25,14 +25,14 @@ export function runWorker() {
 }
 	
 export function asBlob() {
-	return new Blob([exportTh2()], {type: "text/th2"});
+	return new Blob([run()], {type: "text/th2"});
 }
-	
+
 export function save() {
 	saveAs(asBlob(), "export.th2");
 }
 	
-export function exportTh2() {
+function run() {
 	_exportText = ""
 	
 	//prepare items

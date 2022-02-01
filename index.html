@@ -28,15 +28,17 @@
             <ul class="topMenu">
                 <li class="topMenuButton"><svg class="burgerButton" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve"><line stroke-width="12" x1="0" y1="9.5" x2="100" y2="9.5"/><line stroke-width="12" x1="0" y1="50.5" x2="100" y2="50.5"/><line stroke-width="12" x1="0" y1="90.5" x2="100" y2="90.5"/></svg>
                     <ul class="subMenu">
-                        <li class="clearDocument_button">New</li>
-                        <li class="importJSON_button">Open<input id="fileUploadJSON" class="fileUploadInput" type="file" accept=".json" ></li>
-                        <li class="exportJSON_button">Save</li>
+                        <li onclick="pg.menu.handlers.clearDocument()">New</li>
+                        <li onclick="pg.menu.handlers.open()">Open</li>
+                        <li onclick="pg.menu.handlers.saveJSON()">Save</li>
+                        <li onclick="pg.menu.handlers.saveJSON(true)">Save As</li>
                         <li class="space"></li>
-                        <li class="undo_button halfWidth left">Undo</li>
-                        <li class="redo_button halfWidth right">Redo</li>
+                        <li onclick="pg.menu.handlers.undo()" class="halfWidth left">Undo</li>
+                        <li onclick="pg.menu.handlers.redo()" class="halfWidth right">Redo</li>
                         <li class="space"></li>
                         <li class="importMenu hasSubSubMenu">Import
                             <ul class="subSubMenu">
+                                <li>JSON<input id="fileUploadJSON" class="fileUploadInput" type="file" accept=".json" ></li>
                                 <li class="importImage_button">Image<input id="fileUploadImage" class="fileUploadInput" type="file" accept=".gif, .jpg, .jpeg, .png" ></li>
                                 <li class="importImageFromURL_button">Image from URL</li>
                                 <li class="importSVG_button">SVG<input id="fileUploadSVG" class="fileUploadInput" type="file" accept=".svg" ></li>
@@ -45,28 +47,29 @@
                                 <li class="importXVI_button">XVI<input id="fileUploadXVI" class="fileUploadInput" type="file" accept=".xvi" ></li>
                             </ul>
                         </li>
-                        <li class="exportMenu hasSubSubMenu">Export
+                        <li onclick="pg.menu.handlers.exportTH2()">Export</li>
+                        <li onclick="pg.menu.handlers.exportTH2(true)">Export As</li>
+                        <li class="space"></li>
+                        <li class="exportMenu hasSubSubMenu">Other exports
                             <ul class="subSubMenu">
-                                <li class="exportImage_button">Image</li>
-                                <li class="exportSVG_button">SVG</li>
-                                <li class="exportTH2_button">TH2</li>
+                                <li onclick="pg.menu.handlers.exportImage()">Image</li>
+                                <li onclick="pg.menu.handlers.exportSVG()">SVG</li>
+                                <li onclick="pg.menu.handlers.downloadJSON()">Download save</li>
                             </ul>
                         </li>
                         <li class="space"></li>
-                        <li class="scriptEditorButton" title="Script Editor">Script Editor</li>
-                        <li class="space"></li>
                         <li class="hasSubSubMenu">View
                             <ul class="subSubMenu">
-                                <li class="zoomIn_button" title="Alt-ScrollUp">Zoom in</li>
-                                <li class="zoomOut_button" title="Alt-ScrollDown">Zoom out</li>
-                                <li class="resetZoom_button" title="Ctrl-1">Reset zoom</li>
-                                <li class="resetPan_button">Reset pan</li>
+                                <li onclick="pg.menu.handlers.zoomIn()" title="Ctrl-ScrollUp">Zoom in</li>
+                                <li onclick="pg.menu.handlers.zoomOut()" title="Ctrl-ScrollDown">Zoom out</li>
+                                <li onclick="pg.menu.handlers.resetZoom()" title="Ctrl-1">Reset zoom</li>
+                                <li onclick="pg.menu.handlers.resetPan()">Reset pan</li>
                             </ul>
                         </li>					
                         <li class="space"></li>
-                        <li class="resetSettings_button">Reset Settings</li>
+                        <li onclick="pg.menu.handlers.resetSettings()">Reset Settings</li>
                         <li class="space"></li>
-                        <li class="aboutButton" title="About">About</li>
+                        <li onclick="pg.menu.handlers.about()" title="About">About</li>
                     </ul>
                 </li>
                 <li class="topMenuButton">Scrap

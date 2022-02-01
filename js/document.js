@@ -92,17 +92,20 @@ module.exports = function() {
 		var fileName = prompt("Name your file", "export.json");
 
 		if (fileName !== null) {
-			pg.hover.clearHoveredItem();
-			pg.selection.clearSelection();
-			paper.view.update();
-			
+			var json = documentAsJSON();
 			var fileNameNoExtension = fileName.split(".json")[0];
-			var exportData = paper.project.exportJSON({ asString: true });
-			var blob = new Blob([exportData], {type: "text/json"});
+			var blob = new Blob([json], { type: "text/json" });
 			saveAs(blob, fileNameNoExtension+'.json');
 		}
 	};
 	
+	var documentAsJSON = function() {
+		pg.hover.clearHoveredItem();
+		pg.selection.clearSelection();
+		paper.view.update();
+	
+		return exportData = paper.project.exportJSON({ asString: true });
+	}
 	
 	return {
 		getCenter: getCenter,
@@ -113,7 +116,8 @@ module.exports = function() {
 		clearClipboard: clearClipboard,
 		getAllSelectableItems: getAllSelectableItems,
 		loadJSONDocument: loadJSONDocument,
-		saveJSONDocument: saveJSONDocument
+		saveJSONDocument: saveJSONDocument,
+		documentAsJSON: documentAsJSON
 	};
 		
 }();

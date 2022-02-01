@@ -24,6 +24,7 @@
     "@types/jqueryui": "^1.12.16",
     "@types/paper": "^0.12.3",
     "@types/webpack-env": "^1.16.3",
+    "@types/wicg-file-system-access": "^2020.9.5",
     "@webpack-cli/generators": "^2.4.1",
     "copy-webpack-plugin": "^10.0.0",
     "css-loader": "^6.5.1",

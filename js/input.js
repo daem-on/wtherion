@@ -1,3 +1,5 @@
+let { save, exportTH2 } = require("../src/saveManagement");
+
 // functions releated to input (mouse, keyboard)
 
 module.exports = function() {
@@ -62,6 +64,16 @@ module.exports = function() {
 			if ((event.keyCode === 90) && event.ctrlKey && event.shiftKey) {
 				event.preventDefault();
 				pg.undo.redo();
+			}
+
+			if (event.key === "s" && event.ctrlKey) {
+				event.preventDefault();
+				save();
+			}
+
+			if (event.key === "e" && event.ctrlKey) {
+				event.preventDefault();
+				exportTH2();
 			}
 
 			// backspace / stop browsers "back" functionality

@@ -5,7 +5,8 @@ import layer from "../js/layer.js";
 import layerPanel from "../js/layerPanel.js";
 import pgExport from "../js/export.js";
 import text from "../js/text.js";
-import menu from "../js/menu.js";
+import * as menu from "../js/menu";
+import * as modal from "../js/modal.js";
 import toolbar from "../js/toolbar";
 import stylebar from "../js/stylebar.js";
 import statusbar from "../js/statusbar.js";
@@ -41,6 +42,7 @@ export default {
 	export: pgExport,
 	text: text,
 	menu: menu,
+	modal: modal,
 	toolbar: toolbar,
 	stylebar: stylebar,
 	statusbar: statusbar,

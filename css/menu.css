@@ -193,3 +193,8 @@
 	/* text-transform: uppercase; */
 	color: #777;
 }
+
+.saveEntry {
+	display: flex;
+    justify-content: space-between;
+}

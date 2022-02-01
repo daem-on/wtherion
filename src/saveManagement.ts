@@ -24,29 +24,37 @@ export function save(clearName = false) {
 }
 
 export function showLoadSelect() {
+	jQuery("#loadWindow").remove();
 	let content = jQuery(document.createElement("ul"));
 	
 	for (let key of Object.keys(localStorage)) {
 		if (key.startsWith("wt.saves.")) {
-			let entry = jQuery(`<a>${key.substring(9)}</a>`);
-			entry.on("click", () => {loadFromStorage(key)})
+			let entry = jQuery(`<li class="saveEntry"></li>`)
+			let name = jQuery(`<a>${key.substring(9)}</a>`);
+			let del = jQuery(`<a class="delete">&times</a>`);
+			name.on("click", () => {loadFromStorage(key)});
+			del.on("click", () => {deleteFromStorage(key)});
+			del.attr("title", "Delete save file");
+			entry.append(name, del);
 			content.append(entry);
-			entry.wrap("<li></li>");
 		}
 	}
 
-	floater("load", "Load select", content, 400, 200);
+	floater("loadWindow", "Saved files", content, 400, 200);
 }
 
 function loadFromStorage(name: string) {
-	jQuery("#load").remove();
+	jQuery("#loadWindow").remove();
 	setSaveFileName(name.substring(9));
 	const item = localStorage.getItem(name);
 	if (item) pgDocument.loadJSONDocument(item);
 }
 
 function deleteFromStorage(name: string) {
-	localStorage.removeItem(name);
+	if (confirm(`Delete ${name.substring(9)} permanently?`)) {
+		localStorage.removeItem(name);
+		showLoadSelect();
+	}
 }
 
 async function chooseExportLocation() {

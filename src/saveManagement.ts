@@ -80,7 +80,7 @@ export async function exportTH2(clearHandle = false) {
 	if (clearHandle) exportFileHandle = null;
 
 	if (window.showSaveFilePicker && !exportFileHandle) {
-		chooseExportLocation();
+		await chooseExportLocation();
 		if (!exportFileHandle) return;
 	}
 	

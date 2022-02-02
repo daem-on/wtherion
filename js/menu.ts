@@ -2,10 +2,10 @@
 
 import * as importerXvi from "../src/import/importXVI";
 import importerTh2 from "../src/import/importTH2";
-import * as exportTh2 from "../src/export/exportTH2";
 import pg from "../src/init";
 import { save, showLoadSelect, exportTH2, setSaveFileName } from "../src/saveManagement";
 import pgDocument from "../js/document";
+import * as layerPanel from "./layerPanel";
 
 export function setup() {
 	setupNavigationLogic();
@@ -108,15 +108,19 @@ function setupFileSection() {
 
 export let handlers = {
 	
-	// undo: pg.undo.undo,
+	undo: () => pg.undo.undo(),
 	
-	// redo: pg.undo.redo,
+	redo: () => pg.undo.redo(),
 	
-	// resetZoom: pg.view.resetZoom,
+	resetZoom: () => pg.view.resetZoom(),
 	
-	// resetPan: pg.view.resetPan,
+	resetPan: () => pg.view.resetPan(),
 	
-	// layerPanel: pg.layerPanel.toggleVisibility,
+	layerPanel: () => pg.layerPanel.toggleVisibility(),
+	
+	exportSVG: () => pg.export.exportAndPromptSVG(),
+
+	exportImage: () => pg.export.exportAndPromptImage(),
 	
 	about: showAboutModal,
 
@@ -125,10 +129,6 @@ export let handlers = {
 	open: showLoadSelect,
 
 	downloadJSON: pgDocument.saveJSONDocument,
-	
-	// exportSVG: pg.export.exportAndPromptSVG,
-
-	// exportImage: pg.export.exportAndPromptImage,
 
 	exportTH2: exportTH2,
 			
@@ -166,6 +166,8 @@ export let handlers = {
 			setSaveFileName(null);
 		}
 	},
+
+	xviMode: layerPanel.toggleMode,
 }
 
 

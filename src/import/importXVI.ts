@@ -12,6 +12,7 @@ function createLayer(name?: string): paper.Layer {
 	let l = pg.layer.addNewLayer(name ?? "therion.xviLayer");
 	l.locked = true;
 	l.data.isGuideLayer = true;
+	l.data.xviLayer = true;
 	return l;
 }
 
@@ -55,6 +56,7 @@ export function importXVI(source: string, existingLayer?: paper.Layer) {
 			createShot(x1, y1, x2, y2);
 		}
 	}
+	let group = new paper.Group([...layer.children]);
 	pg.layerPanel.updateLayerList();
 	if (layer.data.moveTo) layer.translate(
 		new paper.Point(layer.data.moveTo[0], layer.data.moveTo[1])

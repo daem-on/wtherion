@@ -2,7 +2,7 @@ import jQuery from "jquery";
 import settings from "../js/settings.js";
 import pgDocument from "../js/document.js";
 import layer from "../js/layer.js";
-import layerPanel from "../js/layerPanel.js";
+import * as layerPanel from "../js/layerPanel.js";
 import pgExport from "../js/export.js";
 import text from "../js/text.js";
 import * as menu from "../js/menu";

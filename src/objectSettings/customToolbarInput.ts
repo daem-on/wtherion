@@ -1,20 +1,22 @@
 import "jquery-ui/ui/widgets/selectmenu";
 
-export function constructSelect(element: HTMLDivElement, imageRoot?: string) {
+export function constructSelect(element: HTMLDivElement, selectedVal: string, imageRoot?: string) {
 	element.classList.add("act-as-input")
-	let selectElement = element.getElementsByTagName("select")[0];
-	let selectButtonDiv = document.createElement("div");
-	selectButtonDiv.setAttribute("class", "select-button");
-	selectButtonDiv.innerHTML = selectElement.options[selectElement.selectedIndex].innerHTML;
-	element.appendChild(selectButtonDiv);
+
+	let input = element.getElementsByTagName("input")[0];
+	
+	// element.getElementsByClassName("customListOptions")[0].classList.add("hidden")
+
 	let selectOptionsDiv = document.createElement("div");
 	selectOptionsDiv.setAttribute("class", "select-options");
-	for (let option of selectElement.options) {
+	
+	for (let option of element.getElementsByTagName("option")) {
 		let optionItemDiv = constructOptionItem(option, imageRoot);
 		selectOptionsDiv.appendChild(optionItemDiv);
 	}
 	element.appendChild(selectOptionsDiv);
-	selectButtonDiv.addEventListener("click", function(e) {
+
+	input.addEventListener("click", function(e) {
 		e.stopPropagation();
 		closeAllSelect(this.parentElement);
 		this.parentElement.classList.toggle("open");
@@ -37,21 +39,10 @@ function constructOptionItem(option: HTMLOptionElement, imageRoot?: string) {
 	container.appendChild(label);
 
 	container.addEventListener("click", function (e) {
-		let s = this.parentElement.parentElement.getElementsByTagName("select")[0];
-		let sl = s.length;
+		let s = this.parentElement.parentElement.getElementsByTagName("input")[0];
+		s.value = this.getAttribute("select-val");
+		jQuery(s).trigger("change");
 		let h = this.parentElement.previousElementSibling as HTMLDivElement;
-		for (let i = 0; i < sl; i++) {
-			if (s.options[i].value == this.getAttribute("select-val")) {
-				s.selectedIndex = i;
-				jQuery(s).trigger("change");
-				h.innerHTML = this.getAttribute("select-val");
-				let y = this.parentElement.getElementsByClassName("same-as-selected");
-				for (let k = 0; k < y.length; k++)
-					y[k].removeAttribute("class");
-				this.setAttribute("class", "same-as-selected");
-				break;
-			}
-		}
 		h.click();
 	});
 

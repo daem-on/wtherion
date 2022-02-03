@@ -81,7 +81,7 @@
 .toolOptionPanel input,
 .toolOptionPanel select,
 .toolOptionPanel button {
-	font-size: 0.85em;
+	font-size: 0.75rem;
 }
 
 .toolOptionPanel input,
@@ -128,4 +128,8 @@
 	width: 80px;
 	right: 0;
 	pointer-events: none;
+}
+
+.customListOptions {
+	display: none;
 }

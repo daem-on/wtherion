@@ -47,13 +47,16 @@ export default {
 
 			if (comp.tooltip) $label.attr("title", comp.tooltip);
 
-			if(comp.type == 'boolean') {
+			switch (comp.type) {
+			case 'boolean':
 				$input = jQuery(`<input type="checkbox" name="${key}">`);
 				if(options[key]) {
 					$input.prop('checked', true);
 				}
 
-			} else if(comp.type == 'int' || comp.type == 'float') {
+				break;
+			case 'float':
+			case 'int':
 				var minAttr = '';
 				if(comp.min != undefined && comp.type == 'int') {
 					minAttr = ` min="${parseInt(comp.min)}"`;
@@ -62,8 +65,9 @@ export default {
 					minAttr = ` min="${parseFloat(comp.min)}"`;
 				}
 				$input = jQuery(`<input type="number" data-type="${comp.type}" name="${key}" value="${options[key]}"${minAttr}>`);
-				
-			} else if(comp.type == 'list' || comp.type == 'customList') {
+
+				break;
+			case 'list':
 				$input = jQuery(`<select data-type="${comp.type}" name="${key}">`);
 
 				if (comp.options) {
@@ -80,19 +84,35 @@ export default {
 				}
 
 				if(comp.maxWidth) $input.css({'maxWidth': comp.maxWidth+'px'});
-				
-			} else if(comp.type == 'text') {
+
+				break;
+			case 'customList':
+				let $wrapper = jQuery(`<div class="custom-select"></div>`);
+				$input = jQuery(`<input name="${key}" value="${options[key] ?? ""}">`);
+				let $options = jQuery(`<div class="customListOptions"></div>`)
+
+				if (comp.options) {
+					for (let value of comp.options)
+					$options.append(createOption(value, value, options[key]));
+				}
+				$wrapper.append($input, $options);
+				constructSelect($wrapper[0] as HTMLDivElement, options[key], comp.imageRoot);
+				break;
+			case 'text':
 				let val = options[key] ?? "";
 				$input = jQuery(`<input type="text" id="textToolInput" data-type="${comp.type}" name="${key}" value="${val}">`);
-				
-			} else if(comp.type == 'button') {
+
+				break;
+			case 'button':
 				$button = jQuery(`<button>${comp.label}</button>`);
-				
-			} else if(comp.type == 'title') {
+
+				break;
+			case 'title':
 				$sectionTitle = jQuery(`<h4>${comp.text} ⯆</h4>`);
 				$optionSection.addClass('titleSection collapsed');
+				break;
 			}
-			
+
 			if($input) {
 				// handle input changes by the user
 				$input.on('keyup blur change mousewheel', function(e) {
@@ -138,8 +158,8 @@ export default {
 					processInputRequirements();
 					changeCallback();
 				});
-			};
-			
+			}
+
 			if($button) {
 				$button.on("click", function() {
 					if (comp.click) comp.click();
@@ -161,9 +181,7 @@ export default {
 			}
 			if($input) {
 				if (comp.type == 'customList') {
-					let $wrapper = jQuery(`<div class="custom-select"></div>`);
-					$wrapper.append($input);
-					$optionSection.append($label, $wrapper);
+					$optionSection.append($label, $input.parent()[0]);
 				} else
 				$optionSection.append($label, $input);
 			} else if($button) {
@@ -171,12 +189,12 @@ export default {
 			} else if (!$sectionTitle) {
 				$optionSection.append($label);
 			}
-			
+
 			(lastSubSection || $options).append($optionSection);
 
-			if ($input && comp.type == "customList") {
-				constructSelect($input.parent()[0] as HTMLDivElement, comp.imageRoot);
-			}
+			// if ($input && comp.type == "customList") {
+			// 	constructSelect($input.parent()[0] as HTMLDivElement, comp.imageRoot);
+			// }
 		});
 
 		var $resetButton = jQuery('<button class="toolOptionResetButton" title="Reset Tool Settings">R</button>').click(function() {

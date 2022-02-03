@@ -68,6 +68,7 @@ export default {
 			l.strokeColor = typeColors.default;
 		if (settings.subtype === "presumed")
 			l.dashArray = [3, 6];
+		else l.dashArray = null;
 	},
 	
 	drawObject: function(object: PaperItemType) {

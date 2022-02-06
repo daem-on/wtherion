@@ -44,12 +44,11 @@ export function floater(id, title, html, width, top) {
 	});
 	$container.css({
 		'width': width,
-		'left': jQuery('body').width()*0.5 - $container.width()*0.5 + 40,
+		'left': jQuery('body').width()*0.5 - width*0.5 + 40,
 		'top': top
-		
 	});
 	
-	$closeButton.click(function() {
+	$closeButton.on("click", function() {
 		$container.remove();
 	});
 

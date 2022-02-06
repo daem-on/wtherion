@@ -259,13 +259,18 @@ export function hideContextMenu() {
 };
 	
 
-// var showAboutModal = function () {
-// 	var html = '<h2 class="appTitle">Papergrapher</h2><span class="versionNumber">' + pg.settings.getVersionNumber() + '</span><p>A vector editor for your browser, based on <a href="http://paperjs.org/" target="_blank">Paper.js</a> and <a href="https://github.com/memononen/stylii" target="_blank">stylii</a>. Check it out on <a href="https://github.com/w00dn/papergrapher" target="_blank">GitHub</a>.</p><p>Developed by <a href="https://twitter.com/w00dn" target="_blank">Rolf Fleischmann</a><br>Published under the <a href="https://github.com/w00dn/papergrapher/blob/master/LICENSE" target="_blank">MIT License</a></p>';
-// 	let f = new pg.modal.floater('appInfoWindow', 'Info', html, 300, 100);
-// 	jQuery(document).one("click", () => {})
-// };
-
 function showAboutModal() {
-	alert("wtherion " + pg.settings.getVersionNumber())
-}
+	var html = `
+		<img src="assets/logo-cropped.png" width=600>
+		<p style="margin: 0.5em;">
+			<b style="font-weight: bold">wtherion</b>
+			version ${pg.settings.getVersionNumber()}.
+			Created by Csongor Zih, based on
+			<a href="https://github.com/w00dn/papergrapher" target="_blank">papergrapher</a>, created by Rolf Fleischmann.
+			Powered by <a href="http://paperjs.org/" target="_blank">Paper.js</a>. Published under the MIT license.
+		</p>
+	`;
+	pg.modal.floater('appInfoWindow', 'About', html, 600, 100);
+	jQuery("#appInfoWindow").css("padding", 0);
+};
 

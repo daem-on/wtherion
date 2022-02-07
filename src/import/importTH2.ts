@@ -253,6 +253,7 @@ function createScrap(line: string) {
 			delete options[key];
 		}
 	}
+	// TODO: if projection is [elevation ...]
 	if (options.projection) {
 		switch (options.projection) {
 			case "none": settings.projection = 0; break;

@@ -36,6 +36,20 @@ const components: componentList = {
 		type: "boolean",
 		label: "Invisible"
 	},
+	value: {
+		type: "text",
+		requirements: {
+			type: ["height", "passage-height", "altitude", "dimensions"]
+		},
+		label: "Value"
+	},
+	text: {
+		requirements: {
+			type: ["label", "remark", "continuation"]
+		},
+		type: "text",
+		label: "Text"
+	},
 	name: {
 		type: "text",
 		label: "Station reference",
@@ -54,14 +68,6 @@ const components: componentList = {
 	otherSettings: {
 		type: "text",
 		label: "Other settings"
-	},
-	text: {
-		type: "text",
-		label: "Text"
-	},
-	value: {
-		type: "text",
-		label: "Value"
 	},
 	clip: {
 		type: "list",

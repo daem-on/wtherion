@@ -71,7 +71,7 @@ function setup() {
 		updateLayerList();
 	});
 	
-	jQuery(document).on('DocumentUpdate', function(){
+	jQuery(document).on('keyup keydown mouseup mousedown', function(){
 		updateLayerValues();
 	});
 };

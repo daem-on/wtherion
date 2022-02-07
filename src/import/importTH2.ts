@@ -93,6 +93,8 @@ export default function(source: string) {
 	loadImages();
 	pg.layer.activateDefaultLayer();
 	pg.layerPanel.updateLayerList();
+	pg.undo.clear();
+	pg.undo.setup();
 }
 
 function addSegment(line: string) {

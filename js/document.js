@@ -9,15 +9,15 @@ module.exports = function() {
 		center = paper.view.center;
 		
 		// call DocumentUpdate at a reduced rate (every tenth frame)
-		var int = 10;
-		paper.view.onFrame = function() {
-			if(int > 0) {
-				int--;
-			} else {
-				jQuery(document).trigger('DocumentUpdate');
-				int = 10;
-			}
-		};
+		// var int = 10;
+		// paper.view.onFrame = function() {
+		// 	if(int > 0) {
+		// 		int--;
+		// 	} else {
+		// 		jQuery(document).trigger('DocumentUpdate');
+		// 		int = 10;
+		// 	}
+		// };
 		
 		
 		window.onbeforeunload = (function(e) {
@@ -84,6 +84,7 @@ module.exports = function() {
 		if(exportRect) {
 			pg.export.setExportRect(new paper.Rectangle(exportRect.data.exportRectBounds));
 		}
+		pg.undo.clear();
 		pg.undo.snapshot('loadJSONDocument');
 	};
 	

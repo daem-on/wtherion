@@ -2,7 +2,8 @@ import { componentList } from "../../js/toolOptionPanel";
 import pg from "../init";
 import getSettings, { PaperItemType } from "./model/getSettings";
 import lineOptionPanel from "./panels/lineOptionPanel";
-import segmentOptionPanel from "./panels/segmentOptionPanel";
+import subtypeOptionPanel from "./panels/subtypeOptionPanel";
+import segmentOptionPanel from "./panels/defaultSegmentOptionPanel";
 import areaOptionPanel from "./panels/areaOptionPanel";
 import pointOptionPanel from "./panels/pointOptionPanel";
 import multipleLineOptionPanel from "./panels/multipleLineOptionPanel";
@@ -46,8 +47,6 @@ export function updateWindow() {
 
 		// Detail select
 		if (pg.toolbar.getActiveTool().options.id == "detailselect") {
-			// only supporting wall for subtypes editor (currently)
-			if (selected[0].data.therionData.type !== "wall") return;
 			// ensure only one segment is editable
 			let selection = false;
 			for (let segment of (selected[0] as paper.Path).segments) {
@@ -56,7 +55,11 @@ export function updateWindow() {
 					else selection = true;
 				}
 			}
-			config = segmentOptionPanel(selected[0] as paper.Path);
+			// only supporting wall for subtypes editor (currently)
+			if (selected[0].data.therionData.type === "wall")
+				config = subtypeOptionPanel(selected[0] as paper.Path);
+			else
+				config = segmentOptionPanel(selected[0] as paper.Path);
 		}
 		
 		// Non-detail select

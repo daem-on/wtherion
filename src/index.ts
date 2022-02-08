@@ -24,6 +24,6 @@ jQuery(window).on("load", function() {
 });
 
 if (module.hot) {
-	window["pg"] = pg;
+	// window["pg"] = pg;
 	module.hot.accept()
 }

@@ -154,6 +154,10 @@ export let handlers = {
 		pg.view.zoomBy(1/1.25);
 	},
 
+	panToScrap: function() {
+		pg.view.centerView();
+	},
+
 	resetSettings: function() {
 		if (confirm('Clear all document and tool settings?')) {
 			pg.settings.clearSettings();

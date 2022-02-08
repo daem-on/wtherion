@@ -131,7 +131,7 @@ module.exports = function() {
 						hitResult.item.selected = false;
 						hitResult.item.fullySelected = true;
 					}
-					if(event.modifiers.option) pg.selection.cloneSelection();
+					// if(event.modifiers.option) pg.selection.cloneSelection();
 
 				} else {
 					if(event.modifiers.shift) {
@@ -141,7 +141,7 @@ module.exports = function() {
 						hitResult.item.fullySelected = true;
 
 
-						if(event.modifiers.option) pg.selection.cloneSelection();
+						// if(event.modifiers.option) pg.selection.cloneSelection();
 					}
 				}
 
@@ -166,7 +166,7 @@ module.exports = function() {
 					}
 				}
 				
-				if(event.modifiers.option) pg.selection.cloneSelection();
+				// if(event.modifiers.option) pg.selection.cloneSelection();
 
 
 			} else if(
@@ -183,7 +183,7 @@ module.exports = function() {
 					curve.selected = true;
 				}
 
-				if(event.modifiers.option) pg.selection.cloneSelection();
+				// if(event.modifiers.option) pg.selection.cloneSelection();
 
 			} else if(
 				hitResult.type === 'handle-in' || 

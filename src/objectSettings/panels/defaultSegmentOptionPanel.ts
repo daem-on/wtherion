@@ -36,6 +36,7 @@ const components: componentList = {
 	resetBoth: {type: "button", label: "Turn into corner", click:resetBoth},
 }
 
+// TODO: update panel with new values
 function smooth() {if (selectedSegment) selectedSegment.smooth()};
 function resetIn() {if (selectedSegment) selectedSegment.handleIn.length = 0};
 function resetOut() {if (selectedSegment) selectedSegment.handleOut.length = 0};

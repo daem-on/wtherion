@@ -8,6 +8,7 @@ import areaOptionPanel from "./panels/areaOptionPanel";
 import pointOptionPanel from "./panels/pointOptionPanel";
 import multipleLineOptionPanel from "./panels/multipleLineOptionPanel";
 import multiplePointOptionPanel from "./panels/multiplePointOptionPanel";
+import * as wtConfig from "../configManagement";
 
 export type objectOptionPanelConfig = {
 	options: {},
@@ -58,7 +59,7 @@ export function updateWindow() {
 			// only supporting wall for subtypes editor (currently)
 			if (selected[0].data.therionData.type === "wall")
 				config = subtypeOptionPanel(selected[0] as paper.Path);
-			else
+			else if (wtConfig.get("showSegmentOptionPanel"))
 				config = segmentOptionPanel(selected[0] as paper.Path);
 		}
 		

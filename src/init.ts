@@ -31,6 +31,7 @@ import importHelper from "../js/import.js"
 import order from "../js/order.js"
 
 import paper from "paper";
+import {setup as configSetup} from "./configManagement";
 
 // functions related to initializing pg
 
@@ -69,6 +70,8 @@ export default {
 	init: function() {
 		paper.setup('paperCanvas');
 		jQuery.ajaxSetup({ cache: false });
+
+		configSetup();
 		
 		this.settings.setup();
 		this.document.setup();

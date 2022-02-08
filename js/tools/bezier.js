@@ -1,13 +1,46 @@
 // bezier tool
 // adapted from the paperjs examples (Tools/BezierTool.html)
 
+const wallList = require("../res/walls-list.json");
+const subtypeList = require("../res/subtype-list.json");
+const { default: getSettings } = require("../../src/objectSettings/model/getSettings");
+
 module.exports = function() {
 	var tool;
 	
-	var options = {};
+	var options = {
+		id: "draw",
+		type: "wall",
+		subtype: "",
+		size: 0,
+	};
 	
+	/** @type {import("../toolOptionPanel").componentList} */
+	var components = {
+		type: {
+			type: "customList",
+			label: "Type",
+			options: wallList.passages,
+		},
+		subtype: {
+			type: "customList",
+			label: "Subtype",
+			requirements: {type: ["wall", "border", "water-flow"]},
+			options: subtypeList.wall,
+			imageRoot: "assets/rendered/subtype"
+		},
+		size: {
+			type: "int",
+			label: "Size",
+			requirements: {
+				type: "slope"
+			}
+		}
+	};
+
 	var activateTool = function() {
 		tool = new paper.Tool();
+		options = pg.tools.getLocalOptions(options);
 		
 		var path;
 
@@ -36,7 +69,15 @@ module.exports = function() {
 				if(!hoveredItem) {
 					pg.selection.clearSelection();
 					path = pg.editTH2.createPath();
-					path = pg.stylebar.applyActiveToolbarStyle(path);
+
+					settings = getSettings(path);
+					settings.type = options.type;
+					if (["wall", "border", "water-flow"].includes(options.type))
+						settings.subtype = options.subtype;
+					if (options.type === "slope")
+						settings.size = options.size;
+					pg.editTH2.drawLine(path);
+					jQuery('.toolOptionPanel').remove();
 					
 				} else {
 					path = hoveredItem.item;
@@ -146,7 +187,9 @@ module.exports = function() {
 			
 		};
 		
-		
+		pg.toolOptionPanel.setup(options, components, function() {
+			pg.tools.setLocalOptions(options);
+		});
 		
 		tool.activate();
 	};

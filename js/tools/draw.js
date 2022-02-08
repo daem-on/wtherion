@@ -107,9 +107,8 @@ module.exports = function() {
 				settings.type = options.type;
 				if (["wall", "border", "water-flow"].includes(options.type))
 					settings.subtype = options.subtype;
-				if (options.type === "slope") {
+				if (options.type === "slope")
 					settings.size = options.size;
-				}
 				pg.editTH2.drawLine(path);
 				
 				paths.push(path);

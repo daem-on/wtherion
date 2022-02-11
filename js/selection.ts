@@ -462,6 +462,7 @@ export function rectangularSelectionGroupLoop(group: paper.Group | paper.Compoun
 
 
 export function handleRectangularSelectionItems(item: paper.Item, event: paper.Event, rect: paper.PathItem, mode?: string) {
+	if (item.layer != paper.project.activeLayer) return;
 	if(pg.item.isPathItem(item)) {
 		var segmentMode = false;
 		

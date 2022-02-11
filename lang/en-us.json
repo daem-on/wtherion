@@ -1,10 +1,14 @@
 {
-	"edit": "'Edit'",
-	"copy": "'Copy'",
-	"paste": "'Paste'",
-	"delete": "'Delete'",
-	"select": "'Select'",
-	"selectAll": "'Select all'",
-	"deselectAll": "'Deselect all'",
-	"invertSelection": "'Invert selection'"
+	"edit": "Edit",
+	"copy": "Copy",
+	"paste": "Paste",
+	"delete": "Delete",
+	"select": "Select",
+	"selectAll": "Select all",
+	"deselectAll": "Deselect all",
+	"invertSelection": "Invert selection",
+	"area": "Area",
+	"lineToArea": "Convert line → area",
+	"areaToLine": "Convert area → line",
+	"order": "Order"
 }

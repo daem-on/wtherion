@@ -23,59 +23,59 @@ export default function() {
 	var menuEntries = {
 		editTitle: {
 			type : 'title',
-			text : lang.edit
+			text : "%edit%"
 		},
 		copySelection: {
 			type: 'button',
-			label: lang.copy,
+			label: "%copy%",
 			click: 'pg.edit.copySelectionToClipboard'
 		},
 		pasteSelection: {
 			type: 'button',
-			label: lang.paste,
+			label: "%paste%",
 			click: 'pg.edit.pasteObjectsFromClipboard'
 		},
 		deleteSelection: {
 			type: 'button',
-			label: lang.delete,
+			label: "%delete%",
 			click: 'pg.selection.deleteSelection'
 		},
 		selectionTitle: {
 			type : 'title',
-			text : lang.select
+			text : "%select%"
 		},
 		selectAll: {
 			type: 'button',
-			label: lang.selectAll,
+			label: "%selectAll%",
 			click: 'pg.selection.selectAllItems'
 		},
 		selectNone: {
 			type: 'button',
-			label: lang.deselectAll,
+			label: "%deselectAll%",
 			click: 'pg.selection.clearSelection'
 		},
 		invertSelection: {
 			type: 'button',
-			label: lang.invertSelection,
+			label: "%invertSelection%",
 			click: 'pg.selection.invertItemSelection'
 		},
 		areasTitle: {
 			type: "title",
-			text: "Area"
+			text: "%area%"
 		},
 		lineToArea: {
 			type: "button",
-			label: "Convert line → area",
+			label: "%lineToArea%",
 			click: "pg.editTH2.lineToArea"
 		},
 		areaToLine: {
 			type: "button",
-			label: "Convert area → line",
+			label: "%areaToLine%",
 			click: "pg.editTH2.areaToLine"
 		},
 		orderTitle: {
 			type : 'title',
-			text :'Order'
+			text : '%order%'
 		},
 		bringToFront: {
 			type: 'button',

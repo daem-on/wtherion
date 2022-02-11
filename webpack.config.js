@@ -9,10 +9,7 @@ const CopyPlugin = require("copy-webpack-plugin");
 const isProduction = process.env.NODE_ENV == 'production';
 const buildLang = process.env.BUILD_LANG || "en-us";
 
-// const localization = require(`./lang/${buildLang}.json`);
-// for (let item in localization) {
-//     localization[item] = JSON.stringify(localization[item]);
-// }
+const localization = require(`./lang/${buildLang}.json`);
 
 const stylesHandler = 'style-loader';
 
@@ -35,9 +32,6 @@ const config = {
             paper: 'paper',
             jQuery: 'jquery',
         }),
-        new webpack.DefinePlugin({
-            lang: require(`./lang/${buildLang}.json`)
-        }),
         new CopyPlugin({
             patterns: [
               { from: "css", to: "css" },
@@ -52,8 +46,19 @@ const config = {
         rules: [
             {
                 test: /\.(ts|tsx)$/i,
-                loader: 'ts-loader',
                 exclude: ['/node_modules/'],
+                use: [
+                    {
+                        loader: 'string-replace-loader',
+                        options: {
+                            search: /%(\S+)%/g,
+                            replace(_, p1) {return localization[p1] ?? p1;},
+                        }
+                    },
+                    {
+                        loader: 'ts-loader',
+                    },
+                ]
             },
             {
                 test: /\.css$/i,
@@ -62,10 +67,6 @@ const config = {
             {
                 test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
                 type: 'asset',
-            },
-            {
-                test: /\.paper\.js$/,
-                loader: "paper-loader"
             },
 
             // Add your rules for custom modules here

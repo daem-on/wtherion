@@ -1,0 +1,10 @@
+{
+	"edit": "'Edit'",
+	"copy": "'Copy'",
+	"paste": "'Paste'",
+	"delete": "'Delete'",
+	"select": "'Select'",
+	"selectAll": "'Select all'",
+	"deselectAll": "'Deselect all'",
+	"invertSelection": "'Invert selection'"
+}

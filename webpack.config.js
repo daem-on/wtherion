@@ -7,7 +7,12 @@ const webpack = require("webpack");
 const CopyPlugin = require("copy-webpack-plugin");
 
 const isProduction = process.env.NODE_ENV == 'production';
+const buildLang = process.env.BUILD_LANG || "en-us";
 
+// const localization = require(`./lang/${buildLang}.json`);
+// for (let item in localization) {
+//     localization[item] = JSON.stringify(localization[item]);
+// }
 
 const stylesHandler = 'style-loader';
 
@@ -29,6 +34,9 @@ const config = {
         new webpack.ProvidePlugin({
             paper: 'paper',
             jQuery: 'jquery',
+        }),
+        new webpack.DefinePlugin({
+            lang: require(`./lang/${buildLang}.json`)
         }),
         new CopyPlugin({
             patterns: [

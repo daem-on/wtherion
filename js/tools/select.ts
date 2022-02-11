@@ -23,40 +23,40 @@ export default function() {
 	var menuEntries = {
 		editTitle: {
 			type : 'title',
-			text :'Edit'
+			text : lang.edit
 		},
 		copySelection: {
 			type: 'button',
-			label: 'Copy',
+			label: lang.copy,
 			click: 'pg.edit.copySelectionToClipboard'
 		},
 		pasteSelection: {
 			type: 'button',
-			label: 'Paste',
+			label: lang.paste,
 			click: 'pg.edit.pasteObjectsFromClipboard'
 		},
 		deleteSelection: {
 			type: 'button',
-			label: 'Delete',
+			label: lang.delete,
 			click: 'pg.selection.deleteSelection'
 		},
 		selectionTitle: {
 			type : 'title',
-			text :'Select'
+			text : lang.select
 		},
 		selectAll: {
 			type: 'button',
-			label: 'Select all',
+			label: lang.selectAll,
 			click: 'pg.selection.selectAllItems'
 		},
 		selectNone: {
 			type: 'button',
-			label: 'Deselect all',
+			label: lang.deselectAll,
 			click: 'pg.selection.clearSelection'
 		},
 		invertSelection: {
 			type: 'button',
-			label: 'Invert selection',
+			label: lang.invertSelection,
 			click: 'pg.selection.invertItemSelection'
 		},
 		areasTitle: {
@@ -643,3 +643,4 @@ export default function() {
 	};
 	
 };
+

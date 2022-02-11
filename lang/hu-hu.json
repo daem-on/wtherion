@@ -1,0 +1,10 @@
+{
+	"edit": "'Szerkesztés'",
+	"copy": "'Másolás'",
+	"paste": "'Beillesztés'",
+	"delete": "'Törlés'",
+	"select": "'Kijelölés'",
+	"selectAll": "'Összes kijelölése'",
+	"deselectAll": "'Kijelölés megszűntetése'",
+	"invertSelection": "'Kijelölés invertálása'"
+}

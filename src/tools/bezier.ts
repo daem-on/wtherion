@@ -8,6 +8,7 @@ import { default as getSettings } from "../../src/objectSettings/model/getSettin
 import { wallTypes } from "Res/wallTypes";
 import { componentList } from "../toolOptionPanel";
 import LineSettings from "../../src/objectSettings/model/LineSettings";
+import { getToolInfoByID } from "../../src/tools";
 
 export default function() {
 	let tool: paper.Tool;
@@ -46,6 +47,7 @@ export default function() {
 	const activateTool = function() {
 		tool = new paper.Tool();
 		options = pg.tools.getLocalOptions(options) as typeof options;
+		const toolInfo = getToolInfoByID("bezier");
 		
 		let path: paper.Path;
 
@@ -188,6 +190,14 @@ export default function() {
 				path = null;
 			}
 			
+		};
+
+		tool.onKeyDown = function(event: paper.KeyEvent) {
+			if (event.key == "enter" || event.key == toolInfo.usedKeys.toolbar) {
+				pg.selection.clearSelection();
+				pg.undo.snapshot('bezier');
+				path = null;
+			}
 		};
 		
 		pg.toolOptionPanel.setup(options, components, function() {

@@ -41,7 +41,7 @@ let options: PGToolOptions[] = [
 	// },
 	{
 		id: 'select',
-		name: 'Item select',
+		name: '%tools.itemSelect%',
 		usedKeys : {
 			toolbar : 'v',
 			selectAll : 'ctrl-a',
@@ -54,34 +54,34 @@ let options: PGToolOptions[] = [
 	},
 	{
 		id: 'detailselect',
-		name: 'Detail select',
+		name: '%tools.detailSelect%',
 		usedKeys : {
 			toolbar : 'a'
 		}
 	},
 	{
 		id: 'draw',
-		name: 'Draw'
+		name: '%tools.draw%'
 	},
 	{
 		id: 'bezier',
-		name: 'Bezier',
+		name: '%tools.bezier%',
 		usedKeys : {
 			toolbar : 'p'
 		}
 	},
 	{
 		id: 'point',
-		name: 'Add point',
+		name: '%tools.point%',
 		usedKeys : {
 			toolbar : 'k'
 		}
 	},
 	{
 		id: 'inspect',
-		name: 'Inspect',
+		name: '%tools.inspect%',
 		usedKeys : {
-			toolbar : 'k'
+			toolbar : 'm'
 		}
 	},
 ]

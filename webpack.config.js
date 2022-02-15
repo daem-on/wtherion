@@ -27,6 +27,9 @@ const config = {
     plugins: [
         new HtmlWebpackPlugin({
             template: 'index.html',
+            templateParameters: {
+                "loc": localization
+            }
         }),
         new webpack.ProvidePlugin({
             paper: 'paper',
@@ -34,7 +37,7 @@ const config = {
         }),
         new CopyPlugin({
             patterns: [
-              { from: "css", to: "css" },
+            //   { from: "css", to: "css" },
               { from: "assets", to: "assets" },
             ],
         }),

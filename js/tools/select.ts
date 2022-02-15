@@ -79,40 +79,40 @@ export default function() {
 		},
 		bringToFront: {
 			type: 'button',
-			label: 'Bring to front',
+			label: '%bringToFront%',
 			click: 'pg.order.bringSelectionToFront'
 		},
 		sendToBack: {
 			type: 'button',
-			label: 'Send to back',
+			label: '%sendToBack%',
 			click: 'pg.order.sendSelectionToBack'
 		},
-		editTH2Title: {
+		linesTitle: {
 			type: 'title',
-			text: 'Lines'
+			text: '%linesTitle%',
 		},
 		mergeLines: {
 			type: 'button',
-			label: 'Merge lines',
+			label: '%mergeLines%',
 			click: 'pg.editTH2.mergeLines'
 		},
 		smoothLine: {
 			type: 'button',
-			label: 'Smooth',
+			label: '%smoothLine%',
 			click: 'pg.editTH2.smooth'
 		},
 		simplifyLine: {
 			type: 'button',
-			label: 'Simplify',
+			label: '%simplifyLine%',
 			click: 'pg.editTH2.simplify'
 		},
 		pointsTitle: {
 			type: 'title',
-			text: 'Points'
+			text: '%pointsTitle%',
 		},
 		randomizeRotation: {
 			type: "button",
-			label: "Randomize rotation",
+			label: "%randomizeRotation%",
 			click: "pg.editTH2.randomizeRotation"
 		}
 	};

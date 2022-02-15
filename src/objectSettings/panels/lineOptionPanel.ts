@@ -3,13 +3,8 @@ import LineSettings from "../model/LineSettings";
 import getSettings from "../model/getSettings";
 import { objectOptionPanelConfig } from "../objectOptionPanel";
 import pg from "../../init";
-import wallList from "../../../js/res/walls-list.json";
 import subtypeList from "../../../js/res/subtype-list.json";
-	
-const wallTypes = wallList.labels
-	.concat(wallList.passages)
-	.concat(wallList["passage fills"])
-	.concat(wallList.special);
+import { wallTypes } from "../../../js/res/wallTypes";
 	
 let optionsCache = {
 	reverse: undefined,
@@ -29,82 +24,82 @@ let optionsCache = {
 const components: componentList = {
 	type: {
 		type: "customList",
-		label: "Type",
+		label: "%type%",
 		options: wallTypes,
 	},
 	_subtypeWall: {
 		type: "customList",
-		label: "Subtype",
+		label: "%subtype%",
 		requirements: {type: "wall"},
 		options: subtypeList.wall,
 		imageRoot: "assets/rendered/subtype"
 	},
 	_subtypeBorder: {
 		type: "list",
-		label: "Subtype",
+		label: "%subtype%",
 		requirements: {type: "border"},
 		options: subtypeList.border,
 	},
 	_subtypeWater: {
 		type: "customList",
-		label: "Subtype",
+		label: "%subtype%",
 		requirements: {type: "water-flow"},
 		options: subtypeList["water-flow"],
 		imageRoot: "assets/rendered/subtype"
 	},
 	reverse: {
 		type: "boolean",
-		label: "Reverse"
+		label: "%reverse%"
 	},
 	invisible: {
 		type: "boolean",
-		label: "Invisible"
+		label: "%invisible%"
 	},
 	size: {
 		type: "int",
-		label: "Size",
+		label: "%size%",
 		requirements: {
 			type: "slope"
 		}
 	},
 	outline: {
 		type: "list",
-		label: "Outline",
+		label: "%outline%",
 		optionValuePairs: [
-			["default", 0],
-			["in", 1],
-			["out", 2],
-			["none", 3]
+			["%default%", 0],
+			["%in%", 1],
+			["%out%", 2],
+			["%none%", 3]
 		],
 	},
 	advancedSection: {
 		type: "title",
-		text: "Advanced"
+		text: "%advanced%"
 	},
 	id: {
 		type: "text",
-		label: "id"
+		label: "%id%"
 	},
 	otherSettings: {
 		type: "text",
-		label: "Other settings"
+		label: "%otherSettings%"
 	},
 	clip: {
 		type: "list",
-		label: "Clip",
+		label: "%clip%",
 		optionValuePairs: [
-			["default", 0],
-			["on", 1],
-			["off", 2]
+			["%default%", 0],
+			["%on%", 1],
+			["%off%", 2]
 		],
 	},
 	place: {
 		type: "list",
-		label: "Place",
+		label: "%place%",
 		optionValuePairs: [
-			["top ▲", 2],
-			["bottom ▼", 1],
-			["default ⦿", 0]
+			["%top% ▲", 2],
+			["%bottom% ▼", 1],
+			["%default% ⦿", 0]
 		]
 	},
 }

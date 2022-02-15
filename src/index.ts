@@ -1,6 +1,7 @@
 import pg from "./init";
 import jQuery from "jquery";
 import * as exporter from "./export/exportTH2";
+import "./styles.ts";
 
 // import spectrumSetup from "../js/lib/spectrum.js";
 // spectrumSetup(window, jQuery);

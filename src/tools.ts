@@ -2,8 +2,8 @@
 
 import select from "../js/tools/select";
 import detailselect from "../js/tools/detailselect.js";
-import draw from "../js/tools/draw.js";
-import bezier from "../js/tools/bezier.js";
+import draw from "../js/tools/draw";
+import bezier from "../js/tools/bezier";
 import * as point from "./tools/point";
 // import text from "../js/tools/text.paper.js";
 // import rotate from "../js/tools/rotate.paper.js";

@@ -1,9 +1,12 @@
-
 export enum Place { Default, Bottom, Top }
 enum Outline { Default, In, Out, None }
 export enum Clip { Default, On, Off }
 
 export default class LineSettings {
+	
+	static readonly stringSettings: ReadonlyArray<string> = 
+		["subtype", "id"];
+
 	readonly className = "LineSettings";
 	otherSettings: string;
 	subtype: string;

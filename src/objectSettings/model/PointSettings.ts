@@ -1,6 +1,10 @@
 import { Clip, Place } from "./LineSettings";
 
 export default class PointSettings {
+
+	static readonly stringSettings: ReadonlyArray<string> = 
+		["type", "scale", "name", "text", "value", "id"];
+
 	readonly className = "PointSettings";
 	type: string;
 	otherSettings: string;

@@ -5,7 +5,7 @@ import AreaSettings from "../objectSettings/model/AreaSettings"
 import PointSettings from "../objectSettings/model/PointSettings"
 import { requestImportXVI } from "./importXVI"
 import ScrapSettings from "../objectSettings/model/ScrapSettings"
-				
+
 const toPoint = function(global: string[], global2: string[] = undefined) {
 	if (global2)
 	return new paper.Point([
@@ -248,8 +248,7 @@ function createScrap(line: string) {
 	let settings = getSettings(nl);
 	let options = getOptions(split.slice(2).join(" "));
 
-	const stringOptions = ["scale", "author", "copyright"];
-	for (let key of stringOptions) {
+	for (let key of ScrapSettings.stringSettings) {
 		if (key in options) {
 			settings[key] = options[key];
 			delete options[key];
@@ -289,8 +288,7 @@ function savePointSettings(point: paper.Shape, options: Record<string, string>) 
 	let o = options;
 	let s = getSettings(point) as PointSettings;
 
-	const stringOptions = ["type", "name", "scale", "text", "value", "id"];
-	for (let key of stringOptions) {
+	for (let key of PointSettings.stringSettings) {
 		if (key in options) {
 			s[key] = o[key]; delete o[key];
 		}

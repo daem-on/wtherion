@@ -1,6 +1,10 @@
 enum Projection {none, plan, elevation, extended};
 
 export default class ScrapSettings {
+	
+	static readonly stringSettings: ReadonlyArray<string> = 
+		["scale", "author", "copyright"];
+
 	readonly className = "ScrapSettings";
 	projection: Projection;
 	scale: string;

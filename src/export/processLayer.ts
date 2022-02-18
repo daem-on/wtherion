@@ -52,7 +52,7 @@ export function processLayer(layer: paper.Layer) {
 				break;
 		}
 	}
-	addWhitespace(2);
+	addWhitespace(-1);
 	addText("endscrap");
 	if (exportedChildren === 0)
 		restoreBackup();

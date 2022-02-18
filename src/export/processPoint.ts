@@ -3,15 +3,15 @@ import PointSettings from "../objectSettings/model/PointSettings";
 import { toGlobal, addText } from "./exportTH2";
 
 export function processPoint(item: any) {
-	let shape = item;
-	let settings = getSettings(item) as PointSettings;
-	let position = toGlobal(shape.matrix.slice(4, 6));
+	const shape = item;
+	const settings = getSettings(item) as PointSettings;
+	const position = toGlobal(shape.matrix.slice(4, 6));
 	let options = "";
 	options += settings.type;
 
 	{
 		const s = settings;
-		for (let setting of PointSettings.stringSettings.slice(2)) {
+		for (const setting of PointSettings.stringSettings.slice(2)) {
 			if (s[setting])
 				options += ` -${setting} ${s[setting]}`;
 		}

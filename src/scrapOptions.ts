@@ -3,14 +3,14 @@ import pg from "./init";
 import getSettings from "./objectSettings/model/getSettings";
 import ScrapSettings from "./objectSettings/model/ScrapSettings";
 
-let optionsCache = {
+const optionsCache = {
 	projection: "",
 	scale: "",
 	author: "",
 	copyright: "",
 	otherSettings: ""
 };
-let components: componentList = {
+const components: componentList = {
 	projection: {
 		type: "list",
 		label: "Projection",
@@ -40,8 +40,8 @@ let components: componentList = {
 };
 
 export function show() {
-	let scrap = pg.layer.getActiveLayer();
-	let settings = getSettings(scrap);
+	const scrap = pg.layer.getActiveLayer();
+	const settings = getSettings(scrap);
 
 	for (const key in optionsCache) {
 		if (Object.prototype.hasOwnProperty.call(optionsCache, key)) {

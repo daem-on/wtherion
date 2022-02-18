@@ -15,15 +15,15 @@ const areaColors
 	= generateColors(colorDefs.areaColors);
 
 function generateColors(from: Record<string, string>) {
-	let r: Record<string, paper.Color> = {};
-	for (let entry in from) r[entry] = new paper.Color(from[entry]);
+	const r: Record<string, paper.Color> = {};
+	for (const entry in from) r[entry] = new paper.Color(from[entry]);
 	return r;
 }
 
 export default {
 	
 	createPath: function() {
-		var path = new paper.Path();
+		const path = new paper.Path();
 		path.strokeColor = new paper.Color(0, 0, 0);
 		path.strokeWidth = 2;
 		path.data = {
@@ -33,7 +33,7 @@ export default {
 	},
 	
 	drawArea: function(a: paper.Path) {
-		let settings = getSettings(a) as AreaSettings;
+		const settings = getSettings(a) as AreaSettings;
 		this.drawLine(a, settings.lineSettings);
 		a.fillColor = new paper.Color(0.2, 0.2, 0.2, 0.2);
 		a.fillColor = (settings.type in areaColors) ?
@@ -41,8 +41,8 @@ export default {
 	},
 
 	drawPoint: function(p: paper.Shape) {
-		let settings = getSettings(p) as PointSettings;
-		let isStation = settings.type === "station"
+		const settings = getSettings(p) as PointSettings;
+		const isStation = settings.type === "station"
 
 		p.radius = isStation ? 3 : 5;
 		p.fillColor = isStation ? pointColors.station : pointColors.default;
@@ -51,7 +51,7 @@ export default {
 	},
 	
 	drawLine: function(l: paper.Path, lineSettings?: LineSettings) {
-		let settings = lineSettings || getSettings(l) as LineSettings;
+		const settings = lineSettings || getSettings(l) as LineSettings;
 		l.strokeScaling = true;
 		l.fillColor = null;
 
@@ -72,7 +72,7 @@ export default {
 	},
 	
 	drawObject: function(object: PaperItemType) {
-		let settings = getSettings(object);
+		const settings = getSettings(object);
 		if (!settings) return;
 		if (settings.className == "AreaSettings") {
 			this.drawArea(object as paper.Path);
@@ -87,7 +87,7 @@ export default {
 	},
 	
 	createPoint: function(pos: paper.Point = new paper.Point(0, 0)) {
-		var circle = new paper.Shape.Circle({
+		const circle = new paper.Shape.Circle({
 			center: pos,
 		});
 		circle.data.noDrawHandle = true;
@@ -96,14 +96,14 @@ export default {
 	},
 
 	lineToArea: function() {
-		let selection = pg.selection.getSelectedItems();
+		const selection = pg.selection.getSelectedItems();
 		if (selection.length !== 1) return;
 
-		let line = selection[0]
-		let settings = getSettings(line as PaperItemType);
+		const line = selection[0]
+		const settings = getSettings(line as PaperItemType);
 		if (!settings || settings.className !== "LineSettings") return;
 
-		let oldSettings = settings
+		const oldSettings = settings
 		line.data.therionData = AreaSettings.defaultSettings();
 		line.data.therionData.lineSettings = oldSettings;
 		line.data.therionData.type = "water";
@@ -111,23 +111,23 @@ export default {
 	},
 
 	areaToLine: function() {
-		let selection = pg.selection.getSelectedItems();
+		const selection = pg.selection.getSelectedItems();
 		if (selection.length !== 1) return;
 
-		let area = selection[0]
-		let settings = getSettings(area as PaperItemType);
+		const area = selection[0]
+		const settings = getSettings(area as PaperItemType);
 		if (!settings || settings.className !== "AreaSettings") return;
 
-		let newSettings = area.data.therionData.lineSettings;
+		const newSettings = area.data.therionData.lineSettings;
 		area.data.therionData = newSettings;
 		this.drawLine(area as paper.Path);
 	},
 	
 	randomizeRotation: function() {
-		let selection: paper.Item[] = pg.selection.getSelectedItems();
-		for (let item of selection) {
+		const selection: paper.Item[] = pg.selection.getSelectedItems();
+		for (const item of selection) {
 			if (item.className === "Shape") {
-				let s = getSettings(item as paper.Shape);
+				const s = getSettings(item as paper.Shape);
 				if (s.className === "PointSettings") {
 					item.rotation = Math.floor(Math.random() * 360);
 					s.rotation = item.rotation;
@@ -137,7 +137,7 @@ export default {
 	},
 	
 	mergeLines: function() {
-		let selection = pg.selection.getSelectedItems();
+		const selection = pg.selection.getSelectedItems();
 		if (selection.length !== 2) {
 			console.error("Only possible with 2 lines");
 			return;
@@ -152,18 +152,18 @@ export default {
 	},
 	
 	smooth: function() {
-		let selection = pg.selection.getSelectedItems();
+		const selection = pg.selection.getSelectedItems();
 		
-		for (let item of selection)
+		for (const item of selection)
 			if (pg.item.isPathItem(item)) item.smooth();
 	
 		pg.undo.snapshot("smoothLine");
 	},
 
 	simplify: function() {
-		let selection = pg.selection.getSelectedItems();
+		const selection = pg.selection.getSelectedItems();
 		
-		for (let item of selection)
+		for (const item of selection)
 			if (pg.item.isPathItem(item)) item.simplify();
 	
 		pg.undo.snapshot("simplifyLine");

@@ -19,15 +19,16 @@ const toPoint = function(global: string[], global2: string[] = undefined) {
 }
 
 const getOptions = function(source: string) {
-	let options: Record<string, string> = {};
+	const options: Record<string, string> = {};
 				
-	let re = /-([a-z]+) ['"\[]([^'"\[\]]+)['"\]]/g;
-	let matches = source.matchAll(re);
-	for (let match of matches) {
+	// eslint-disable-next-line no-useless-escape
+	const re = /-([a-z]+) ['"\[]([^'"\[\]]+)['"\]]/g;
+	const matches = source.matchAll(re);
+	for (const match of matches) {
 		options[match[1]] = match[2];
 	}
-	let singleOptions = source.replace(re, "");
-	let split = singleOptions.split(" ");
+	const singleOptions = source.replace(re, "");
+	const split = singleOptions.split(" ");
 	for (let i = 0; i < split.length; i+=2) {
 		if (split[i].trim().startsWith("-"))
 			options[split[i].slice(1)] = split[i+1];
@@ -35,9 +36,9 @@ const getOptions = function(source: string) {
 	return options;
 }
 
-let _xthSettings: string[] = [];
+const _xthSettings: string[] = [];
 
-let _linedef: boolean = false;
+let _linedef = false;
 let _currentPath: paper.Path = null;
 let _currentSegments: string[][] = null;
 let _closeLine: boolean = null;
@@ -46,9 +47,9 @@ let _subtypes: Record<number, string> = {};
 let _segmentOptions: Record<number, string> = {};
 let _segmentIndex: number;
 
-let _areadef: boolean = false;
-let _linesWithIds: Record<string, paper.Path> = {};
-let _areas: {type: string, ids: string[]}[] = [];
+let _areadef = false;
+const _linesWithIds: Record<string, paper.Path> = {};
+const _areas: {type: string, ids: string[]}[] = [];
 
 export default function(source: string) {
 	for (let line of source.split("\n")) {
@@ -102,8 +103,8 @@ function addSegment(line: string) {
 }
 				
 function saveLineSettings() {
-	let o = _parsedOptions;
-	let s = getSettings(_currentPath) as LineSettings;
+	const o = _parsedOptions;
+	const s = getSettings(_currentPath) as LineSettings;
 	if (o.subtype) {
 		s.subtype = o.subtype; delete o.subtype;
 	}
@@ -145,10 +146,10 @@ function saveLineSettings() {
 }
 				
 function endLine() {
-	let segments = _currentSegments;
+	const segments = _currentSegments;
 	let lastpoint: string[];
 	for (let i = 0; i < segments.length; i++) {
-		let segment = segments[i];
+		const segment = segments[i];
 		if (segment.length == 2) {
 			_currentPath.add(new paper.Point(toPoint(segment)));
 			lastpoint = segment;
@@ -170,7 +171,7 @@ function endLine() {
 	if (_closeLine) _currentPath.closed = true;
 	_linedef = false;
 				
-	let lineSettings = getSettings(_currentPath) as LineSettings;
+	const lineSettings = getSettings(_currentPath) as LineSettings;
 	lineSettings.subtypes = _subtypes;
 	lineSettings.segmentSettings = _segmentOptions;
 	pg.editTH2.drawLine(_currentPath);
@@ -189,7 +190,7 @@ function addSegmentOption(line: string) {
 }
 				
 function createLine(line: string) {
-	let split = line.split(" ");
+	const split = line.split(" ");
 	_currentPath = pg.editTH2.createPath();
 	_currentSegments = [];
 	_parsedOptions = {};
@@ -199,7 +200,7 @@ function createLine(line: string) {
 	_subtypes = {};
 	_segmentOptions = {};
 
-	let lineSettings = getSettings(_currentPath) as LineSettings;
+	const lineSettings = getSettings(_currentPath) as LineSettings;
 	lineSettings.type = split[1];
 					
 	_parsedOptions = getOptions(line);
@@ -214,7 +215,6 @@ function createArea(line: string) {
 }
 
 function addLineToArea(line: string) {
-	let id = line;
 	_areas[_areas.length-1].ids.push(line);
 }
 				
@@ -223,15 +223,15 @@ function endArea() {
 }
 
 function applyAreas() {
-	for (let area of _areas) {
+	for (const area of _areas) {
 		if (area.ids.length > 1) {
 			console.warn("This importer is designed to work with one-to-one associations between lines and areas.")
 		}
-		for (let id of area.ids) {
+		for (const id of area.ids) {
 			if (id in _linesWithIds) {
-				let line = _linesWithIds[id]
+				const line = _linesWithIds[id]
 				
-				let oldSettings = getSettings(line);
+				const oldSettings = getSettings(line);
 				if (oldSettings.className === "AreaSettings") {
 					console.warn("Seems like one line is included in multiple areas.");
 					continue;
@@ -246,14 +246,14 @@ function applyAreas() {
 }
 				
 function createScrap(line: string) {
-	let split = line.split(" ");
-	let nl = pg.layer.addNewLayer(split[1], true);
+	const split = line.split(" ");
+	const nl = pg.layer.addNewLayer(split[1], true);
 	nl.data.therionData.createdFrom = line;
 
-	let settings = getSettings(nl);
-	let options = getOptions(split.slice(2).join(" "));
+	const settings = getSettings(nl);
+	const options = getOptions(split.slice(2).join(" "));
 
-	for (let key of ScrapSettings.stringSettings) {
+	for (const key of ScrapSettings.stringSettings) {
 		if (key in options) {
 			settings[key] = options[key];
 			delete options[key];
@@ -278,9 +278,9 @@ function createScrap(line: string) {
 }
 				
 function createPoint(line: string) {
-	let point = pg.editTH2.createPoint();
-	let split = line.split(" ");
-	let options = getOptions(split.slice(4).join(" "));
+	const point = pg.editTH2.createPoint();
+	const split = line.split(" ");
+	const options = getOptions(split.slice(4).join(" "));
 	options.type = split[3]
 	if ("orient" in options || "orientation" in options)
 		point.rotation = Number.parseFloat(options.orient || options.orientation)
@@ -290,10 +290,10 @@ function createPoint(line: string) {
 }
 
 function savePointSettings(point: paper.Shape, options: Record<string, string>) {
-	let o = options;
-	let s = getSettings(point) as PointSettings;
+	const o = options;
+	const s = getSettings(point) as PointSettings;
 
-	for (let key of PointSettings.stringSettings) {
+	for (const key of PointSettings.stringSettings) {
 		if (key in options) {
 			s[key] = o[key]; delete o[key];
 		}
@@ -322,12 +322,12 @@ function savePointSettings(point: paper.Shape, options: Record<string, string>) 
 	}
 }
 function loadImages() {
-	for (let line of _xthSettings) {
+	for (const line of _xthSettings) {
 		if (line.startsWith("##XTHERION## xth_me_image_insert")) {
-			let params = line.slice(33).split(" ");
-			let x = Number.parseFloat(params[0].slice(1));
-			let y = -Number.parseFloat(params[3].slice(1));
-			let name = params[5];
+			const params = line.slice(33).split(" ");
+			const x = Number.parseFloat(params[0].slice(1));
+			const y = -Number.parseFloat(params[3].slice(1));
+			const name = params[5];
 			requestImportXVI(name, x, y);
 		}
 	}

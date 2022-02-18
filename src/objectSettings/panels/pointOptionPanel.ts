@@ -1,5 +1,4 @@
 import { componentList } from "../../../js/toolOptionPanel";
-import LineSettings from "../model/LineSettings";
 import getSettings from "../model/getSettings";
 import { objectOptionPanelConfig } from "../objectOptionPanel";
 import pg from "../../init";
@@ -8,10 +7,10 @@ import symbolList from "../../../js/res/symbol-list.json";
 // const types = symbolList["special objects"]
 // 	.concat(symbolList["symbolic passage fills"]);
 const types = [];
-for (let category in symbolList)
+for (const category in symbolList)
 	types.push(symbolList[category]);
 
-let optionsCache = {
+const optionsCache = {
 	type: undefined,
 	otherSettings: undefined,
 	name: undefined,
@@ -97,7 +96,7 @@ const components: componentList = {
 }
 
 export default function(shape: paper.Shape): objectOptionPanelConfig {
-	let settings = getSettings(shape);
+	const settings = getSettings(shape);
 	
 	for (const key in optionsCache) {
 		if (Object.prototype.hasOwnProperty.call(optionsCache, key)) {
@@ -105,7 +104,7 @@ export default function(shape: paper.Shape): objectOptionPanelConfig {
 		}
 	}
 	
-	let modifyObject = () => {
+	const modifyObject = () => {
 		for (const key in optionsCache) {
 			if (Object.prototype.hasOwnProperty.call(optionsCache, key)) {
 				if (optionsCache[key] != settings[key]) {

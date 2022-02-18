@@ -19,19 +19,19 @@ export function save(clearName = false) {
 		if (saveFileName === null) return;
 	}
 
-	let json = pgDocument.documentAsJSON();
+	const json = pgDocument.documentAsJSON();
 	localStorage.setItem("wt.saves." + saveFileName, json);
 }
 
 export function showLoadSelect() {
 	jQuery("#loadWindow").remove();
-	let content = jQuery(document.createElement("ul"));
+	const content = jQuery(document.createElement("ul"));
 	
-	for (let key of Object.keys(localStorage)) {
+	for (const key of Object.keys(localStorage)) {
 		if (key.startsWith("wt.saves.")) {
-			let entry = jQuery(`<li class="saveEntry"></li>`)
-			let name = jQuery(`<a>${key.substring(9)}</a>`);
-			let del = jQuery(`<a class="delete">&times</a>`);
+			const entry = jQuery(`<li class="saveEntry"></li>`)
+			const name = jQuery(`<a>${key.substring(9)}</a>`);
+			const del = jQuery(`<a class="delete">&times</a>`);
 			name.on("click", () => {loadFromStorage(key)});
 			del.on("click", () => {deleteFromStorage(key)});
 			del.attr("title", "Delete save file");
@@ -84,7 +84,7 @@ export async function exportTH2(clearHandle = false) {
 		if (!exportFileHandle) return;
 	}
 	
-	let blob = asBlob();
+	const blob = asBlob();
 	if (window.showSaveFilePicker) {
 		const writable = await exportFileHandle.createWritable();
 		await writable.write(blob);

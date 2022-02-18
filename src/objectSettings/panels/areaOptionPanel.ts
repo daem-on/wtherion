@@ -1,5 +1,4 @@
 import { componentList } from "../../../js/toolOptionPanel";
-import LineSettings from "../model/LineSettings";
 import getSettings from "../model/getSettings";
 import AreaSettings from "../model/AreaSettings";
 import { objectOptionPanelConfig } from "../objectOptionPanel";
@@ -12,7 +11,7 @@ const wallTypes = wallList.labels
 	.concat(wallList["passage fills"])
 	.concat(wallList.special);
 
-let optionsCache = {
+const optionsCache = {
 	lineType: undefined,
 	lineSubtype: undefined,
 	areaType: undefined,
@@ -60,7 +59,7 @@ const components: componentList = {
 }
 
 export default function(line: paper.Path): objectOptionPanelConfig {
-	let settings = getSettings(line) as AreaSettings;
+	const settings = getSettings(line) as AreaSettings;
 	
 	optionsCache.areaType = settings.type;
 	optionsCache.lineType = settings.lineSettings.type;
@@ -69,7 +68,7 @@ export default function(line: paper.Path): objectOptionPanelConfig {
 	optionsCache.id = settings.lineSettings.id;
 	optionsCache.otherSettings = settings.lineSettings.otherSettings;
 	
-	let modifyObject = () => {
+	const modifyObject = () => {
 		settings.type = optionsCache.areaType;
 		settings.lineSettings.type = optionsCache.lineType;
 		settings.lineSettings.invisible = optionsCache.invisible;

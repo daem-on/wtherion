@@ -9,14 +9,14 @@ export function processLayer(layer: paper.Layer) {
 	if (!layer.children || layer.children.length == 0)
 		return;
 
-	let settings = getSettings(layer);
+	const settings = getSettings(layer);
 
 	let optionsString = "";
 	{
-		let s = settings;
-		let o = [];
+		const s = settings;
+		const o = [];
 
-		for (let setting of ScrapSettings.stringSettings) {
+		for (const setting of ScrapSettings.stringSettings) {
 			if (s[setting])
 				o.push(`-${setting} ${s[setting]}`);
 		}
@@ -32,10 +32,10 @@ export function processLayer(layer: paper.Layer) {
 	let exportedChildren = 0;
 	addText("scrap", layer.name.replace(" ", "_"), optionsString);
 	addWhitespace(1);
-	for (let item of layer.children) {
+	for (const item of layer.children) {
 		switch (item[0]) {
 			case "Path":
-				let s = getSettings(item[1]);
+				const s = getSettings(item[1]);
 				if (s.className == "LineSettings")
 					processLine(item[1]);
 				else if (s.className == "AreaSettings")

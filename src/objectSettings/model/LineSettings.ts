@@ -22,7 +22,7 @@ export default class LineSettings {
 	type: string;
 
 	static defaultSettings(): LineSettings {
-		let ls = new LineSettings();
+		const ls = new LineSettings();
 		ls.otherSettings = "";
 		ls.subtype = "";
 		ls.subtypes = {};

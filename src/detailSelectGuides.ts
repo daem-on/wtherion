@@ -12,7 +12,7 @@ function getNextGuide() {
 	if (guideTextPool.length > currentIndex)
 		return guideTextPool[currentIndex++];
 	else {
-		let text = new paper.PointText(zero);
+		const text = new paper.PointText(zero);
 		guideTextPool.push(text);
 		return guideTextPool[currentIndex++];
 	}
@@ -20,28 +20,28 @@ function getNextGuide() {
 
 export function drawGuides() {
 	if (!wtConfig.get("detailSelectGuides")) return;
-	let selected = pg.selection.getSelectedItems();
-	let layer = pg.layer.getGuideLayer();
+	const selected = pg.selection.getSelectedItems();
+	const layer = pg.layer.getGuideLayer();
 	hideGuideNumbers();
 
 	if (layer === false) return;
 	if (selected.length !== 1) return;
 	if (selected[0].className !== "Path") return;
-	let path = selected[0] as paper.Path;
-	let settings = getSettings(path);
+	const path = selected[0] as paper.Path;
+	const settings = getSettings(path);
 	if (settings.className !== "LineSettings") return;
 
-	for (let segment of path.segments) {
-		let text = getNextGuide();
+	for (const segment of path.segments) {
+		const text = getNextGuide();
 		text.visible = true;
 		text.content = settings.subtypes[segment.index] || segment.index.toString();
 		
 		if (!path.closed && (segment.isFirst() || segment.isLast())) {
 			text.point = segment.point.add(endoffset);
 		} else {
-			let vec1 = segment.previous.point.subtract(segment.point).normalize();
-			let vec2 = segment.next.point.subtract(segment.point).normalize();
-			let avg = vec1.add(vec2).multiply(0.5);
+			const vec1 = segment.previous.point.subtract(segment.point).normalize();
+			const vec2 = segment.next.point.subtract(segment.point).normalize();
+			const avg = vec1.add(vec2).multiply(0.5);
 			text.point = segment.point.add(avg.normalize(-14)).add(offset);
 		}
 
@@ -52,13 +52,13 @@ export function drawGuides() {
 
 export function hideGuideNumbers() {
 	currentIndex = 0;
-	for (let item of guideTextPool) {
+	for (const item of guideTextPool) {
 		item.visible = false;
 	}
 }
 
 export function clearGuideNumbers() {
-	for (let item of guideTextPool) {
+	for (const item of guideTextPool) {
 		item.remove();
 	}
 	guideTextPool = [];

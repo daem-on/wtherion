@@ -1,6 +1,6 @@
 import {PGToolOptions} from "./toolbar";
 
-let options: PGToolOptions[] = [
+const options: PGToolOptions[] = [
 	{
 		id: 'viewzoom',
 		name: 'View zoom',

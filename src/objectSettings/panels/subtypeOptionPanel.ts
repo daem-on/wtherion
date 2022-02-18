@@ -2,7 +2,6 @@ import { componentList } from "../../../js/toolOptionPanel";
 import LineSettings from "../model/LineSettings";
 import getSettings from "../model/getSettings";
 import { objectOptionPanelConfig } from "../objectOptionPanel";
-import pg from "../../init";
 import subtypes from "../../../js/res/subtype-list.json";
 	
 let optionsCache = {
@@ -56,10 +55,10 @@ export default function(line: paper.Path): objectOptionPanelConfig {
 		subType: "bedrock",
 		otherSettings: ""
 	};
-	let settings = getSettings(line);
+	const settings = getSettings(line);
 	if (settings.className !== "LineSettings") return;
 	
-	for (let segment of line.segments)
+	for (const segment of line.segments)
 	if (segment.selected) selectedSegment = segment;
 	
 	if (settings.subtypes[selectedSegment.index]) {
@@ -75,7 +74,7 @@ export default function(line: paper.Path): objectOptionPanelConfig {
 		let nextSubtype: number = undefined;
 		for (const key in settings.subtypes) {
 			if (Object.prototype.hasOwnProperty.call(settings.subtypes, key)) {
-				let index = key as unknown as number;
+				const index = key as unknown as number;
 				if (index < selectedSegment.index) lastSubtype = index;
 				if (index > selectedSegment.index) {nextSubtype = index; break;}
 			}
@@ -93,8 +92,8 @@ export default function(line: paper.Path): objectOptionPanelConfig {
 		components.nextSubtypeLabel.label = "";
 	}
 
-	let s = settings as LineSettings;
-	let modifyObject = () => {
+	const s = settings as LineSettings;
+	const modifyObject = () => {
 		if (optionsCache.subTypeEnable) {
 			s.subtypes[selectedSegment.index] = optionsCache.subType;
 		} else if (s.subtypes[selectedSegment.index]) {

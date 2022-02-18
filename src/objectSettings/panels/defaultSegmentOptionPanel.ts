@@ -2,8 +2,6 @@ import { componentList } from "../../../js/toolOptionPanel";
 import LineSettings from "../model/LineSettings";
 import getSettings from "../model/getSettings";
 import { objectOptionPanelConfig } from "../objectOptionPanel";
-import pg from "../../init";
-import subtypes from "../../../js/res/subtype-list.json";
 	
 let optionsCache = {
 	x: undefined,
@@ -37,10 +35,10 @@ const components: componentList = {
 }
 
 // TODO: update panel with new values
-function smooth() {if (selectedSegment) selectedSegment.smooth()};
-function resetIn() {if (selectedSegment) selectedSegment.handleIn.length = 0};
-function resetOut() {if (selectedSegment) selectedSegment.handleOut.length = 0};
-function resetBoth() {if (selectedSegment) selectedSegment.clearHandles()};
+function smooth() {if (selectedSegment) selectedSegment.smooth()}
+function resetIn() {if (selectedSegment) selectedSegment.handleIn.length = 0}
+function resetOut() {if (selectedSegment) selectedSegment.handleOut.length = 0}
+function resetBoth() {if (selectedSegment) selectedSegment.clearHandles()}
 	
 export default function(line: paper.Path): objectOptionPanelConfig {
 	optionsCache = {
@@ -52,10 +50,10 @@ export default function(line: paper.Path): objectOptionPanelConfig {
 		handleOutY: 0,
 		otherSettings: ""
 	};
-	let settings = getSettings(line);
+	const settings = getSettings(line);
 	if (settings.className !== "LineSettings") return;
 	
-	for (let segment of line.segments)
+	for (const segment of line.segments)
 		if (segment.selected) selectedSegment = segment;
 	
 	optionsCache.x = selectedSegment.point.x;
@@ -69,8 +67,8 @@ export default function(line: paper.Path): objectOptionPanelConfig {
 		optionsCache.otherSettings = settings.segmentSettings[selectedSegment.index];
 	}
 
-	let s = settings as LineSettings;
-	let modifyObject = () => {
+	const s = settings as LineSettings;
+	const modifyObject = () => {
 		selectedSegment.point.x = optionsCache.x,
 		selectedSegment.point.y = optionsCache.y,
 		selectedSegment.handleIn.x = optionsCache.handleInX;

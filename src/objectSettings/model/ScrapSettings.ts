@@ -1,4 +1,4 @@
-enum Projection {none, plan, elevation, extended};
+enum Projection {none, plan, elevation, extended}
 
 export default class ScrapSettings {
 	
@@ -13,7 +13,7 @@ export default class ScrapSettings {
 	otherSettings: string;
 
 	static defaultSettings(): ScrapSettings {
-		let s = new ScrapSettings();
+		const s = new ScrapSettings();
 		s.projection = Projection.plan;
 		s.scale = "";
 		s.author = "";

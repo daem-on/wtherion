@@ -15,7 +15,7 @@ import * as inspect from "./tools/inspect";
 
 import toolOptions from "../js/toolOptions";
 
-export let tools = {
+export const tools = {
 	select: select,
 	detailselect: detailselect,
 	draw: draw,
@@ -30,14 +30,14 @@ export let tools = {
 	inspect: inspect,
 }
 
-let toolList = toolOptions;
+const toolList = toolOptions;
 export function getToolList() {
 	return toolList;
 }
 
 
 export function getToolInfoByID(id: string) {
-	for(var i=0; i<toolList.length; i++) {
+	for(let i=0; i<toolList.length; i++) {
 		if(toolList[i].id == id) {
 			return toolList[i];
 		}
@@ -47,14 +47,14 @@ export function getToolInfoByID(id: string) {
 
 // localstorage
 export function getLocalOptions(options: { [x: string]: any; id: string; }) {
-	var storageJSON = localStorage.getItem('pg.tools.'+options.id);
+	const storageJSON = localStorage.getItem('pg.tools.'+options.id);
 	if(storageJSON && storageJSON.length > 0) {
-		var storageOptions = JSON.parse(storageJSON);
+		const storageOptions = JSON.parse(storageJSON);
 		
 		// only overwrite options that are stored
 		// new options will use their default value
-		for(var option in options) {
-			if(storageOptions.hasOwnProperty(option)) {
+		for(const option in options) {
+			if(Object.prototype.hasOwnProperty.call(storageOptions, option)) {
 				options[option] = storageOptions[option];
 			}
 		}
@@ -64,7 +64,7 @@ export function getLocalOptions(options: { [x: string]: any; id: string; }) {
 
 
 export function setLocalOptions(options: { id: string; }) {
-	var optionsJSON = JSON.stringify(options, null, 2);
+	const optionsJSON = JSON.stringify(options, null, 2);
 	localStorage.setItem('pg.tools.'+options.id, optionsJSON);
 }
 

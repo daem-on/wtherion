@@ -9,7 +9,7 @@ enum ProcessingState {
 let state: ProcessingState = 0;
 
 function createLayer(name?: string): paper.Layer {
-	let l = pg.layer.addNewLayer(name ?? "therion.xviLayer");
+	const l = pg.layer.addNewLayer(name ?? "therion.xviLayer");
 	l.locked = true;
 	l.data.isGuideLayer = true;
 	l.data.xviLayer = true;
@@ -17,9 +17,9 @@ function createLayer(name?: string): paper.Layer {
 }
 
 export function requestImportXVI(filename: string, x: number, y: number) {
-	let input = document.createElement("input");
+	const input = document.createElement("input");
 	input.type = "file";
-	let layer = createLayer();
+	const layer = createLayer();
 	layer.data.moveTo = [x, y];
 	input.onchange = fileProcessor(layer);
 	input.accept = ".xvi";
@@ -28,7 +28,7 @@ export function requestImportXVI(filename: string, x: number, y: number) {
 
 function fileProcessor(layer: paper.Layer): (event) => void {
 	return (event) => {
-		var reader = new FileReader();
+		const reader = new FileReader();
 		reader.readAsText(event.target.files[0]);
 		reader.onload = function () {
 			importXVI(reader.result as string, layer);
@@ -37,7 +37,7 @@ function fileProcessor(layer: paper.Layer): (event) => void {
 }
 
 export function importXVI(source: string, existingLayer?: paper.Layer) {
-	let layer = existingLayer ?? createLayer();
+	const layer = existingLayer ?? createLayer();
 
 	for (let line of source.split("\n")) {
 		line = line.trim();
@@ -47,16 +47,16 @@ export function importXVI(source: string, existingLayer?: paper.Layer) {
 		} else if (state === 1) {
 			if (line.startsWith("}")) {state = 0; continue;}
 
-			let [x, y, n] = line.slice(1, line.length-1).split(" ").filter(i => i);
+			const [x, y, n] = line.slice(1, line.length-1).split(" ").filter(i => i);
 			createStation(x, y, n);
 		} else if (state === 2) {
 			if (line.startsWith("}")) {state = 0; continue;}
 
-			let [x1, y1, x2, y2] = line.slice(1, line.length-1).split(" ").filter(i => i);
+			const [x1, y1, x2, y2] = line.slice(1, line.length-1).split(" ").filter(i => i);
 			createShot(x1, y1, x2, y2);
 		}
 	}
-	let group = new paper.Group([...layer.children]);
+	new paper.Group([...layer.children]);
 	pg.layerPanel.updateLayerList();
 	if (layer.data.moveTo) layer.translate(
 		new paper.Point(layer.data.moveTo[0], layer.data.moveTo[1])
@@ -64,7 +64,7 @@ export function importXVI(source: string, existingLayer?: paper.Layer) {
 }
 
 function createStation(x: string, y: string, n: string) {
-	let circle = new paper.Shape.Circle({
+	const circle = new paper.Shape.Circle({
 		center: new paper.Point(
 			Number.parseFloat(x),
 			-Number.parseFloat(y)
@@ -79,7 +79,7 @@ function createStation(x: string, y: string, n: string) {
 }
 
 function createShot(x1: string, y1: string, x2: string, y2: string) {
-	let path = new paper.Path({
+	new paper.Path({
 		segments: [
 			[Number.parseFloat(x1), -Number.parseFloat(y1)],
 			[Number.parseFloat(x2), -Number.parseFloat(y2)]

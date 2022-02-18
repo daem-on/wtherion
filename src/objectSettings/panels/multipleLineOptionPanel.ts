@@ -38,20 +38,20 @@ const components: componentList = {
 }
 
 function modifyObject() {
-	for (let option in optionsCache) {
+	for (const option in optionsCache) {
 		if (optionsCache[option] !== "") {
-			for (let line of lineSettingsArray)
+			for (const line of lineSettingsArray)
 				line[option] = optionsCache[option];
 		}
 	}
-	for (let line of lineArray) pg.editTH2.drawLine(line);
+	for (const line of lineArray) pg.editTH2.drawLine(line);
 }
 
 export default function(lines: paper.Path[]): objectOptionPanelConfig {
 	lineArray = lines;
 	lineSettingsArray = [];
 	optionsCache = defaultOptions();
-	for (let line of lines)
+	for (const line of lines)
 		lineSettingsArray.push(getSettings(line) as LineSettings);
 
 	return {

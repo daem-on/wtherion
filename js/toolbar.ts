@@ -11,8 +11,8 @@ export type PGToolOptions = {
 };
 
 type PGTool = {
-	activateTool: Function,
-	deactivateTool: Function,
+	activateTool: () => void,
+	deactivateTool: () => void,
 	options: PGToolOptions
 }
 
@@ -25,23 +25,23 @@ type ToolConstructor = {
 let activeTool: PGTool;
 let previousTool: PGTool;
 
-var setup = function() {
+const setup = function() {
 	setupToolList();
 };
 
 
-var setupToolList = function() {
-	var toolList= pg.tools.getToolList();
-	var $toolsContainer = jQuery('.toolsContainer');
+const setupToolList = function() {
+	const toolList= pg.tools.getToolList();
+	const $toolsContainer = jQuery('.toolsContainer');
 	
 	jQuery.each(toolList, function(index, tool) {
 		if(tool.type == 'hidden') return true;
 		
-		var shortCutInfo = '';
+		let shortCutInfo = '';
 		if(tool.usedKeys && tool.usedKeys.toolbar != '') {
 			shortCutInfo = ' ('+(tool.usedKeys.toolbar).toUpperCase()+')';
 		}
-		var $tool = jQuery('<div class="tool_'+tool.id+' tool" data-id="'+tool.id+'" title="'+tool.name+shortCutInfo+'">');
+		const $tool = jQuery('<div class="tool_'+tool.id+' tool" data-id="'+tool.id+'" title="'+tool.name+shortCutInfo+'">');
 		$tool.css({'background-image': 'url(assets/tools/tool_'+tool.id+'.svg)'});
 		$tool.click(function() {
 			switchTool(tool.id);
@@ -62,21 +62,21 @@ var setupToolList = function() {
 
 
 
-var getActiveTool = function() {
+const getActiveTool = function() {
 	return activeTool;
 };
 
 
-var getPreviousTool = function() {
+const getPreviousTool = function() {
 	return previousTool;
 };
 
-var switchTool = function(toolID: string, forced?: boolean) {
+const switchTool = function(toolID: string, forced?: boolean) {
 	try {
-		let opts = pg.tools.getToolInfoByID(toolID);
+		const opts = pg.tools.getToolInfoByID(toolID);
 		let tool: PGTool;
 		{
-			let toolEntry: PGTool | ToolConstructor = pg.tools.tools[toolID];
+			const toolEntry: PGTool | ToolConstructor = pg.tools.tools[toolID];
 			if (typeof toolEntry === "function") tool = new toolEntry();
 			else tool = toolEntry;
 		}
@@ -110,14 +110,14 @@ var switchTool = function(toolID: string, forced?: boolean) {
 };
 
 
-var resetTools = function() {
+const resetTools = function() {
 	if(activeTool !== undefined && activeTool !== null) {
 		try {
 			activeTool.deactivateTool();
 		} catch(e) {
 			// this tool has no (optional) deactivateTool function
 		}
-		for(var i=0; i < paper.tools.length; i++) {
+		for(let i=0; i < paper.tools.length; i++) {
 			paper.tools[i].remove();
 		}
 	}
@@ -126,7 +126,7 @@ var resetTools = function() {
 };
 
 
-var setDefaultTool = function() {
+const setDefaultTool = function() {
 	switchTool('select');
 };
 	

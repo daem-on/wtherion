@@ -21,7 +21,7 @@ jQuery(window).on("load", function() {
 		function () {
 			jQuery(this).remove();
 		});
-	;
+	
 });
 
 if (module.hot) {

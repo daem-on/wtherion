@@ -8,8 +8,8 @@ function generateId() {
 }
 
 export function processArea(item: paperExportedPath) {
-	let areaSettings = getSettings(item as any) as AreaSettings;
-	let lineSettings = areaSettings.lineSettings;
+	const areaSettings = getSettings(item as any) as AreaSettings;
+	const lineSettings = areaSettings.lineSettings;
 
 	if (lineSettings.id === "")
 		lineSettings.id = generateId();

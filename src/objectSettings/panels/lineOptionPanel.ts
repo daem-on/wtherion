@@ -6,7 +6,7 @@ import pg from "../../init";
 import subtypeList from "../../../js/res/subtype-list.json";
 import { wallTypes } from "../../../js/res/wallTypes";
 	
-let optionsCache = {
+const optionsCache = {
 	reverse: undefined,
 	clip: undefined,
 	outline: undefined,
@@ -105,7 +105,7 @@ const components: componentList = {
 }
 	
 export default function(line: paper.Path): objectOptionPanelConfig {
-	let settings = getSettings(line) as LineSettings;
+	const settings = getSettings(line) as LineSettings;
 	
 	for (const key in optionsCache) {
 		if (Object.prototype.hasOwnProperty.call(optionsCache, key)) {
@@ -118,7 +118,7 @@ export default function(line: paper.Path): objectOptionPanelConfig {
 		case "water-flow": optionsCache._subtypeWater = settings.subtype; break;
 	}
 	
-	let modifyObject = () => {
+	const modifyObject = () => {
 		for (const key in optionsCache) {
 			if (Object.prototype.hasOwnProperty.call(optionsCache, key)) {
 				if (optionsCache[key] !== settings[key]) {

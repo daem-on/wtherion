@@ -10,7 +10,7 @@ import * as layerPanel from "./layerPanel";
 export function setup() {
 	setupNavigationLogic();
 	setupFileSection();
-};
+}
 
 
 function setupNavigationLogic() {
@@ -19,7 +19,7 @@ function setupNavigationLogic() {
 	// submenu. also shows/hides inputblocker in the background (transparent)
 	jQuery('#appNav .topMenu>li').off('click').on('click', function(e) {
 		e.stopPropagation();
-		var $button = jQuery(this);
+		const $button = jQuery(this);
 		jQuery('#appNav .topMenu>li').not($button).removeClass('active');
 		jQuery('#appNav .subMenu').hide();
 		
@@ -40,7 +40,7 @@ function setupNavigationLogic() {
 	
 	jQuery('#appNav .subMenu .hasSubSubMenu').off('click').on('click', function(e) {
 		e.stopPropagation();
-		var $subSubMenu = jQuery(this).children('ul');
+		const $subSubMenu = jQuery(this).children('ul');
 		$subSubMenu.toggleClass('active');
 	});
 	
@@ -55,7 +55,7 @@ function setupNavigationLogic() {
 		hideMenus();
 	});
 	
-};
+}
 
 
 function closeMainMenu() {
@@ -63,7 +63,7 @@ function closeMainMenu() {
 	jQuery('.subMenu').hide();
 	jQuery('.subSubMenu').removeClass('active');
 	jQuery('#menuInputBlocker').hide();
-};
+}
 
 
 function setupFileSection() {
@@ -104,9 +104,9 @@ function setupFileSection() {
 		});
 	});
 
-};
+}
 
-export let handlers = {
+export const handlers = {
 	
 	undo: () => pg.undo.undo(),
 	
@@ -133,14 +133,14 @@ export let handlers = {
 	exportTH2: exportTH2,
 			
 	importImageFromURL: function() {
-		var url = prompt("Paste URL to Image (jpg, png, gif)", "http://");
+		const url = prompt("Paste URL to Image (jpg, png, gif)", "http://");
 		if(url) {
 			pg.import.importAndAddExternalImage(url);
 		}
 	},
 	
 	importSVGFromURL: function () {
-		var url = prompt("Paste URL to SVG", "http://");
+		const url = prompt("Paste URL to SVG", "http://");
 		if (url) {
 			pg.import.importAndAddSVG(url);
 		}
@@ -176,23 +176,23 @@ export let handlers = {
 
 
 export function setupToolEntries(entries) {
-	var $toolMenu = jQuery('#toolSubMenu');		
+	const $toolMenu = jQuery('#toolSubMenu');		
 	$toolMenu.empty().parent().removeClass('empty');
-	var $subMenuAttachParent = null;
+	let $subMenuAttachParent = null;
 	jQuery.each(entries, function(index, entry) {
 		if(entry.type === 'title') {
 			$toolMenu.append(jQuery('<li class="space"></li>'));
-			var $subSubMenuButton = jQuery('<li class="hasSubSubMenu">'+entry.text+'</li>');
+			const $subSubMenuButton = jQuery('<li class="hasSubSubMenu">'+entry.text+'</li>');
 			$subMenuAttachParent = jQuery('<ul class="subSubMenu">');
 			$subSubMenuButton.append($subMenuAttachParent);
 			$toolMenu.append($subSubMenuButton);
 			
 		} else if(entry.type === 'button') {
-			var classString = entry.class ? ' '+entry.class : '' ;
-			var $toolButton = jQuery('<li class="button'+classString+'" data-click="'+entry.click+'">'+entry.label+'</li>');
+			const classString = entry.class ? ' '+entry.class : '' ;
+			const $toolButton = jQuery('<li class="button'+classString+'" data-click="'+entry.click+'">'+entry.label+'</li>');
 			
 			$toolButton.on("click", function() {
-				var func = jQuery(this).attr('data-click');
+				const func = jQuery(this).attr('data-click');
 				pg.helper.executeFunctionByName(func, window);
 				setTimeout(function() {
 					hideMenus();
@@ -207,12 +207,12 @@ export function setupToolEntries(entries) {
 		
 	});
 	setupNavigationLogic();
-};
+}
 
 
 export function clearToolEntries() {
 	jQuery('#toolSubMenu').empty().parent().addClass('empty');
-};
+}
 
 
 export function showContextMenu(event) {
@@ -225,13 +225,13 @@ export function showContextMenu(event) {
 		// create, append and position context menu for object context
 		jQuery('body').append("<nav class='appNav' id='appNavContextMenu'></nav>");
 		
-		var $menu = jQuery('#toolSubMenu')
+		const $menu = jQuery('#toolSubMenu')
 			.clone(true)
 			.appendTo('#appNavContextMenu')
 			.show();
 		
-		var menuPosY = event.pageY;
-		var diff = (jQuery(document).height() - event.pageY) - $menu.outerHeight();
+		let menuPosY = event.pageY;
+		const diff = (jQuery(document).height() - event.pageY) - $menu.outerHeight();
 		if(diff < 0) {
 			menuPosY += diff - 10; 
 		}
@@ -243,7 +243,7 @@ export function showContextMenu(event) {
 		//todo: create context menu for document context
 	}
 
-};
+}
 
 function hideMenus() {
 	jQuery('#appNav .topMenu>li').removeClass('active');
@@ -251,7 +251,7 @@ function hideMenus() {
 	jQuery('#appNav .subMenu').hide();
 	jQuery('#menuInputBlocker').hide();
 	hideContextMenu();
-};
+}
 
 
 export function hideContextMenu() {
@@ -260,11 +260,11 @@ export function hideContextMenu() {
 	jQuery('body>#appNavContextMenu').remove();
 	jQuery('#menuInputBlocker').hide();
 	
-};
+}
 	
 
 function showAboutModal() {
-	var html = `
+	const html = `
 		<img src="assets/logo-cropped.png" width=600>
 		<p style="margin: 0.5em;">
 			<b style="font-weight: bold">wtherion</b>
@@ -276,5 +276,5 @@ function showAboutModal() {
 	`;
 	pg.modal.floater('appInfoWindow', 'About', html, 600, 100);
 	jQuery("#appInfoWindow").css("padding", 0);
-};
+}
 

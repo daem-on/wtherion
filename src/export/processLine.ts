@@ -5,7 +5,6 @@ import { addText, toGlobal, addWhitespace } from "./exportTH2";
 export type paperExportedPath = {
 	closed: boolean;
 	segments: segment[];
-	data: { therionData: {}; };
 };
 
 type cornerSegment = [x: number, y: number];
@@ -16,18 +15,18 @@ function isCurved(segment: segment): segment is curvedSegment {
 }
 
 export function processLine(item: paperExportedPath, settings?: LineSettings) {
-	let segments = item.segments;
+	const segments = item.segments;
 	if (!segments || segments.length < 2)
 		return;
 
-	let lineSettings = settings || getSettings(item as any) as LineSettings;
-	let subtypes = lineSettings.subtypes;
-	let segmentSettings = lineSettings.segmentSettings;
+	const lineSettings = settings || getSettings(item as any) as LineSettings;
+	const subtypes = lineSettings.subtypes;
+	const segmentSettings = lineSettings.segmentSettings;
 
 	let optionsString = "";
 	{
-		let s = lineSettings;
-		let o = [];
+		const s = lineSettings;
+		const o = [];
 		o.push(s.type);
 		if (s.id !== "")
 			o.push("-id " + s.id);
@@ -46,7 +45,6 @@ export function processLine(item: paperExportedPath, settings?: LineSettings) {
 		// // not sure what's up with this, apparently can't be set here
 		// if (s.size !== undefined && s.size !== 0)
 		// 	o.push("-size " + s.size);
-		if (s.otherSettings !== "" && !s.otherSettings) debugger;
 		if (s.otherSettings !== "")
 			o.push(s.otherSettings.replace(";", "\n"));
 		optionsString = o.join(" ");
@@ -59,7 +57,7 @@ export function processLine(item: paperExportedPath, settings?: LineSettings) {
 		addText("close on");
 
 	for (let i = 0; i < segments.length + (item.closed ? 1 : 0); i++) {
-		let output = [];
+		const output = [];
 		const current = segments.at(i % segments.length);
 		const last = segments.at(i - 1);
 
@@ -91,6 +89,6 @@ export function processLine(item: paperExportedPath, settings?: LineSettings) {
 	addText("endline");
 }
 export function processCompoundPath(item) {
-	for (let child of item.children)
+	for (const child of item.children)
 		processLine(child);
 }

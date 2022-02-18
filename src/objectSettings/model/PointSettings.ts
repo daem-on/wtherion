@@ -19,7 +19,7 @@ export default class PointSettings {
 	id: string;
 
 	static defaultSettings(): PointSettings {
-		let ls = new PointSettings();
+		const ls = new PointSettings();
 		ls.type = "station";
 		ls.otherSettings = "";
 		ls.name = "";

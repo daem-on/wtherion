@@ -9,7 +9,7 @@ type component = {
 	label?: string,
 	options?: string[],
 	optionValuePairs?: [string, string|number][],
-	click?: Function,
+	click?: () => void,
 	maxWidth?: any,
 	minWidth?: any,
 	text?: string,
@@ -31,19 +31,19 @@ type optionsType = {
 export default {
 	
 	setup(options: optionsType, components: componentList, changeCallback: () => void) {
-		let panelTitle = options.name || "Settings";
+		const panelTitle = options.name || "Settings";
 		
-		var $panel = jQuery('<div class="toolOptionPanel">');
-		var $title = jQuery(`<h3 class="panelTitle">${panelTitle}</h3>`);
-		var $options = jQuery('<div class="options">');
+		const $panel = jQuery('<div class="toolOptionPanel">');
+		const $title = jQuery(`<h3 class="panelTitle">${panelTitle}</h3>`);
+		const $options = jQuery('<div class="options">');
 		
 		let lastSubSection: JQuery<HTMLElement> = null;
 		jQuery.each(components, function(key: string, comp) {
-			var $optionSection = jQuery(`<div class="option-section" data-id="${key}">`);
-			var $label = jQuery(`<label for="${key}">${comp.label}</label>`);
-			var $input: JQuery<HTMLInputElement>;
-			var $button: JQuery<HTMLButtonElement>;
-			var $sectionTitle: JQuery<HTMLTitleElement>;
+			const $optionSection = jQuery(`<div class="option-section" data-id="${key}">`);
+			const $label = jQuery(`<label for="${key}">${comp.label}</label>`);
+			let $input: JQuery<HTMLInputElement>;
+			let $button: JQuery<HTMLButtonElement>;
+			let $sectionTitle: JQuery<HTMLTitleElement>;
 
 			if (comp.tooltip) $label.attr("title", comp.tooltip);
 
@@ -57,7 +57,7 @@ export default {
 				break;
 			case 'float':
 			case 'int':
-				var minAttr = '';
+				let minAttr = '';
 				if(comp.min != undefined && comp.type == 'int') {
 					minAttr = ` min="${parseInt(comp.min)}"`;
 					
@@ -71,7 +71,7 @@ export default {
 				$input = jQuery(`<select data-type="${comp.type}" name="${key}">`);
 
 				if (comp.options) {
-					for (let value of comp.options) {
+					for (const value of comp.options) {
 						if (typeof value === "string")
 							$input.append(createOption(value, value, options[key]));
 						else $input.append(
@@ -79,7 +79,7 @@ export default {
 						);
 					}
 				} else if (comp.optionValuePairs) {
-					for (let [display, value] of comp.optionValuePairs)
+					for (const [display, value] of comp.optionValuePairs)
 						$input.append(createOption(value, display, options[key]));
 				}
 
@@ -87,19 +87,19 @@ export default {
 
 				break;
 			case 'customList':
-				let $wrapper = jQuery(`<div class="custom-select"></div>`);
+				const $wrapper = jQuery(`<div class="custom-select"></div>`);
 				$input = jQuery(`<input name="${key}" value="${options[key] ?? ""}">`);
-				let $options = jQuery(`<div class="customListOptions"></div>`)
+				const $options = jQuery(`<div class="customListOptions"></div>`)
 
 				if (comp.options) {
-					for (let value of comp.options)
+					for (const value of comp.options)
 					$options.append(createOption(value, value, options[key]));
 				}
 				$wrapper.append($input, $options);
 				constructSelect($wrapper[0] as HTMLDivElement, options[key], comp.imageRoot);
 				break;
 			case 'text':
-				let val = options[key] ?? "";
+				const val = options[key] ?? "";
 				$input = jQuery(`<input type="text" id="textToolInput" data-type="${comp.type}" name="${key}" value="${val}">`);
 
 				break;
@@ -116,17 +116,17 @@ export default {
 			if($input) {
 				// handle input changes by the user
 				$input.on('keyup blur change mousewheel', function(e) {
-					var val;
+					let val;
 					if(e.target.type == 'checkbox') {
 						val = e.target.checked;
 					} else if (e.target.type == "text") {
 						val = e.target.value;
 					} else if(e.target.type == 'number') {
-						var dataType = e.target.dataset.type;
+						const dataType = e.target.dataset.type;
 
 						if(dataType == 'int') {
 							val = parseInt(e.target.value);
-							var min = parseInt(jQuery(this).attr('min'));
+							const min = parseInt(jQuery(this).attr('min'));
 
 							if(!jQuery.isNumeric(val)) {
 								val = min;
@@ -137,7 +137,7 @@ export default {
 
 						} else if(dataType == 'float') {
 							val = parseFloat(e.target.value);
-							var min = parseFloat(jQuery(this).attr('min'));
+							const min = parseFloat(jQuery(this).attr('min'));
 							if(!jQuery.isNumeric(val)) {
 								val = min;
 							} if(min != undefined && min > val) {
@@ -170,7 +170,7 @@ export default {
 				$optionSection.addClass("options");
 
 				$sectionTitle.on("click", function() {
-					let p = jQuery(this).parent();
+					const p = jQuery(this).parent();
 					if (p.hasClass("collapsed")) p.removeClass("collapsed")
 					else p.addClass("collapsed")
 				});
@@ -197,7 +197,7 @@ export default {
 			// }
 		});
 
-		var $resetButton = jQuery('<button class="toolOptionResetButton" title="Reset Tool Settings">R</button>').click(function() {
+		const $resetButton = jQuery('<button class="toolOptionResetButton" title="Reset Tool Settings">R</button>').click(function() {
 			if(confirm('Reset tool options to default?')) {
 				pg.tools.deleteLocalOptions(options.id);
 				pg.toolbar.switchTool(options.id, true);
@@ -221,7 +221,7 @@ export default {
 			jQuery.each(components, function(reqid, comp){
 				if(comp.requirements) {
 					jQuery.each(comp.requirements, function(reqkey, req){
-						var $el = jQuery('.option-section[data-id="'+reqid+'"]');
+						const $el = jQuery('.option-section[data-id="'+reqid+'"]');
 						if(compareInputRequirement(options[reqkey], req)) {
 							$el.removeClass('hidden');
 						} else {
@@ -230,14 +230,14 @@ export default {
 					});
 				}
 			});
-		};
+		}
 		
 		return $panel;
 	},
 	
 	update(options: optionsType) {
 		jQuery.each(options, function(key: string, opt) {
-			var $el = jQuery(`[name="${key}"]`);
+			const $el = jQuery(`[name="${key}"]`);
 			if($el.attr('data-type') == 'int') {
 				$el.val(opt);
 			} else if($el.attr('data-type') == 'float') {
@@ -259,14 +259,14 @@ function compareInputRequirement(value: any, requirement: any) {
 }
 
 function createOption(value: string | number, display: string, selected: string | number) {
-	var $opt = jQuery(`<option value="${value}">${display}</option>`);
+	const $opt = jQuery(`<option value="${value}">${display}</option>`);
 	if (value === selected) $opt.prop('selected', true);
 	return $opt;
 }
 
 function createOptionCategory(name: string, category: Array<string>, selected: string) {
-	var $category = jQuery(`<optgroup label="${name}"></optgroup>`);
-	for (let option of category)
+	const $category = jQuery(`<optgroup label="${name}"></optgroup>`);
+	for (const option of category)
 		$category.append(createOption(option, option, selected));
 	return $category;
 }

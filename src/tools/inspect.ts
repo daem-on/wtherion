@@ -1,22 +1,19 @@
-import { updateWindow } from "../objectSettings/objectOptionPanel";
 import pg from "../init";
-import { componentList } from "../../js/toolOptionPanel";
 import getSettings from "../objectSettings/model/getSettings";
 
-var tool: paper.Tool;
-var keyModifiers = {};
+let tool: paper.Tool;
 
-export let options = {};
+export const options = {};
 
-var menuEntries = {};
+const menuEntries = {};
 
 function objectToString(object) {
-	let s = getSettings(object);
+	const s = getSettings(object);
 	if (!s) return "Unrecognized";
 
 	switch (s.className) {
 		case "LineSettings":
-			let subtype = s.subtype ? ":"+s.subtype : ""
+			const subtype = s.subtype ? ":"+s.subtype : ""
 			return `Line ${s.type + subtype} ${s.invisible ? "invisible" : ""}`
 		case "AreaSettings":
 			return `Area ${s.type} with line ${s.lineSettings.type}`
@@ -30,7 +27,7 @@ export function activateTool() {
 	pg.selection.clearSelection();	
 	tool = new paper.Tool();
 			
-	var hitOptions = {
+	const hitOptions = {
 		segments: true,
 		stroke: true,
 		curves: true,
@@ -40,19 +37,19 @@ export function activateTool() {
 		tolerance: 3
 	};
 	
-	var hitType;
+	let hitType;
 	
 	tool.onMouseDown = function(event) {
 	};
 	
 	tool.onMouseMove = function(event: paper.ToolEvent) {
 		pg.hover.handleHoveredItem(hitOptions, event);
-		let hovered = pg.hover.getHoveredItem();
+		const hovered = pg.hover.getHoveredItem();
 		if (hovered) {
 			pg.statusbar.showCustom(objectToString(hovered));
 		} else {
-			let x = event.point.x.toFixed(1);
-			let y = event.point.y.toFixed(1);
+			const x = event.point.x.toFixed(1);
+			const y = event.point.y.toFixed(1);
 			pg.statusbar.showCustom(`Position: ${x}, ${y}`);
 		}
 	};
@@ -75,10 +72,10 @@ export function activateTool() {
 	pg.menu.setupToolEntries(menuEntries);
 	
 	tool.activate();
-};
+}
 
 
 export function deactivateTool() {
 	pg.hover.clearHoveredItem();
 	pg.menu.clearToolEntries();
-};
+}

@@ -5,7 +5,7 @@ import getSettings from "../objectSettings/model/getSettings";
 import PointSettings from "../objectSettings/model/PointSettings";
 
 const types = [];
-for (let category in symbolList)
+for (const category in symbolList)
 	types.push(symbolList[category]);
 
 export let options = {
@@ -14,7 +14,7 @@ export let options = {
 	stationName: "",
 };
 
-let components: componentList = {
+const components: componentList = {
 	type: {
 		type: "list",
 		label: "Type",
@@ -30,7 +30,7 @@ let components: componentList = {
 }
 
 export function activateTool() {
-	let tool = new paper.Tool();
+	const tool = new paper.Tool();
 
 	// get options from local storage if present
 	options = pg.tools.getLocalOptions(options) as any;
@@ -38,8 +38,8 @@ export function activateTool() {
 	tool.onMouseDown = function(event: any) {
 		if (event.event.button > 0) return;
 
-		let point = pg.editTH2.createPoint(event.point);
-		let settings = getSettings(point) as PointSettings;
+		const point = pg.editTH2.createPoint(event.point);
+		const settings = getSettings(point) as PointSettings;
 		settings.type = options.type;
 		if (options.type === "station") {
 			settings.name = options.stationName;
@@ -57,7 +57,7 @@ export function activateTool() {
 
 function increaseStationNumber() {
 	if (options.stationName.includes("@")) {
-		let split = options.stationName.split("@")
+		const split = options.stationName.split("@")
 		options.stationName = (Number.parseInt(split[0])+1) + "@" + split[1];
 		pg.tools.setLocalOptions(options)
 		pg.toolOptionPanel.update(options);

@@ -11,7 +11,7 @@ import multiplePointOptionPanel from "./panels/multiplePointOptionPanel";
 import * as wtConfig from "../configManagement";
 
 export type objectOptionPanelConfig = {
-	options: {},
+	options: Record<string, any>,
 	components: componentList,
 	callback: () => void
 }
@@ -21,7 +21,7 @@ function removeWindow() {
 }
 
 export function updateWindow() {
-	let selected = pg.selection.getSelectedItems() as PaperItemType[];
+	const selected = pg.selection.getSelectedItems() as PaperItemType[];
 	
 	removeWindow();
 	
@@ -31,8 +31,8 @@ export function updateWindow() {
 
 	// Multiple selection
 	else if (selected.length > 1) {
-		let className: string = selected[0].className;
-		for (let item of selected) {
+		const className: string = selected[0].className;
+		for (const item of selected) {
 			if (item.className !== className) return;
 		}
 		if (pg.toolbar.getActiveTool().options.id == "select")
@@ -50,7 +50,7 @@ export function updateWindow() {
 		if (pg.toolbar.getActiveTool().options.id == "detailselect") {
 			// ensure only one segment is editable
 			let selection = false;
-			for (let segment of (selected[0] as paper.Path).segments) {
+			for (const segment of (selected[0] as paper.Path).segments) {
 				if (segment.selected) {
 					if (selection) return;
 					else selection = true;
@@ -65,7 +65,7 @@ export function updateWindow() {
 		
 		// Non-detail select
 		else if (isPath(selected[0])) {
-			let settings = getSettings(selected[0])
+			const settings = getSettings(selected[0])
 			if (settings.className == "LineSettings")
 				config = lineOptionPanel(selected[0] as paper.Path);
 			else if (settings.className == "AreaSettings")

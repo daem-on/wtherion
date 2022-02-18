@@ -63,13 +63,15 @@ export function processLine(item: paperExportedPath, settings?: LineSettings) {
 		const current = segments.at(i % segments.length);
 		const last = segments.at(i - 1);
 
-		if (isCurved(last)) {
-			if (isCurved(current))
-				output.push(toGlobal(last[0], last[2]), toGlobal(current[0], current[1]));
-			else
-				output.push(toGlobal(last[0], last[2]), toGlobal(current));
-		} else if (isCurved(current))
-			output.push(toGlobal(last), toGlobal(current[0], current[1]));
+		if (i !== 0 || item.closed) {
+			if (isCurved(last)) {
+				if (isCurved(current))
+					output.push(toGlobal(last[0], last[2]), toGlobal(current[0], current[1]));
+				else
+					output.push(toGlobal(last[0], last[2]), toGlobal(current));
+			} else if (isCurved(current))
+				output.push(toGlobal(last), toGlobal(current[0], current[1]));
+		}
 
 		output.push(isCurved(current) ? toGlobal(current[0]) : toGlobal(current));
 

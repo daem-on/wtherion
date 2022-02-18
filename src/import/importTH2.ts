@@ -153,8 +153,9 @@ function endLine() {
 			_currentPath.add(new paper.Point(toPoint(segment)));
 			lastpoint = segment;
 		} else if (segment.length == 6) {
-			_currentPath.lastSegment.handleOut =
-				toPoint(segment.slice(0, 2), lastpoint);
+			if (_currentPath.lastSegment)
+				_currentPath.lastSegment.handleOut =
+					toPoint(segment.slice(0, 2), lastpoint);
 			_currentPath.add(new paper.Segment(
 				toPoint(segment.slice(4, 6)),
 				toPoint(segment.slice(2, 4), segment.slice(4, 6)),

@@ -1,0 +1,94 @@
+import LineSettings from "../objectSettings/model/LineSettings";
+import getSettings from "../objectSettings/model/getSettings";
+import { addText, toGlobal, addWhitespace } from "./exportTH2";
+
+export type paperExportedPath = {
+	closed: boolean;
+	segments: segment[];
+	data: { therionData: {}; };
+};
+
+type cornerSegment = [x: number, y: number];
+type curvedSegment = [center: number[], handleIn: number[], handleOut: number[]];
+type segment = cornerSegment | curvedSegment;
+function isCurved(segment: segment): segment is curvedSegment {
+	return segment.length >= 3;
+}
+
+export function processLine(item: paperExportedPath, settings?: LineSettings) {
+	let segments = item.segments;
+	if (!segments || segments.length < 2)
+		return;
+
+	let lineSettings = settings || getSettings(item as any) as LineSettings;
+	let subtypes = lineSettings.subtypes;
+	let segmentSettings = lineSettings.segmentSettings;
+
+	let optionsString = "";
+	{
+		let s = lineSettings;
+		let o = [];
+		o.push(s.type);
+		if (s.id !== "")
+			o.push("-id " + s.id);
+		if (s.subtype !== "")
+			o.push("-subtype " + s.subtype);
+		if (s.clip !== 0)
+			o.push("-clip " + ["", "on", "off"][s.clip]);
+		if (s.invisible === true)
+			o.push("-visibility off");
+		if (s.reverse === true)
+			o.push("-reverse on");
+		if (s.outline !== 0)
+			o.push("-outline " + ["", "in", "out", "none"][s.outline]);
+		if (s.place !== 0)
+			o.push("-place " + ["", "bottom", "top"][s.place]);
+		// // not sure what's up with this, apparently can't be set here
+		// if (s.size !== undefined && s.size !== 0)
+		// 	o.push("-size " + s.size);
+		if (s.otherSettings !== "" && !s.otherSettings) debugger;
+		if (s.otherSettings !== "")
+			o.push(s.otherSettings.replace(";", "\n"));
+		optionsString = o.join(" ");
+	}
+
+	addText("line " + optionsString);
+	addWhitespace(1);
+
+	if (item.closed)
+		addText("close on");
+
+	for (let i = 0; i < segments.length + (item.closed ? 1 : 0); i++) {
+		let output = [];
+		const current = segments.at(i % segments.length);
+		const last = segments.at(i - 1);
+
+		if (isCurved(last)) {
+			if (isCurved(current))
+				output.push(toGlobal(last[0], last[2]), toGlobal(current[0], current[1]));
+			else
+				output.push(toGlobal(last[0], last[2]), toGlobal(current));
+		} else if (isCurved(current))
+			output.push(toGlobal(last), toGlobal(current[0], current[1]));
+
+		output.push(isCurved(current) ? toGlobal(current[0]) : toGlobal(current));
+
+		addText(output.join(" "));
+		if (i in subtypes) {
+			addText("subtype " + subtypes[i]);
+		}
+		if (i in segmentSettings) {
+			addText(segmentSettings[i].replace(";", "\n"));
+		}
+	}
+
+	if (lineSettings.size !== undefined
+		&& lineSettings.size !== 0)
+		addText("size " + lineSettings.size);
+	addWhitespace(-1);
+	addText("endline");
+}
+export function processCompoundPath(item) {
+	for (let child of item.children)
+		processLine(child);
+}

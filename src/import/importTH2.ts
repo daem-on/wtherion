@@ -229,8 +229,12 @@ function applyAreas() {
 		for (let id of area.ids) {
 			if (id in _linesWithIds) {
 				let line = _linesWithIds[id]
-
+				
 				let oldSettings = getSettings(line);
+				if (oldSettings.className === "AreaSettings") {
+					console.warn("Seems like one line is included in multiple areas.");
+					continue;
+				}
 				line.data.therionData = AreaSettings.defaultSettings();
 				line.data.therionData.lineSettings = oldSettings;
 				line.data.therionData.type = area.type;

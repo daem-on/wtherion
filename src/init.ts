@@ -1,5 +1,4 @@
 import jQuery from "jquery";
-import settings from "../js/settings.js";
 import pgDocument from "../js/document.js";
 import layer from "../js/layer.js";
 import * as layerPanel from "../js/layerPanel.js";
@@ -36,7 +35,6 @@ import {setup as configSetup} from "./configManagement";
 // functions related to initializing pg
 
 export default {
-	settings: settings,
 	document: pgDocument,
 	layer: layer,
 	layerPanel: layerPanel,
@@ -72,8 +70,6 @@ export default {
 		jQuery.ajaxSetup({ cache: false });
 
 		configSetup();
-		
-		this.settings.setup();
 		this.document.setup();
 		this.layer.setup();
 		this.export.setup();
@@ -84,7 +80,6 @@ export default {
 		this.statusbar.setup();
 		this.input.setup();
 		this.undo.setup();
-		// this.codeEditor.setup();
 	}
 };
 

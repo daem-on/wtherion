@@ -1,6 +1,11 @@
 // TODO: merge with settings.js
 import defaultConfig from "../js/res/default-config.json";
+import versionConfig from "../versionconfig.json";
 let config: Record<string, any> = {}
+
+export function getVersionNumber() {
+	return versionConfig.appVersion;
+}
 
 export function exists(name: string) {
 	return config[name] !== undefined && config[name] !== null;

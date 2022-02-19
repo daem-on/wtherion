@@ -6,6 +6,7 @@ import pg from "../src/init";
 import { save, showLoadSelect, exportTH2, setSaveFileName } from "../src/saveManagement";
 import pgDocument from "../js/document";
 import * as layerPanel from "./layerPanel";
+import { getVersionNumber } from "../src/configManagement";
 
 export function setup() {
 	setupNavigationLogic();
@@ -159,8 +160,8 @@ export const handlers = {
 	},
 
 	resetSettings: function() {
-		if (confirm('Clear all document and tool settings?')) {
-			pg.settings.clearSettings();
+		if (confirm('Clear all data stored locally? (projects, settings)')) {
+			localStorage.clear();
 		}
 	},
 
@@ -268,7 +269,7 @@ function showAboutModal() {
 		<img src="assets/logo-cropped.png" width=600>
 		<p style="margin: 0.5em;">
 			<b style="font-weight: bold">wtherion</b>
-			version ${pg.settings.getVersionNumber()}.
+			version ${getVersionNumber()}.
 			Created by Csongor Zih, based on
 			<a href="https://github.com/w00dn/papergrapher" target="_blank">papergrapher</a>, created by Rolf Fleischmann.
 			Powered by <a href="http://paperjs.org/" target="_blank">Paper.js</a>. Published under the MIT license.

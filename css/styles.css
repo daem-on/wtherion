@@ -33,33 +33,6 @@ input, select {
 	display:none;
 }
 
-.loadingScreen {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: white;
-	opacity: 1;
-	z-index: 200;
-	transition: opacity 0.5s ease;
-}
-
-.loadingScreen.disabled {
-	opacity: 0;
-}
-
-.loadingScreen .panel {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	background-color: #444;
-	height: 31px;
-	color: #bbb;
-	padding: 0.5em 1.4em;
-}
-
 .zoom-in {
 	cursor: -webkit-zoom-in;
 	cursor: zoom-in;

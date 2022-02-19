@@ -5,7 +5,30 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         <title>wtherion</title>
-        
+        <meta name="description" content="A web-based Therion map editor">
+        <!-- Inlined style for loading screen -->
+        <style>
+            .loadingScreen {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: white;
+                opacity: 1;
+                z-index: 200;
+                transition: opacity 0.5s ease;
+                display: flex;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .loadingScreen.disabled {
+                display: none;
+            }
+        </style>
     </head>
     <body>
         <canvas id="paperCanvas" data-paper-resize="true" data-paper-hidpi="off"></canvas>

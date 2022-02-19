@@ -198,6 +198,19 @@ export function splitPathAtSelectedSegments() {
 	}
 }
 
+/**
+ * This function is borrowed straight from an older version
+ * of Paper.js, for some reason they just removed it.
+ * But we need it for splitting by segment index, so here it is.
+ */
+function split(path: paper.Path, index: number, time: number) {
+	let curve: paper.Curve;
+	const location = time === undefined ? index
+			: (curve = path.curves[index])
+				&& curve.getLocationAtTime(time);
+	return location != null ? path.splitAt(location) : null;
+}
+
 export function splitPathRetainSelection(path: paper.Path, index: number, deselectSplitSegments?: boolean): void {
 	const selectedPoints = [];
 	
@@ -212,8 +225,7 @@ export function splitPathRetainSelection(path: paper.Path, index: number, desele
 			selectedPoints.push(seg.point);
 		}
 	}
-	
-	const newPath = path.splitAt(index);
+	const newPath = split(path, index, 0);
 	if(!newPath) return;
 	if (path.data && path.data.therionData)
 			newPath.data = JSON.parse(JSON.stringify(path.data))

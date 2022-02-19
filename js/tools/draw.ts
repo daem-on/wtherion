@@ -11,7 +11,7 @@ import LineSettings from "../../src/objectSettings/model/LineSettings";
 export default function() {
 	let tool: paper.Tool;
 	
-	let options: any = {
+	let options = {
 		id: "draw",
 		type: "wall",
 		subtype: "",
@@ -21,10 +21,13 @@ export default function() {
 		lines: 3,
 		lineDistance: 10,
 		closePath: 'near start',
-		smoothPath : true
+		smoothPath : true,
+		simplifyPath : true
 	};
 
-	const components: componentList = {
+	type comp = componentList<Partial<typeof options> & {toolOptions}>;
+
+	const components: comp = {
 		type: {
 			type: "customList",
 			label: "%type%",
@@ -77,6 +80,10 @@ export default function() {
 		smoothPath: {
 			type: 'boolean',
 			label: '%draw.smoothPath%'
+		},
+		simplifyPath: {
+			type: 'boolean',
+			label: '%draw.simplifyPath%'
 		}
 	};
 
@@ -84,7 +91,7 @@ export default function() {
 		let paths: paper.Path[] = [];
 		
 		// get options from local storage if present
-		options = pg.tools.getLocalOptions(options);
+		options = pg.tools.getLocalOptions(options) as typeof options;
 		
 		tool = new paper.Tool();
 		
@@ -155,6 +162,7 @@ export default function() {
 					path.closePath();
 				}
 				if(options.smoothPath) path.smooth();
+				if(options.simplifyPath) path.simplify();
 				
 				if(lineCount > 1) {
 					group.addChild(path);

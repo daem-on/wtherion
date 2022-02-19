@@ -24,7 +24,7 @@ const optionsCache = {
 	otherSettings: undefined,
 };
 
-const components: componentList = {
+const components: componentList<any> = {
 	lineType: {
 		type: "customList",
 		label: "Outline Type",

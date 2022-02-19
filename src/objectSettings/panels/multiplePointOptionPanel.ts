@@ -17,7 +17,7 @@ let optionsCache = defaultOptions();
 let pointArray: paper.Shape[];
 let pointSettingsArray: PointSettings[];
 	
-const components: componentList = {
+const components: componentList<any> = {
 	type: {
 		type: "list",
 		label: "Type",

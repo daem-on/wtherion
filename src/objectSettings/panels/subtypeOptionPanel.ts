@@ -12,7 +12,7 @@ let optionsCache = {
 	
 let selectedSegment: paper.Segment = undefined;
 	
-const components: componentList = {
+const components: componentList<any> = {
 	lastSubtypeLabel: {
 		label: ""
 	},
@@ -42,7 +42,7 @@ const components: componentList = {
 	},
 }
 	
-const sizeComponent: componentList = {
+const sizeComponent: componentList<any> = {
 	size: {
 		type: "int",
 		label: "Size"

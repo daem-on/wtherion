@@ -15,7 +15,7 @@ let optionsCache = {
 
 let selectedSegment: paper.Segment = undefined;
 
-const components: componentList = {
+const components: componentList<any> = {
 	otherSettings: {
 		type: "text",
 		label: "Segment settings",

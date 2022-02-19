@@ -16,8 +16,10 @@ const defaultOptions = () => ({
 let optionsCache = defaultOptions();
 let lineArray: paper.Path[];
 let lineSettingsArray: LineSettings[];
+
+type comp = componentList<typeof optionsCache & {execute}>;
 	
-const components: componentList = {
+const components: comp = {
 	type: {
 		type: "customList",
 		label: "Type",

@@ -12,7 +12,7 @@ import * as wtConfig from "../configManagement";
 
 export type objectOptionPanelConfig = {
 	options: Record<string, any>,
-	components: componentList,
+	components: componentList<any>,
 	callback: () => void
 }
 

@@ -20,8 +20,8 @@ type component = {
 	},
 }
 
-export type componentList = {
-	[componentName: string]: component
+export type componentList<T> = {
+	[componentName in keyof T]: component
 }
 
 type optionsType = {
@@ -30,7 +30,7 @@ type optionsType = {
 
 export default {
 	
-	setup(options: optionsType, components: componentList, changeCallback: () => void) {
+	setup(options: optionsType, components: componentList<optionsType>, changeCallback: () => void) {
 		const panelTitle = options.name || "Settings";
 		
 		const $panel = jQuery('<div class="toolOptionPanel">');

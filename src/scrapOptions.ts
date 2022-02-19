@@ -10,7 +10,7 @@ const optionsCache = {
 	copyright: "",
 	otherSettings: ""
 };
-const components: componentList = {
+const components: componentList<typeof optionsCache> = {
 	projection: {
 		type: "list",
 		label: "Projection",

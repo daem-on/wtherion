@@ -14,7 +14,7 @@ export let options = {
 	stationName: "",
 };
 
-const components: componentList = {
+const components: componentList<Partial<typeof options>> = {
 	type: {
 		type: "list",
 		label: "Type",

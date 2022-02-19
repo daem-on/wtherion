@@ -45,6 +45,7 @@
 	"draw.lineDistance": "Line distance",
 	"draw.closePath": "Close path",
 	"draw.smoothPath": "Smooth path",
+	"draw.simplifyPath": "Simplify path",
 	"loading": "Loading ...",
 	"zoom": "Zoom",
 	"menu": {

@@ -12,14 +12,14 @@ import LineSettings from "../../src/objectSettings/model/LineSettings";
 export default function() {
 	let tool: paper.Tool;
 	
-	let options: any = {
+	let options = {
 		id: "draw",
 		type: "wall",
 		subtype: "",
 		size: 0,
 	};
 
-	const components: componentList = {
+	const components: componentList<Partial<typeof options>> = {
 		type: {
 			type: "customList",
 			label: "%type%",
@@ -45,7 +45,7 @@ export default function() {
 
 	const activateTool = function() {
 		tool = new paper.Tool();
-		options = pg.tools.getLocalOptions(options);
+		options = pg.tools.getLocalOptions(options) as typeof options;
 		
 		let path: paper.Path;
 

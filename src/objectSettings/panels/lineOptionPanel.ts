@@ -20,8 +20,9 @@ const optionsCache = {
 	_subtypeBorder: undefined,
 	_subtypeWater: undefined,
 };
-	
-const components: componentList = {
+type comp = componentList<typeof optionsCache & {advancedSection}>;
+
+const components: comp = {
 	type: {
 		type: "customList",
 		label: "%type%",

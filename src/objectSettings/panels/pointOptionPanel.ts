@@ -22,8 +22,9 @@ const optionsCache = {
 	value: undefined,
 	id: undefined,
 };
+type comp = componentList<typeof optionsCache & {advancedSection}>;
 
-const components: componentList = {
+const components: comp = {
 	type: {
 		// type: "customList",
 		// imageRoot: "assets/rendered/symbol",

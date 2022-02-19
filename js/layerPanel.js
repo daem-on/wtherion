@@ -26,7 +26,6 @@ export function toggleVisibility() {
 
 
 function setup() {
-	loadResources();
 	
 	var $panel = jQuery('<div class="layerPanel">');
 	var baseTopOffset = jQuery('.appNav').height();
@@ -198,17 +197,4 @@ function updateLayerValues() {
 			}
 		}
 	});
-};
-
-
-function loadResources() {
-	if(!jQuery('#layerPanelCSS').length) {
-		jQuery("<link />", {
-			href: "css/layerPanel.css",
-			rel: "stylesheet",
-			id: "layerPanelCSS"
-		}).appendTo("head", function() {
-			return true;
-		});
-	};
 };

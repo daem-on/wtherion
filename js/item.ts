@@ -65,7 +65,7 @@ export function setPositionInView(item, pos) {
 	item.position.y = paper.view.bounds.y + pos.y;
 }
 
-export function getRootItem(item) {
+export function getRootItem(item: paper.Item): paper.Item {
 	if(item.parent.className === 'Layer') {
 		return item;
 	} else {

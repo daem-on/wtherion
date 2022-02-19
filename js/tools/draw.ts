@@ -9,9 +9,9 @@ import { wallTypes } from "../res/wallTypes";
 import LineSettings from "../../src/objectSettings/model/LineSettings";
 
 export default function() {
-	var tool;
+	let tool: paper.Tool;
 	
-	var options: any = {
+	let options: any = {
 		id: "draw",
 		type: "wall",
 		subtype: "",
@@ -24,7 +24,7 @@ export default function() {
 		smoothPath : true
 	};
 
-	var components: componentList = {
+	const components: componentList = {
 		type: {
 			type: "customList",
 			label: "%type%",
@@ -80,15 +80,15 @@ export default function() {
 		}
 	};
 
-	var activateTool = function() {
-		var paths: paper.Path[] = [];
+	const activateTool = function() {
+		let paths: paper.Path[] = [];
 		
 		// get options from local storage if present
 		options = pg.tools.getLocalOptions(options);
 		
 		tool = new paper.Tool();
 		
-		var lineCount;
+		let lineCount: number;
 
 		tool.onMouseDown = function(event) {
 			if(event.event.button > 0) return;  // only first mouse button
@@ -101,11 +101,11 @@ export default function() {
 				lineCount = 1;
 			}
 		
-			for( var i=0; i < lineCount; i++) {
-				var path = paths[i];
+			for( let i=0; i < lineCount; i++) {
+				let path = paths[i];
 				path = pg.editTH2.createPath();
 				
-				let settings = getSettings(path) as LineSettings;
+				const settings = getSettings(path) as LineSettings;
 				settings.type = options.type;
 				if (["wall", "border", "water-flow"].includes(options.type))
 					settings.subtype = options.subtype;
@@ -120,10 +120,10 @@ export default function() {
 		tool.onMouseDrag = function(event) {
 			if(event.event.button > 0) return;  // only first mouse button
 						
-			var offset = event.delta;
+			const offset = event.delta;
 			offset.angle += 90;
-			for( var i=0; i < lineCount; i++) {
-				var path = paths[i];
+			for( let i=0; i < lineCount; i++) {
+				const path = paths[i];
 				offset.length = options.lineDistance * i;
 				path.add(event.middlePoint.add(offset));
 			}
@@ -140,14 +140,14 @@ export default function() {
 				return;
 			}
 
-			var group;
+			let group: paper.Group;
 			if(lineCount > 1) {
 				group = new paper.Group();
 			}
 
-			var nearStart = pg.math.checkPointsClose(paths[0].firstSegment.point, event.point, 30);
-			for( var i=0; i < lineCount; i++) {
-				var path = paths[i];
+			const nearStart = pg.math.checkPointsClose(paths[0].firstSegment.point, event.point, 30);
+			for( let i=0; i < lineCount; i++) {
+				const path = paths[i];
 				
 				if(options.closePath === 'near start' && nearStart) {
 					path.closePath();
@@ -182,4 +182,4 @@ export default function() {
 		activateTool:activateTool
 	};
 
-};
+}

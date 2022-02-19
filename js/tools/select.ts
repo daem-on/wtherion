@@ -6,21 +6,24 @@ import { default as getSettings } from "../../src/objectSettings/model/getSettin
 import { updateWindow } from "../../src/objectSettings/objectOptionPanel";
 import pg from "../../src/init";
 import paper from "paper";
+import LineSettings from "../../src/objectSettings/model/LineSettings";
+
+/** Apparently paper's types are wrong and don't include Event.event */
+type correctToolEvent = paper.ToolEvent & {event: MouseEvent};
 
 export default function() {
-	var tool;
-	var keyModifiers: Record<string, boolean> = {};
+	let tool: paper.Tool;
+	const keyModifiers: Record<string, boolean> = {};
 			
-	var boundsPath: paper.Path;
-	var boundsScaleHandles = [];
-	var boundsRotHandles = [];
-	var thPointRotHandle = null;
+	let boundsPath: paper.Path;
+	const boundsScaleHandles = [];
+	const boundsRotHandles = [];
 		
-	var options = {};
+	const options = {};
 	
-	var components = {};
+	const components = {};
 	
-	var menuEntries = {
+	const menuEntries = {
 		editTitle: {
 			type : 'title',
 			text : "%edit%"
@@ -117,12 +120,13 @@ export default function() {
 		}
 	};
 
-	var activateTool = function() {		
+	const activateTool = function() {		
 		setSelectionBounds();
 		preProcessSelection();
+		setSelectionBounds();
 		tool = new paper.Tool();
 
-		var hitOptions = {
+		const hitOptions = {
 			segments: true,
 			stroke: true,
 			curves: true,
@@ -131,31 +135,34 @@ export default function() {
 			tolerance: 8 / paper.view.zoom
 		};
 
-		var mode = 'none';
-		var selectionRect;
+		type selectToolMode = 
+			"none" | "scale" | "rotate" | "move" | "cloneMove" | "rectSelection";
+		let mode: selectToolMode = 'none';
+		let selectionRect: paper.Path;
 
-		var itemGroup;
-		var pivot;
-		var corner;
-		var origPivot;
-		var origSize;
-		var origCenter;
-		var scaleItems;
+		let itemGroup: paper.Group;
+		let pivot: paper.Point;
+		let corner: paper.Point;
+		let origPivot: paper.Point;
+		let origSize: paper.Point;
+		let origCenter: paper.Point;
+		let scaleItems: paper.Item[];
 		
-		var rotItems = [];
-		var rotGroupPivot;
-		var prevRot = [];
+		let rotItems: paper.Item[] = [];
+		let rotGroupPivot: paper.Point;
+		const prevRot: number[] = [];
 
-		tool.onMouseDown = function(event) {
+		tool.onMouseDown = function(event: correctToolEvent) {
 			if(event.event.button > 0) return;  // only first mouse button
 			pg.hover.clearHoveredItem();
 			
-			var hitResult = paper.project.hitTest(event.point, hitOptions);
+			const hitResult = paper.project.hitTest(event.point, hitOptions);
 			hit: if (hitResult) {
 				
-				if(hitResult.item.data && hitResult.item.data.isScaleHandle) {
+				if(hitResult.item.data?.isScaleHandle) {
 					mode = 'scale';
-					var index = hitResult.item.data.index;					
+					const index = hitResult.item.data.index;
+
 					pivot = boundsPath.bounds[getOpposingRectCornerNameByIndex(index)].clone();
 					origPivot = boundsPath.bounds[getOpposingRectCornerNameByIndex(index)].clone();
 					corner = boundsPath.bounds[getRectCornerNameByIndex(index)].clone();
@@ -163,7 +170,7 @@ export default function() {
 					origCenter = boundsPath.bounds.center;
 					scaleItems = pg.selection.getSelectedItems();
 					
-				} else if(hitResult.item.data && hitResult.item.data.isRotHandle) {
+				} else if(hitResult.item.data?.isRotHandle) {
 					mode = 'rotate';
 					if (boundsPath)
 						rotGroupPivot = boundsPath.bounds.center;
@@ -172,7 +179,7 @@ export default function() {
 					rotItems = pg.selection.getSelectedItems();
 					
 					jQuery.each(rotItems, function(i, item) {
-						prevRot[i] = (event.point.subtract(rotGroupPivot)).angle;
+						prevRot[i] = event.point.subtract(rotGroupPivot).angle;
 					});
 										
 				} else {
@@ -181,7 +188,7 @@ export default function() {
 					// also needs some special love for compound paths and groups,
 					// as their children are not marked as "selected"
 					if(!event.modifiers.shift) {
-						var root = pg.item.getRootItem(hitResult.item);
+						const root = pg.item.getRootItem(hitResult.item);
 						if(pg.item.isCompoundPathItem(root) || pg.group.isGroup(root)) {
 							if(!root.selected) {
 								pg.selection.clearSelection();
@@ -227,15 +234,15 @@ export default function() {
 			mode = 'rectSelection';
 		};
 
-		tool.onMouseMove = function(event) {			
+		tool.onMouseMove = function(event: correctToolEvent) {			
 			pg.hover.handleHoveredItem(hitOptions, event);
 		};
 
 		
-		tool.onMouseDrag = function(event) {
+		tool.onMouseDrag = function(event: correctToolEvent) {
 			if(event.event.button > 0) return; // only first mouse button
 			
-			var modOrigSize = origSize;
+			let modOrigSize = origSize;
 			
 			if(mode === 'rectSelection') {
 				selectionRect = pg.guides.rectSelect(event);
@@ -257,8 +264,8 @@ export default function() {
 				}
 
 				corner = corner.add(event.delta);
-				var size = corner.subtract(pivot);
-				var sx = 1.0, sy = 1.0;
+				const size = corner.subtract(pivot);
+				let sx = 1.0, sy = 1.0;
 				if (Math.abs(modOrigSize.x) > 0.0000001) {
 					sx = size.x / modOrigSize.x;
 				}
@@ -267,8 +274,8 @@ export default function() {
 				}
 
 				if (event.modifiers.shift) {
-					var signx = sx > 0 ? 1 : -1;
-					var signy = sy > 0 ? 1 : -1;
+					const signx = sx > 0 ? 1 : -1;
+					const signy = sy > 0 ? 1 : -1;
 					sx = sy = Math.max(Math.abs(sx), Math.abs(sy));
 					sx *= signx;
 					sy *= signy;
@@ -289,7 +296,7 @@ export default function() {
 				});
 				
 			} else if(mode === 'rotate') {
-				var rotAngle = (event.point.subtract(rotGroupPivot)).angle;
+				let rotAngle = (event.point.subtract(rotGroupPivot)).angle;
 				
 				jQuery.each(rotItems, function(i, item) {
 					
@@ -311,11 +318,11 @@ export default function() {
 				
 			} else if(mode === 'move' || mode === 'cloneMove') {
 				
-				var dragVector = (event.point.subtract(event.downPoint));
-				var selectedItems = pg.selection.getSelectedItems();
+				const dragVector = (event.point.subtract(event.downPoint));
+				const selectedItems = pg.selection.getSelectedItems();
 
-				for(var i=0; i<selectedItems.length; i++) {
-					var item = selectedItems[i];
+				for(let i=0; i<selectedItems.length; i++) {
+					const item = selectedItems[i];
 					// add the position of the item before the drag started
 					// for later use in the snap calculation
 					if(!item.data.origPos) {
@@ -334,7 +341,7 @@ export default function() {
 			}
 		};
 
-		tool.onMouseUp = function(event) {
+		tool.onMouseUp = function(event: correctToolEvent) {
 			if(event.event.button > 0) return; // only first mouse button
 			
 			if(mode === 'rectSelection' && selectionRect) {
@@ -344,7 +351,7 @@ export default function() {
 			} else if(mode === 'move' || mode === 'cloneMove') {
 				
 				// resetting the items origin point for the next usage
-				var selectedItems = pg.selection.getSelectedItems();
+				const selectedItems = pg.selection.getSelectedItems();
 
 				jQuery.each(selectedItems, function(index, item) {
 					// remove the orig pos again
@@ -358,8 +365,8 @@ export default function() {
 				itemGroup.applyMatrix = true;
 				
 				// mark text items as scaled (for later use on font size calc)
-				for(var i=0; i<itemGroup.children.length; i++) {
-					var child = itemGroup.children[i];
+				for(let i=0; i<itemGroup.children.length; i++) {
+					const child = itemGroup.children[i];
 					if(child.data.isPGTextItem) {
 						child.data.wasScaled = true;
 					}
@@ -386,11 +393,11 @@ export default function() {
 			}
 		};
 		
-		tool.onKeyDown = function(event) {
+		tool.onKeyDown = function(event: paper.KeyEvent) {
 			keyModifiers[event.key] = true;
 		};
 		
-		tool.onKeyUp = function(event) {
+		tool.onKeyUp = function(event: paper.KeyEvent) {
 			
 			if(keyModifiers.control && keyModifiers.shift) {
 				if(event.key === 'g') {
@@ -428,7 +435,7 @@ export default function() {
 	};
 
 
-	var deactivateTool = function() {
+	const deactivateTool = function() {
 		pg.hover.clearHoveredItem();
 		removeBoundsPath();
 		pg.menu.clearToolEntries();
@@ -436,55 +443,25 @@ export default function() {
 	};
 	
 	
-	var setSelectionBounds = function() {
+	const setSelectionBounds = function() {
 		removeBoundsPath();
 		
-		var items = pg.selection.getSelectedItems();
+		const items = pg.selection.getSelectedItems();
 		if(items.length <= 0) return;
 
-		if (
-			items.some(item => (item.data && item.data.noDrawHandle))
-		) {
-			if (items.length === 1) {
-				thPointRotHandle =
-					new paper.Path.Line({
-						data: {
-							isRotHandle: true,
-							isHelperItem: true,
-							noSelect: true,
-							noHover: true
-						},
-						from: items[0].position
-							.subtract(new paper.Point(0, 6)),
-						to: items[0].position
-							.subtract(new paper.Point(0, 10 + (paper.view.zoom / 60))),
-						strokeColor: pg.guides.getGuideColor('blue'),
-						strokeWidth: 4 / paper.view.zoom,
-						parent: pg.layer.getGuideLayer()
-					});
-				thPointRotHandle.rotate(items[0].rotation, items[0].position);
-			}
+		// If there are items with noDrawHandle, don't draw regular handles
+		if (items.some(item => (item.data?.noDrawHandle))) {
+			if (items.length === 1) showRotateHandle(items[0]);
 			return;
 		}
 
-		if (items.length === 1
-			&& pg.item.isPathItem(items[0])) {
-				let settings = getSettings(items[0]);
-				if (settings.className !== "LineSettings") return;
-				let line = items[0];
-				let reverse = settings.reverse ? -1 : 1;
-				let normal = line.getNormalAt(0).multiply(10 * reverse);
-				let directionIndicator = new paper.Path([
-					line.firstSegment.point,
-					line.firstSegment.point.add(normal)
-				])
-				directionIndicator.strokeColor = new paper.Color("#fcba03");
-				directionIndicator.data.isHelperItem = true;
-				directionIndicator["guide"] = true;
-				directionIndicator.parent = pg.layer.getGuideLayer() || null;
+		if (items.length === 1 && pg.item.isPathItem(items[0])) {
+			const settings = getSettings(items[0]);
+			if (settings.className === "LineSettings")
+				showLineDirectionTick(items[0], settings);
 		}
 
-		var rect;
+		let rect: paper.Rectangle;
 		jQuery.each(items, function(index, item) {
 			if(rect) {
 				rect = rect.unite(item.bounds);
@@ -509,14 +486,14 @@ export default function() {
 		boundsPath.parent = pg.layer.getGuideLayer() || null;
 		
 		jQuery.each(boundsPath.segments, function(index: number, segment) {
-			var size = 4;
+			let size = 4;
 			
 			if(index%2 === 0) {
 				size = 6;
 			}
 			
 			if(index === 7) {
-				var offset = new paper.Point(0, 10/paper.view.zoom);
+				const offset = new paper.Point(0, 10/paper.view.zoom);
 				boundsRotHandles[index] =
 				new paper.Path.Circle({
 					center: segment.point.add(offset),
@@ -550,91 +527,15 @@ export default function() {
 					parent: pg.layer.getGuideLayer()
 				});
 		});
-	};
+	};	
+
 	
-	
-	var removeBoundsPath = function() {
+	const removeBoundsPath = function() {
 		pg.guides.removeHelperItems();
 		boundsPath = null;
 		boundsScaleHandles.length = 0;
 		boundsRotHandles.length = 0;
-	};
-	
-	
-	var preProcessSelection = function() {
-		
-		// when switching to the select tool while having a child object of a
-		// compound path selected, deselect the child and select the compound path
-		// instead. (otherwise the compound path breaks because of scale-grouping)
-		var items = pg.selection.getSelectedItems();
-		jQuery.each(items, function(index, item) {
-			if(pg.compoundPath.isCompoundPathChild(item)) {
-				var cp = pg.compoundPath.getItemsCompoundPath(item);
-				pg.selection.setItemSelection(item, false);
-				pg.selection.setItemSelection(cp, true);
-			}
-		});
-		setSelectionBounds();
-	};
-	
-	
-	var getRectCornerNameByIndex = function(index) {
-		switch(index) {
-			case 0:
-				return 'bottomLeft';
-			
-			case 1:
-				return 'leftCenter';
-				
-			case 2:
-				return 'topLeft';
-			
-			case 3:
-				return 'topCenter';
-			
-			case 4:
-				return 'topRight';
-			
-			case 5:
-				return 'rightCenter';
-			
-			case 6:
-				return 'bottomRight';
-				
-			case 7:
-				return 'bottomCenter';
-		}
-	};
-	
-	var getOpposingRectCornerNameByIndex = function(index) {
-		switch(index) {
-			case 0:
-				return 'topRight';
-				
-			case 1:
-				return 'rightCenter';
-				
-			case 2:
-				return 'bottomRight';
-				
-			case 3:
-				return 'bottomCenter';
-			
-			case 4:
-				return 'bottomLeft';
-				
-			case 5:
-				return 'leftCenter';
-			
-			case 6:
-				return 'topLeft';
-				
-			case 7:
-				return 'topCenter';
-		}
-	};
-
-	
+	}
 	
 	return {
 		options: options,
@@ -642,5 +543,80 @@ export default function() {
 		deactivateTool: deactivateTool
 	};
 	
-};
+}
+
+function preProcessSelection() {
+	
+	// when switching to the select tool while having a child object of a
+	// compound path selected, deselect the child and select the compound path
+	// instead. (otherwise the compound path breaks because of scale-grouping)
+	const items = pg.selection.getSelectedItems();
+	jQuery.each(items, function(index, item) {
+		if(pg.compoundPath.isCompoundPathChild(item)) {
+			const cp = pg.compoundPath.getItemsCompoundPath(item);
+			pg.selection.setItemSelection(item, false);
+			pg.selection.setItemSelection(cp, true);
+		}
+	});
+}
+
+
+function getRectCornerNameByIndex(index: number) {
+	switch(index) {
+		case 0: return 'bottomLeft';
+		case 1: return 'leftCenter';
+		case 2: return 'topLeft';
+		case 3: return 'topCenter';
+		case 4: return 'topRight';
+		case 5: return 'rightCenter';
+		case 6: return 'bottomRight';
+		case 7: return 'bottomCenter';
+	}
+}
+
+function getOpposingRectCornerNameByIndex(index: number) {
+	switch(index) {
+		case 0: return 'topRight';
+		case 1: return 'rightCenter';
+		case 2: return 'bottomRight';
+		case 3: return 'bottomCenter';
+		case 4: return 'bottomLeft';
+		case 5: return 'leftCenter';
+		case 6: return 'topLeft';
+		case 7: return 'topCenter';
+	}
+}
+
+function showLineDirectionTick(line: paper.Path, settings: LineSettings) {
+	const reverse = settings.reverse ? -1 : 1;
+	const normal = line.getNormalAt(0).multiply(10 * reverse);
+	const directionIndicator = new paper.Path([
+		line.firstSegment.point,
+		line.firstSegment.point.add(normal)
+	]);
+	directionIndicator.strokeColor = new paper.Color("#fcba03");
+	directionIndicator.data.isHelperItem = true;
+	directionIndicator["guide"] = true;
+	directionIndicator.parent = pg.layer.getGuideLayer() || null;
+}
+
+function showRotateHandle(item: paper.Item) {
+	const thPointRotHandle =
+		new paper.Path.Line({
+			data: {
+				isRotHandle: true,
+				isHelperItem: true,
+				noSelect: true,
+				noHover: true
+			},
+			from: item.position
+				.subtract(new paper.Point(0, 6)),
+			to: item.position
+				.subtract(new paper.Point(0, 10 + (paper.view.zoom / 60))),
+			strokeColor: pg.guides.getGuideColor('blue'),
+			strokeWidth: 4 / paper.view.zoom,
+			parent: pg.layer.getGuideLayer()
+		});
+	thPointRotHandle.rotate(item.rotation, item.position);
+}
 

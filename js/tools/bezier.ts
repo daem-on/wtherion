@@ -10,16 +10,16 @@ import { componentList } from "../toolOptionPanel";
 import LineSettings from "../../src/objectSettings/model/LineSettings";
 
 export default function() {
-	var tool;
+	let tool: paper.Tool;
 	
-	var options: any = {
+	let options: any = {
 		id: "draw",
 		type: "wall",
 		subtype: "",
 		size: 0,
 	};
 
-	var components: componentList = {
+	const components: componentList = {
 		type: {
 			type: "customList",
 			label: "%type%",
@@ -41,18 +41,21 @@ export default function() {
 		}
 	};
 
-	var activateTool = function() {
+	type TypedHitResult<T extends paper.Item> = paper.HitResult & {item: T}
+
+	const activateTool = function() {
 		tool = new paper.Tool();
 		options = pg.tools.getLocalOptions(options);
 		
-		var path;
+		let path: paper.Path;
 
-		var currentSegment;
-		var mode;
-		var type;
-		var hoveredItem = null;
+		let currentSegment: paper.Segment;
+
+		let mode: "continue" | "close" | "remove" | "add";
+		let type: string;
+		let hoveredItem: TypedHitResult<paper.Path> = null;
 		
-		var hitOptions = {
+		const hitOptions = {
 			segments: true,
 			stroke: true,
 			curves: true,
@@ -73,7 +76,7 @@ export default function() {
 					pg.selection.clearSelection();
 					path = pg.editTH2.createPath();
 
-					let settings = getSettings(path) as LineSettings;
+					const settings = getSettings(path) as LineSettings;
 					settings.type = options.type;
 					if (["wall", "border", "water-flow"].includes(options.type))
 						settings.subtype = options.subtype;
@@ -98,7 +101,7 @@ export default function() {
 			}
 			
 			if(path) {
-				var result = findHandle(path, event.point);
+				const result = findHandle(path, event.point);
 				if (result && mode !== 'continue') {
 					currentSegment = result.segment;
 					type = result.type;
@@ -125,7 +128,7 @@ export default function() {
 							!hoveredItem.item.closed) {
 						
 							// joining two paths
-							var hoverPath = hoveredItem.item;
+							const hoverPath = hoveredItem.item;
 							// check if the connection point is the first segment
 							// reverse path if it is not because join() 
 							// always connects to first segment)
@@ -140,7 +143,7 @@ export default function() {
 						
 							mode = 'add';
 							// inserting segment on curve/stroke
-							var location = hoveredItem.location;
+							const location = hoveredItem.location;
 							currentSegment = path.insert(location.index + 1, event.point);
 							currentSegment.selected = true;
 						}
@@ -148,7 +151,7 @@ export default function() {
 					} else {
 						mode = 'add';
 						// add a new segment to the path
-						currentSegment = path.add(event.point);
+						currentSegment = path.add(event.point) as paper.Segment;
 						currentSegment.selected = true;
 						
 					}
@@ -159,20 +162,17 @@ export default function() {
 		};
 		
 		tool.onMouseMove = function(event) {			
-			var hitResult = paper.project.hitTest(event.point, hitOptions);
-			if(hitResult && hitResult.item && hitResult.item.selected) {
-				hoveredItem = hitResult;
-				
-			} else {
-				hoveredItem = null;
-			}
+			const hitResult = paper.project.hitTest(event.point, hitOptions) as TypedHitResult<paper.Path>;
+			
+			if(hitResult?.item?.selected) hoveredItem = hitResult;
+			else hoveredItem = null;
 		};
 		
 		tool.onMouseDrag = function(event) {
 			if(event.event.button > 0) return;  // only first mouse button
 			if (!currentSegment) return;
 			
-			var delta = event.delta.clone();
+			let delta = event.delta.clone();
 			if (type === 'handleOut' || mode === 'add') {
 				delta = delta.multiply(-1);
 			}
@@ -197,16 +197,16 @@ export default function() {
 		tool.activate();
 	};
 	
-	var findHandle = function(path, point) {
-		var types = ['point', 'handleIn', 'handleOut'];
-		for (var i = 0, l = path.segments.length; i < l; i++) {
-			for (var j = 0; j < 3; j++) {
-				var type = types[j];
-				var segment = path.segments[i];
-				var segmentPoint = type === 'point'
+	const findHandle = function(path: paper.Path, point: paper.Point) {
+		const types = ['point', 'handleIn', 'handleOut'];
+		for (let i = 0, l = path.segments.length; i < l; i++) {
+			for (let j = 0; j < 3; j++) {
+				const type = types[j];
+				const segment = path.segments[i];
+				const segmentPoint = type === 'point'
 						? segment.point
 						: segment.point.add(segment[type]);
-				var distance = (point.subtract(segmentPoint)).length;
+				const distance = (point.subtract(segmentPoint)).length;
 				if (distance < 6) {
 					return {
 						type: type,
@@ -224,4 +224,4 @@ export default function() {
 		activateTool : activateTool
 	};
 	
-};
+}

@@ -1,4 +1,4 @@
-import { componentList } from "../js/toolOptionPanel";
+import { componentList } from "./toolOptionPanel";
 import pg from "./init";
 import getSettings from "./objectSettings/model/getSettings";
 import ScrapSettings from "./objectSettings/model/ScrapSettings";

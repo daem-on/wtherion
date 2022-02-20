@@ -1,4 +1,4 @@
-import { componentList } from "../../js/toolOptionPanel";
+import { componentList } from "../toolOptionPanel";
 import pg from "../init";
 import getSettings, { PaperItemType } from "./model/getSettings";
 import lineOptionPanel from "./panels/lineOptionPanel";

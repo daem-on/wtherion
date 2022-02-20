@@ -1,9 +1,9 @@
 // functions related to tools
 
-import select from "../js/tools/select";
+import select from "./tools/select";
 import detailselect from "../js/tools/detailselect.js";
-import draw from "../js/tools/draw";
-import bezier from "../js/tools/bezier";
+import draw from "./tools/draw";
+import bezier from "./tools/bezier";
 import * as point from "./tools/point";
 // import text from "../js/tools/text.paper.js";
 // import rotate from "../js/tools/rotate.paper.js";
@@ -13,7 +13,7 @@ import viewgrab from "../js/tools/viewgrab.js";
 import viewzoom from "../js/tools/viewzoom.js";
 import * as inspect from "./tools/inspect";
 
-import toolOptions from "../js/toolOptions";
+import toolOptions from "./toolOptions";
 
 export const tools = {
 	select: select,

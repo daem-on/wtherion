@@ -1,5 +1,5 @@
 import paper from "paper";
-import pg from "../src/init";
+import pg from "./init";
 
 export function zoomBy(factor: number) {
 	paper.view.zoom *= factor;

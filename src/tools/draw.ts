@@ -1,12 +1,12 @@
 // drawing tool
 // adapted from resources on http://paperjs.org
 
-import pg from "../../src/init";
+import pg from "../init";
 import { componentList } from "../toolOptionPanel";
 import subtypeList from "../res/subtype-list.json";
-import { default as getSettings } from "../../src/objectSettings/model/getSettings";
+import { default as getSettings } from "../objectSettings/model/getSettings";
 import { wallTypes } from "../res/wallTypes";
-import LineSettings from "../../src/objectSettings/model/LineSettings";
+import LineSettings from "../objectSettings/model/LineSettings";
 
 export default function() {
 	let tool: paper.Tool;

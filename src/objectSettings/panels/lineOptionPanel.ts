@@ -1,10 +1,10 @@
-import { componentList } from "../../../js/toolOptionPanel";
+import { componentList } from "../../toolOptionPanel";
 import LineSettings from "../model/LineSettings";
 import getSettings from "../model/getSettings";
 import { objectOptionPanelConfig } from "../objectOptionPanel";
 import pg from "../../init";
-import subtypeList from "../../../js/res/subtype-list.json";
-import { wallTypes } from "../../../js/res/wallTypes";
+import subtypeList from "../../res/subtype-list.json";
+import { wallTypes } from "../../res/wallTypes";
 	
 const optionsCache = {
 	reverse: undefined,

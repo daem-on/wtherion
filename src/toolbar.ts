@@ -1,4 +1,4 @@
-import pg from "../src/init";
+import pg from "./init";
 import paper from "paper";
 
 export type PGToolOptions = {

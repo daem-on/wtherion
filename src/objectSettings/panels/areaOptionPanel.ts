@@ -1,10 +1,10 @@
-import { componentList } from "../../../js/toolOptionPanel";
+import { componentList } from "../../toolOptionPanel";
 import getSettings from "../model/getSettings";
 import AreaSettings from "../model/AreaSettings";
 import { objectOptionPanelConfig } from "../objectOptionPanel";
 import pg from "../../init";
-import wallList from "../../../js/res/walls-list.json";
-import areaList from "../../../js/res/area-list.json";
+import wallList from "../../res/walls-list.json";
+import areaList from "../../res/area-list.json";
 
 const wallTypes = wallList.labels
 	.concat(wallList.passages)

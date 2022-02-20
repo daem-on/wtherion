@@ -4,26 +4,26 @@ import layer from "../js/layer.js";
 import * as layerPanel from "../js/layerPanel.js";
 import pgExport from "../js/export.js";
 import text from "../js/text.js";
-import * as menu from "../js/menu";
+import * as menu from "./menu";
 import * as modal from "../js/modal.js";
-import toolbar from "../js/toolbar";
+import toolbar from "./toolbar";
 import stylebar from "../js/stylebar.js";
 import statusbar from "../js/statusbar.js";
 import input from "../js/input.js";
 import undo from "../js/undo.js";
 import * as tools from "./tools";
-import * as selection from "../js/selection";
+import * as selection from "./selection";
 import guides from "../js/guides.js"
 import helper from "../js/helper.js"
 import hover from "../js/hover.js"
 import editTH2 from "./editTH2"
-import * as group from "../js/group"
-import * as item from "../js/item"
+import * as group from "./group"
+import * as item from "./item"
 import compoundPath from "../js/compoundPath.js"
-import toolOptionPanel from "../js/toolOptionPanel"
+import toolOptionPanel from "./toolOptionPanel"
 import math from "../js/math.js"
 import geometry from "../js/geometry.js"
-import * as view from "../js/view"
+import * as view from "./view"
 import boolean from "../js/boolean.js"
 import edit from "../js/edit.js"
 import importHelper from "../js/import.js"

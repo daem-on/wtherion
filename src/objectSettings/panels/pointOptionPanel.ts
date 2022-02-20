@@ -1,8 +1,8 @@
-import { componentList } from "../../../js/toolOptionPanel";
+import { componentList } from "../../toolOptionPanel";
 import getSettings from "../model/getSettings";
 import { objectOptionPanelConfig } from "../objectOptionPanel";
 import pg from "../../init";
-import symbolList from "../../../js/res/symbol-list.json";
+import symbolList from "../../res/symbol-list.json";
 
 // const types = symbolList["special objects"]
 // 	.concat(symbolList["symbolic passage fills"]);

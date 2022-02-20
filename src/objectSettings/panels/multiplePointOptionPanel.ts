@@ -1,9 +1,9 @@
-import { componentList } from "../../../js/toolOptionPanel";
+import { componentList } from "../../toolOptionPanel";
 import getSettings from "../model/getSettings";
 import { objectOptionPanelConfig } from "../objectOptionPanel";
 import pg from "../../init";
 import PointSettings from "../model/PointSettings";
-import symbolList from "../../../js/res/symbol-list.json";
+import symbolList from "../../res/symbol-list.json";
 
 const types = [""];
 for (const category in symbolList)

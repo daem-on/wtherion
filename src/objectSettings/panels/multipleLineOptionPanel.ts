@@ -1,10 +1,10 @@
-import { componentList } from "../../../js/toolOptionPanel";
+import { componentList } from "../../toolOptionPanel";
 import LineSettings from "../model/LineSettings";
 import getSettings from "../model/getSettings";
 import { objectOptionPanelConfig } from "../objectOptionPanel";
 import pg from "../../init";
-import wallList from "../../../js/res/walls-list.json";
-import subtypeList from "../../../js/res/subtype-list.json";
+import wallList from "../../res/walls-list.json";
+import subtypeList from "../../res/subtype-list.json";
 
 const wallTypes = [""].concat(wallList.passages)
 

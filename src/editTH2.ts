@@ -4,7 +4,7 @@ import getSettings, { PaperItemType } from "./objectSettings/model/getSettings";
 import AreaSettings from "./objectSettings/model/AreaSettings";
 import PointSettings from "./objectSettings/model/PointSettings";
 
-import colorDefs from "../js/res/color-defs.json";
+import colorDefs from "./res/color-defs.json";
 import * as scrapOptions from "./scrapOptions";
 
 const typeColors

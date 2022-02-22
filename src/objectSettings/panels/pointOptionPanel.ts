@@ -29,49 +29,49 @@ const components: comp = {
 		// type: "customList",
 		// imageRoot: "assets/rendered/symbol",
 		type: "list",
-		label: "Type",
+		label: "%type%",
 		options: types
 	},
 	invisible: {
 		type: "boolean",
-		label: "Invisible"
+		label: "%invisible%"
 	},
 	value: {
 		type: "text",
 		requirements: {
 			type: ["height", "passage-height", "altitude", "dimensions"]
 		},
-		label: "Value"
+		label: "%value%"
 	},
 	text: {
 		requirements: {
 			type: ["label", "remark", "continuation"]
 		},
 		type: "text",
-		label: "Text"
+		label: "%text%"
 	},
 	name: {
 		type: "text",
-		label: "Station reference",
+		label: "%stationName%",
 		requirements: {
 			type: "station"
 		}
 	},
 	advancedSection: {
 		type: "title",
-		text: "Advanced"
+		text: "%advanced%"
 	},
 	id: {
 		type: "text",
-		label: "id"
+		label: "%id%"
 	},
 	otherSettings: {
 		type: "text",
-		label: "Other settings"
+		label: "%otherSettings%"
 	},
 	clip: {
 		type: "list",
-		label: "Clip",
+		label: "%clip%",
 		optionValuePairs: [
 			["default", 0],
 			["on", 1],
@@ -80,18 +80,18 @@ const components: comp = {
 	},
 	scale: {
 		type: "list",
-		label: "Scale",
+		label: "%scale%",
 		options: [
 			"xs", "s", "m", "l", "xl"
 		],
 	},
 	place: {
 		type: "list",
-		label: "Place",
+		label: "%place%",
 		optionValuePairs: [
-			["top ▲", 2],
-			["bottom ▼", 1],
-			["default ⦿", 0]
+			["%top% ▲", 2],
+			["%bottom% ▼", 1],
+			["%default% ⦿", 0]
 		]
 	},
 }

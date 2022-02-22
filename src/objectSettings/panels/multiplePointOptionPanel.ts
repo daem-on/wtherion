@@ -20,13 +20,13 @@ let pointSettingsArray: PointSettings[];
 const components: componentList<any> = {
 	type: {
 		type: "list",
-		label: "Type",
+		label: "%type%",
 		options: types,
 	},
 	execute: {
 		type: "button",
 		click: modifyObject,
-		label: "Apply",
+		label: "%apply%",
 	}
 }
 

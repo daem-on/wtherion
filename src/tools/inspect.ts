@@ -9,17 +9,17 @@ const menuEntries = {};
 
 function objectToString(object) {
 	const s = getSettings(object);
-	if (!s) return "Unrecognized";
+	if (!s) return "%inspect.unrecognized%";
 
 	switch (s.className) {
 		case "LineSettings":
 			const subtype = s.subtype ? ":"+s.subtype : ""
-			return `Line ${s.type + subtype} ${s.invisible ? "invisible" : ""}`
+			return `%inspect.line% ${s.type + subtype} ${s.invisible ? "invisible" : ""}`
 		case "AreaSettings":
-			return `Area ${s.type} with line ${s.lineSettings.type}`
+			return `%inspect.area% ${s.type} %inspect.withLine% ${s.lineSettings.type}`
 		case "PointSettings":
-			if (s.type === "station") return `Point ${s.type} ${s.name}`;
-			else return `Point ${s.type}`;
+			if (s.type === "station") return `%inspect.point% ${s.type} ${s.name}`;
+			else return `%inspect.point% ${s.type}`;
 	}
 }
 
@@ -50,7 +50,7 @@ export function activateTool() {
 		} else {
 			const x = event.point.x.toFixed(1);
 			const y = event.point.y.toFixed(1);
-			pg.statusbar.showCustom(`Position: ${x}, ${y}`);
+			pg.statusbar.showCustom(`%inspect.position%: ${x}, ${y}`);
 		}
 	};
 	

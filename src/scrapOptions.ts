@@ -13,7 +13,7 @@ const optionsCache = {
 const components: componentList<typeof optionsCache> = {
 	projection: {
 		type: "list",
-		label: "Projection",
+		label: "%scrap.projection%",
 		optionValuePairs: [
 			["none", 0],
 			["plan", 1],
@@ -23,19 +23,19 @@ const components: componentList<typeof optionsCache> = {
 	},
 	scale: {
 		type: "text",
-		label: "Scale"
+		label: "%scale%"
 	},
 	author: {
 		type: "text",
-		label: "Author"
+		label: "%scrap.author%"
 	},
 	copyright: {
 		type: "text",
-		label: "Copyright"
+		label: "%scrap.copyright%"
 	},
 	otherSettings: {
 		type: "text",
-		label: "Other settings"
+		label: "%otherSettings%"
 	},
 };
 

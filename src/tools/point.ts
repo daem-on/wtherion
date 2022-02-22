@@ -17,12 +17,12 @@ export let options = {
 const components: componentList<Partial<typeof options>> = {
 	type: {
 		type: "list",
-		label: "Type",
+		label: "%type%",
 		options: types
 	},
 	stationName: {
 		type: "text",
-		label: "Station reference",
+		label: "%stationName%",
 		requirements: {
 			type: "station"
 		}

@@ -22,12 +22,12 @@ type comp = componentList<typeof optionsCache & {execute}>;
 const components: comp = {
 	type: {
 		type: "customList",
-		label: "Type",
+		label: "%type%",
 		options: wallTypes,
 	},
 	subtype: {
 		type: "customList",
-		label: "Subtype",
+		label: "%subtype%",
 		requirements: {type: ["wall", "border", "water-flow"]},
 		options: subtypeList.wall.concat(subtypeList.border).concat(subtypeList["water-flow"]),
 		imageRoot: "assets/rendered/subtype"
@@ -35,7 +35,7 @@ const components: comp = {
 	execute: {
 		type: "button",
 		click: modifyObject,
-		label: "Apply",
+		label: "%apply%",
 	}
 }
 

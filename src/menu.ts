@@ -134,14 +134,14 @@ export const handlers = {
 	exportTH2: exportTH2,
 			
 	importImageFromURL: function() {
-		const url = prompt("Paste URL to Image (jpg, png, gif)", "http://");
+		const url = prompt("%import.imageURL% (jpg, png, gif)", "http://");
 		if(url) {
 			pg.import.importAndAddExternalImage(url);
 		}
 	},
 	
 	importSVGFromURL: function () {
-		const url = prompt("Paste URL to SVG", "http://");
+		const url = prompt("%import.svgURL%", "http://");
 		if (url) {
 			pg.import.importAndAddSVG(url);
 		}
@@ -160,13 +160,13 @@ export const handlers = {
 	},
 
 	resetSettings: function() {
-		if (confirm('Clear all data stored locally? (projects, settings)')) {
+		if (confirm('%clearSettings%')) {
 			localStorage.clear();
 		}
 	},
 
 	clearDocument: function() {
-		if (confirm('Clear the document permanently?')) {
+		if (confirm('%clearDocument%')) {
 			pg.document.clear();
 			setSaveFileName(null);
 		}
@@ -269,7 +269,8 @@ function showAboutModal() {
 		<img src="assets/logo-cropped.png" width=600>
 		<p style="margin: 0.5em;">
 			<b style="font-weight: bold">wtherion</b>
-			version ${getVersionNumber()}.
+			version ${getVersionNumber()}
+			%translationCredits%
 			Created by Csongor Zih, based on
 			<a href="https://github.com/w00dn/papergrapher" target="_blank">papergrapher</a>, created by Rolf Fleischmann.
 			Powered by <a href="http://paperjs.org/" target="_blank">Paper.js</a>. Published under the MIT license.

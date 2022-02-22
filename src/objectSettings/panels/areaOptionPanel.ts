@@ -27,34 +27,34 @@ const optionsCache = {
 const components: componentList<any> = {
 	lineType: {
 		type: "customList",
-		label: "Outline Type",
+		label: "%outlineType%",
 		options: wallTypes,
 	},
 	areaType: {
 		type: "customList",
-		label: "Area Type",
+		label: "%areaType%",
 		options: areaList,
 		imageRoot: "assets/rendered/area"
 	},
 	invisible: {
 		type: "boolean",
-		label: "Invisible outline"
+		label: "%invisible% (%areaOptions.outline%)"
 	},
 	areaInvisible: {
 		type: "boolean",
-		label: "Invisible area"
+		label: "%invisible% (%areaOptions.area%)"
 	},
 	advancedSection: {
 		type: "title",
-		text: "Advanced"
+		text: "%advanced%"
 	},
 	id: {
 		type: "text",
-		label: "id"
+		label: "%id%"
 	},
 	otherSettings: {
 		type: "text",
-		label: "Other settings"
+		label: "%otherSettings%"
 	},
 }
 

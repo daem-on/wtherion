@@ -69,6 +69,7 @@ export default {
 		if (settings.subtype === "presumed")
 			l.dashArray = [3, 6];
 		else l.dashArray = null;
+		l.strokeColor.alpha = settings.invisible ? 0.3 : 1;
 	},
 	
 	drawObject: function(object: PaperItemType) {

@@ -8,14 +8,14 @@ let saveFileName: string;
 
 export function setSaveFileName(name: string) {
 	saveFileName = name;
-	document.title = saveFileName || "Empty document";
+	document.title = saveFileName || "%save.untitled%";
 }
 
 export function save(clearName = false) {
 	if (clearName) setSaveFileName(null);
 
 	if (!saveFileName) {
-		setSaveFileName(prompt("Save file name"));
+		setSaveFileName(prompt("%save.saveFileName%"));
 		if (saveFileName === null) return;
 	}
 
@@ -34,7 +34,7 @@ export function showLoadSelect() {
 			const del = jQuery(`<a class="delete">&times</a>`);
 			name.on("click", () => {loadFromStorage(key)});
 			del.on("click", () => {deleteFromStorage(key)});
-			del.attr("title", "Delete save file");
+			del.attr("title", "%save.deleteTooltip%");
 			entry.append(name, del);
 			content.append(entry);
 		}
@@ -51,7 +51,7 @@ function loadFromStorage(name: string) {
 }
 
 function deleteFromStorage(name: string) {
-	if (confirm(`Delete ${name.substring(9)} permanently?`)) {
+	if (confirm(`%save.delete1% ${name.substring(9)} %save.delete2%`)) {
 		localStorage.removeItem(name);
 		showLoadSelect();
 	}
@@ -72,7 +72,7 @@ async function chooseExportLocation() {
 			return
 		}
 	} else {
-		alert("This feature is not supported by browsers except Chrome.")
+		alert("%save.notSupported%")
 	}
 }
 

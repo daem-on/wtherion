@@ -1,3 +1,4 @@
+// TODO: support [elevation xx]
 enum Projection {none, plan, elevation, extended}
 
 export default class ScrapSettings {

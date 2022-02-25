@@ -3,9 +3,9 @@
 
 import pg from "../../src/init";
 import paper from "paper";
-import subtypeList from "../res/subtype-list.json";
+import subtypeList from "Res/subtype-list.json";
 import { default as getSettings } from "../../src/objectSettings/model/getSettings";
-import { wallTypes } from "../res/wallTypes";
+import { wallTypes } from "Res/wallTypes";
 import { componentList } from "../toolOptionPanel";
 import LineSettings from "../../src/objectSettings/model/LineSettings";
 

@@ -9,6 +9,11 @@
     "allowJs": true,
     "outDir": "./dist",
     "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "Res/*": ["src/res/*"],
+      "Lang": ["lang/en-us.json"]
+    }
   },
   "files": ["src/index.ts"],
   "include": [

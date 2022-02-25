@@ -3,7 +3,7 @@ import getSettings from "../model/getSettings";
 import { objectOptionPanelConfig } from "../objectOptionPanel";
 import pg from "../../init";
 import PointSettings from "../model/PointSettings";
-import symbolList from "../../res/symbol-list.json";
+import symbolList from "Res/symbol-list.json";
 
 const types = [""];
 for (const category in symbolList)

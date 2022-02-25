@@ -3,9 +3,9 @@
 
 import pg from "../init";
 import { componentList } from "../toolOptionPanel";
-import subtypeList from "../res/subtype-list.json";
+import subtypeList from "Res/subtype-list.json";
 import { default as getSettings } from "../objectSettings/model/getSettings";
-import { wallTypes } from "../res/wallTypes";
+import { wallTypes } from "Res/wallTypes";
 import LineSettings from "../objectSettings/model/LineSettings";
 
 export default function() {

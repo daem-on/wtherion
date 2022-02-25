@@ -2,7 +2,7 @@ import { componentList } from "../../toolOptionPanel";
 import LineSettings from "../model/LineSettings";
 import getSettings from "../model/getSettings";
 import { objectOptionPanelConfig } from "../objectOptionPanel";
-import subtypes from "../../res/subtype-list.json";
+import subtypes from "Res/subtype-list.json";
 	
 let optionsCache = {
 	subTypeEnable: false,

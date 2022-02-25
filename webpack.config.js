@@ -78,6 +78,10 @@ const config = {
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
+        alias: {
+            Res: path.resolve(__dirname, "src/res"),
+            Lang$: path.resolve(__dirname, `lang/${buildLang}.json`),
+        }
     },
 };
 

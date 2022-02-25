@@ -3,8 +3,8 @@ import LineSettings from "../model/LineSettings";
 import getSettings from "../model/getSettings";
 import { objectOptionPanelConfig } from "../objectOptionPanel";
 import pg from "../../init";
-import wallList from "../../res/walls-list.json";
-import subtypeList from "../../res/subtype-list.json";
+import wallList from "Res/walls-list.json";
+import subtypeList from "Res/subtype-list.json";
 
 const wallTypes = [""].concat(wallList.passages)
 

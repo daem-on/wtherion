@@ -1,6 +1,6 @@
 import { componentList } from "../toolOptionPanel";
 import pg from "../init";
-import symbolList from "../res/symbol-list.json";
+import symbolList from "Res/symbol-list.json";
 import getSettings from "../objectSettings/model/getSettings";
 import PointSettings from "../objectSettings/model/PointSettings";
 

@@ -3,8 +3,8 @@ import getSettings from "../model/getSettings";
 import AreaSettings from "../model/AreaSettings";
 import { objectOptionPanelConfig } from "../objectOptionPanel";
 import pg from "../../init";
-import wallList from "../../res/walls-list.json";
-import areaList from "../../res/area-list.json";
+import wallList from "Res/walls-list.json";
+import areaList from "Res/area-list.json";
 
 const wallTypes = wallList.labels
 	.concat(wallList.passages)

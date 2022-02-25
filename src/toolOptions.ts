@@ -84,5 +84,5 @@ const options: PGToolOptions[] = [
 			toolbar : 'm'
 		}
 	},
-]
+];
 export default options;

@@ -33,7 +33,7 @@ function fileProcessor(layer: paper.Layer): (event) => void {
 		reader.onload = function () {
 			importXVI(reader.result as string, layer);
 		};
-	}
+	};
 }
 
 export function importXVI(source: string, existingLayer?: paper.Layer) {
@@ -85,5 +85,5 @@ function createShot(x1: string, y1: string, x2: string, y2: string) {
 			[Number.parseFloat(x2), -Number.parseFloat(y2)]
 		],
 		strokeColor: COMMMON_COLOR
-	})
+	});
 }

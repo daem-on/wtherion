@@ -1,22 +1,22 @@
-import pg from "../init"
-import LineSettings from "../objectSettings/model/LineSettings"
-import getSettings from "../objectSettings/model/getSettings"
-import AreaSettings from "../objectSettings/model/AreaSettings"
-import PointSettings from "../objectSettings/model/PointSettings"
-import { requestImportXVI } from "./importXVI"
-import ScrapSettings from "../objectSettings/model/ScrapSettings"
+import pg from "../init";
+import LineSettings from "../objectSettings/model/LineSettings";
+import getSettings from "../objectSettings/model/getSettings";
+import AreaSettings from "../objectSettings/model/AreaSettings";
+import PointSettings from "../objectSettings/model/PointSettings";
+import { requestImportXVI } from "./importXVI";
+import ScrapSettings from "../objectSettings/model/ScrapSettings";
 
 const toPoint = function(global: string[], global2: string[] = undefined) {
 	if (global2)
 	return new paper.Point([
 		-(Number.parseFloat(global2[0])-Number.parseFloat(global[0])),
 		+(Number.parseFloat(global2[1])-Number.parseFloat(global[1]))
-	])
+	]);
 	else return new paper.Point([
 		Number.parseFloat(global[0]),
 		-Number.parseFloat(global[1])
-	])
-}
+	]);
+};
 
 const getOptions = function(source: string) {
 	const options: Record<string, string> = {};
@@ -34,7 +34,7 @@ const getOptions = function(source: string) {
 			options[split[i].slice(1)] = split[i+1];
 	}
 	return options;
-}
+};
 
 const _xthSettings: string[] = [];
 
@@ -71,7 +71,7 @@ export default function(source: string) {
 				addSegment(line);
 			}
 		} else if (_areadef) {
-			if (line.startsWith("endarea")) endArea()
+			if (line.startsWith("endarea")) endArea();
 			else if (line.startsWith("place")
 				|| line.startsWith("clip")
 				|| line.startsWith("context")
@@ -80,7 +80,7 @@ export default function(source: string) {
 			else addLineToArea(line);
 		} else {
 			if (line.startsWith("line")) {
-				createLine(line)
+				createLine(line);
 			} else if (line.startsWith("area")) {
 				createArea(line);
 			} else if (line.startsWith("scrap")) {
@@ -225,11 +225,11 @@ function endArea() {
 function applyAreas() {
 	for (const area of _areas) {
 		if (area.ids.length > 1) {
-			console.warn("This importer is designed to work with one-to-one associations between lines and areas.")
+			console.warn("This importer is designed to work with one-to-one associations between lines and areas.");
 		}
 		for (const id of area.ids) {
 			if (id in _linesWithIds) {
-				const line = _linesWithIds[id]
+				const line = _linesWithIds[id];
 				
 				const oldSettings = getSettings(line);
 				if (oldSettings.className === "AreaSettings") {
@@ -281,10 +281,10 @@ function createPoint(line: string) {
 	const point = pg.editTH2.createPoint();
 	const split = line.split(" ");
 	const options = getOptions(split.slice(4).join(" "));
-	options.type = split[3]
+	options.type = split[3];
 	if ("orient" in options || "orientation" in options)
-		point.rotation = Number.parseFloat(options.orient || options.orientation)
-	point.position = new paper.Point(toPoint(split.slice(1, 3)))
+		point.rotation = Number.parseFloat(options.orient || options.orientation);
+	point.position = new paper.Point(toPoint(split.slice(1, 3)));
 	savePointSettings(point, options);
 	pg.editTH2.drawPoint(point);
 }

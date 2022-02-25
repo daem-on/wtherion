@@ -42,7 +42,7 @@ export default {
 
 	drawPoint: function(p: paper.Shape) {
 		const settings = getSettings(p) as PointSettings;
-		const isStation = settings.type === "station"
+		const isStation = settings.type === "station";
 
 		p.radius = isStation ? 3 : 5;
 		p.fillColor = isStation ? pointColors.station : pointColors.default;
@@ -100,11 +100,11 @@ export default {
 		const selection = pg.selection.getSelectedItems();
 		if (selection.length !== 1) return;
 
-		const line = selection[0]
+		const line = selection[0];
 		const settings = getSettings(line as PaperItemType);
 		if (!settings || settings.className !== "LineSettings") return;
 
-		const oldSettings = settings
+		const oldSettings = settings;
 		line.data.therionData = AreaSettings.defaultSettings();
 		line.data.therionData.lineSettings = oldSettings;
 		line.data.therionData.type = "water";
@@ -115,7 +115,7 @@ export default {
 		const selection = pg.selection.getSelectedItems();
 		if (selection.length !== 1) return;
 
-		const area = selection[0]
+		const area = selection[0];
 		const settings = getSettings(area as PaperItemType);
 		if (!settings || settings.className !== "AreaSettings") return;
 
@@ -173,4 +173,4 @@ export default {
 	showScrapOptionsPanel: function() {
 		scrapOptions.show();
 	},
-}
+};

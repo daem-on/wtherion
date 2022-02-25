@@ -27,7 +27,7 @@ const components: componentList<Partial<typeof options>> = {
 			type: "station"
 		}
 	},
-}
+};
 
 export function activateTool() {
 	const tool = new paper.Tool();
@@ -46,7 +46,7 @@ export function activateTool() {
 			increaseStationNumber();
 		}
 		pg.editTH2.drawPoint(point);
-	}
+	};
 
 	pg.toolOptionPanel.setup(options, components, function() {
 		pg.tools.setLocalOptions(options);
@@ -57,9 +57,9 @@ export function activateTool() {
 
 function increaseStationNumber() {
 	if (options.stationName.includes("@")) {
-		const split = options.stationName.split("@")
+		const split = options.stationName.split("@");
 		options.stationName = (Number.parseInt(split[0])+1) + "@" + split[1];
-		pg.tools.setLocalOptions(options)
+		pg.tools.setLocalOptions(options);
 		pg.toolOptionPanel.update(options);
 	}
 }

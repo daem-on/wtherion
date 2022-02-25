@@ -28,7 +28,7 @@ const components: componentList<any> = {
 		click: modifyObject,
 		label: "%apply%",
 	}
-}
+};
 
 function modifyObject() {
 	for (const option in optionsCache) {
@@ -51,5 +51,5 @@ export default function(points: paper.Shape[]): objectOptionPanelConfig {
 		options: optionsCache,
 		components: components,
 		callback: () => {},
-	}
+	};
 }

@@ -6,7 +6,7 @@ import pg from "../../init";
 import wallList from "Res/walls-list.json";
 import subtypeList from "Res/subtype-list.json";
 
-const wallTypes = [""].concat(wallList.passages)
+const wallTypes = [""].concat(wallList.passages);
 
 const defaultOptions = () => ({
 	type: "",
@@ -37,7 +37,7 @@ const components: comp = {
 		click: modifyObject,
 		label: "%apply%",
 	}
-}
+};
 
 function modifyObject() {
 	for (const option in optionsCache) {
@@ -60,5 +60,5 @@ export default function(lines: paper.Path[]): objectOptionPanelConfig {
 		options: optionsCache,
 		components: components,
 		callback: () => {},
-	}
+	};
 }

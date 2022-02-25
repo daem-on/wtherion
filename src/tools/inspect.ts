@@ -13,10 +13,10 @@ function objectToString(object) {
 
 	switch (s.className) {
 		case "LineSettings":
-			const subtype = s.subtype ? ":"+s.subtype : ""
-			return `%inspect.line% ${s.type + subtype} ${s.invisible ? "invisible" : ""}`
+			const subtype = s.subtype ? ":"+s.subtype : "";
+			return `%inspect.line% ${s.type + subtype} ${s.invisible ? "invisible" : ""}`;
 		case "AreaSettings":
-			return `%inspect.area% ${s.type} %inspect.withLine% ${s.lineSettings.type}`
+			return `%inspect.area% ${s.type} %inspect.withLine% ${s.lineSettings.type}`;
 		case "PointSettings":
 			if (s.type === "station") return `%inspect.point% ${s.type} ${s.name}`;
 			else return `%inspect.point% ${s.type}`;

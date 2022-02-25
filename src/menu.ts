@@ -173,7 +173,7 @@ export const handlers = {
 	},
 
 	xviMode: layerPanel.toggleMode,
-}
+};
 
 
 export function setupToolEntries(entries) {

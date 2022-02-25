@@ -29,11 +29,11 @@ export function showLoadSelect() {
 	
 	for (const key of Object.keys(localStorage)) {
 		if (key.startsWith("wt.saves.")) {
-			const entry = jQuery(`<li class="saveEntry"></li>`)
+			const entry = jQuery(`<li class="saveEntry"></li>`);
 			const name = jQuery(`<a>${key.substring(9)}</a>`);
 			const del = jQuery(`<a class="delete">&times</a>`);
-			name.on("click", () => {loadFromStorage(key)});
-			del.on("click", () => {deleteFromStorage(key)});
+			name.on("click", () => {loadFromStorage(key);});
+			del.on("click", () => {deleteFromStorage(key);});
 			del.attr("title", "%save.deleteTooltip%");
 			entry.append(name, del);
 			content.append(entry);
@@ -68,11 +68,11 @@ async function chooseExportLocation() {
 				]
 			});
 		} catch {
-			console.log("Exited without any save location set.")
-			return
+			console.log("Exited without any save location set.");
+			return;
 		}
 	} else {
-		alert("%save.notSupported%")
+		alert("%save.notSupported%");
 	}
 }
 

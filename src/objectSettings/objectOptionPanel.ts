@@ -65,7 +65,7 @@ export function updateWindow() {
 		
 		// Non-detail select
 		else if (isPath(selected[0])) {
-			const settings = getSettings(selected[0])
+			const settings = getSettings(selected[0]);
 			if (settings.className == "LineSettings")
 				config = lineOptionPanel(selected[0] as paper.Path);
 			else if (settings.className == "AreaSettings")

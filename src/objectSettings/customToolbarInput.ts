@@ -1,7 +1,7 @@
 import "jquery-ui/ui/widgets/selectmenu";
 
 export function constructSelect(element: HTMLDivElement, selectedVal: string, imageRoot?: string) {
-	element.classList.add("act-as-input")
+	element.classList.add("act-as-input");
 
 	const input = element.getElementsByTagName("input")[0];
 	

@@ -40,14 +40,14 @@ const components: componentList<any> = {
 		type: "text",
 		label: "Other settings"
 	},
-}
+};
 	
 const sizeComponent: componentList<any> = {
 	size: {
 		type: "int",
 		label: "Size"
 	}
-}
+};
 	
 export default function(line: paper.Path): objectOptionPanelConfig {
 	optionsCache = {
@@ -104,10 +104,10 @@ export default function(line: paper.Path): objectOptionPanelConfig {
 		} else if (s.segmentSettings[selectedSegment.index]) {
 			delete s.segmentSettings[selectedSegment.index];
 		}
-	}
+	};
 	return {
 		options: optionsCache,
 		components: components,
 		callback: modifyObject,
-	}
+	};
 }

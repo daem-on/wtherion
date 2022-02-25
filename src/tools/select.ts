@@ -535,7 +535,7 @@ export default function() {
 		boundsPath = null;
 		boundsScaleHandles.length = 0;
 		boundsRotHandles.length = 0;
-	}
+	};
 	
 	return {
 		options: options,

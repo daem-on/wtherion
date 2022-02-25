@@ -89,7 +89,7 @@ export default {
 			case 'customList':
 				const $wrapper = jQuery(`<div class="custom-select"></div>`);
 				$input = jQuery(`<input name="${key}" value="${options[key] ?? ""}">`);
-				const $options = jQuery(`<div class="customListOptions"></div>`)
+				const $options = jQuery(`<div class="customListOptions"></div>`);
 
 				if (comp.options) {
 					for (const value of comp.options)
@@ -171,8 +171,8 @@ export default {
 
 				$sectionTitle.on("click", function() {
 					const p = jQuery(this).parent();
-					if (p.hasClass("collapsed")) p.removeClass("collapsed")
-					else p.addClass("collapsed")
+					if (p.hasClass("collapsed")) p.removeClass("collapsed");
+					else p.addClass("collapsed");
 				});
 
 				lastSubSection = $optionSection;
@@ -250,7 +250,7 @@ export default {
 		});
 	}
 	
-}
+};
 
 
 function compareInputRequirement(value: any, requirement: any) {

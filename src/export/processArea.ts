@@ -18,6 +18,6 @@ export function processArea(item: paperExportedPath) {
 	addText(`area ${areaSettings.type}`);
 	addWhitespace(1);
 	addText(lineSettings.id);
-	addWhitespace(-1)
+	addWhitespace(-1);
 	addText("endarea");
 }

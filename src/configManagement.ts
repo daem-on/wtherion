@@ -1,6 +1,6 @@
 import defaultConfig from "Res/default-config.json";
 import versionConfig from "../versionconfig.json";
-let config: Record<string, any> = {}
+let config: Record<string, any> = {};
 
 export function getVersionNumber() {
 	return versionConfig.appVersion;
@@ -24,7 +24,7 @@ export function loadConfig() {
 		config = JSON.parse(localStorage["wt.config"]);
 	} catch (e) {
 		console.error("Error while reading config:", e);
-		config = {}
+		config = {};
 	}
 }
 

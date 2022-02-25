@@ -103,7 +103,7 @@ const components: comp = {
 			["%default% ⦿", 0]
 		]
 	},
-}
+};
 	
 export default function(line: paper.Path): objectOptionPanelConfig {
 	const settings = getSettings(line) as LineSettings;
@@ -134,10 +134,10 @@ export default function(line: paper.Path): objectOptionPanelConfig {
 			default: settings.subtype = "";
 		}
 		pg.editTH2.drawLine(line);
-	}
+	};
 	return {
 		options: optionsCache,
 		components: components,
 		callback: modifyObject,
-	}
+	};
 }

@@ -13,21 +13,21 @@ import input from "../js/input.js";
 import undo from "../js/undo.js";
 import * as tools from "./tools";
 import * as selection from "./selection";
-import guides from "../js/guides.js"
-import helper from "../js/helper.js"
-import hover from "../js/hover.js"
-import editTH2 from "./editTH2"
-import * as group from "./group"
-import * as item from "./item"
-import compoundPath from "../js/compoundPath.js"
-import toolOptionPanel from "./toolOptionPanel"
-import math from "../js/math.js"
-import geometry from "../js/geometry.js"
-import * as view from "./view"
-import boolean from "../js/boolean.js"
-import edit from "../js/edit.js"
-import importHelper from "../js/import.js"
-import order from "../js/order.js"
+import guides from "../js/guides.js";
+import helper from "../js/helper.js";
+import hover from "../js/hover.js";
+import editTH2 from "./editTH2";
+import * as group from "./group";
+import * as item from "./item";
+import compoundPath from "../js/compoundPath.js";
+import toolOptionPanel from "./toolOptionPanel";
+import math from "../js/math.js";
+import geometry from "../js/geometry.js";
+import * as view from "./view";
+import boolean from "../js/boolean.js";
+import edit from "../js/edit.js";
+import importHelper from "../js/import.js";
+import order from "../js/order.js";
 
 import paper from "paper";
 import {setup as configSetup} from "./configManagement";

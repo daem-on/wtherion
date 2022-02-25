@@ -5,16 +5,16 @@ import { processLayer } from "./processLayer";
 export function toGlobal(global: number[], local = [0, 0]) {
 	const x = Math.round((global[0]+local[0])*100)/100;
 	const y = -Math.round((global[1]+local[1])*100)/100;
-	return `${x} ${y}`
+	return `${x} ${y}`;
 }
 
 let exportWhitespace = 0;
-let exportText = ""
+let exportText = "";
 export function addText(...data: any[]) {
 	exportText += "\t".repeat(exportWhitespace) + data.join(" ") + "\n";
 }
 export function addWhitespace(amount: number) {
-	exportWhitespace += amount
+	exportWhitespace += amount;
 }
 let backupText: string = null;
 export function makeBackup() {
@@ -29,7 +29,7 @@ export function restoreBackup() {
 export function runWorker() {
 	const worker = new Worker(new URL('./worker', import.meta.url));
 	worker.postMessage({question: "asdfasd"});
-	worker.onmessage = data => {console.log(data)}
+	worker.onmessage = data => {console.log(data);};
 }
 	
 export function asBlob() {
@@ -41,7 +41,7 @@ export function save() {
 }
 	
 function run() {
-	exportText = ""
+	exportText = "";
 	
 	//prepare items
 	for (const item of paper.project.getItems({className:"Shape"})) {

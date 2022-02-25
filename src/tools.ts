@@ -28,7 +28,7 @@ export const tools = {
 	viewgrab: viewgrab,
 	viewzoom: viewzoom,
 	inspect: inspect,
-}
+};
 
 const toolList = toolOptions;
 export function getToolList() {

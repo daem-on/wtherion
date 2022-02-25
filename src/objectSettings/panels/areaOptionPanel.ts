@@ -56,7 +56,7 @@ const components: componentList<any> = {
 		type: "text",
 		label: "%otherSettings%"
 	},
-}
+};
 
 export default function(line: paper.Path): objectOptionPanelConfig {
 	const settings = getSettings(line) as AreaSettings;
@@ -76,11 +76,11 @@ export default function(line: paper.Path): objectOptionPanelConfig {
 		settings.lineSettings.id = optionsCache.id;
 		settings.lineSettings.otherSettings = optionsCache.otherSettings;
 		pg.editTH2.drawArea(line);
-	}
+	};
 
 	return {
 		options: optionsCache,
 		components: components,
 		callback: modifyObject,
-	}
+	};
 }

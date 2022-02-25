@@ -94,7 +94,7 @@ const components: comp = {
 			["%default% ⦿", 0]
 		]
 	},
-}
+};
 
 export default function(shape: paper.Shape): objectOptionPanelConfig {
 	const settings = getSettings(shape);
@@ -114,10 +114,10 @@ export default function(shape: paper.Shape): objectOptionPanelConfig {
 			}
 		}
 		pg.editTH2.drawPoint(shape);
-	}
+	};
 	return {
 		options: optionsCache,
 		components: components,
 		callback: modifyObject,
-	}
+	};
 }

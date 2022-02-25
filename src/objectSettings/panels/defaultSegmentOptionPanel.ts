@@ -32,13 +32,13 @@ const components: componentList<any> = {
 	resetIn: {type: "button", label: "Reset handle in", click: resetIn},
 	resetOut: {type: "button", label: "Reset handle out", click: resetOut},
 	resetBoth: {type: "button", label: "Turn into corner", click:resetBoth},
-}
+};
 
 // TODO: update panel with new values
-function smooth() {if (selectedSegment) selectedSegment.smooth()}
-function resetIn() {if (selectedSegment) selectedSegment.handleIn.length = 0}
-function resetOut() {if (selectedSegment) selectedSegment.handleOut.length = 0}
-function resetBoth() {if (selectedSegment) selectedSegment.clearHandles()}
+function smooth() {if (selectedSegment) selectedSegment.smooth();}
+function resetIn() {if (selectedSegment) selectedSegment.handleIn.length = 0;}
+function resetOut() {if (selectedSegment) selectedSegment.handleOut.length = 0;}
+function resetBoth() {if (selectedSegment) selectedSegment.clearHandles();}
 	
 export default function(line: paper.Path): objectOptionPanelConfig {
 	optionsCache = {
@@ -81,10 +81,10 @@ export default function(line: paper.Path): objectOptionPanelConfig {
 		} else if (s.segmentSettings[selectedSegment.index]) {
 			delete s.segmentSettings[selectedSegment.index];
 		}
-	}
+	};
 	return {
 		options: optionsCache,
 		components: components,
 		callback: modifyObject,
-	}
+	};
 }

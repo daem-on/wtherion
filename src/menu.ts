@@ -93,7 +93,7 @@ function setupFileSection() {
 	// handle change on hidden file input in menu item
 	jQuery('#fileUploadXVI').on('change', function(event) {
 		pg.helper.processFileInput('text', event.target, function(data) {
-			importerXvi.importXVI(data);
+			importerXvi.importXVI(data, (event.target as HTMLInputElement).files[0].name);
 		});
 	});
 	

@@ -4,9 +4,9 @@ let mode = "normal";
 
 export function toggleMode() {
 	mode = mode === "xvi" ? "normal" : "xvi";
-	let lock = mode !== "xvi";
-	for (let layer of paper.project.layers)
-		if (layer.data?.xviLayer) layer.locked = lock;
+	// let lock = mode !== "xvi";
+	// for (let layer of paper.project.layers)
+	// 	if (layer.data?.xviLayer) layer.locked = lock;
 	updateLayerList();
 }
 

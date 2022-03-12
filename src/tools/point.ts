@@ -3,6 +3,7 @@ import pg from "../init";
 import symbolList from "Res/symbol-list.json";
 import getSettings from "../objectSettings/model/getSettings";
 import PointSettings from "../objectSettings/model/PointSettings";
+import paper from "paper";
 
 const types = [];
 for (const category in symbolList)
@@ -38,12 +39,23 @@ export function activateTool() {
 	tool.onMouseDown = function(event: any) {
 		if (event.event.button > 0) return;
 
+		const result = paper.project.hitTest(event.point, {
+			fill: true
+		});
+
 		const point = pg.editTH2.createPoint(event.point);
 		const settings = getSettings(point) as PointSettings;
-		settings.type = options.type;
-		if (options.type === "station") {
-			settings.name = options.stationName;
-			increaseStationNumber();
+
+		if (result?.item.data.therionData) {
+			point.position = result.item.position;
+			settings.type = "station";
+			settings.name = result.item.data.therionData.name;
+		} else {
+			settings.type = options.type;
+			if (options.type === "station") {
+				settings.name = options.stationName;
+				increaseStationNumber();
+			}
 		}
 		pg.editTH2.drawPoint(point);
 	};

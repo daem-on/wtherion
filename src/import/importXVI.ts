@@ -10,7 +10,7 @@ let state: ProcessingState = 0;
 
 function createLayer(name?: string): paper.Layer {
 	const l = pg.layer.addNewLayer(name ?? "therion.xviLayer");
-	l.locked = true;
+	// l.locked = true;
 	l.data.isGuideLayer = true;
 	l.data.xviLayer = true;
 	return l;
@@ -31,13 +31,13 @@ function fileProcessor(layer: paper.Layer): (event) => void {
 		const reader = new FileReader();
 		reader.readAsText(event.target.files[0]);
 		reader.onload = function () {
-			importXVI(reader.result as string, layer);
+			importXVI(reader.result as string, event.target.files[0].name, layer);
 		};
 	};
 }
 
-export function importXVI(source: string, existingLayer?: paper.Layer) {
-	const layer = existingLayer ?? createLayer();
+export function importXVI(source: string, name?: string, existingLayer?: paper.Layer) {
+	const layer = existingLayer ?? createLayer(name);
 
 	for (let line of source.split("\n")) {
 		line = line.trim();
@@ -61,6 +61,8 @@ export function importXVI(source: string, existingLayer?: paper.Layer) {
 	if (layer.data.moveTo) layer.translate(
 		new paper.Point(layer.data.moveTo[0], layer.data.moveTo[1])
 	);
+	layer.sendToBack();
+	pg.layer.activateDefaultLayer();
 }
 
 function createStation(x: string, y: string, n: string) {

@@ -20,9 +20,7 @@ export function processLayer(layer: paper.Layer) {
 			if (s[setting])
 				o.push(`-${setting} ${s[setting]}`);
 		}
-
-		if (s.projection !== 1)
-			o.push("-projection " + ["none", "plan", "elevation", "extended"][s.projection]);
+		
 		if (s.otherSettings !== "")
 			o.push(s.otherSettings);
 		optionsString = o.join(" ");

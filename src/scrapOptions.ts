@@ -12,14 +12,10 @@ const optionsCache = {
 };
 const components: componentList<typeof optionsCache> = {
 	projection: {
-		type: "list",
+		type: "customList",
 		label: "%scrap.projection%",
-		optionValuePairs: [
-			["none", 0],
-			["plan", 1],
-			["elevation", 2],
-			["extended", 3]
-		]
+		options: ["plan", "[elevation 0]", "extended", "none"],
+		imageRoot: "assets/projection"
 	},
 	scale: {
 		type: "text",

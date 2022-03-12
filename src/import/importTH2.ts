@@ -259,16 +259,6 @@ function createScrap(line: string) {
 			delete options[key];
 		}
 	}
-	// TODO: if projection is [elevation ...]
-	if (options.projection) {
-		switch (options.projection) {
-			case "none": settings.projection = 0; break;
-			case "elevation": settings.projection = 2; break;
-			case "extended": settings.projection = 3; break;
-			default: settings.projection = 1; break;
-		}
-		delete options.projection;
-	}
 
 	for (const key in options) {
 		if (Object.prototype.hasOwnProperty.call(options, key)) {

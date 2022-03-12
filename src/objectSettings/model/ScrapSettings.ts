@@ -1,13 +1,10 @@
-// TODO: support [elevation xx]
-enum Projection {none, plan, elevation, extended}
-
 export default class ScrapSettings {
 	
 	static readonly stringSettings: ReadonlyArray<string> = 
-		["scale", "author", "copyright"];
+		["projection", "scale", "author", "copyright"];
 
 	readonly className = "ScrapSettings";
-	projection: Projection;
+	projection: string;
 	scale: string;
 	author: string;
 	copyright: string;
@@ -15,7 +12,7 @@ export default class ScrapSettings {
 
 	static defaultSettings(): ScrapSettings {
 		const s = new ScrapSettings();
-		s.projection = Projection.plan;
+		s.projection = "";
 		s.scale = "";
 		s.author = "";
 		s.copyright = "";

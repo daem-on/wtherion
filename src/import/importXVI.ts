@@ -76,6 +76,7 @@ function createStation(x: string, y: string, n: string) {
 	});
 	circle.data.noDrawHandle = true;
 	circle.data.therionData = {
+		className: "XVIStation",
 		name: n
 	};
 }

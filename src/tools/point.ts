@@ -46,7 +46,7 @@ export function activateTool() {
 		const point = pg.editTH2.createPoint(event.point);
 		const settings = getSettings(point) as PointSettings;
 
-		if (result?.item.data.therionData) {
+		if (result?.item.data.therionData.className === "XVIStation") {
 			point.position = result.item.position;
 			settings.type = "station";
 			settings.name = result.item.data.therionData.name;

@@ -1,5 +1,6 @@
 import "jquery-ui/ui/widgets/sortable";
-		
+import * as wtConfig from "../src/configManagement";
+
 let mode = "normal";
 
 export function toggleMode() {
@@ -18,6 +19,7 @@ export function toggleVisibility() {
 	} else {
 		if($panel.hasClass('hidden')) {
 			$panel.removeClass('hidden');
+			updateLayerList();
 		} else {
 			$panel.addClass('hidden');
 		}
@@ -105,10 +107,9 @@ function setupLayerEntry(layer) {
 		layer.visible = !layer.visible;
 	});
 	
-	
-	// if(layer.data.isDefaultLayer) {
-	// 	$layerNameInput.attr('disabled', true);
-	// }
+	if (wtConfig.get("lockLayerNames")) {
+		$layerNameInput.attr('disabled', true);
+	}
 	
 	
 	$layerNameInput.on('change', function() {

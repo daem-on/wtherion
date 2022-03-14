@@ -7,6 +7,7 @@ import { save, showLoadSelect, exportTH2, setSaveFileName } from "../src/saveMan
 import pgDocument from "../js/document";
 import * as layerPanel from "../js/layerPanel";
 import { getVersionNumber } from "../src/configManagement";
+import * as configEditor from "./configEditor";
 
 export function setup() {
 	setupNavigationLogic();
@@ -117,7 +118,7 @@ export const handlers = {
 	
 	resetPan: () => pg.view.resetPan(),
 	
-	layerPanel: () => pg.layerPanel.toggleVisibility(),
+	layerPanel: layerPanel.toggleVisibility,
 	
 	exportSVG: () => pg.export.exportAndPromptSVG(),
 
@@ -173,6 +174,8 @@ export const handlers = {
 	},
 
 	xviMode: layerPanel.toggleMode,
+
+	showConfigEditor: configEditor.show
 };
 
 

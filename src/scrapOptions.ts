@@ -50,6 +50,7 @@ export function show() {
 		components,
 		() => {
 			Object.assign(settings, optionsCache);
-		}
+		},
+		"%scrapSettingsTitle%"
 	);
 }

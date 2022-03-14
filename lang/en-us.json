@@ -83,7 +83,8 @@
 		"scrapPanel": "Scrap panel",
 		"editScrap": "Edit scrap",
 		"xviEdit": "XVI edit mode",
-		"tool": "Tool"
+		"tool": "Tool",
+		"showConfigEditor": "Configuration"
 	},
 	"tools.itemSelect": "Item Select",
 	"tools.detailSelect": "Detail Select",
@@ -116,5 +117,10 @@
 	"outlineType": "Outline type",
 	"areaType": "Area type",
 	"areaOptions.outline": "outline",
-	"areaOptions.area": "area"
+	"areaOptions.area": "area",
+	"scrapSettingsTitle": "Scrap settings",
+	"configTitle": "Configuration",
+	"config.detailSelectGuides": "Detail select guides",
+	"config.showSegmentOptionPanel": "Generic segment option panel",
+	"config.lockLayerNames": "Lock layer names"
 }

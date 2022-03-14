@@ -30,8 +30,8 @@ type optionsType = {
 
 export default {
 	
-	setup(options: optionsType, components: componentList<optionsType>, changeCallback: () => void) {
-		const panelTitle = options.name || "Settings";
+	setup(options: optionsType, components: componentList<optionsType>, changeCallback: () => void, title?: string) {
+		const panelTitle = title || options.name || "Settings";
 		
 		const $panel = jQuery('<div class="toolOptionPanel">');
 		const $title = jQuery(`<h3 class="panelTitle">${panelTitle}</h3>`);

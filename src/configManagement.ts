@@ -19,6 +19,11 @@ export function set(name: string, value: any) {
 	saveConfig();
 }
 
+export function assign(values: Record<string, any>) {
+	Object.assign(config, values);
+	saveConfig();
+}
+
 export function loadConfig() {
 	try {
 		config = JSON.parse(localStorage["wt.config"]);

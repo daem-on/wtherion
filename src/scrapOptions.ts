@@ -49,11 +49,7 @@ export function show() {
 		optionsCache,
 		components,
 		() => {
-			for (const key in optionsCache) {
-				if (Object.prototype.hasOwnProperty.call(optionsCache, key))
-					if (optionsCache[key] !== settings[key])
-						settings[key] = optionsCache[key];
-			}
+			Object.assign(settings, optionsCache);
 		}
 	);
 }

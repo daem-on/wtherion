@@ -106,13 +106,7 @@ export default function(shape: paper.Shape): objectOptionPanelConfig {
 	}
 	
 	const modifyObject = () => {
-		for (const key in optionsCache) {
-			if (Object.prototype.hasOwnProperty.call(optionsCache, key)) {
-				if (optionsCache[key] != settings[key]) {
-					settings[key] = optionsCache[key];
-				}
-			}
-		}
+		Object.assign(settings, optionsCache);
 		pg.editTH2.drawPoint(shape);
 	};
 	return {

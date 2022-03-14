@@ -28,7 +28,7 @@ export function processLayer(layer: paper.Layer) {
 
 	makeBackup();
 	let exportedChildren = 0;
-	addText("scrap", layer.name.replace(" ", "_"), optionsString);
+	addText("scrap", layer.name.replace(/ /g, "_"), optionsString);
 	addWhitespace(1);
 	for (const item of layer.children) {
 		switch (item[0]) {

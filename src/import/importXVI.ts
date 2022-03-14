@@ -3,7 +3,7 @@ const COMMMON_COLOR = new paper.Color(0.2, 0.2, 0.2);
 
 enum ProcessingState {
 	Default,
-	XVIstations,
+	XVIStations,
 	XVIShots
 }
 let state: ProcessingState = 0;
@@ -41,16 +41,16 @@ export function importXVI(source: string, name?: string, existingLayer?: paper.L
 
 	for (let line of source.split("\n")) {
 		line = line.trim();
-		if (state === 0) {
-			if (line.startsWith("set XVIstations")) state = 1;
-			if (line.startsWith("set XVIshots")) state = 2;
-		} else if (state === 1) {
-			if (line.startsWith("}")) {state = 0; continue;}
+		if (state === ProcessingState.Default) {
+			if (line.startsWith("set XVIstations")) state = ProcessingState.XVIStations;
+			if (line.startsWith("set XVIshots")) state = ProcessingState.XVIShots;
+		} else if (state === ProcessingState.XVIStations) {
+			if (line.startsWith("}")) {state = ProcessingState.Default; continue;}
 
 			const [x, y, n] = line.slice(1, line.length-1).split(" ").filter(i => i);
 			createStation(x, y, n);
-		} else if (state === 2) {
-			if (line.startsWith("}")) {state = 0; continue;}
+		} else if (state === ProcessingState.XVIShots) {
+			if (line.startsWith("}")) {state = ProcessingState.Default; continue;}
 
 			const [x1, y1, x2, y2] = line.slice(1, line.length-1).split(" ").filter(i => i);
 			createShot(x1, y1, x2, y2);

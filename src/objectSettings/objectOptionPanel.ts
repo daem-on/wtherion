@@ -48,6 +48,8 @@ export function updateWindow() {
 
 		// Detail select
 		if (pg.toolbar.getActiveTool().options.id == "detailselect") {
+			if (selected.length > 1 ||selected[0].className != "Path")
+				return;
 			// ensure only one segment is editable
 			let selection = false;
 			for (const segment of (selected[0] as paper.Path).segments) {

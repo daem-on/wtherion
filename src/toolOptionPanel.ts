@@ -3,7 +3,7 @@ import pg from "../src/init";
 import {constructSelect} from "../src/objectSettings/customToolbarInput";
 
 type component = {
-	type?: "int" | "list" | "float" | "text" | "button" | "boolean" | "title" | "customList",
+	type?: "int" | "list" | "float" | "text" | "button" | "boolean" | "nullable-boolean" | "title" | "customList",
 	min?: any,
 	max?: any,
 	label?: string,
@@ -53,6 +53,17 @@ export default {
 				if(options[key]) {
 					$input.prop('checked', true);
 				}
+
+				break;
+			case 'nullable-boolean':
+				$input = jQuery(`<input type="checkbox" name="${key}">`);
+				if(options[key] === true) {
+					$input.prop("checked", true);
+				} else if (options[key] === null) {
+					$input.prop("indeterminate", true);
+					$input.prop("readonly", true);
+				}
+				$input.on("click", nullableCheckboxCallback);
 
 				break;
 			case 'float':
@@ -118,7 +129,9 @@ export default {
 				$input.on('keyup blur change mousewheel', function(e) {
 					let val;
 					if(e.target.type == 'checkbox') {
-						val = e.target.checked;
+						val = 
+							e.target.indeterminate ? null :
+							e.target.checked;
 					} else if (e.target.type == "text") {
 						val = e.target.value;
 					} else if(e.target.type == 'number') {
@@ -252,6 +265,12 @@ export default {
 	
 };
 
+
+function nullableCheckboxCallback(event: JQuery.ClickEvent<HTMLInputElement, undefined, HTMLInputElement, HTMLInputElement>) {
+	const cb = event.target;
+	if (cb.readOnly) cb.checked=cb.readOnly=false;
+	else if (!cb.checked) cb.readOnly=cb.indeterminate=true;
+}
 
 function compareInputRequirement(value: any, requirement: any) {
 	if (Array.isArray(requirement)) return requirement.includes(value);

@@ -10,9 +10,13 @@ const wallTypes = [""].concat(wallList.passages);
 
 const defaultOptions = () => ({
 	type: "",
-	subtype: ""
+	subtype: "",
+	reverse: 0,
+	invisible: 0
 });
 
+const stringOptions = ["type", "subtype"];
+const booleanValues = [null, true, false];
 let optionsCache = defaultOptions();
 let lineArray: paper.Path[];
 let lineSettingsArray: LineSettings[];
@@ -32,6 +36,24 @@ const components: comp = {
 		options: subtypeList.wall.concat(subtypeList.border).concat(subtypeList["water-flow"]),
 		imageRoot: "assets/rendered/subtype"
 	},
+	reverse: {
+		type: "list",
+		label: "%reverse%",
+		optionValuePairs: [
+			["%on%", 1],
+			["%off%", 2],
+			["", 0]
+		]
+	},
+	invisible: {
+		type: "list",
+		label: "%invisible%",
+		optionValuePairs: [
+			["%on%", 1],
+			["%off%", 2],
+			["", 0]
+		]
+	},
 	execute: {
 		type: "button",
 		click: modifyObject,
@@ -40,11 +62,17 @@ const components: comp = {
 };
 
 function modifyObject() {
-	for (const option in optionsCache) {
+	for (const option of stringOptions) {
 		if (optionsCache[option] !== "") {
 			for (const line of lineSettingsArray)
 				line[option] = optionsCache[option];
 		}
+	}
+	for (const line of lineSettingsArray) {
+		if (optionsCache.reverse !== 0)
+			line.reverse = booleanValues[optionsCache.reverse];
+		if (optionsCache.invisible !== 0)
+			line.invisible = booleanValues[optionsCache.invisible];
 	}
 	for (const line of lineArray) pg.editTH2.drawLine(line);
 }

@@ -10,9 +10,13 @@ for (const category in symbolList)
 	types.push(symbolList[category]);
 
 const defaultOptions = () => ({
-	type: ""
+	type: "",
+	scale: "",
+	invisible: 0
 });
 
+const stringOptions = ["type", "scale"];
+const booleanValues = [null, true, false];
 let optionsCache = defaultOptions();
 let pointArray: paper.Shape[];
 let pointSettingsArray: PointSettings[];
@@ -23,6 +27,22 @@ const components: componentList<any> = {
 		label: "%type%",
 		options: types,
 	},
+	scale: {
+		type: "list",
+		label: "%scale%",
+		options: [
+			" ", "xs", "s", "m", "l", "xl"
+		],
+	},
+	invisible: {
+		type: "list",
+		label: "%invisible%",
+		optionValuePairs: [
+			["%on%", 1],
+			["%off%", 2],
+			["", 0]
+		]
+	},
 	execute: {
 		type: "button",
 		click: modifyObject,
@@ -31,11 +51,15 @@ const components: componentList<any> = {
 };
 
 function modifyObject() {
-	for (const option in optionsCache) {
+	for (const option of stringOptions) {
 		if (optionsCache[option] !== "") {
 			for (const point of pointSettingsArray)
 				point[option] = optionsCache[option];
 		}
+	}
+	for (const point of pointSettingsArray) {
+		if (optionsCache.invisible !== 0)
+			point.invisible = booleanValues[optionsCache.invisible];
 	}
 	for (const point of pointArray) pg.editTH2.drawPoint(point);
 }

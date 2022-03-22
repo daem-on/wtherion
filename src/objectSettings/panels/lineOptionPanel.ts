@@ -15,6 +15,7 @@ const optionsCache = {
 	otherSettings: undefined,
 	place: undefined,
 	type: undefined,
+	text: undefined,
 	size: undefined,
 	_subtypeWall: undefined,
 	_subtypeBorder: undefined,
@@ -47,6 +48,11 @@ const components: comp = {
 		requirements: {type: "water-flow"},
 		options: subtypeList["water-flow"],
 		imageRoot: "assets/rendered/subtype"
+	},
+	text: {
+		type: "text",
+		label: "%text%",
+		requirements: {type: "label"}
 	},
 	reverse: {
 		type: "boolean",

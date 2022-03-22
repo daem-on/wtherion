@@ -4,8 +4,9 @@ export enum Clip { Default, On, Off }
 
 export default class LineSettings {
 	
+	// Currently unused, just to be the same as PointSettings
 	static readonly stringSettings: ReadonlyArray<string> = 
-		["subtype", "id"];
+		["subtype", "id", "text"];
 
 	readonly className = "LineSettings";
 	otherSettings: string;
@@ -18,6 +19,7 @@ export default class LineSettings {
 	invisible: boolean;
 	outline: Outline;
 	size?: number;
+	text: string;
 	id: string;
 	type: string;
 
@@ -35,6 +37,7 @@ export default class LineSettings {
 		ls.id = "";
 		ls.type = "wall";
 		ls.size = 0;
+		ls.text = "";
 		return ls;
 	}
 }

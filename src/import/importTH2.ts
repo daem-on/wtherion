@@ -108,6 +108,9 @@ function saveLineSettings() {
 	if (o.subtype) {
 		s.subtype = o.subtype; delete o.subtype;
 	}
+	if (o.text) {
+		s.text = o.text; delete o.text;
+	}
 	if (o.close === "on") {
 		_closeLine = true; delete o.close;
 	}
@@ -140,7 +143,7 @@ function saveLineSettings() {
 				
 	for (const key in o) {
 		if (Object.prototype.hasOwnProperty.call(o, key)) {
-			s.otherSettings += ` -${key}  ${o[key]}`;
+			s.otherSettings += ` -${key} ${o[key]}`;
 		}
 	}
 }

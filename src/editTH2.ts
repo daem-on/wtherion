@@ -44,8 +44,11 @@ export default {
 		const settings = getSettings(p) as PointSettings;
 		const isStation = settings.type === "station";
 
-		p.radius = isStation ? 3 : 5;
-		p.fillColor = isStation ? pointColors.station : pointColors.default;
+		p.radius = settings.type === "station" ? 3 : 5;
+		if (settings.type in pointColors)
+			p.fillColor = pointColors[settings.type];
+		else
+			p.fillColor = pointColors.default;
 		// p.strokeColor = pointColors.default;
 		// p.strokeWidth = 2;
 	},
@@ -122,6 +125,12 @@ export default {
 		const newSettings = area.data.therionData.lineSettings;
 		area.data.therionData = newSettings;
 		this.drawLine(area as paper.Path);
+	},
+
+	toggleItemsLocked: function() {
+		const selection = pg.selection.getSelectedItems();
+		for (const item of selection)
+			item.locked = !item.locked;
 	},
 	
 	randomizeRotation: function() {

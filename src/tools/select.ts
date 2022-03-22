@@ -76,6 +76,11 @@ export default function() {
 			label: "%areaToLine%",
 			click: "pg.editTH2.areaToLine"
 		},
+		lockArea: {
+			type: "button",
+			label: "%toggleItemsLocked%",
+			click: "pg.editTH2.toggleItemsLocked"
+		},
 		orderTitle: {
 			type : 'title',
 			text : '%order%'

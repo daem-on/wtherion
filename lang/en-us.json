@@ -10,6 +10,7 @@
 	"area": "Area",
 	"lineToArea": "Convert line → area",
 	"areaToLine": "Convert area → line",
+	"toggleItemsLocked": "Lock/unlock item",
 	"order": "Order",
 	"bringToFront": "Bring to front",
 	"sendToBack": "Send to back",

@@ -99,7 +99,8 @@ export default {
 				break;
 			case 'customList':
 				const $wrapper = jQuery(`<div class="custom-select"></div>`);
-				$input = jQuery(`<input name="${key}" value="${options[key] ?? ""}">`);
+				$input = jQuery(`<input name="${key}">`);
+				$input.val(options[key] ?? "");
 				const $options = jQuery(`<div class="customListOptions"></div>`);
 
 				if (comp.options) {
@@ -110,8 +111,8 @@ export default {
 				constructSelect($wrapper[0] as HTMLDivElement, options[key], comp.imageRoot);
 				break;
 			case 'text':
-				const val = options[key] ?? "";
-				$input = jQuery(`<input type="text" id="textToolInput" data-type="${comp.type}" name="${key}" value="${val}">`);
+				$input = jQuery(`<input type="text" id="textToolInput" data-type="${comp.type}" name="${key}">`);
+				$input.val(options[key] ?? "");
 
 				break;
 			case 'button':

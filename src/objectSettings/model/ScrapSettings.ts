@@ -1,7 +1,7 @@
 export default class ScrapSettings {
 	
 	static readonly stringSettings: ReadonlyArray<string> = 
-		["projection", "scale", "author", "copyright"];
+		["scale", "projection", "author", "copyright"];
 
 	readonly className = "ScrapSettings";
 	projection: string;

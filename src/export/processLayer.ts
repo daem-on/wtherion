@@ -16,9 +16,10 @@ export function processLayer(layer: paper.Layer) {
 		const s = settings;
 		const o = [];
 
-		for (const setting of ScrapSettings.stringSettings) {
+		if (s.scale !== "") o.push(`-scale [${s.scale}]`);
+		for (const setting of ScrapSettings.stringSettings.slice(1)) {
 			if (s[setting])
-				o.push(`-${setting} ${s[setting]}`);
+				o.push(`-${setting} "${s[setting]}"`);
 		}
 		
 		if (s.otherSettings !== "")

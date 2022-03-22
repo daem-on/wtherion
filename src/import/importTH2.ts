@@ -316,7 +316,8 @@ function savePointSettings(point: paper.Shape, options: Record<string, string>) 
 }
 function loadImages() {
 	for (const line of _xthSettings) {
-		if (line.startsWith("##XTHERION## xth_me_image_insert")) {
+		if (line.startsWith("##XTHERION## xth_me_image_insert")
+			&& line.includes("xvi")) {
 			const params = line.slice(33).split(" ");
 			const x = Number.parseFloat(params[0].slice(1));
 			const y = -Number.parseFloat(params[3].slice(1));

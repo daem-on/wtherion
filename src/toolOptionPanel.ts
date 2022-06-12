@@ -219,15 +219,6 @@ export default {
 		});
 		$title.append($resetButton);
 		$panel.append($title, $options);
-		jQuery('body').append($panel);
-		
-		$panel.css({
-			'min-width': $title.outerWidth()+30+'px'
-		});
-		$panel.draggable({
-			containment: '#paperCanvas',
-			handle: '.panelTitle'
-		});
 		processInputRequirements();
 		
 		// shows/hides option-sections based on predefined requirements
@@ -246,6 +237,19 @@ export default {
 			});
 		}
 		
+		return $panel;
+	},
+
+	setupFloating(options: optionsType, components: componentList<optionsType>, changeCallback: () => void, title?: string) {
+		const $panel = this.setup(options, components, changeCallback, title);
+		
+		jQuery('body').append($panel);
+		
+		$panel.draggable({
+			containment: '#paperCanvas',
+			handle: '.panelTitle'
+		});
+
 		return $panel;
 	},
 	

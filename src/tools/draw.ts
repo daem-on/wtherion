@@ -174,7 +174,7 @@ export default function() {
 		};
 		
 		// setup floating tool options panel in the editor
-		pg.toolOptionPanel.setup(options, components, function() {
+		pg.toolOptionPanel.setupFloating(options, components, function() {
 			pg.tools.setLocalOptions(options);
 			lineCount = options.lines;
 			tool.fixedDistance = options.pointDistance;

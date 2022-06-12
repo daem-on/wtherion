@@ -79,7 +79,7 @@ export function updateWindow() {
 	}
 
 	if (!config) return;
-	pg.toolOptionPanel.setup(
+	pg.toolOptionPanel.setupFloating(
 		config.options,
 		config.components,
 		config.callback

@@ -77,6 +77,10 @@
 	line-height: 1.8;
 }
 
+.toolOptionPanel label[title] {
+	text-decoration: dotted underline #999;
+}
+
 .toolOptionPanel label,
 .toolOptionPanel input,
 .toolOptionPanel select,

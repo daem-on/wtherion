@@ -1,7 +1,7 @@
 // select tool
 // adapted from resources on http://paperjs.org and 
 // https://github.com/memononen/stylii
-const { drawGuides, clearGuideNumbers } = require("../../src/detailSelectGuides");
+const { drawGuides, clearGuideNumbers, hideGuideNumbers } = require("../../src/detailSelectGuides");
 const { updateWindow } = require("../../src/objectSettings/objectOptionPanel");
 
 module.exports = function() {
@@ -113,7 +113,6 @@ module.exports = function() {
 					pg.selection.clearSelection();
 				}
 				doRectSelection = true;
-				drawGuides();
 				return;
 			}
 			
@@ -201,7 +200,7 @@ module.exports = function() {
 			}
 			
 			pg.statusbar.update();
-			drawGuides();
+			hideGuideNumbers();
 		};
 		
 		tool.onMouseMove = function(event) {

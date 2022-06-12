@@ -60,7 +60,7 @@ export function activateTool() {
 		pg.editTH2.drawPoint(point);
 	};
 
-	pg.toolOptionPanel.setup(options, components, function() {
+	pg.toolOptionPanel.setupFloating(options, components, function() {
 		pg.tools.setLocalOptions(options);
 	});
 

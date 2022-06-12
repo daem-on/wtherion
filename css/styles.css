@@ -16,6 +16,10 @@ body {
 	/* background-color: #FFFFE0; */
 }
 
+#paperCanvas.xviMode {
+	background-color: rgb(175, 230, 255);
+}
+
 body, input, button, textarea, label {
 	font-size: 14px;
 	line-height: 16px;

@@ -6,6 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         <title>wtherion</title>
         <meta name="description" content="A web-based Therion map editor">
+        <link rel="manifest" href="manifest.json">
+        <meta name="theme-color" content="3AAB75">
+        <link rel="icon" href="assets/web-icons/favicon.ico" sizes="any">
+        <link rel="apple-touch-icon" href="assets/web-icons/apple-touch-icon.png">
         <!-- Inlined style for loading screen -->
         <style>
             .loadingScreen {
@@ -158,7 +162,8 @@
         <div id="colorInputBlocker" class="colorInputBlocker hidden"></div>
     </body>
     
-    <!-- <script>
+    <% if (isProduction) { %>
+    <script>
         if ("serviceWorker" in navigator) {
             window.addEventListener("load", () => {
                 navigator.serviceWorker
@@ -171,5 +176,6 @@
                     });
             });
         }
-    </script> -->
+    </script>
+    <% } %>
 </html>

@@ -73,7 +73,7 @@ export default {
 		this.document.setup();
 		this.layer.setup();
 		this.export.setup();
-		this.text.setup();
+		// this.text.setup();
 		this.menu.setup();
 		this.toolbar.setup();
 		this.stylebar.setup();

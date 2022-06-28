@@ -81,7 +81,7 @@
 		"about": "Névjegy",
 		"scraps": "Scrap-ek",
 		"scrapPanel": "Scrap panel",
-		"editScrap": "Scrap szerkesztése",
+		"editScrap": "Scrap beállításai",
 		"xviEdit": "XVI szerkesztési mód",
 		"tool": "Eszköz"
 	},
@@ -111,9 +111,15 @@
 	"inspect.area": "Terület",
 	"inspect.withLine": "aminek körvonala",
 	"inspect.point": "Pont",
+	"inspect.position": "Koordináták",
 	"apply": "Alkalmaz",
 	"outlineType": "Körvonal típusa",
 	"areaType": "Terület típusa",
 	"areaOptions.outline": "körvonal",
-	"areaOptions.area": "terület"
+	"areaOptions.area": "terület",
+	"scrapSettingsTitle": "Scrap beállításai",
+	"configTitle": "Konfiguráció",
+	"config.detailSelectGuides": "Részlet kijelölés segédek megjelenítése",
+	"config.showSegmentOptionPanel": "Minden szegmensnél beállítások panel",
+	"config.lockLayerNames": "Scrap nevek zárolása"
 }

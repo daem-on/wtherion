@@ -7,7 +7,7 @@ export function toggleMode() {
 	mode = mode === "xvi" ? "normal" : "xvi";
 
 	jQuery("#paperCanvas").toggleClass("xviMode", mode === "xvi");
-	jQuery("#modeInfo").text(mode === "xvi" ? "XVI Mode" : "");
+	jQuery("#modeInfo").toggleClass('hidden', mode !== "xvi");
 
 	updateLayerList();
 }
@@ -170,6 +170,7 @@ function handleLayerOrderChange() {
 
 export function updateLayerList() {
 	jQuery('.layerEntries').empty();
+	jQuery('.newLayerButton').toggleClass('hidden', mode !== "normal");
 	jQuery.each(paper.project.layers, function(index, layer) {
 		setupLayerEntry(layer);
 	});

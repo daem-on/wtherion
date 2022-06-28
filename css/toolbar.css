@@ -144,6 +144,10 @@
 	margin-left: 1em;
 }
 
+.statusBarSection.hidden {
+	display: none;
+}
+
 .statusBarSection:empty {
 	margin-left: 0;
 }

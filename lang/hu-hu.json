@@ -83,7 +83,8 @@
 		"scrapPanel": "Scrap panel",
 		"editScrap": "Scrap beállításai",
 		"xviEdit": "XVI szerkesztési mód",
-		"tool": "Eszköz"
+		"tool": "Eszköz",
+		"showConfigEditor": "Konfiguráció"
 	},
 	"tools.itemSelect": "Elem kijelölés",
 	"tools.detailSelect": "Részlet kijelölés",

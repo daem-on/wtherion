@@ -1,13 +1,10 @@
 import { componentList } from "../toolOptionPanel";
 import pg from "../init";
-import symbolList from "Res/symbol-list.json";
 import getSettings from "../objectSettings/model/getSettings";
 import PointSettings from "../objectSettings/model/PointSettings";
 import paper from "paper";
-
-const types = [];
-for (const category in symbolList)
-	types.push(symbolList[category]);
+import { correctToolEvent } from "./select";
+import { pointTypes } from "../objectSettings/pointSymbolList";
 
 export let options = {
 	id: "point",
@@ -19,7 +16,7 @@ const components: componentList<Partial<typeof options>> = {
 	type: {
 		type: "list",
 		label: "%type%",
-		options: types
+		options: pointTypes
 	},
 	stationName: {
 		type: "text",
@@ -36,7 +33,7 @@ export function activateTool() {
 	// get options from local storage if present
 	options = pg.tools.getLocalOptions(options) as any;
 
-	tool.onMouseDown = function(event: any) {
+	tool.onMouseDown = function(event: correctToolEvent) {
 		if (event.event.button > 0) return;
 
 		const result = paper.project.hitTest(event.point, {
@@ -62,7 +59,7 @@ export function activateTool() {
 
 	pg.toolOptionPanel.setupFloating(options, components, function() {
 		pg.tools.setLocalOptions(options);
-	});
+	}); 
 
 	tool.activate();
 }

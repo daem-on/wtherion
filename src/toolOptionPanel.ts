@@ -21,7 +21,7 @@ type component = {
 }
 
 export type componentList<T> = {
-	[componentName in keyof T]: component
+	[componentName in keyof T]: component;
 }
 
 type optionsType = {
@@ -83,11 +83,7 @@ export default {
 
 				if (comp.options) {
 					for (const value of comp.options) {
-						if (typeof value === "string")
-							$input.append(createOption(value, value, options[key]));
-						else $input.append(
-							createOptionCategory("Category", value, options[key])
-						);
+						$input.append(createOption(value, value, options[key]));
 					}
 				} else if (comp.optionValuePairs) {
 					for (const [display, value] of comp.optionValuePairs)
@@ -223,18 +219,21 @@ export default {
 		
 		// shows/hides option-sections based on predefined requirements
 		function processInputRequirements() {
-			jQuery.each(components, function(reqid, comp){
-				if(comp.requirements) {
-					jQuery.each(comp.requirements, function(reqkey, req){
-						const $el = jQuery('.option-section[data-id="'+reqid+'"]');
-						if(compareInputRequirement(options[reqkey], req)) {
-							$el.removeClass('hidden');
-						} else {
-							$el.addClass('hidden');
-						}
-					});
+			for (const name in components) {
+				const requirements = components[name].requirements;
+				if (requirements) {
+					for (const reqkey in requirements) {
+						$options
+						.children(`.option-section[data-id="${name}"]`)
+						.toggleClass(
+							"hidden",
+							!compareInputRequirement(
+								options[reqkey], requirements[reqkey]
+							)
+						);
+					}
 				}
-			});
+			}
 		}
 		
 		return $panel;
@@ -283,16 +282,14 @@ function compareInputRequirement(value: any, requirement: any) {
 }
 
 function createOption(value: string | number, display: string, selected: string | number) {
+	if (typeof value === "string" && value.startsWith("**")) {
+		const $category = jQuery(`<optgroup label="${value.substring(2)}" />`);
+		return $category;
+	}
+
 	const $opt = jQuery(`<option value="${value}">${display}</option>`);
 	if (value === selected) $opt.prop('selected', true);
 	return $opt;
-}
-
-function createOptionCategory(name: string, category: Array<string>, selected: string) {
-	const $category = jQuery(`<optgroup label="${name}"></optgroup>`);
-	for (const option of category)
-		$category.append(createOption(option, option, selected));
-	return $category;
 }
 
 function asNumOrString(val: string) {

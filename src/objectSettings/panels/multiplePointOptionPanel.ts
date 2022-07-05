@@ -3,11 +3,7 @@ import getSettings from "../model/getSettings";
 import { objectOptionPanelConfig } from "../objectOptionPanel";
 import pg from "../../init";
 import PointSettings from "../model/PointSettings";
-import symbolList from "Res/symbol-list.json";
-
-const types = [""];
-for (const category in symbolList)
-	types.push(symbolList[category]);
+import { pointTypes } from "../pointSymbolList";
 
 const defaultOptions = () => ({
 	type: "",
@@ -25,7 +21,7 @@ const components: componentList<any> = {
 	type: {
 		type: "list",
 		label: "%type%",
-		options: types,
+		options: pointTypes,
 	},
 	scale: {
 		type: "list",

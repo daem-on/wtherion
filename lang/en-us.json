@@ -104,6 +104,7 @@
 	"save.delete2": "permanently?",
 	"import.imageURL": "Paste URL to Image",
 	"import.svgURL": "Paste URL to SVG",
+	"import.embeddedTitle": "Import embedded files",
 	"clearSettings": "Clear all data stored locally? (projects, settings)",
 	"clearDocument": "Clear the document permanently?",
 	"translationCredits": "",
@@ -123,5 +124,6 @@
 	"configTitle": "Configuration",
 	"config.detailSelectGuides": "Detail select guides",
 	"config.showSegmentOptionPanel": "Generic segment option panel",
-	"config.lockLayerNames": "Lock layer names"
+	"config.lockLayerNames": "Lock layer names",
+	"ok": "OK"
 }

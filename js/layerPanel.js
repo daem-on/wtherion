@@ -9,6 +9,15 @@ export function toggleMode() {
 	jQuery("#paperCanvas").toggleClass("xviMode", mode === "xvi");
 	jQuery("#modeInfo").toggleClass('hidden', mode !== "xvi");
 
+	// auto-activate the first qualified layer
+	for (const layer of paper.project.layers) {
+		if ((mode === "xvi" && (layer.data?.xviLayer)) 
+		|| (mode === "normal" && !layer.data?.xviLayer)) {
+			layer.activate();
+			break;
+		}
+	}
+
 	updateLayerList();
 }
 

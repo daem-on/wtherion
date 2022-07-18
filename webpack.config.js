@@ -29,7 +29,8 @@ const config = {
             template: 'index.html',
             templateParameters: {
                 "loc": localization,
-                "isProduction": isProduction
+                "isProduction": isProduction,
+                "builtAt": new Date().toISOString()
             }
         }),
         new webpack.ProvidePlugin({

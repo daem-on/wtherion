@@ -9,7 +9,7 @@ import paper from "paper";
 import LineSettings from "../../src/objectSettings/model/LineSettings";
 
 /** Apparently paper's types are wrong and don't include Event.event */
-type correctToolEvent = paper.ToolEvent & {event: MouseEvent};
+export type correctToolEvent = paper.ToolEvent & {event: MouseEvent};
 
 export default function() {
 	let tool: paper.Tool;
@@ -75,6 +75,11 @@ export default function() {
 			type: "button",
 			label: "%areaToLine%",
 			click: "pg.editTH2.areaToLine"
+		},
+		lockArea: {
+			type: "button",
+			label: "%toggleItemsLocked%",
+			click: "pg.editTH2.toggleItemsLocked"
 		},
 		orderTitle: {
 			type : 'title',

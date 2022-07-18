@@ -28,7 +28,9 @@ const config = {
         new HtmlWebpackPlugin({
             template: 'index.html',
             templateParameters: {
-                "loc": localization
+                "loc": localization,
+                "isProduction": isProduction,
+                "builtAt": new Date().toISOString()
             }
         }),
         new webpack.ProvidePlugin({
@@ -39,6 +41,7 @@ const config = {
             patterns: [
             //   { from: "css", to: "css" },
               { from: "assets", to: "assets" },
+              { from: "manifest.json", to: "manifest.json" }
             ],
         }),
 
@@ -88,10 +91,9 @@ const config = {
 module.exports = () => {
     if (isProduction) {
         config.mode = 'production';
-        
-        
-        config.plugins.push(new WorkboxWebpackPlugin.GenerateSW());
-        
+        config.plugins.push(new WorkboxWebpackPlugin.GenerateSW({
+            maximumFileSizeToCacheInBytes: 6 * 1024 * 1024
+        }));
     } else {
         config.mode = 'development';
         config.devtool = "eval-source-map";

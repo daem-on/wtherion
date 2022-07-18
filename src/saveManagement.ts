@@ -43,6 +43,38 @@ export function showLoadSelect() {
 	floater("loadWindow", "Saved files", content, 400, 200);
 }
 
+export function showMultipleFileSelect(filenames: string[]): Promise<File[]> {
+	return new Promise((resolve, reject) => {
+		jQuery("#fileSelectWindow").remove();
+		const content = jQuery(document.createElement("div"));
+		const selectedFiles: Record<string, File> = {};
+
+		for (const filename of filenames) {
+			const label = jQuery(`<label>${filename}</label>`);
+			const extension = filename.substring(filename.lastIndexOf("."));
+			const fileInput: JQuery<HTMLInputElement> =
+				jQuery(`<input type="file" accept="${extension}">`);
+			fileInput.on("change", () => {
+				const files = fileInput[0].files;
+				if (files.length > 0) {
+					selectedFiles[filename] = files[0];
+				}
+			});
+			const div = jQuery(`<div></div>`);
+			div.append(label, fileInput);
+			content.append(div);
+		}
+
+		const ok = jQuery(`<button>%ok%</button>`);
+		ok.on("click", () => {
+			resolve(Object.values(selectedFiles));
+			jQuery("#fileSelectWindow").remove();
+		});
+		content.append(ok);
+		floater("fileSelectWindow", "%import.embeddedTitle%", content, 400, 200);
+	});
+}
+
 function loadFromStorage(name: string) {
 	jQuery("#loadWindow").remove();
 	setSaveFileName(name.substring(9));

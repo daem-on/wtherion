@@ -2,13 +2,10 @@ import { componentList } from "../../toolOptionPanel";
 import getSettings from "../model/getSettings";
 import { objectOptionPanelConfig } from "../objectOptionPanel";
 import pg from "../../init";
-import symbolList from "Res/symbol-list.json";
+import { pointTypes } from "../pointSymbolList";
 
 // const types = symbolList["special objects"]
 // 	.concat(symbolList["symbolic passage fills"]);
-const types = [];
-for (const category in symbolList)
-	types.push(symbolList[category]);
 
 const optionsCache = {
 	type: undefined,
@@ -30,7 +27,7 @@ const components: comp = {
 		// imageRoot: "assets/rendered/symbol",
 		type: "list",
 		label: "%type%",
-		options: types
+		options: pointTypes
 	},
 	invisible: {
 		type: "boolean",

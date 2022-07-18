@@ -32,7 +32,7 @@ export function show() {
 		}
 	}
 
-	pg.toolOptionPanel.setup(
+	pg.toolOptionPanel.setupFloating(
 		optionsCache,
 		components,
 		() => {

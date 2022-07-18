@@ -10,8 +10,29 @@
 		"slope": "rgb(223,197,47)"
 	},
 	"pointColors": {
-		"default": "#f00",
-		"station": "#eba800"
+		"default": "#418a29",
+		"station": "#eba800",
+		"bedrock": "#82ab74",
+		"blocks": "#82ab74",
+		"clay": "#82ab74",
+		"debris": "#82ab74",
+		"guano": "#82ab74",
+		"ice": "#82ab74",
+		"mudcrack": "#82ab74",
+		"mud": "#82ab74",
+		"pebbles": "#82ab74",
+		"raft": "#82ab74",
+		"sand": "#82ab74",
+		"snow": "#82ab74",
+		"water": "#82ab74",
+		"breakdown-choke": "#388f5d",
+		"clay-choke": "#388f5d",
+		"continuation": "#388f5d",
+		"entrance": "#388f5d",
+		"flowstonechoke": "#388f5d",
+		"low-end": "#388f5d",
+		"narrow-end": "#388f5d",
+		"section": "#d98d00"
 	},
 	"areaColors": {
 		"default": "#4444",

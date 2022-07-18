@@ -3,8 +3,9 @@ import LineSettings from "../objectSettings/model/LineSettings";
 import getSettings from "../objectSettings/model/getSettings";
 import AreaSettings from "../objectSettings/model/AreaSettings";
 import PointSettings from "../objectSettings/model/PointSettings";
-import { requestImportXVI } from "./importXVI";
+import { importFiles } from "./importXVI";
 import ScrapSettings from "../objectSettings/model/ScrapSettings";
+import { showMultipleFileSelect } from "../saveManagement";
 
 const toPoint = function(global: string[], global2: string[] = undefined) {
 	if (global2)
@@ -52,6 +53,7 @@ const _linesWithIds: Record<string, paper.Path> = {};
 const _areas: {type: string, ids: string[]}[] = [];
 
 export default function(source: string) {
+	_xthSettings.length = 0;
 	for (let line of source.split("\n")) {
 		line = line.trim();
 		if (line.startsWith("#")) {
@@ -91,7 +93,7 @@ export default function(source: string) {
 		}
 	}
 	applyAreas();
-	loadImages();
+	loadEmbedded();
 	pg.layer.activateDefaultLayer();
 	pg.layerPanel.updateLayerList();
 	pg.undo.clear();
@@ -107,6 +109,9 @@ function saveLineSettings() {
 	const s = getSettings(_currentPath) as LineSettings;
 	if (o.subtype) {
 		s.subtype = o.subtype; delete o.subtype;
+	}
+	if (o.text) {
+		s.text = o.text; delete o.text;
 	}
 	if (o.close === "on") {
 		_closeLine = true; delete o.close;
@@ -140,7 +145,7 @@ function saveLineSettings() {
 				
 	for (const key in o) {
 		if (Object.prototype.hasOwnProperty.call(o, key)) {
-			s.otherSettings += ` -${key}  ${o[key]}`;
+			s.otherSettings += ` -${key} ${o[key]}`;
 		}
 	}
 }
@@ -311,15 +316,21 @@ function savePointSettings(point: paper.Shape, options: Record<string, string>) 
 		}
 	}
 }
-function loadImages() {
+async function loadEmbedded() {
+	const list: [name: string, x: number, y: number][] = [];
 	for (const line of _xthSettings) {
 		if (line.startsWith("##XTHERION## xth_me_image_insert")) {
 			const params = line.slice(33).split(" ");
 			const x = Number.parseFloat(params[0].slice(1));
 			const y = -Number.parseFloat(params[3].slice(1));
-			const name = params[5];
-			requestImportXVI(name, x, y);
+			const name = / {*([^{}]+)}* 0 {}/.exec(line)[1];
+
+			list.push([name, x, y]);
 		}
 	}
+	if (list.length === 0) return;
+	const files = await showMultipleFileSelect(list.map(e => e[0]));
+	importFiles(files);
+	// TODO: move the images to the right position
+	// first we need to figure out how XTH coordinates are stored
 }
-

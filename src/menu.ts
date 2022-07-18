@@ -268,11 +268,13 @@ export function hideContextMenu() {
 	
 
 function showAboutModal() {
+	const builtAt = jQuery(`meta[name="built-at"]`).attr('content');
 	const html = `
 		<img src="assets/logo-cropped.png" width=600>
 		<p style="margin: 0.5em;">
 			<b style="font-weight: bold">wtherion</b>
 			version ${getVersionNumber()}
+			build ${builtAt}
 			%translationCredits%
 			Created by Csongor Zih, based on
 			<a href="https://github.com/w00dn/papergrapher" target="_blank">papergrapher</a>, created by Rolf Fleischmann.

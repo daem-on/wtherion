@@ -21,7 +21,7 @@ type component = {
 }
 
 export type componentList<T> = {
-	[componentName in keyof T]: component
+	[componentName in keyof T]: component;
 }
 
 type optionsType = {
@@ -83,11 +83,7 @@ export default {
 
 				if (comp.options) {
 					for (const value of comp.options) {
-						if (typeof value === "string")
-							$input.append(createOption(value, value, options[key]));
-						else $input.append(
-							createOptionCategory("Category", value, options[key])
-						);
+						$input.append(createOption(value, value, options[key]));
 					}
 				} else if (comp.optionValuePairs) {
 					for (const [display, value] of comp.optionValuePairs)
@@ -99,7 +95,8 @@ export default {
 				break;
 			case 'customList':
 				const $wrapper = jQuery(`<div class="custom-select"></div>`);
-				$input = jQuery(`<input name="${key}" value="${options[key] ?? ""}">`);
+				$input = jQuery(`<input name="${key}">`);
+				$input.val(options[key] ?? "");
 				const $options = jQuery(`<div class="customListOptions"></div>`);
 
 				if (comp.options) {
@@ -110,8 +107,8 @@ export default {
 				constructSelect($wrapper[0] as HTMLDivElement, options[key], comp.imageRoot);
 				break;
 			case 'text':
-				const val = options[key] ?? "";
-				$input = jQuery(`<input type="text" id="textToolInput" data-type="${comp.type}" name="${key}" value="${val}">`);
+				$input = jQuery(`<input type="text" id="textToolInput" data-type="${comp.type}" name="${key}">`);
+				$input.val(options[key] ?? "");
 
 				break;
 			case 'button':
@@ -218,33 +215,40 @@ export default {
 		});
 		$title.append($resetButton);
 		$panel.append($title, $options);
-		jQuery('body').append($panel);
-		
-		$panel.css({
-			'min-width': $title.outerWidth()+30+'px'
-		});
-		$panel.draggable({
-			containment: '#paperCanvas',
-			handle: '.panelTitle'
-		});
 		processInputRequirements();
 		
 		// shows/hides option-sections based on predefined requirements
 		function processInputRequirements() {
-			jQuery.each(components, function(reqid, comp){
-				if(comp.requirements) {
-					jQuery.each(comp.requirements, function(reqkey, req){
-						const $el = jQuery('.option-section[data-id="'+reqid+'"]');
-						if(compareInputRequirement(options[reqkey], req)) {
-							$el.removeClass('hidden');
-						} else {
-							$el.addClass('hidden');
-						}
-					});
+			for (const name in components) {
+				const requirements = components[name].requirements;
+				if (requirements) {
+					for (const reqkey in requirements) {
+						$options
+						.children(`.option-section[data-id="${name}"]`)
+						.toggleClass(
+							"hidden",
+							!compareInputRequirement(
+								options[reqkey], requirements[reqkey]
+							)
+						);
+					}
 				}
-			});
+			}
 		}
 		
+		return $panel;
+	},
+
+	setupFloating(options: optionsType, components: componentList<optionsType>, changeCallback: () => void, title?: string) {
+		const $panel = this.setup(options, components, changeCallback, title);
+		
+		jQuery('body').append($panel);
+		
+		$panel.draggable({
+			containment: '#paperCanvas',
+			handle: '.panelTitle'
+		});
+
 		return $panel;
 	},
 	
@@ -278,16 +282,14 @@ function compareInputRequirement(value: any, requirement: any) {
 }
 
 function createOption(value: string | number, display: string, selected: string | number) {
+	if (typeof value === "string" && value.startsWith("**")) {
+		const $category = jQuery(`<optgroup label="${value.substring(2)}" />`);
+		return $category;
+	}
+
 	const $opt = jQuery(`<option value="${value}">${display}</option>`);
 	if (value === selected) $opt.prop('selected', true);
 	return $opt;
-}
-
-function createOptionCategory(name: string, category: Array<string>, selected: string) {
-	const $category = jQuery(`<optgroup label="${name}"></optgroup>`);
-	for (const option of category)
-		$category.append(createOption(option, option, selected));
-	return $category;
 }
 
 function asNumOrString(val: string) {

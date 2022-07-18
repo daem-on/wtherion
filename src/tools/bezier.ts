@@ -200,7 +200,7 @@ export default function() {
 			}
 		};
 		
-		pg.toolOptionPanel.setup(options, components, function() {
+		pg.toolOptionPanel.setupFloating(options, components, function() {
 			pg.tools.setLocalOptions(options);
 		});
 		

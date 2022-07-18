@@ -4,7 +4,8 @@ const COMMMON_COLOR = new paper.Color(0.2, 0.2, 0.2);
 enum ProcessingState {
 	Default,
 	XVIStations,
-	XVIShots
+	XVIShots,
+	XVISketchlines
 }
 let state: ProcessingState = 0;
 
@@ -16,24 +17,22 @@ function createLayer(name?: string): paper.Layer {
 	return l;
 }
 
-export function requestImportXVI(filename: string, x: number, y: number) {
-	const input = document.createElement("input");
-	input.type = "file";
-	const layer = createLayer();
-	layer.data.moveTo = [x, y];
-	input.onchange = fileProcessor(layer);
-	input.accept = ".xvi";
-	input.click();
-}
-
-function fileProcessor(layer: paper.Layer): (event) => void {
-	return (event) => {
-		const reader = new FileReader();
-		reader.readAsText(event.target.files[0]);
-		reader.onload = function () {
-			importXVI(reader.result as string, event.target.files[0].name, layer);
-		};
-	};
+export function importFiles(list: File[]): void {
+	for	(const file of list) {
+		if (file.name.endsWith(".xvi")) {
+			const reader = new FileReader();
+			reader.readAsText(file);
+			reader.onload = function () {
+				importXVI(reader.result as string, file.name);
+			};
+		} else {
+			const reader = new FileReader();
+			reader.readAsDataURL(file);
+			reader.onload = function () {
+				pg.import.importAndAddImage(reader.result);
+			};
+		}
+	}
 }
 
 export function importXVI(source: string, name?: string, existingLayer?: paper.Layer) {
@@ -44,6 +43,7 @@ export function importXVI(source: string, name?: string, existingLayer?: paper.L
 		if (state === ProcessingState.Default) {
 			if (line.startsWith("set XVIstations")) state = ProcessingState.XVIStations;
 			if (line.startsWith("set XVIshots")) state = ProcessingState.XVIShots;
+			if (line.startsWith("set XVIsketchlines")) state = ProcessingState.XVISketchlines;
 		} else if (state === ProcessingState.XVIStations) {
 			if (line.startsWith("}")) {state = ProcessingState.Default; continue;}
 
@@ -54,6 +54,11 @@ export function importXVI(source: string, name?: string, existingLayer?: paper.L
 
 			const [x1, y1, x2, y2] = line.slice(1, line.length-1).split(" ").filter(i => i);
 			createShot(x1, y1, x2, y2);
+		} else if (state === ProcessingState.XVISketchlines) {
+			if (line.startsWith("}")) {state = ProcessingState.Default; continue;}
+
+			const list = line.slice(1, line.length-1).split(" ");
+			createSketchLine(list[0], list.slice(1));
 		}
 	}
 	new paper.Group([...layer.children]);
@@ -88,5 +93,20 @@ function createShot(x1: string, y1: string, x2: string, y2: string) {
 			[Number.parseFloat(x2), -Number.parseFloat(y2)]
 		],
 		strokeColor: COMMMON_COLOR
+	});
+}
+
+function createSketchLine(color: string, positions: string[]) {
+	const segments: [number, number][] = [];
+	for (let i = 0; i < positions.length; i += 2) {
+		segments.push([
+			Number.parseFloat(positions[i]),
+			-Number.parseFloat(positions[i+1])
+		]);
+	}
+
+	const path = new paper.Path({
+		strokeColor: color,
+		segments: segments
 	});
 }

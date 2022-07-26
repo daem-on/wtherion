@@ -108,7 +108,13 @@
                     <ul class="subMenu" id="toolSubMenu">
                     </ul>
                 </li>
-    
+
+                <li class="topMenuButton hidden"
+                    id="updateNotif"
+                    title="<%= loc.menu.updateTitle %>">
+                    <%= loc.menu.updateReady %>
+                </li>
+                
             </ul>
         </nav>
         <div id="toolSettingsBar" class="hidden">
@@ -165,12 +171,27 @@
     
     <% if (isProduction) { %>
     <script>
+        function showWaiting() {
+            document.getElementById("updateNotif").classList.remove("hidden");
+        }
+
         if ("serviceWorker" in navigator) {
             window.addEventListener("load", () => {
                 navigator.serviceWorker
                     .register("service-worker.js")
                     .then((registration) => {
                         console.log("Service Worker registered: ", registration);
+                        if (registration.waiting && registration.active) {
+                            showWaiting();
+                        } else {
+                            registration.addEventListener('updatefound', () => {
+                                registration.installing.addEventListener('statechange', () => {
+                                    if (event.target.state === 'installed' && registration.active) {
+                                        showWaiting();
+                                    }
+                                });
+                            });
+                        }
                     })
                     .catch((registrationError) => {
                         console.error("Service Worker registration failed: ", registrationError);

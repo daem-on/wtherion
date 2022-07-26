@@ -85,7 +85,9 @@
 		"editScrap": "Edit scrap",
 		"xviEdit": "XVI edit mode",
 		"tool": "Tool",
-		"showConfigEditor": "Configuration"
+		"showConfigEditor": "Configuration",
+		"updateReady": "Update ready",
+		"updateTitle": "Close and reopen app to update"
 	},
 	"tools.itemSelect": "Item Select",
 	"tools.detailSelect": "Detail Select",

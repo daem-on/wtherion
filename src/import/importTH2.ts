@@ -3,7 +3,7 @@ import LineSettings from "../objectSettings/model/LineSettings";
 import getSettings from "../objectSettings/model/getSettings";
 import AreaSettings from "../objectSettings/model/AreaSettings";
 import PointSettings from "../objectSettings/model/PointSettings";
-import { importFiles } from "./importXVI";
+import { importFiles, PositionList } from "./importXVI";
 import ScrapSettings from "../objectSettings/model/ScrapSettings";
 import { showMultipleFileSelect } from "../saveManagement";
 
@@ -317,7 +317,7 @@ function savePointSettings(point: paper.Shape, options: Record<string, string>) 
 	}
 }
 async function loadEmbedded() {
-	const list: [name: string, x: number, y: number][] = [];
+	const list: PositionList = [];
 	for (const line of _xthSettings) {
 		if (line.startsWith("##XTHERION## xth_me_image_insert")) {
 			const params = line.slice(33).split(" ");
@@ -330,7 +330,7 @@ async function loadEmbedded() {
 	}
 	if (list.length === 0) return;
 	const files = await showMultipleFileSelect(list.map(e => e[0]));
-	importFiles(files);
+	importFiles(files, list);
 	// TODO: move the images to the right position
 	// first we need to figure out how XTH coordinates are stored
 }

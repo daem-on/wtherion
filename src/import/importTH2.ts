@@ -21,18 +21,12 @@ const toPoint = function(global: string[], global2: string[] = undefined) {
 
 const getOptions = function(source: string) {
 	const options: Record<string, string> = {};
-				
-	// eslint-disable-next-line no-useless-escape
-	const re = /-([a-z]+) ['"\[]([^'"\[\]]+)['"\]]/g;
-	const matches = source.matchAll(re);
+
+	const re = /-([a-z-]+) ((?:(?! -[a-z]).)+)[ \n]/g;
+	const matches = (source + "\n").matchAll(re);
 	for (const match of matches) {
-		options[match[1]] = match[2];
-	}
-	const singleOptions = source.replace(re, "");
-	const split = singleOptions.split(" ");
-	for (let i = 0; i < split.length; i+=2) {
-		if (split[i].trim().startsWith("-"))
-			options[split[i].slice(1)] = split[i+1];
+		const value = match[2].trim();
+		options[match[1]] = value;
 	}
 	return options;
 };
@@ -145,7 +139,7 @@ function saveLineSettings() {
 				
 	for (const key in o) {
 		if (Object.prototype.hasOwnProperty.call(o, key)) {
-			s.otherSettings += ` -${key} ${o[key]}`;
+			s.otherSettings += `-${key} ${o[key]} `;
 		}
 	}
 }
@@ -208,7 +202,7 @@ function createLine(line: string) {
 	const lineSettings = getSettings(_currentPath) as LineSettings;
 	lineSettings.type = split[1];
 					
-	_parsedOptions = getOptions(line);
+	_parsedOptions = getOptions(split.slice(2).join(" "));
 }
 
 function createArea(line: string) {
@@ -260,7 +254,12 @@ function createScrap(line: string) {
 
 	for (const key of ScrapSettings.stringSettings) {
 		if (key in options) {
-			settings[key] = options[key];
+			const trimmed = 
+				options[key]
+				.trim()
+				.replace(/^["'\[]/, "")
+				.replace(/["'\]]$/, "");
+			settings[key] = trimmed;
 			delete options[key];
 		}
 	}

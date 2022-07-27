@@ -36,7 +36,16 @@
         </style>
     </head>
     <body>
-        <canvas id="paperCanvas" data-paper-resize="true" data-paper-hidpi="off"></canvas>
+        <div id="fileDropzone">
+            <canvas
+            id="paperCanvas"
+            data-paper-resize="true"
+            data-paper-hidpi="off"
+            ondragenter="pg.dropfiles.cancelAll(event);"
+            ondragover="pg.dropfiles.cancelAll(event);"
+            ondrop="pg.dropfiles.cancelAll(event); pg.dropfiles.drop(event);"
+            ></canvas>
+        </div>
         
         <div id="loadingScreen" class="loadingScreen">
             <div class="panel"><%= loc.loading %></div>

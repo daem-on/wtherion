@@ -28,6 +28,7 @@ import boolean from "../js/boolean.js";
 import edit from "../js/edit.js";
 import importHelper from "../js/import.js";
 import order from "../js/order.js";
+import * as dropfiles from "./dropfiles";
 
 import paper from "paper";
 import {setup as configSetup} from "./configManagement";
@@ -64,6 +65,7 @@ export default {
 	edit: edit,
 	import: importHelper,
 	order: order,
+	dropfiles: dropfiles,
 	
 	init: function() {
 		paper.setup('paperCanvas');

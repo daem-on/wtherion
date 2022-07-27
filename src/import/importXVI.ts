@@ -124,7 +124,8 @@ function createAreaShot(list: string[]) {
 
 	new paper.Path({
 		fillColor: COMMMON_FILL,
-		segments: segments
+		segments: segments,
+		closed: true
 	});
 }
 
@@ -139,7 +140,6 @@ function createSketchLine(color: string, positions: string[]) {
 
 	const path = new paper.Path({
 		strokeColor: color,
-		segments: segments,
-		closed: true
+		segments: segments
 	});
 }

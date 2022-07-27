@@ -331,6 +331,4 @@ async function loadEmbedded() {
 	if (list.length === 0) return;
 	const files = await showMultipleFileSelect(list.map(e => e[0]));
 	importFiles(files, list);
-	// TODO: move the images to the right position
-	// first we need to figure out how XTH coordinates are stored
 }

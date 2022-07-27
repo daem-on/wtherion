@@ -19,6 +19,11 @@ const toPoint = function(global: string[], global2: string[] = undefined) {
 	]);
 };
 
+const trimEnclosing = (text: string) =>
+	text.trim()
+	.replace(/^["'\[]/, "")
+	.replace(/["'\]]$/, "");
+
 const getOptions = function(source: string) {
 	const options: Record<string, string> = {};
 
@@ -102,10 +107,10 @@ function saveLineSettings() {
 	const o = _parsedOptions;
 	const s = getSettings(_currentPath) as LineSettings;
 	if (o.subtype) {
-		s.subtype = o.subtype; delete o.subtype;
+		s.subtype = trimEnclosing(o.subtype); delete o.subtype;
 	}
 	if (o.text) {
-		s.text = o.text; delete o.text;
+		s.text = trimEnclosing(o.text); delete o.text;
 	}
 	if (o.close === "on") {
 		_closeLine = true; delete o.close;
@@ -254,12 +259,7 @@ function createScrap(line: string) {
 
 	for (const key of ScrapSettings.stringSettings) {
 		if (key in options) {
-			const trimmed = 
-				options[key]
-				.trim()
-				.replace(/^["'\[]/, "")
-				.replace(/["'\]]$/, "");
-			settings[key] = trimmed;
+			settings[key] = trimEnclosing(options[key]);
 			delete options[key];
 		}
 	}
@@ -316,6 +316,9 @@ function savePointSettings(point: paper.Shape, options: Record<string, string>) 
 	}
 }
 async function loadEmbedded() {
+	const defaultLayer = pg.layer.getDefaultLayer();
+	if (defaultLayer) defaultLayer.data.therionData.xthSettings = _xthSettings;
+	
 	const list: PositionList = [];
 	for (const line of _xthSettings) {
 		if (line.startsWith("##XTHERION## xth_me_image_insert")) {

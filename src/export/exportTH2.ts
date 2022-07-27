@@ -54,6 +54,14 @@ function run() {
 	}
 		
 	const data = paper.project.exportJSON({asString: false, precision: 2}) as any;
+
+	exportText += "encoding utf-8\n";
+	const settingsLayer = data.find(l => l[1].data.therionData.xthSettings);
+	if (settingsLayer) {
+		for (const line of settingsLayer[1].data.therionData.xthSettings) {
+			exportText += line + "\n";
+		}
+	}
 	
 	for (const layer of data) {
 		if (layer[0] != "Layer") continue;

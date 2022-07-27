@@ -133,7 +133,7 @@ module.exports = function() {
 				return layer;
 			}
 		}
-		return false;
+		return null;
 	};
 		
 	

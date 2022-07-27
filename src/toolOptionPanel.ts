@@ -3,7 +3,8 @@ import pg from "../src/init";
 import {constructSelect} from "../src/objectSettings/customToolbarInput";
 
 type component = {
-	type?: "int" | "list" | "float" | "text" | "button" | "boolean" | "nullable-boolean" | "title" | "customList",
+	type?:	"int" | "list" | "float" | "text" | "button" | "boolean" |
+			"nullable-boolean" | "title" | "customList" | "textarea",
 	min?: any,
 	max?: any,
 	label?: string,
@@ -11,7 +12,7 @@ type component = {
 	optionValuePairs?: [string, string|number][],
 	click?: () => void,
 	maxWidth?: any,
-	minWidth?: any,
+	minWidth?: number,
 	text?: string,
 	tooltip?: string,
 	imageRoot?: string,
@@ -119,6 +120,13 @@ export default {
 				$sectionTitle = jQuery(`<h4>${comp.text} ⯆</h4>`);
 				$optionSection.addClass('titleSection collapsed');
 				break;
+			case 'textarea':
+				$input = jQuery(`<textarea name="${key}">${options[key] ?? ""}</textarea>`);
+				break;
+			}
+
+			if ($input && comp.minWidth) {
+				$input.css({'minWidth': comp.minWidth+'px'});
 			}
 
 			if($input) {
@@ -129,7 +137,7 @@ export default {
 						val = 
 							e.target.indeterminate ? null :
 							e.target.checked;
-					} else if (e.target.type == "text") {
+					} else if (e.target.type == "text" || e.target.type == "textarea") {
 						val = e.target.value;
 					} else if(e.target.type == 'number') {
 						const dataType = e.target.dataset.type;

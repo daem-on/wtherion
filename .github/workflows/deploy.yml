@@ -5,7 +5,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,11 +17,20 @@ jobs:
     - name: Build
       run: yarn build
 
-    - name: Add .nojekyll file
-      run: touch dist/.nojekyll
-
-    - name: Deploy to branch
-      uses: JamesIves/github-pages-deploy-action@4.1.8
+    - name: Setup Pages
+      uses: actions/configure-pages@v1
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v1
       with:
-        branch: deploy
-        folder: dist
+        path: './dist'
+      
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1

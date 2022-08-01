@@ -30,7 +30,7 @@ export function processPoint(item: any) {
 		if (s.rotation !== 0)
 			options += " -orientation " + s.rotation;
 		if (s.otherSettings)
-			options += " " + s.otherSettings;
+			options += " " + s.otherSettings.replace(/\n/g, " ");
 	}
 
 	addText("point", position, options);

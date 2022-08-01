@@ -144,7 +144,7 @@ function saveLineSettings() {
 				
 	for (const key in o) {
 		if (Object.prototype.hasOwnProperty.call(o, key)) {
-			s.otherSettings += `-${key} ${o[key]} `;
+			s.otherSettings += `-${key} ${o[key]}\n`;
 		}
 	}
 }
@@ -311,7 +311,7 @@ function savePointSettings(point: paper.Shape, options: Record<string, string>) 
 
 	for (const key in o) {
 		if (Object.prototype.hasOwnProperty.call(o, key)) {
-			s.otherSettings += `-${key} ${o[key]} `;
+			s.otherSettings += `-${key} ${o[key]}\n`;
 		}
 	}
 }

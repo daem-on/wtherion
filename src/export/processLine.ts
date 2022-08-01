@@ -48,7 +48,7 @@ export function processLine(item: paperExportedPath, settings?: LineSettings) {
 		// if (s.size !== undefined && s.size !== 0)
 		// 	o.push("-size " + s.size);
 		if (s.otherSettings !== "")
-			o.push(s.otherSettings.replace(";", "\n"));
+			o.push(s.otherSettings.replace(/\n/g, " "));
 		optionsString = o.join(" ");
 	}
 

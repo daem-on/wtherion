@@ -42,10 +42,17 @@ export function drawGuides() {
 			const vec1 = segment.previous.point.subtract(segment.point).normalize();
 			const vec2 = segment.next.point.subtract(segment.point).normalize();
 			const avg = vec1.add(vec2).multiply(0.5);
-			text.point = segment.point.add(avg.normalize(-14)).add(offset);
+			text.point = segment.point.add(avg.normalize(-14));
+
+			if (text.content.length > 1) {
+				if (avg.x < 0) text.justification = "left";
+				else text.justification = "right";
+			} else {
+				text.justification = "center";
+				text.point = text.point.add(offset);
+			}
 		}
 
-		text.justification = "center";
 		text.addTo(layer);
 	}
 }

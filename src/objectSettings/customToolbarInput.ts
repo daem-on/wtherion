@@ -21,6 +21,11 @@ export function constructSelect(element: HTMLDivElement, selectedVal: string, im
 		closeAllSelect(this.parentElement);
 		this.parentElement.classList.toggle("open");
 	});
+
+	input.addEventListener("keypress", e => {
+		if (e.key === "Enter") element.classList.remove("open");
+	})
+	input.addEventListener("blur", e => element.classList.remove("open"));
 }
 
 function constructOptionItem(option: HTMLOptionElement, imageRoot?: string) {

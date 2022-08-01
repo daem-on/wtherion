@@ -26,15 +26,15 @@ body, input, button, textarea, label {
 }
 
 input, select {
-	border: 1px solid #aaa;
-	outline: none;
+	/* border: 1px solid #aaa;
+	outline: none; */
 	padding: 0 4px;
 	height: 22px;
 	box-shadow: none;
 }
 
 .hidden {
-	display:none;
+	display: none;
 }
 
 .zoom-in {

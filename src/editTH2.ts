@@ -131,6 +131,7 @@ export default {
 		const selection = pg.selection.getSelectedItems();
 		for (const item of selection)
 			item.locked = !item.locked;
+		pg.undo.snapshot("Toggle locked");
 	},
 	
 	randomizeRotation: function() {

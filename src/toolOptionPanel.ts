@@ -2,11 +2,13 @@ import "jquery-ui/ui/widgets/draggable";
 import pg from "../src/init";
 import {constructSelect} from "../src/objectSettings/customToolbarInput";
 
+type ComponentType = "int" | "list" | "float" | "text" | "button" | "boolean" |
+"nullable-boolean" | "title" | "customList" | "textarea";
+
 type component = {
-	type?:	"int" | "list" | "float" | "text" | "button" | "boolean" |
-			"nullable-boolean" | "title" | "customList" | "textarea",
-	min?: any,
-	max?: any,
+	type?: ComponentType
+	min?: number,
+	max?: number,
 	label?: string,
 	options?: string[],
 	optionValuePairs?: [string, string|number][],
@@ -69,14 +71,8 @@ export default {
 				break;
 			case 'float':
 			case 'int':
-				let minAttr = '';
-				if(comp.min != undefined && comp.type == 'int') {
-					minAttr = ` min="${parseInt(comp.min)}"`;
-					
-				} else if(comp.min != undefined && comp.type == 'float') {
-					minAttr = ` min="${parseFloat(comp.min)}"`;
-				}
-				$input = jQuery(`<input type="number" data-type="${comp.type}" name="${key}" value="${options[key]}"${minAttr}>`);
+				$input = jQuery(`<input type="number" data-type="${comp.type}" name="${key}" value="${options[key]}">`);
+				$input.attr("min", comp.min);
 
 				break;
 			case 'list':
@@ -122,6 +118,7 @@ export default {
 				break;
 			case 'textarea':
 				$input = jQuery(`<textarea name="${key}">${options[key] ?? ""}</textarea>`);
+				$optionSection.addClass('vertical');
 				break;
 			}
 

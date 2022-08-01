@@ -47,8 +47,8 @@ export function setup() {
 		'top': baseTopOffset+'px',
 		'max-height': jQuery(window).height()-baseTopOffset+'px' 
 	});
-	var $header = jQuery('<header class="layerPanelHeader"><h2>Scraps</h2></header>');
-	var $newLayerButton = jQuery('<button class="newLayerButton">Add</button>');
+	var $header = jQuery('<header class="layerPanelHeader"><h2>%scraps%</h2></header>');
+	var $newLayerButton = jQuery('<button class="newLayerButton">%scraps.add%</button>');
 	
 	$newLayerButton.on("click", function() {
 		var newLayer = pg.layer.addNewLayer();

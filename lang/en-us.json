@@ -127,5 +127,7 @@
 	"config.detailSelectGuides": "Detail select guides",
 	"config.showSegmentOptionPanel": "Generic segment option panel",
 	"config.lockLayerNames": "Lock layer names",
-	"ok": "OK"
+	"ok": "OK",
+	"scraps": "Scraps",
+	"scraps.add": "Add"
 }

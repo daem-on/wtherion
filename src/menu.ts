@@ -5,7 +5,7 @@ import importerTh2 from "../src/import/importTH2";
 import pg from "../src/init";
 import { save, showLoadSelect, exportTH2, setSaveFileName } from "../src/saveManagement";
 import pgDocument from "../js/document";
-import * as layerPanel from "../js/layerPanel";
+import * as layerPanel from "./layerPanel";
 import { getVersionNumber } from "../src/configManagement";
 import * as configEditor from "./configEditor";
 

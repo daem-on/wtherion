@@ -1,7 +1,7 @@
 import jQuery from "jquery";
 import pgDocument from "../js/document.js";
 import layer from "../js/layer.js";
-import * as layerPanel from "../js/layerPanel.js";
+import * as layerPanel from "./layerPanel";
 import pgExport from "../js/export.js";
 import text from "../js/text.js";
 import * as menu from "./menu";
@@ -75,13 +75,13 @@ export default {
 		this.document.setup();
 		this.layer.setup();
 		this.export.setup();
-		// this.text.setup();
 		this.menu.setup();
 		this.toolbar.setup();
 		this.stylebar.setup();
 		this.statusbar.setup();
 		this.input.setup();
 		this.undo.setup();
+		this.layerPanel.setup();
 	}
 };
 

@@ -1,5 +1,7 @@
 import "jquery-ui/ui/widgets/sortable";
-import * as wtConfig from "../src/configManagement";
+import paper from "paper";
+import pg from "./init";
+import * as wtConfig from "./configManagement";
 
 let mode = "normal";
 
@@ -37,7 +39,7 @@ export function toggleVisibility() {
 };
 
 
-function setup() {
+export function setup() {
 	
 	var $panel = jQuery('<div class="layerPanel">');
 	var baseTopOffset = jQuery('.appNav').height();
@@ -118,7 +120,7 @@ function setupLayerEntry(layer) {
 	});
 	
 	if (wtConfig.get("lockLayerNames")) {
-		$layerNameInput.attr('disabled', true);
+		$layerNameInput.attr("disabled", "disabled");
 	}
 	
 	
@@ -146,7 +148,7 @@ function setupLayerEntry(layer) {
 			jQuery.each(items, function(index, item) {
 				pg.selection.setItemSelection(item, true);
 			});
-			jQuery(this).attr('checked', items.length >0);
+			jQuery(this).attr('checked', items.length>0 ? "" : null);
 		}
 	});
 
@@ -194,7 +196,7 @@ function updateLayerValues() {
 			
 			var selectedItems = 0;
 			jQuery.each(layer.children, function(index, child) {
-				if(child.selected || child.fullySelected) {
+				if(child.selected || (child as paper.Path).fullySelected) {
 					selectedItems++;
 				}
 			});

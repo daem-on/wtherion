@@ -129,5 +129,6 @@
 	"config.lockLayerNames": "Lock layer names",
 	"ok": "OK",
 	"scraps": "Scraps",
-	"scraps.add": "Add"
+	"scraps.add": "Add",
+	"history": "History"
 }

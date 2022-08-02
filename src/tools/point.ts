@@ -55,6 +55,7 @@ export function activateTool() {
 			}
 		}
 		pg.editTH2.drawPoint(point);
+		pg.undo.snapshot("point");
 	};
 
 	pg.toolOptionPanel.setupFloating(options, components, function() {

@@ -10,7 +10,7 @@ import toolbar from "./toolbar";
 import stylebar from "../js/stylebar.js";
 import statusbar from "../js/statusbar.js";
 import input from "../js/input.js";
-import undo from "../js/undo.js";
+import * as undo from "./undo";
 import * as tools from "./tools";
 import * as selection from "./selection";
 import guides from "../js/guides.js";
@@ -29,6 +29,7 @@ import edit from "../js/edit.js";
 import importHelper from "../js/import.js";
 import order from "../js/order.js";
 import * as dropfiles from "./dropfiles";
+import * as historyPanel from "./historyPanel";
 
 import paper from "paper";
 import {setup as configSetup} from "./configManagement";
@@ -82,6 +83,7 @@ export default {
 		this.input.setup();
 		this.undo.setup();
 		this.layerPanel.setup();
+		historyPanel.setup();
 	}
 };
 

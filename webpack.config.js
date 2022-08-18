@@ -13,7 +13,16 @@ const localization = require(`./lang/${buildLang}.json`);
 
 const stylesHandler = 'style-loader';
 
+function replaceLoc(_, p1) { return localization[p1] ?? p1; }
 
+function replaceLocDevelopment(_, p1) {
+    const loc = localization[p1];
+    if (loc === undefined) {
+        console.error(`Missing localization for ${p1}`);
+        return p1;
+    }
+    return loc;
+}
 
 const config = {
     entry: './src/index.ts',
@@ -58,7 +67,7 @@ const config = {
                         loader: 'string-replace-loader',
                         options: {
                             search: /%(\S+)%/g,
-                            replace(_, p1) {return localization[p1] ?? p1;},
+                            replace: isProduction ? replaceLoc : replaceLocDevelopment,
                         }
                     },
                     {

@@ -1,4 +1,5 @@
 import importTH2 from "./import/importTH2";
+import { loadJSONDocument } from "../js/document";
 
 export function cancelAll(event: Event) {
 	event.preventDefault();
@@ -12,6 +13,10 @@ export function drop(event: DragEvent) {
 		if (file.name.endsWith(".th2")) {
 			const reader = new FileReader();
 			reader.onload = () => importTH2(reader.result as string);
+			reader.readAsText(file);
+		} else if (file.name.endsWith(".json")) {
+			const reader = new FileReader();
+			reader.onload = () => loadJSONDocument(reader.result as string);
 			reader.readAsText(file);
 		}
 	}

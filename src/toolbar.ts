@@ -10,10 +10,10 @@ export type PGToolOptions = {
 	};
 };
 
-type PGTool = {
+export type PGTool = {
 	activateTool: () => void,
 	deactivateTool: () => void,
-	options: PGToolOptions
+	options: Record<string, any>
 }
 
 type ToolConstructor = {
@@ -73,6 +73,7 @@ const getPreviousTool = function() {
 
 const switchTool = function(toolID: string, forced?: boolean) {
 	try {
+		activeTool?.deactivateTool?.();
 		const opts = pg.tools.getToolInfoByID(toolID);
 		let tool: PGTool;
 		{

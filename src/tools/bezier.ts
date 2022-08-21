@@ -9,8 +9,18 @@ import { wallTypes } from "Res/wallTypes";
 import { componentList } from "../toolOptionPanel";
 import LineSettings from "../../src/objectSettings/model/LineSettings";
 import { getToolInfoByID } from "../../src/tools";
+import { PGTool } from "src/toolbar";
 
-export default function() {
+let dirty = false;
+
+function snapshotIfDirty() {
+	if (dirty) {
+		pg.undo.snapshot("bezier");
+		dirty = false;
+	}
+}
+
+export default function(): PGTool {
 	let tool: paper.Tool;
 	
 	let options = {
@@ -64,6 +74,19 @@ export default function() {
 			guide: false,
 			tolerance: 5 / paper.view.zoom
 		};
+
+		function createNewPath() {
+			path = pg.editTH2.createPath();
+
+			const settings = getSettings(path) as LineSettings;
+			settings.type = options.type;
+			if (["wall", "border", "water-flow"].includes(options.type))
+				settings.subtype = options.subtype;
+			if (options.type === "slope")
+				settings.size = options.size;
+			pg.editTH2.drawLine(path);
+			jQuery('.toolOptionPanel').remove();
+		}
 		
 		tool.onMouseDown = function(event) {
 			if(event.event.button > 0) return;  // only first mouse button
@@ -77,16 +100,8 @@ export default function() {
 			if(!path) {
 				if(!hoveredItem) {
 					pg.selection.clearSelection();
-					path = pg.editTH2.createPath();
-
-					const settings = getSettings(path) as LineSettings;
-					settings.type = options.type;
-					if (["wall", "border", "water-flow"].includes(options.type))
-						settings.subtype = options.subtype;
-					if (options.type === "slope")
-						settings.size = options.size;
-					pg.editTH2.drawLine(path);
-					jQuery('.toolOptionPanel').remove();
+					createNewPath();
+					dirty = true;
 					
 				} else {
 					path = hoveredItem.item;
@@ -122,6 +137,7 @@ export default function() {
 							result.segment.remove();
 							
 						}
+						dirty = true;
 					}
 				}
 
@@ -136,12 +152,15 @@ export default function() {
 							// check if the connection point is the first segment
 							// reverse path if it is not because join() 
 							// always connects to first segment)
-							if(hoverPath.firstSegment !== hoveredItem.segment) {
-								hoverPath.reverse();
+							if (hoverPath.firstSegment !== hoveredItem.segment) {
+								if (hoverPath.lastSegment === hoveredItem.segment) {
+									hoverPath.reverse();
+								} else return;
 							}
 							path.join(hoverPath);
 							path = null;
 							unselectSegment();
+							dirty = true;
 
 						} else if(hoveredItem.type === 'curve' || 
 							hoveredItem.type === 'stroke') {
@@ -166,8 +185,9 @@ export default function() {
 					currentSegment.selected = true;
 				}
 				
-				
+				if (mode === "add" || mode === "continue") dirty = true;
 			}
+
 		};
 		
 		tool.onMouseMove = function(event) {			
@@ -194,6 +214,7 @@ export default function() {
 			
 			if(path && path.closed) {
 				pg.undo.snapshot('bezier');
+				dirty = false;
 				path = null;
 			}
 			
@@ -203,6 +224,7 @@ export default function() {
 			if (event.key == "enter" || event.key == toolInfo.usedKeys.toolbar) {
 				pg.selection.clearSelection();
 				pg.undo.snapshot('bezier');
+				dirty = false;
 				path = null;
 			}
 		};
@@ -212,6 +234,10 @@ export default function() {
 		});
 		
 		tool.activate();
+	};
+
+	const deactivateTool = function() {
+		snapshotIfDirty();
 	};
 	
 	const findHandle = function(path: paper.Path, point: paper.Point) {
@@ -242,7 +268,8 @@ export default function() {
 	
 	return {
 		options: options,
-		activateTool : activateTool
+		activateTool : activateTool,
+		deactivateTool : deactivateTool,
 	};
 	
 }

@@ -1,5 +1,6 @@
 import pg from "../init";
 import getSettings from "../objectSettings/model/getSettings";
+import paper from "paper";
 
 let tool: paper.Tool;
 
@@ -7,7 +8,7 @@ export const options = {};
 
 const menuEntries = {};
 
-function objectToString(object) {
+export function objectToString(object: any) {
 	const s = getSettings(object);
 	if (!s) return "%inspect.unrecognized%";
 
@@ -43,10 +44,13 @@ export function activateTool() {
 	};
 	
 	tool.onMouseMove = function(event: paper.ToolEvent) {
-		pg.hover.handleHoveredItem(hitOptions, event);
-		const hovered = pg.hover.getHoveredItem();
+		// pg.hover.handleHoveredItem(hitOptions, event);
+		// const hovered = pg.hover.getHoveredItem();
+
+		const hovered = paper.project.hitTest(event.point, hitOptions);
+
 		if (hovered) {
-			pg.statusbar.showCustom(objectToString(hovered));
+			pg.statusbar.showCustom(objectToString(hovered.item));
 		} else {
 			const x = event.point.x.toFixed(1);
 			const y = event.point.y.toFixed(1);

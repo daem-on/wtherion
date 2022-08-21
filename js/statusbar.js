@@ -22,7 +22,7 @@ module.exports = function() {
 		jQuery('#zoomInput').val(Math.round(paper.view.zoom*100));
 		
 		var selectionType = pg.selection.getSelectionType();
-		if(selectionType) {
+		if (selectionType !== null) {
 			jQuery('#selectionTypeLabel').html(selectionType).removeClass('none');
 		} else {
 			jQuery('#selectionTypeLabel').html('No selection').addClass('none');

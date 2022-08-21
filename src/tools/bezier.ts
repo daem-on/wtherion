@@ -46,7 +46,7 @@ export default function() {
 
 	const activateTool = function() {
 		tool = new paper.Tool();
-		options = pg.tools.getLocalOptions(options) as typeof options;
+		options = pg.tools.getLocalOptions(options);
 		const toolInfo = getToolInfoByID("bezier");
 		
 		let path: paper.Path;
@@ -67,9 +67,10 @@ export default function() {
 		
 		tool.onMouseDown = function(event) {
 			if(event.event.button > 0) return;  // only first mouse button
-			
-			if (currentSegment) {
-				currentSegment.selected = false;
+
+			const selectedSegment = currentSegment?.selected ? currentSegment : null;
+			function unselectSegment() {
+				if (selectedSegment) selectedSegment.selected = false;
 			}
 			mode = type = currentSegment = null;
 			
@@ -113,6 +114,7 @@ export default function() {
 							!path.closed) {
 							mode = 'close';
 							path.closed = true;
+							unselectSegment();
 							path.firstSegment.selected = true;
 							
 						} else {
@@ -139,12 +141,14 @@ export default function() {
 							}
 							path.join(hoverPath);
 							path = null;
+							unselectSegment();
 
 						} else if(hoveredItem.type === 'curve' || 
 							hoveredItem.type === 'stroke') {
 						
 							mode = 'add';
 							// inserting segment on curve/stroke
+							unselectSegment();
 							const location = hoveredItem.location;
 							currentSegment = path.insert(location.index + 1, event.point);
 							currentSegment.selected = true;
@@ -153,10 +157,13 @@ export default function() {
 					} else {
 						mode = 'add';
 						// add a new segment to the path
+						unselectSegment();
 						currentSegment = path.add(event.point) as paper.Segment;
 						currentSegment.selected = true;
 						
 					}
+				} else {
+					currentSegment.selected = true;
 				}
 				
 				
@@ -209,20 +216,24 @@ export default function() {
 	
 	const findHandle = function(path: paper.Path, point: paper.Point) {
 		const types = ['point', 'handleIn', 'handleOut'];
+		const tolerance = 6/paper.view.zoom;
 		for (let i = 0, l = path.segments.length; i < l; i++) {
-			for (let j = 0; j < 3; j++) {
-				const type = types[j];
-				const segment = path.segments[i];
-				const segmentPoint = type === 'point'
-						? segment.point
-						: segment.point.add(segment[type]);
-				const distance = (point.subtract(segmentPoint)).length;
-				if (distance < 6) {
-					return {
-						type: type,
-						segment: segment
-					};
+			const segment = path.segments[i];
+			if (segment.selected) {
+				for (let j = 0; j < 3; j++) {
+					const type = types[j];
+					const segmentPoint = type === 'point'
+							? segment.point
+							: segment.point.add(segment[type]);
+					const distance = (point.subtract(segmentPoint)).length;
+					if (distance < tolerance) {
+						return { type: type, segment: segment };
+					}
 				}
+			} else {
+				const distance = (point.subtract(segment.point)).length;
+				if (distance < tolerance)
+					return { type: "point", segment: segment };
 			}
 		}
 		return null;

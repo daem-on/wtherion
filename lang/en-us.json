@@ -91,7 +91,8 @@
 		"github": "GitHub",
 		"loadFromGitHub": "Load from GitHub",
 		"commitNew": "Commit new file",
-		"commit": "Commit"
+		"commit": "Commit",
+		"historyPanel": "History panel"
 	},
 	"tools.itemSelect": "Item Select",
 	"tools.detailSelect": "Detail Select",

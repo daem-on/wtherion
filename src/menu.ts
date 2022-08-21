@@ -182,6 +182,11 @@ export const handlers = {
 	commitNew: saves.saveAsNewFileToGitHub,
 
 	loadFromGitHub: saves.showGitHubLoadModal,
+
+	historyPanel: function() {
+		jQuery("#historyPanel").toggleClass("hidden");
+		jQuery(document).trigger("HistoryChanged");
+	}
 };
 
 export function showCommitButton(show: boolean) {

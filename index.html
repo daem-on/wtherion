@@ -59,12 +59,16 @@
                     <%= loc.menu.main %>
                     <ul class="subMenu">
                         <li onclick="pg.menu.handlers.clearDocument()"><%= loc.menu.new %></li>
+                        <li class="space"></li>
                         <li onclick="pg.menu.handlers.open()"><%= loc.menu.open %></li>
-                        <li onclick="pg.menu.handlers.saveJSON()"><%= loc.menu.save %></li>
-                        <li onclick="pg.menu.handlers.saveJSON(true)"><%= loc.menu.saveAs %></li>
+                        <li class="space"></li>
+                        <li onclick="pg.menu.handlers.saveJSON()" class="halfWidth left"><%= loc.menu.save %></li>
+                        <li onclick="pg.menu.handlers.saveJSON(true)" class="halfWidth right"><%= loc.menu.saveAs %></li>
                         <li class="space"></li>
                         <li onclick="pg.menu.handlers.undo()" class="halfWidth left"><%= loc.menu.undo %></li>
                         <li onclick="pg.menu.handlers.redo()" class="halfWidth right"><%= loc.menu.redo %></li>
+                        <li class="space"></li>
+                        <li onclick="pg.menu.handlers.historyPanel()"><%= loc.menu.historyPanel %></li>
                         <li class="space"></li>
                         <li class="importMenu hasSubSubMenu"><%= loc.menu.import %>
                             <ul class="subSubMenu">
@@ -77,8 +81,9 @@
                                 <li class="importXVI_button"><%= loc.menu.xvi %><input id="fileUploadXVI" class="fileUploadInput" type="file" accept=".xvi" ></li>
                             </ul>
                         </li>
-                        <li onclick="pg.menu.handlers.exportTH2()"><%= loc.menu.export %></li>
-                        <li onclick="pg.menu.handlers.exportTH2(true)"><%= loc.menu.exportAs %></li>
+                        <li class="space"></li>
+                        <li onclick="pg.menu.handlers.exportTH2()" class="halfWidth left"><%= loc.menu.export %></li>
+                        <li onclick="pg.menu.handlers.exportTH2(true)" class="halfWidth right"><%= loc.menu.exportAs %></li>
                         <li class="space"></li>
                         <li class="exportMenu hasSubSubMenu"><%= loc.menu.otherExports %>
                             <ul class="subSubMenu">

@@ -1,4 +1,4 @@
-.historyPanel {
+#historyPanel {
 	position: absolute;
 	bottom: 0;
 	left: 0;
@@ -11,12 +11,17 @@
 	flex-direction: column;
 }
 
-.historyPanel > header {
-	padding: 10px;
-	display: flex;
+#historyPanel.hidden {
+	display: none;
 }
 
-.historyPanel > header > .divider {
+#historyPanel > header {
+	padding: 10px;
+	display: flex;
+	align-items: center;
+}
+
+#historyPanel > header > .divider {
 	flex: 1;
 }
 
@@ -30,7 +35,7 @@
 	line-height: 0;
 }
 
-.historyPanel .entriesContainer {
+#historyPanel .entriesContainer {
 	overflow-y: auto;
 }
 

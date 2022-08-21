@@ -1,7 +1,7 @@
 import {getHead, getStates, clear, undo, redo, moveHeadTo} from "./undo";
 
 export function setup() {
-	const $panel = jQuery("<div class='historyPanel'>");
+	const $panel = jQuery("<div id='historyPanel' class='hidden'>");
 	const $header = jQuery("<header class='historyPanelHeader'><h2>%history%</h2></header>");
 
 	$header.append(jQuery("<div class='divider'>"));
@@ -28,6 +28,8 @@ export function setup() {
 }
 
 function updateEntries(container: JQuery) {
+	if (container.parent().hasClass("hidden")) return;
+
 	const entries = getStates();
 	container.empty();
 	

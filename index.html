@@ -110,6 +110,11 @@
                         <li onclick="pg.menu.handlers.about()" title="About"><%= loc.menu.about %></li>
                     </ul>
                 </li>
+                <!-- <li class="topMenuButton"><%= loc.edit %>
+                    <ul class="subMenu">
+                        <li onclick="pg.editTH2.changeStationsNamespace()"><%= loc.menu.changeNamespace %></li>
+                    </ul>
+                </li> -->
                 <li class="topMenuButton"><%= loc.menu.scraps %>
                     <ul class="subMenu">
                         <li onclick="pg.menu.handlers.layerPanel()" title="Scrap Panel"><%= loc.menu.scrapPanel %></li>
@@ -123,11 +128,11 @@
                     </ul>
                 </li>
                 
-                <li class="topMenuButton"><%= loc.menu.github %>
+                <li class="topMenuButton"><%= loc.menu.github.github %>
                     <ul class="subMenu" id="toolSubMenu">
-                        <li onclick="pg.menu.handlers.loadFromGitHub()"><%= loc.menu.loadFromGitHub %></li>
-                        <li onclick="pg.menu.handlers.commitNew()"><%= loc.menu.commitNew %></li>
-                        <li id="commitButton" class="hidden" onclick="pg.menu.handlers.commit()"><%= loc.menu.commit %></li>
+                        <li onclick="pg.menu.handlers.loadFromGitHub()"><%= loc.menu.github.load %></li>
+                        <li onclick="pg.menu.handlers.commitNew()"><%= loc.menu.github.commitNew %></li>
+                        <li id="commitButton" class="hidden" onclick="pg.menu.handlers.commit()"><%= loc.menu.github.commit %></li>
                     </ul>
                 </li>
 

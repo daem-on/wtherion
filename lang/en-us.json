@@ -88,10 +88,12 @@
 		"showConfigEditor": "Configuration",
 		"updateReady": "Update ready",
 		"updateTitle": "Close and reopen app to update",
-		"github": "GitHub",
-		"loadFromGitHub": "Load from GitHub",
-		"commitNew": "Commit new file",
-		"commit": "Commit",
+		"github": {
+			"github": "GitHub",
+			"load": "Load from GitHub",
+			"commitNew": "Commit new file",
+			"commit": "Commit"
+		},
 		"historyPanel": "History panel"
 	},
 	"tools.itemSelect": "Item Select",
@@ -141,5 +143,7 @@
 	"ok": "OK",
 	"scraps": "Scraps",
 	"scraps.add": "Add",
-	"history": "History"
+	"history": "History",
+	"edit.changeNamespace": "Change namespace of all stations",
+	"edit.namespacePrompt": "Enter the new namespace. This will override all existing stations' namespace."
 }

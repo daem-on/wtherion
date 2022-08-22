@@ -136,6 +136,7 @@ export default {
 
 	changeStationsNamespace: function(addToEmpty = false) {
 		const newNamespace = prompt("%edit.namespacePrompt%");
+		if (!newNamespace) return;
 
 		for (const item of pg.helper.getAllPaperItems() as any[]) {
 			const settings = getSettings(item);

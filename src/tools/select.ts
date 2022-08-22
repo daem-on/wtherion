@@ -122,6 +122,11 @@ export default function() {
 			type: "button",
 			label: "%randomizeRotation%",
 			click: "pg.editTH2.randomizeRotation"
+		},
+		changeNamespace: {
+			type: "button",
+			label: "%edit.changeNamespace%",
+			click: "pg.editTH2.changeStationsNamespace"
 		}
 	};
 

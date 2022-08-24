@@ -10,6 +10,7 @@
 	"area": "Terület",
 	"lineToArea": "Vonal → terület átalakítás",
 	"areaToLine": "Terület → vonal átalakítás",
+	"toggleItemsLocked:": "Elem zárolása/feloldása",
 	"order": "Sorrend",
 	"bringToFront": "Előrehozás",
 	"sendToBack": "Hátraküldés",
@@ -84,7 +85,16 @@
 		"editScrap": "Scrap beállításai",
 		"xviEdit": "XVI szerkesztési mód",
 		"tool": "Eszköz",
-		"showConfigEditor": "Konfiguráció"
+		"showConfigEditor": "Konfiguráció",
+		"updateReady": "Frissítés elérhető",
+		"updateTitle": "Az alkalmazást be kell zárni a frissítéshez.",
+		"github": {
+			"github": "GitHub",
+			"load": "Betöltés GitHub-ról",
+			"commitNew": "Új fájl kommittálása",
+			"commit": "Kommittálás"
+		},
+		"historyPanel": "Előzmények"
 	},
 	"tools.itemSelect": "Elem kijelölés",
 	"tools.detailSelect": "Részlet kijelölés",
@@ -101,8 +111,13 @@
 	"save.deleteTooltip": "Mentés törlése",
 	"save.delete1": "Véglegesen törlöd ezt:",
 	"save.delete2": "?",
+	"save.githubLoadPrompt": "A betöltendő fájl URL-je:",
+	"save.githubNewFilePrompt": "Az új (nem létező) fájl URL-je:",
+	"save.githubCommitPrompt": "Kommit megjegyzés:",
+	"save.updateFileMessage": "Fájl frissítve:",
 	"import.imageURL": "Kép URL-je",
 	"import.svgURL": "SVG URL-je",
+	"import.embeddedTitle": "Beágyazott fájlok importálása",
 	"clearSettings": "Minden adatot törölsz? (mentések, beállítások)",
 	"clearDocument": "A nem mentett módosítások elvesznek. Folytatod?",
 	"translationCredits": "Fordította: Zih Csongor",
@@ -122,5 +137,13 @@
 	"configTitle": "Konfiguráció",
 	"config.detailSelectGuides": "Részlet kijelölés segédek megjelenítése",
 	"config.showSegmentOptionPanel": "Minden szegmensnél beállítások panel",
-	"config.lockLayerNames": "Scrap nevek zárolása"
+	"config.lockLayerNames": "Scrap nevek zárolása",
+	"config.githubToken": "GitHub token",
+	"config.githubToken.tooltip": "Egy GitHub Personal Access Token a 'repo' hozzáféréssel",
+	"ok": "OK",
+	"scraps": "Scrap-ek",
+	"scraps.add": "Új",
+	"history": "Előzmények",
+	"edit.changeNamespace": "Összes állomás névterének megváltoztatása",
+	"edit.namespacePrompt": "Ez a művelet felülírja az összes állomás névterét. Új névtér:"
 }

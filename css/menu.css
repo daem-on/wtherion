@@ -8,6 +8,9 @@
 	z-index: 100;
 }
 
+.appNav .i {
+	font-style: italic;
+}
 
 .appNav>.topMenu {
 	position: relative;
@@ -62,6 +65,20 @@
 	border-right: 1px solid #555;
 }
 
+.appNav .horizontal {
+	display: flex;
+	flex-direction: row;
+}
+
+.appNav .horizontal li {
+	flex: 1;
+	border-right: 1px solid #555;
+}
+
+.appNav .horizontal li:last-child {
+	border-right: none;
+}
+
 .appNav .subMenu {
 	display:none;
 	position: absolute;
@@ -79,7 +96,7 @@
 	min-width: 200px;
 }
 
-.appNav .subMenu>li {
+.appNav .subMenu li {
 	position: relative;
 	padding: 10px 20px;
 	color: #bbb;
@@ -91,22 +108,22 @@
 	
 }
 
-.appNav .subMenu>li:not(.title):hover {
+.appNav .subMenu li:not(.title):hover {
 	background-color: #444;
 	color: #fff;
 }
 
-.appNav .subMenu>li.title {
+.appNav .subMenu li.title {
 	color: #888;
 	font-size: 0.7em;
 }
 
-.appNav .subMenu>li.title:not(:first-child) {
+.appNav .subMenu li.title:not(:first-child) {
 	border-top: 1px solid #555;
 	margin-top: 1em;
 }
 
-.appNav .subMenu>li>.note {
+.appNav .subMenu li>.note {
 	color: #888;
 	font-size: 0.85em;
 	display:inline-block;
@@ -158,12 +175,12 @@
 	color: #bbb;
 }
 
-.subSubMenu>li {
+.appNav .subSubMenu>li {
 	position: relative;
 	padding: 6px 0;
 }
 
-.subSubMenu>li:hover {
+.appNav .subSubMenu>li:hover {
 	color: #fff;
 }
 

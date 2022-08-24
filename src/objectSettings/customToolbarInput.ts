@@ -22,11 +22,9 @@ export function constructSelect(element: HTMLDivElement, selectedVal: string, im
 		this.parentElement.classList.toggle("open");
 	});
 
-	input.addEventListener("keypress", e => {
-		if (e.key === "Enter") element.classList.remove("open");
+	input.addEventListener("keydown", e => {
+		if (e.key === "Enter" || e.key === "Escape") element.classList.remove("open");
 	});
-	// this gets triggered before the click and breaks functionality
-	// input.addEventListener("blur", e => element.classList.remove("open"));
 }
 
 function constructOptionItem(option: HTMLOptionElement, imageRoot?: string) {

@@ -1,6 +1,7 @@
 import paper from "paper";
-import { saveAs } from "file-saver";
+import { saveAs, showErrorWindow } from "file-saver";
 import { processLayer } from "./processLayer";
+import { floater } from "../../js/modal";
 	
 export function toGlobal(global: number[], local = [0, 0]) {
 	const x = Math.round((global[0]+local[0])*100)/100;
@@ -34,10 +35,6 @@ export function runWorker() {
 	
 export function asBlob() {
 	return new Blob([run()], {type: "text/th2"});
-}
-
-export function save() {
-	saveAs(asBlob(), "export.th2");
 }
 	
 function run() {

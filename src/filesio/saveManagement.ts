@@ -83,6 +83,19 @@ export function showMultipleFileSelect(filenames: string[]): Promise<File[]> {
 	});
 }
 
+function showErrorWindow(e: Error) {
+	const content = jQuery(document.createElement("div"));
+	content.append(jQuery(`<p>${e.message}</p>`));
+	content.append(jQuery(`<pre class="scrollable">${e.stack}</pre>`));
+
+	const report = jQuery(`<a>%error.report%</a>`);
+	report.attr("href", "https://github.com/daem-on/wtherion/issues/new");
+	report.attr("target", "_blank");
+	content.append(report);
+
+	floater("errorWindow", "%error.title%", content, 400, 200);
+}
+
 function loadFromStorage(name: string) {
 	jQuery("#loadWindow").remove();
 	setSaveFileName(name.substring(9));
@@ -124,13 +137,19 @@ export async function exportTH2(clearHandle = false) {
 		if (!exportFileHandle) return;
 	}
 	
-	const blob = asBlob();
-	if (window.showSaveFilePicker) {
-		const writable = await exportFileHandle.createWritable();
-		await writable.write(blob);
-		await writable.close();
-	} else {
+	try {
+		const blob = asBlob();
+		
 		saveAs(blob, "export.th2");
+		if (window.showSaveFilePicker) {
+			const writable = await exportFileHandle.createWritable();
+			await writable.write(blob);
+			await writable.close();
+		} else {
+			saveAs(blob, "export.th2");
+		}
+	} catch (e) {
+		showErrorWindow(e);
 	}
 }
 

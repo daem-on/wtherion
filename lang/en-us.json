@@ -145,5 +145,7 @@
 	"scraps.add": "Add",
 	"history": "History",
 	"edit.changeNamespace": "Change namespace of all stations",
-	"edit.namespacePrompt": "Enter the new namespace. This will override all existing stations' namespace."
+	"edit.namespacePrompt": "Enter the new namespace. This will override all existing stations' namespace.",
+	"error.title": "Encountered an error",
+	"error.report": "Report this error on GitHub"
 }

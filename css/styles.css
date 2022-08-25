@@ -33,6 +33,15 @@ input, select {
 	box-shadow: none;
 }
 
+pre {
+	font-family: monospace;
+	user-select: all;
+}
+
+pre.scrollable {
+	overflow-x: scroll;
+}
+
 .hidden {
 	display: none;
 }

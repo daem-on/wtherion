@@ -1,7 +1,7 @@
 import "jquery-ui/ui/widgets/sortable";
 import paper from "paper";
 import pg from "./init";
-import * as wtConfig from "./configManagement";
+import * as wtConfig from "./filesio/configManagement";
 
 let mode = "normal";
 

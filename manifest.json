@@ -9,5 +9,15 @@
 		{ "src": "assets/web-icons/icon-512.png", "type": "image/png", "sizes": "512x512" },
 		{ "src": "assets/web-icons/icon-192-maskable.png", "type": "image/png", "sizes": "192x192", "purpose": "maskable" },
 		{ "src": "assets/web-icons/icon-512-maskable.png", "type": "image/png", "sizes": "512x512", "purpose": "maskable" }
+	],
+	"file_handlers": [
+		{
+			"action": "/",
+			"accept": {
+				"application/json+wtherion": [".wtherion"]
+			},
+			"icons": [],
+			"launch_type": "multiple-clients"
+		}
 	]
 }

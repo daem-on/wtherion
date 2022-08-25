@@ -1,6 +1,6 @@
 import { componentList } from "./toolOptionPanel";
 import pg from "./init";
-import * as wtConf from "./configManagement";
+import * as wtConf from "./filesio/configManagement";
 
 const optionsCache = {
 	detailSelectGuides: false,

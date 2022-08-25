@@ -1,12 +1,13 @@
+import { loadJSONDocument } from "../../js/document";
+import importTH2 from "../import/importTH2";
+
 export function setup() {
-	if ('launchQueue' in window) {
-		console.log('File Handling API is supported!');
+	if ("launchQueue" in window) {
+		console.info("File Handling API is supported!");
 	
 		(window as any).launchQueue.setConsumer(launchParams => {
 			handleFiles(launchParams.files);
 		});
-	} else {
-		console.error('File Handling API is not supported!');
 	}
 }
 
@@ -16,6 +17,10 @@ async function handleFiles(files: FileSystemFileHandle[]) {
         const blob = await file.getFile();
         const text = await blob.text();
 
-        
+        if (file.name.endsWith(".th2")) {
+			importTH2(text);
+		} else if (file.name.endsWith(".json") || file.name.endsWith(".wtherion")) {
+			loadJSONDocument(text);
+		}
     }
 }

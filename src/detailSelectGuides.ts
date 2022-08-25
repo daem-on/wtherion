@@ -1,4 +1,4 @@
-import * as wtConfig from "./configManagement";
+import * as wtConfig from "./filesio/configManagement";
 import pg from "./init";
 import getSettings from "./objectSettings/model/getSettings";
 

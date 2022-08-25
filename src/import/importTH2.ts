@@ -5,7 +5,7 @@ import AreaSettings from "../objectSettings/model/AreaSettings";
 import PointSettings from "../objectSettings/model/PointSettings";
 import { importFiles, PositionList } from "./importXVI";
 import ScrapSettings from "../objectSettings/model/ScrapSettings";
-import { showMultipleFileSelect } from "../saveManagement";
+import { showMultipleFileSelect } from "../filesio/saveManagement";
 
 const toPoint = function(global: string[], global2: string[] = undefined) {
 	if (global2)

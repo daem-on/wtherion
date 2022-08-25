@@ -28,11 +28,12 @@ import boolean from "../js/boolean.js";
 import edit from "../js/edit.js";
 import importHelper from "../js/import.js";
 import order from "../js/order.js";
-import * as dropfiles from "./dropfiles";
+import * as dropfiles from "./filesio/dropfiles";
+import * as launchQueue from "./filesio/launchQueue";
 import * as historyPanel from "./historyPanel";
 
 import paper from "paper";
-import {setup as configSetup} from "./configManagement";
+import {setup as configSetup} from "./filesio/configManagement";
 
 // functions related to initializing pg
 
@@ -84,6 +85,7 @@ export default {
 		this.undo.setup();
 		this.layerPanel.setup();
 		historyPanel.setup();
+		launchQueue.setup();
 	}
 };
 

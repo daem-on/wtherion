@@ -3,10 +3,10 @@
 import * as importerXvi from "../src/import/importXVI";
 import importerTh2 from "../src/import/importTH2";
 import pg from "../src/init";
-import * as saves from "../src/saveManagement";
+import * as saves from "./filesio/saveManagement";
 import pgDocument from "../js/document";
 import * as layerPanel from "./layerPanel";
-import { getVersionNumber } from "../src/configManagement";
+import { getVersionNumber } from "./filesio/configManagement";
 import * as configEditor from "./configEditor";
 
 export function setup() {

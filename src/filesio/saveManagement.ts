@@ -1,11 +1,11 @@
-import pgDocument from "../js/document";
-import { floater } from "../js/modal";
-import { asBlob } from "./export/exportTH2";
+import pgDocument from "../../js/document";
+import { floater } from "../../js/modal";
+import { asBlob } from "../export/exportTH2";
 import { saveAs } from "file-saver";
 import * as wtConfig from "./configManagement";
 import { Octokit } from "@octokit/rest";
-import importTH2 from "./import/importTH2";
-import { showCommitButton } from "./menu";
+import importTH2 from "../import/importTH2";
+import { showCommitButton } from "../menu";
 
 let exportFileHandle: FileSystemFileHandle;
 let saveFileName: string;

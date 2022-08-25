@@ -3,10 +3,10 @@
 import * as importerXvi from "../src/import/importXVI";
 import importerTh2 from "../src/import/importTH2";
 import pg from "../src/init";
-import { save, showLoadSelect, exportTH2, setSaveFileName } from "../src/saveManagement";
+import * as saves from "./filesio/saveManagement";
 import pgDocument from "../js/document";
-import * as layerPanel from "../js/layerPanel";
-import { getVersionNumber } from "../src/configManagement";
+import * as layerPanel from "./layerPanel";
+import { getVersionNumber } from "./filesio/configManagement";
 import * as configEditor from "./configEditor";
 
 export function setup() {
@@ -126,13 +126,13 @@ export const handlers = {
 	
 	about: showAboutModal,
 
-	saveJSON: save,
+	saveJSON: saves.save,
 
-	open: showLoadSelect,
+	open: saves.showLoadSelect,
 
 	downloadJSON: pgDocument.saveJSONDocument,
 
-	exportTH2: exportTH2,
+	exportTH2: saves.exportTH2,
 			
 	importImageFromURL: function() {
 		const url = prompt("%import.imageURL% (jpg, png, gif)", "http://");
@@ -169,15 +169,29 @@ export const handlers = {
 	clearDocument: function() {
 		if (confirm('%clearDocument%')) {
 			pg.document.clear();
-			setSaveFileName(null);
+			saves.setSaveFileName(null);
 		}
 	},
 
 	xviMode: layerPanel.toggleMode,
 
-	showConfigEditor: configEditor.show
+	showConfigEditor: configEditor.show,
+
+	commit: saves.saveJSONToGitHub,
+
+	commitNew: saves.saveAsNewFileToGitHub,
+
+	loadFromGitHub: saves.showGitHubLoadModal,
+
+	historyPanel: function() {
+		jQuery("#historyPanel").toggleClass("hidden");
+		jQuery(document).trigger("HistoryChanged");
+	}
 };
 
+export function showCommitButton(show: boolean) {
+	jQuery("#commitButton").toggleClass("hidden", !show);
+}
 
 export function setupToolEntries(entries) {
 	const $toolMenu = jQuery('#toolSubMenu');		

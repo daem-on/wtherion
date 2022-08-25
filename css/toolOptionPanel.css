@@ -104,6 +104,16 @@
 	width: 100%;
 }
 
+.toolOptionPanel .option-section.vertical {
+	display: flex;
+	flex-direction: column;
+}
+
+.toolOptionPanel .option-section textarea {
+	overflow-wrap: normal;
+	white-space: pre;
+}
+
 .toolOptionPanel .toolOptionResetButton {
 	position: absolute;
 	width: 16px;

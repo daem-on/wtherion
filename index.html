@@ -36,7 +36,16 @@
         </style>
     </head>
     <body>
-        <canvas id="paperCanvas" data-paper-resize="true" data-paper-hidpi="off"></canvas>
+        <div id="fileDropzone">
+            <canvas
+            id="paperCanvas"
+            data-paper-resize="true"
+            data-paper-hidpi="off"
+            ondragenter="pg.dropfiles.cancelAll(event);"
+            ondragover="pg.dropfiles.cancelAll(event);"
+            ondrop="pg.dropfiles.cancelAll(event); pg.dropfiles.drop(event);"
+            ></canvas>
+        </div>
         
         <div id="loadingScreen" class="loadingScreen">
             <div class="panel"><%= loc.loading %></div>
@@ -50,12 +59,20 @@
                     <%= loc.menu.main %>
                     <ul class="subMenu">
                         <li onclick="pg.menu.handlers.clearDocument()"><%= loc.menu.new %></li>
-                        <li onclick="pg.menu.handlers.open()"><%= loc.menu.open %></li>
-                        <li onclick="pg.menu.handlers.saveJSON()"><%= loc.menu.save %></li>
-                        <li onclick="pg.menu.handlers.saveJSON(true)"><%= loc.menu.saveAs %></li>
                         <li class="space"></li>
-                        <li onclick="pg.menu.handlers.undo()" class="halfWidth left"><%= loc.menu.undo %></li>
-                        <li onclick="pg.menu.handlers.redo()" class="halfWidth right"><%= loc.menu.redo %></li>
+                        <li onclick="pg.menu.handlers.open()"><%= loc.menu.open %></li>
+                        <li class="space"></li>
+                        <div class="horizontal">
+                            <li onclick="pg.menu.handlers.saveJSON()"><%= loc.menu.save %></li>
+                            <li onclick="pg.menu.handlers.saveJSON(true)"><%= loc.menu.saveAs %></li>
+                        </div>
+                        <li class="space"></li>
+                        <div class="horizontal">
+                        <li onclick="pg.menu.handlers.undo()"><%= loc.menu.undo %></li>
+                        <li onclick="pg.menu.handlers.redo()"><%= loc.menu.redo %></li>
+                        </div>
+                        <li class="space"></li>
+                        <li onclick="pg.menu.handlers.historyPanel()"><%= loc.menu.historyPanel %></li>
                         <li class="space"></li>
                         <li class="importMenu hasSubSubMenu"><%= loc.menu.import %>
                             <ul class="subSubMenu">
@@ -68,8 +85,11 @@
                                 <li class="importXVI_button"><%= loc.menu.xvi %><input id="fileUploadXVI" class="fileUploadInput" type="file" accept=".xvi" ></li>
                             </ul>
                         </li>
+                        <li class="space"></li>
+                        <div class="horizontal">
                         <li onclick="pg.menu.handlers.exportTH2()"><%= loc.menu.export %></li>
                         <li onclick="pg.menu.handlers.exportTH2(true)"><%= loc.menu.exportAs %></li>
+                        </div>
                         <li class="space"></li>
                         <li class="exportMenu hasSubSubMenu"><%= loc.menu.otherExports %>
                             <ul class="subSubMenu">
@@ -96,6 +116,11 @@
                         <li onclick="pg.menu.handlers.about()" title="About"><%= loc.menu.about %></li>
                     </ul>
                 </li>
+                <!-- <li class="topMenuButton"><%= loc.edit %>
+                    <ul class="subMenu">
+                        <li onclick="pg.editTH2.changeStationsNamespace()"><%= loc.menu.changeNamespace %></li>
+                    </ul>
+                </li> -->
                 <li class="topMenuButton"><%= loc.menu.scraps %>
                     <ul class="subMenu">
                         <li onclick="pg.menu.handlers.layerPanel()" title="Scrap Panel"><%= loc.menu.scrapPanel %></li>
@@ -108,7 +133,21 @@
                     <ul class="subMenu" id="toolSubMenu">
                     </ul>
                 </li>
-    
+                
+                <li class="topMenuButton"><%= loc.menu.github.github %>
+                    <ul class="subMenu" id="toolSubMenu">
+                        <li onclick="pg.menu.handlers.loadFromGitHub()"><%= loc.menu.github.load %></li>
+                        <li onclick="pg.menu.handlers.commitNew()"><%= loc.menu.github.commitNew %></li>
+                        <li id="commitButton" class="hidden" onclick="pg.menu.handlers.commit()"><%= loc.menu.github.commit %></li>
+                    </ul>
+                </li>
+
+                <li class="topMenuButton hidden"
+                    id="updateNotif"
+                    title="<%= loc.menu.updateTitle %>">
+                    <%= loc.menu.updateReady %>
+                </li>
+                
             </ul>
         </nav>
         <div id="toolSettingsBar" class="hidden">
@@ -165,12 +204,27 @@
     
     <% if (isProduction) { %>
     <script>
+        function showWaiting() {
+            document.getElementById("updateNotif").classList.remove("hidden");
+        }
+
         if ("serviceWorker" in navigator) {
             window.addEventListener("load", () => {
                 navigator.serviceWorker
                     .register("service-worker.js")
                     .then((registration) => {
                         console.log("Service Worker registered: ", registration);
+                        if (registration.waiting && registration.active) {
+                            showWaiting();
+                        } else {
+                            registration.addEventListener('updatefound', () => {
+                                registration.installing.addEventListener('statechange', () => {
+                                    if (event.target.state === 'installed' && registration.active) {
+                                        showWaiting();
+                                    }
+                                });
+                            });
+                        }
                     })
                     .catch((registrationError) => {
                         console.error("Service Worker registration failed: ", registrationError);

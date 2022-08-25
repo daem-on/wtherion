@@ -1,6 +1,7 @@
 import paper from "paper";
-import { saveAs } from "file-saver";
+import { saveAs, showErrorWindow } from "file-saver";
 import { processLayer } from "./processLayer";
+import { floater } from "../../js/modal";
 	
 export function toGlobal(global: number[], local = [0, 0]) {
 	const x = Math.round((global[0]+local[0])*100)/100;
@@ -35,10 +36,6 @@ export function runWorker() {
 export function asBlob() {
 	return new Blob([run()], {type: "text/th2"});
 }
-
-export function save() {
-	saveAs(asBlob(), "export.th2");
-}
 	
 function run() {
 	exportText = "";
@@ -54,6 +51,14 @@ function run() {
 	}
 		
 	const data = paper.project.exportJSON({asString: false, precision: 2}) as any;
+
+	exportText += "encoding utf-8\n";
+	const settingsLayer = data.find(l => l[1].data.therionData.xthSettings);
+	if (settingsLayer) {
+		for (const line of settingsLayer[1].data.therionData.xthSettings) {
+			exportText += line + "\n";
+		}
+	}
 	
 	for (const layer of data) {
 		if (layer[0] != "Layer") continue;

@@ -15,6 +15,7 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
+    "@octokit/rest": "^19.0.4",
     "file-saver": "^2.0.5",
     "jquery": "^3.6.0",
     "jquery-ui": "^1.13.0",

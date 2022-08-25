@@ -122,6 +122,11 @@ export default function() {
 			type: "button",
 			label: "%randomizeRotation%",
 			click: "pg.editTH2.randomizeRotation"
+		},
+		changeNamespace: {
+			type: "button",
+			label: "%edit.changeNamespace%",
+			click: "pg.editTH2.changeStationsNamespace"
 		}
 	};
 
@@ -593,6 +598,7 @@ function getOpposingRectCornerNameByIndex(index: number) {
 }
 
 function showLineDirectionTick(line: paper.Path, settings: LineSettings) {
+	if (line.segments.length < 2) return;
 	const reverse = settings.reverse ? -1 : 1;
 	const normal = line.getNormalAt(0).multiply(10 * reverse);
 	const directionIndicator = new paper.Path([

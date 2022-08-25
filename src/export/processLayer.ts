@@ -23,7 +23,7 @@ export function processLayer(layer: paper.Layer) {
 		}
 		
 		if (s.otherSettings !== "")
-			o.push(s.otherSettings);
+			o.push(s.otherSettings.replace(/\n/g, " "));
 		optionsString = o.join(" ");
 	}
 

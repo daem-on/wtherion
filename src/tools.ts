@@ -44,9 +44,13 @@ export function getToolInfoByID(id: string) {
 	}
 }
 
+type ToolSettings = {
+	[key: string]: any,
+	id: string
+}
 
 // localstorage
-export function getLocalOptions(options: { [x: string]: any; id: string; }) {
+export function getLocalOptions<T extends ToolSettings>(options: T): T {
 	const storageJSON = localStorage.getItem('pg.tools.'+options.id);
 	if(storageJSON && storageJSON.length > 0) {
 		const storageOptions = JSON.parse(storageJSON);

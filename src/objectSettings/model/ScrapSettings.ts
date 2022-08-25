@@ -16,6 +16,7 @@ export default class ScrapSettings {
 		s.scale = "";
 		s.author = "";
 		s.copyright = "";
+		s.otherSettings = "";
 		return s;
 	}
 }

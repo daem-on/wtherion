@@ -1,5 +1,5 @@
 import defaultConfig from "Res/default-config.json";
-import versionConfig from "../versionconfig.json";
+import versionConfig from "../../versionconfig.json";
 let config: Record<string, any> = {};
 
 export function getVersionNumber() {

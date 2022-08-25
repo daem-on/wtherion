@@ -1,7 +1,7 @@
 import jQuery from "jquery";
 import pgDocument from "../js/document.js";
 import layer from "../js/layer.js";
-import * as layerPanel from "../js/layerPanel.js";
+import * as layerPanel from "./layerPanel";
 import pgExport from "../js/export.js";
 import text from "../js/text.js";
 import * as menu from "./menu";
@@ -10,7 +10,7 @@ import toolbar from "./toolbar";
 import stylebar from "../js/stylebar.js";
 import statusbar from "../js/statusbar.js";
 import input from "../js/input.js";
-import undo from "../js/undo.js";
+import * as undo from "./undo";
 import * as tools from "./tools";
 import * as selection from "./selection";
 import guides from "../js/guides.js";
@@ -28,9 +28,12 @@ import boolean from "../js/boolean.js";
 import edit from "../js/edit.js";
 import importHelper from "../js/import.js";
 import order from "../js/order.js";
+import * as dropfiles from "./filesio/dropfiles";
+import * as launchQueue from "./filesio/launchQueue";
+import * as historyPanel from "./historyPanel";
 
 import paper from "paper";
-import {setup as configSetup} from "./configManagement";
+import {setup as configSetup} from "./filesio/configManagement";
 
 // functions related to initializing pg
 
@@ -64,6 +67,7 @@ export default {
 	edit: edit,
 	import: importHelper,
 	order: order,
+	dropfiles: dropfiles,
 	
 	init: function() {
 		paper.setup('paperCanvas');
@@ -73,13 +77,15 @@ export default {
 		this.document.setup();
 		this.layer.setup();
 		this.export.setup();
-		// this.text.setup();
 		this.menu.setup();
 		this.toolbar.setup();
 		this.stylebar.setup();
 		this.statusbar.setup();
 		this.input.setup();
 		this.undo.setup();
+		this.layerPanel.setup();
+		historyPanel.setup();
+		launchQueue.setup();
 	}
 };
 

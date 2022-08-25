@@ -3,9 +3,9 @@ import LineSettings from "../objectSettings/model/LineSettings";
 import getSettings from "../objectSettings/model/getSettings";
 import AreaSettings from "../objectSettings/model/AreaSettings";
 import PointSettings from "../objectSettings/model/PointSettings";
-import { importFiles } from "./importXVI";
+import { importFiles, PositionList } from "./importXVI";
 import ScrapSettings from "../objectSettings/model/ScrapSettings";
-import { showMultipleFileSelect } from "../saveManagement";
+import { showMultipleFileSelect } from "../filesio/saveManagement";
 
 const toPoint = function(global: string[], global2: string[] = undefined) {
 	if (global2)
@@ -19,20 +19,19 @@ const toPoint = function(global: string[], global2: string[] = undefined) {
 	]);
 };
 
+const trimEnclosing = (text: string) =>
+	text.trim()
+	.replace(/^["'\[]/, "")
+	.replace(/["'\]]$/, "");
+
 const getOptions = function(source: string) {
 	const options: Record<string, string> = {};
-				
-	// eslint-disable-next-line no-useless-escape
-	const re = /-([a-z]+) ['"\[]([^'"\[\]]+)['"\]]/g;
-	const matches = source.matchAll(re);
+
+	const re = /-([a-z-]+) ((?:(?! -[a-z]).)+)[ \n]/g;
+	const matches = (source + "\n").matchAll(re);
 	for (const match of matches) {
-		options[match[1]] = match[2];
-	}
-	const singleOptions = source.replace(re, "");
-	const split = singleOptions.split(" ");
-	for (let i = 0; i < split.length; i+=2) {
-		if (split[i].trim().startsWith("-"))
-			options[split[i].slice(1)] = split[i+1];
+		const value = match[2].trim();
+		options[match[1]] = value;
 	}
 	return options;
 };
@@ -108,10 +107,10 @@ function saveLineSettings() {
 	const o = _parsedOptions;
 	const s = getSettings(_currentPath) as LineSettings;
 	if (o.subtype) {
-		s.subtype = o.subtype; delete o.subtype;
+		s.subtype = trimEnclosing(o.subtype); delete o.subtype;
 	}
 	if (o.text) {
-		s.text = o.text; delete o.text;
+		s.text = trimEnclosing(o.text); delete o.text;
 	}
 	if (o.close === "on") {
 		_closeLine = true; delete o.close;
@@ -145,7 +144,7 @@ function saveLineSettings() {
 				
 	for (const key in o) {
 		if (Object.prototype.hasOwnProperty.call(o, key)) {
-			s.otherSettings += ` -${key} ${o[key]}`;
+			s.otherSettings += `-${key} ${o[key]}\n`;
 		}
 	}
 }
@@ -208,7 +207,7 @@ function createLine(line: string) {
 	const lineSettings = getSettings(_currentPath) as LineSettings;
 	lineSettings.type = split[1];
 					
-	_parsedOptions = getOptions(line);
+	_parsedOptions = getOptions(split.slice(2).join(" "));
 }
 
 function createArea(line: string) {
@@ -260,14 +259,14 @@ function createScrap(line: string) {
 
 	for (const key of ScrapSettings.stringSettings) {
 		if (key in options) {
-			settings[key] = options[key];
+			settings[key] = trimEnclosing(options[key]);
 			delete options[key];
 		}
 	}
 
 	for (const key in options) {
 		if (Object.prototype.hasOwnProperty.call(options, key)) {
-			settings.otherSettings += ` -${key} ${options[key]}`;
+			settings.otherSettings += `-${key} ${options[key]}\n`;
 		}
 	}
 }
@@ -312,12 +311,15 @@ function savePointSettings(point: paper.Shape, options: Record<string, string>) 
 
 	for (const key in o) {
 		if (Object.prototype.hasOwnProperty.call(o, key)) {
-			s.otherSettings += ` -${key} ${o[key]}`;
+			s.otherSettings += `-${key} ${o[key]}\n`;
 		}
 	}
 }
 async function loadEmbedded() {
-	const list: [name: string, x: number, y: number][] = [];
+	const defaultLayer = pg.layer.getDefaultLayer();
+	if (defaultLayer) defaultLayer.data.therionData.xthSettings = _xthSettings;
+	
+	const list: PositionList = [];
 	for (const line of _xthSettings) {
 		if (line.startsWith("##XTHERION## xth_me_image_insert")) {
 			const params = line.slice(33).split(" ");
@@ -330,7 +332,5 @@ async function loadEmbedded() {
 	}
 	if (list.length === 0) return;
 	const files = await showMultipleFileSelect(list.map(e => e[0]));
-	importFiles(files);
-	// TODO: move the images to the right position
-	// first we need to figure out how XTH coordinates are stored
+	importFiles(files, list);
 }

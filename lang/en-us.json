@@ -85,7 +85,16 @@
 		"editScrap": "Edit scrap",
 		"xviEdit": "XVI edit mode",
 		"tool": "Tool",
-		"showConfigEditor": "Configuration"
+		"showConfigEditor": "Configuration",
+		"updateReady": "Update ready",
+		"updateTitle": "Close and reopen app to update",
+		"github": {
+			"github": "GitHub",
+			"load": "Load from GitHub",
+			"commitNew": "Commit new file",
+			"commit": "Commit"
+		},
+		"historyPanel": "History panel"
 	},
 	"tools.itemSelect": "Item Select",
 	"tools.detailSelect": "Detail Select",
@@ -102,6 +111,10 @@
 	"save.deleteTooltip": "Delete save file",
 	"save.delete1": "Delete",
 	"save.delete2": "permanently?",
+	"save.githubLoadPrompt": "Enter the URL of the file to load",
+	"save.githubNewFilePrompt": "Enter the URL of a non-existant file to create",
+	"save.githubCommitPrompt": "Enter the commit message",
+	"save.updateFileMessage": "Update file",
 	"import.imageURL": "Paste URL to Image",
 	"import.svgURL": "Paste URL to SVG",
 	"import.embeddedTitle": "Import embedded files",
@@ -125,5 +138,14 @@
 	"config.detailSelectGuides": "Detail select guides",
 	"config.showSegmentOptionPanel": "Generic segment option panel",
 	"config.lockLayerNames": "Lock layer names",
-	"ok": "OK"
+	"config.githubToken": "GitHub token",
+	"config.githubToken.tooltip": "A GitHub Personal Access Token with the 'repo' scope",
+	"ok": "OK",
+	"scraps": "Scraps",
+	"scraps.add": "Add",
+	"history": "History",
+	"edit.changeNamespace": "Change namespace of all stations",
+	"edit.namespacePrompt": "Enter the new namespace. This will override all existing stations' namespace.",
+	"error.title": "Encountered an error",
+	"error.report": "Report this error on GitHub"
 }

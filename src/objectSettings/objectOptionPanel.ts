@@ -8,7 +8,7 @@ import areaOptionPanel from "./panels/areaOptionPanel";
 import pointOptionPanel from "./panels/pointOptionPanel";
 import multipleLineOptionPanel from "./panels/multipleLineOptionPanel";
 import multiplePointOptionPanel from "./panels/multiplePointOptionPanel";
-import * as wtConfig from "../configManagement";
+import * as wtConfig from "../filesio/configManagement";
 
 export type objectOptionPanelConfig = {
 	options: Record<string, any>,

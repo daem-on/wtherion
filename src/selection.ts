@@ -1,6 +1,7 @@
 // functions related to selecting stuff
 import pg from "../src/init";
 import paper from "paper";
+import getSettings from "./objectSettings/model/getSettings";
 
 export function getSelectionMode() {
 	const activeTool = pg.toolbar.getActiveTool();
@@ -341,33 +342,44 @@ export function getSelectedItems() {
 	return itemsAndGroups;
 }
 
+const TypeNames = {
+	"LineSettings": "Line",
+	"AreaSettings": "Area",
+	"PointSettings": "Point",
+	"ScrapSettings": "Scrap"
+};
 
-export function getSelectionType() {
+export function getSelectionType(): string {
 	const selection = getSelectedItems();
 	if(selection.length === 0) {
-		return false;
+		return null;
 	}
 	
-	let selectionType = '';
-	let lastSelectionType = '';
-	for(let i=0; i<selection.length; i++) {
+	let selectionType = "";
+	let lastSelectionType = "";
+	for (let i=0; i<selection.length; i++) {
 		const item = selection[i];
-		if(getSelectionMode() === 'Segment') {
+		if(getSelectionMode() === "Segment") {
 			//todo: differentiate between segment, curve and handle
-			return 'Segment';
+			return "Segment";
 		}
 		
 		if(item.data.isPGTextItem) {
-			selectionType = 'Text';
+			selectionType = "Text";
 		} else {
-			selectionType = item.className;
+			const settings = getSettings(item as any);
+			if (settings !== null) {
+				selectionType = TypeNames[settings.className];
+			} else {
+				selectionType = item.className;
+			}
 		}
 		
-		if(selectionType === lastSelectionType || lastSelectionType === '') {
+		if(selectionType === lastSelectionType || lastSelectionType === "") {
 			lastSelectionType = selectionType;
 			
 		} else {
-			return 'Mixed';
+			return "Mixed";
 		}
 	}
 	return selectionType;

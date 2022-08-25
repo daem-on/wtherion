@@ -87,10 +87,6 @@ const components: comp = {
 		type: "text",
 		label: "%id%"
 	},
-	otherSettings: {
-		type: "text",
-		label: "%otherSettings%"
-	},
 	clip: {
 		type: "list",
 		label: "%clip%",
@@ -108,6 +104,10 @@ const components: comp = {
 			["%bottom% ▼", 1],
 			["%default% ⦿", 0]
 		]
+	},
+	otherSettings: {
+		type: "textarea",
+		label: "%otherSettings%"
 	},
 };
 	

@@ -30,8 +30,9 @@ const components: componentList<typeof optionsCache> = {
 		label: "%scrap.copyright%"
 	},
 	otherSettings: {
-		type: "text",
-		label: "%otherSettings%"
+		type: "textarea",
+		label: "%otherSettings%",
+		// minWidth: 300
 	},
 };
 

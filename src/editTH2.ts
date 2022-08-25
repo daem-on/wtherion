@@ -131,6 +131,24 @@ export default {
 		const selection = pg.selection.getSelectedItems();
 		for (const item of selection)
 			item.locked = !item.locked;
+		pg.undo.snapshot("Toggle locked");
+	},
+
+	changeStationsNamespace: function(addToEmpty = false) {
+		const newNamespace = prompt("%edit.namespacePrompt%");
+		if (!newNamespace) return;
+
+		for (const item of pg.helper.getAllPaperItems() as any[]) {
+			const settings = getSettings(item);
+			if (!settings || settings.className !== "PointSettings") continue;
+			if (settings.type !== "station") continue;
+			if (settings.name.includes("@")) {
+				const name = settings.name.split("@")[0];
+				settings.name = `${name}@${newNamespace}`;
+			} else if (addToEmpty) {
+				settings.name = `${settings.name}@${newNamespace}`;
+			}
+		}
 	},
 	
 	randomizeRotation: function() {

@@ -1,4 +1,4 @@
-let { save, exportTH2 } = require("../src/saveManagement");
+let { save, exportTH2 } = require("../src/filesio/saveManagement");
 
 // functions releated to input (mouse, keyboard)
 

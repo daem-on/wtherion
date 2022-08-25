@@ -9,8 +9,18 @@ import { wallTypes } from "Res/wallTypes";
 import { componentList } from "../toolOptionPanel";
 import LineSettings from "../../src/objectSettings/model/LineSettings";
 import { getToolInfoByID } from "../../src/tools";
+import { PGTool } from "src/toolbar";
 
-export default function() {
+let dirty = false;
+
+function snapshotIfDirty() {
+	if (dirty) {
+		pg.undo.snapshot("bezier");
+		dirty = false;
+	}
+}
+
+export default function(): PGTool {
 	let tool: paper.Tool;
 	
 	let options = {
@@ -46,7 +56,7 @@ export default function() {
 
 	const activateTool = function() {
 		tool = new paper.Tool();
-		options = pg.tools.getLocalOptions(options) as typeof options;
+		options = pg.tools.getLocalOptions(options);
 		const toolInfo = getToolInfoByID("bezier");
 		
 		let path: paper.Path;
@@ -64,28 +74,34 @@ export default function() {
 			guide: false,
 			tolerance: 5 / paper.view.zoom
 		};
+
+		function createNewPath() {
+			path = pg.editTH2.createPath();
+
+			const settings = getSettings(path) as LineSettings;
+			settings.type = options.type;
+			if (["wall", "border", "water-flow"].includes(options.type))
+				settings.subtype = options.subtype;
+			if (options.type === "slope")
+				settings.size = options.size;
+			pg.editTH2.drawLine(path);
+			jQuery('.toolOptionPanel').remove();
+		}
 		
 		tool.onMouseDown = function(event) {
 			if(event.event.button > 0) return;  // only first mouse button
-			
-			if (currentSegment) {
-				currentSegment.selected = false;
+
+			const selectedSegment = currentSegment?.selected ? currentSegment : null;
+			function unselectSegment() {
+				if (selectedSegment) selectedSegment.selected = false;
 			}
 			mode = type = currentSegment = null;
 			
 			if(!path) {
 				if(!hoveredItem) {
 					pg.selection.clearSelection();
-					path = pg.editTH2.createPath();
-
-					const settings = getSettings(path) as LineSettings;
-					settings.type = options.type;
-					if (["wall", "border", "water-flow"].includes(options.type))
-						settings.subtype = options.subtype;
-					if (options.type === "slope")
-						settings.size = options.size;
-					pg.editTH2.drawLine(path);
-					jQuery('.toolOptionPanel').remove();
+					createNewPath();
+					dirty = true;
 					
 				} else {
 					path = hoveredItem.item;
@@ -113,6 +129,7 @@ export default function() {
 							!path.closed) {
 							mode = 'close';
 							path.closed = true;
+							unselectSegment();
 							path.firstSegment.selected = true;
 							
 						} else {
@@ -120,6 +137,7 @@ export default function() {
 							result.segment.remove();
 							
 						}
+						dirty = true;
 					}
 				}
 
@@ -134,17 +152,22 @@ export default function() {
 							// check if the connection point is the first segment
 							// reverse path if it is not because join() 
 							// always connects to first segment)
-							if(hoverPath.firstSegment !== hoveredItem.segment) {
-								hoverPath.reverse();
+							if (hoverPath.firstSegment !== hoveredItem.segment) {
+								if (hoverPath.lastSegment === hoveredItem.segment) {
+									hoverPath.reverse();
+								} else return;
 							}
 							path.join(hoverPath);
 							path = null;
+							unselectSegment();
+							dirty = true;
 
 						} else if(hoveredItem.type === 'curve' || 
 							hoveredItem.type === 'stroke') {
 						
 							mode = 'add';
 							// inserting segment on curve/stroke
+							unselectSegment();
 							const location = hoveredItem.location;
 							currentSegment = path.insert(location.index + 1, event.point);
 							currentSegment.selected = true;
@@ -153,14 +176,18 @@ export default function() {
 					} else {
 						mode = 'add';
 						// add a new segment to the path
+						unselectSegment();
 						currentSegment = path.add(event.point) as paper.Segment;
 						currentSegment.selected = true;
 						
 					}
+				} else {
+					currentSegment.selected = true;
 				}
 				
-				
+				if (mode === "add" || mode === "continue") dirty = true;
 			}
+
 		};
 		
 		tool.onMouseMove = function(event) {			
@@ -187,6 +214,7 @@ export default function() {
 			
 			if(path && path.closed) {
 				pg.undo.snapshot('bezier');
+				dirty = false;
 				path = null;
 			}
 			
@@ -196,6 +224,7 @@ export default function() {
 			if (event.key == "enter" || event.key == toolInfo.usedKeys.toolbar) {
 				pg.selection.clearSelection();
 				pg.undo.snapshot('bezier');
+				dirty = false;
 				path = null;
 			}
 		};
@@ -206,23 +235,31 @@ export default function() {
 		
 		tool.activate();
 	};
+
+	const deactivateTool = function() {
+		snapshotIfDirty();
+	};
 	
 	const findHandle = function(path: paper.Path, point: paper.Point) {
 		const types = ['point', 'handleIn', 'handleOut'];
+		const tolerance = 6/paper.view.zoom;
 		for (let i = 0, l = path.segments.length; i < l; i++) {
-			for (let j = 0; j < 3; j++) {
-				const type = types[j];
-				const segment = path.segments[i];
-				const segmentPoint = type === 'point'
-						? segment.point
-						: segment.point.add(segment[type]);
-				const distance = (point.subtract(segmentPoint)).length;
-				if (distance < 6) {
-					return {
-						type: type,
-						segment: segment
-					};
+			const segment = path.segments[i];
+			if (segment.selected) {
+				for (let j = 0; j < 3; j++) {
+					const type = types[j];
+					const segmentPoint = type === 'point'
+							? segment.point
+							: segment.point.add(segment[type]);
+					const distance = (point.subtract(segmentPoint)).length;
+					if (distance < tolerance) {
+						return { type: type, segment: segment };
+					}
 				}
+			} else {
+				const distance = (point.subtract(segment.point)).length;
+				if (distance < tolerance)
+					return { type: "point", segment: segment };
 			}
 		}
 		return null;
@@ -231,7 +268,8 @@ export default function() {
 	
 	return {
 		options: options,
-		activateTool : activateTool
+		activateTool : activateTool,
+		deactivateTool : deactivateTool,
 	};
 	
 }

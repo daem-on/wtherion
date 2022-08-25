@@ -1,11 +1,12 @@
 import { componentList } from "./toolOptionPanel";
 import pg from "./init";
-import * as wtConf from "./configManagement";
+import * as wtConf from "./filesio/configManagement";
 
 const optionsCache = {
 	detailSelectGuides: false,
 	showSegmentOptionPanel: false,
-	lockLayerNames: false
+	lockLayerNames: false,
+	githubToken: "",
 };
 const components: componentList<typeof optionsCache> = {
 	detailSelectGuides: {
@@ -19,6 +20,11 @@ const components: componentList<typeof optionsCache> = {
 	lockLayerNames: {
 		type: "boolean",
 		label: "%config.lockLayerNames%"
+	},
+	githubToken: {
+		type: "text",
+		label: "%config.githubToken%",
+		tooltip: "%config.githubToken.tooltip%"
 	}
 };
 

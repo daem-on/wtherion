@@ -1,3 +1,4 @@
+import { assertValid } from "../../validate";
 export enum Place { Default, Bottom, Top }
 enum Outline { Default, In, Out, None }
 export enum Clip { Default, On, Off }
@@ -39,5 +40,12 @@ export default class LineSettings {
 		ls.size = 0;
 		ls.text = "";
 		return ls;
+	}
+
+	static validate(s: LineSettings) {
+		for (const setting of this.stringSettings) {
+			assertValid(!(s[setting] == null), `Missing ${setting}`, s);
+		}
+		assertValid(!(s.otherSettings == null), `Missing otherSettings`, s);
 	}
 }

@@ -2,9 +2,7 @@ import { loadJSONDocument } from "../../js/document";
 import importTH2 from "../import/importTH2";
 
 export function setup() {
-	if ("launchQueue" in window) {
-		console.info("File Handling API is supported!");
-	
+	if ("launchQueue" in window) {	
 		(window as any).launchQueue.setConsumer(launchParams => {
 			handleFiles(launchParams.files);
 		});

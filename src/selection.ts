@@ -368,7 +368,7 @@ export function getSelectionType(): string {
 			selectionType = "Text";
 		} else {
 			const settings = getSettings(item as any);
-			if (settings !== null) {
+			if (settings != null) {
 				selectionType = TypeNames[settings.className];
 			} else {
 				selectionType = item.className;

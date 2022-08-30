@@ -21,6 +21,7 @@ const toPoint = function(global: string[], global2: string[] = undefined) {
 
 const trimEnclosing = (text: string) =>
 	text.trim()
+	// eslint-disable-next-line no-useless-escape
 	.replace(/^["'\[]/, "")
 	.replace(/["'\]]$/, "");
 
@@ -154,10 +155,10 @@ function endLine() {
 	let lastpoint: string[];
 	for (let i = 0; i < segments.length; i++) {
 		const segment = segments[i];
-		if (segment.length == 2) {
+		if (segment.length === 2) {
 			_currentPath.add(new paper.Point(toPoint(segment)));
 			lastpoint = segment;
-		} else if (segment.length == 6) {
+		} else if (segment.length === 6) {
 			if (_currentPath.lastSegment)
 				_currentPath.lastSegment.handleOut =
 					toPoint(segment.slice(0, 2), lastpoint);

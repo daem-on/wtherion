@@ -58,9 +58,9 @@ export default {
 		l.strokeScaling = true;
 		l.fillColor = null;
 
-		if (settings.type == "wall")
+		if (settings.type === "wall")
 			l.strokeWidth = 2;
-		else if (settings.type == "rock-edge")
+		else if (settings.type === "rock-edge")
 			l.strokeWidth = 0.8;
 		else
 			l.strokeWidth = 1;
@@ -78,9 +78,9 @@ export default {
 	drawObject: function(object: PaperItemType) {
 		const settings = getSettings(object);
 		if (!settings) return;
-		if (settings.className == "AreaSettings") {
+		if (settings.className === "AreaSettings") {
 			this.drawArea(object as paper.Path);
-		} else if (settings.className == "LineSettings") {
+		} else if (settings.className === "LineSettings") {
 			this.drawLine(object as paper.Path);
 		}
 	},

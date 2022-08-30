@@ -193,7 +193,7 @@ export default function() {
 					});
 										
 				} else {
-					if (hitResult.item.layer != paper.project.activeLayer) break hit;
+					if (hitResult.item.layer !== paper.project.activeLayer) break hit;
 					// deselect all by default if the shift key isn't pressed
 					// also needs some special love for compound paths and groups,
 					// as their children are not marked as "selected"

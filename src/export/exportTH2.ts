@@ -42,7 +42,7 @@ function run() {
 	
 	//prepare items
 	for (const item of paper.project.getItems({className:"Shape"})) {
-		if (item.className == "Shape" && item.data && item.data.therionData) {
+		if (item.className === "Shape" && item.data && item.data.therionData) {
 			let rot = item.rotation % 360;
 		
 			if (rot < 0) rot += 360;
@@ -61,7 +61,7 @@ function run() {
 	}
 	
 	for (const layer of data) {
-		if (layer[0] != "Layer") continue;
+		if (layer[0] !== "Layer") continue;
 		if (layer[1].data && layer[1].data.isGuideLayer) continue;
 		processLayer(layer[1]);
 	}	

@@ -41,7 +41,7 @@ export function importFiles(files: File[], list: PositionList): void {
 
 export function importXVI(source: string, name?: string, moveTo?: paper.Point) {
 	const layer = createLayer(name);
-	var firstStation: [string, string] = null;
+	let firstStation: [string, string] = null;
 
 	for (let line of source.split("\n")) {
 		line = line.trim();
@@ -77,7 +77,7 @@ export function importXVI(source: string, name?: string, moveTo?: paper.Point) {
 	}
 	new paper.Group([...layer.children]);
 	pg.layerPanel.updateLayerList();
-	if (moveTo !== undefined && firstStation !== null) {
+	if (moveTo != null && firstStation != null) {
 		const [x, y] = firstStation;
 		const point = new paper.Point(Number.parseFloat(x), -Number.parseFloat(y));
 		layer.translate(moveTo.subtract(point));

@@ -27,7 +27,7 @@ export function updateWindow() {
 	
 	let config: objectOptionPanelConfig;
 
-	if (selected.length == 0) return;
+	if (selected.length === 0) return;
 
 	// Multiple selection
 	else if (selected.length > 1) {
@@ -35,9 +35,9 @@ export function updateWindow() {
 		for (const item of selected) {
 			if (item.className !== className) return;
 		}
-		if (pg.toolbar.getActiveTool().options.id == "select")
+		if (pg.toolbar.getActiveTool().options.id === "select")
 		if (isPath(selected[0])
-			&& getSettings(selected[0]).className == "LineSettings") {
+			&& getSettings(selected[0]).className === "LineSettings") {
 			config = multipleLineOptionPanel(selected as paper.Path[]);
 		} else if (isShape(selected[0])) {
 			config = multiplePointOptionPanel(selected as paper.Shape[]);
@@ -47,8 +47,8 @@ export function updateWindow() {
 	} else {
 
 		// Detail select
-		if (pg.toolbar.getActiveTool().options.id == "detailselect") {
-			if (selected.length > 1 ||selected[0].className != "Path")
+		if (pg.toolbar.getActiveTool().options.id === "detailselect") {
+			if (selected.length > 1 ||selected[0].className !== "Path")
 				return;
 			// ensure only one segment is editable
 			let selection = false;
@@ -68,12 +68,12 @@ export function updateWindow() {
 		// Non-detail select
 		else if (isPath(selected[0])) {
 			const settings = getSettings(selected[0]);
-			if (settings.className == "LineSettings")
+			if (settings.className === "LineSettings")
 				config = lineOptionPanel(selected[0] as paper.Path);
-			else if (settings.className == "AreaSettings")
+			else if (settings.className === "AreaSettings")
 				config = areaOptionPanel(selected[0] as paper.Path);
 		} else if (isShape(selected[0])) {
-			if (getSettings(selected[0]).className == "PointSettings") 
+			if (getSettings(selected[0]).className === "PointSettings") 
 				config = pointOptionPanel(selected[0] as paper.Shape);
 		} else return;
 	}

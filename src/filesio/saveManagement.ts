@@ -9,7 +9,7 @@ import { showCommitButton } from "../menu";
 
 let exportFileHandle: FileSystemFileHandle;
 let saveFileName: string;
-let gitHubDetails = {
+const gitHubDetails = {
 	path: "",
 	sha: ""
 };
@@ -24,7 +24,7 @@ export function save(clearName = false) {
 
 	if (!saveFileName) {
 		setSaveFileName(prompt("%save.saveFileName%"));
-		if (saveFileName === null) return;
+		if (saveFileName == null) return;
 	}
 
 	const json = pgDocument.documentAsJSON();

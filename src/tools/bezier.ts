@@ -221,7 +221,7 @@ export default function(): PGTool {
 		};
 
 		tool.onKeyDown = function(event: paper.KeyEvent) {
-			if (event.key == "enter" || event.key == toolInfo.usedKeys.toolbar) {
+			if (event.key === "enter" || event.key === toolInfo.usedKeys.toolbar) {
 				pg.selection.clearSelection();
 				pg.undo.snapshot('bezier');
 				dirty = false;

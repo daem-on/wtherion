@@ -62,7 +62,7 @@ export default {
 				$input = jQuery(`<input type="checkbox" name="${key}">`);
 				if(options[key] === true) {
 					$input.prop("checked", true);
-				} else if (options[key] === null) {
+				} else if (options[key] == null) {
 					$input.prop("indeterminate", true);
 					$input.prop("readonly", true);
 				}
@@ -130,38 +130,38 @@ export default {
 				// handle input changes by the user
 				$input.on('keyup blur change mousewheel', function(e) {
 					let val;
-					if(e.target.type == 'checkbox') {
+					if(e.target.type === 'checkbox') {
 						val = 
 							e.target.indeterminate ? null :
 							e.target.checked;
-					} else if (e.target.type == "text" || e.target.type == "textarea") {
+					} else if (e.target.type === "text" || e.target.type === "textarea") {
 						val = e.target.value;
-					} else if(e.target.type == 'number') {
+					} else if(e.target.type === 'number') {
 						const dataType = e.target.dataset.type;
 
-						if(dataType == 'int') {
+						if(dataType === 'int') {
 							val = parseInt(e.target.value);
 							const min = parseInt(jQuery(this).attr('min'));
 
 							if(!jQuery.isNumeric(val)) {
 								val = min;
-							} else if(min != undefined && min > val) {
+							} else if(min != null && min > val) {
 								val = min;
 								jQuery(this).val(min);
 							}
 
-						} else if(dataType == 'float') {
+						} else if(dataType === 'float') {
 							val = parseFloat(e.target.value);
 							const min = parseFloat(jQuery(this).attr('min'));
 							if(!jQuery.isNumeric(val)) {
 								val = min;
-							} if(min != undefined && min > val) {
+							} if(min != null && min > val) {
 								val = min;
 								jQuery(this).val(min);
 							}
 						}
 
-					} else if(e.target.type == 'select-one') {
+					} else if(e.target.type === 'select-one') {
 						val = e.target.value;
 						val = asNumOrString(val);
 					}
@@ -195,7 +195,7 @@ export default {
 				return;
 			}
 			if($input) {
-				if (comp.type == 'customList') {
+				if (comp.type === 'customList') {
 					$optionSection.append($label, $input.parent()[0]);
 				} else
 				$optionSection.append($label, $input);
@@ -260,13 +260,13 @@ export default {
 	update(options: optionsType) {
 		jQuery.each(options, function(key: string, opt) {
 			const $el = jQuery(`[name="${key}"]`);
-			if($el.attr('data-type') == 'int') {
+			if($el.attr('data-type') === 'int') {
 				$el.val(opt);
-			} else if($el.attr('data-type') == 'float') {
+			} else if($el.attr('data-type') === 'float') {
 				$el.val(opt);
-			} else if( $el.attr('data-type') == 'text') {
+			} else if( $el.attr('data-type') === 'text') {
 				$el.val(opt);
-			} else if($el.attr('data-type') == 'list'){
+			} else if($el.attr('data-type') === 'list'){
 				$el.val(opt);
 			}
 		});

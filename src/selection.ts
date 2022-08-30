@@ -274,7 +274,7 @@ export function cloneSelection() {
 
 
 export function setItemSelection(item, state) {
-	if (item.layer != paper.project.activeLayer) return;
+	if (item.layer !== paper.project.activeLayer) return;
 	const parentGroup = pg.group.getItemsGroup(item);
 	const itemsCompoundPath = pg.compoundPath.getItemsCompoundPath(item);
 	
@@ -486,7 +486,7 @@ export function rectangularSelectionGroupLoop(group: paper.Group | paper.Compoun
 
 
 export function handleRectangularSelectionItems(item: paper.Item, event: paper.Event, rect: paper.PathItem, mode?: string) {
-	if (item.layer != paper.project.activeLayer) return;
+	if (item.layer !== paper.project.activeLayer) return;
 	if(pg.item.isPathItem(item)) {
 		let segmentMode = false;
 		

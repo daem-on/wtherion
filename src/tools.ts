@@ -38,7 +38,7 @@ export function getToolList() {
 
 export function getToolInfoByID(id: string) {
 	for(let i=0; i<toolList.length; i++) {
-		if(toolList[i].id == id) {
+		if(toolList[i].id === id) {
 			return toolList[i];
 		}
 	}

@@ -7,7 +7,7 @@ export function getVersionNumber() {
 }
 
 export function exists(name: string) {
-	return config[name] !== undefined && config[name] !== null;
+	return config[name] != null;
 }
 
 export function get(name: string) {

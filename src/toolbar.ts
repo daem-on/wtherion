@@ -35,10 +35,10 @@ const setupToolList = function() {
 	const $toolsContainer = jQuery('.toolsContainer');
 	
 	jQuery.each(toolList, function(index, tool) {
-		if(tool.type == 'hidden') return true;
+		if(tool.type === 'hidden') return true;
 		
 		let shortCutInfo = '';
-		if(tool.usedKeys && tool.usedKeys.toolbar != '') {
+		if(tool.usedKeys && tool.usedKeys.toolbar !== '') {
 			shortCutInfo = ' ('+(tool.usedKeys.toolbar).toUpperCase()+')';
 		}
 		const $tool = jQuery('<div class="tool_'+tool.id+' tool" data-id="'+tool.id+'" title="'+tool.name+shortCutInfo+'">');
@@ -112,7 +112,7 @@ const switchTool = function(toolID: string, forced?: boolean) {
 
 
 const resetTools = function() {
-	if(activeTool !== undefined && activeTool !== null) {
+	if(activeTool != null) {
 		try {
 			activeTool.deactivateTool();
 		} catch(e) {

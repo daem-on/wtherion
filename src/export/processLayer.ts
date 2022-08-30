@@ -6,7 +6,7 @@ import { processLine, processCompoundPath } from "./processLine";
 import { addText, addWhitespace, makeBackup, restoreBackup } from "./exportTH2";
 
 export function processLayer(layer: paper.Layer) {
-	if (!layer.children || layer.children.length == 0)
+	if (!layer.children || layer.children.length === 0)
 		return;
 
 	const settings = getSettings(layer);
@@ -35,9 +35,9 @@ export function processLayer(layer: paper.Layer) {
 		switch (item[0]) {
 			case "Path":
 				const s = getSettings(item[1]);
-				if (s.className == "LineSettings")
+				if (s.className === "LineSettings")
 					processLine(item[1]);
-				else if (s.className == "AreaSettings")
+				else if (s.className === "AreaSettings")
 					processArea(item[1]);
 				exportedChildren++;
 				break;

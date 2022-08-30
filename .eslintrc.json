@@ -24,6 +24,6 @@
         "@typescript-eslint/no-unused-vars": "off",
         "no-case-declarations": "off",
         "semi": ["warn", "always"],
-        "eqeqeq": ["warn", "smart"]
+        "eqeqeq": ["warn", "always", {"null": "never"}]
     }
 }

@@ -27,6 +27,7 @@ let previousTool: PGTool;
 
 const setup = function() {
 	setupToolList();
+	setDefaultTool();
 };
 
 
@@ -43,24 +44,14 @@ const setupToolList = function() {
 		}
 		const $tool = jQuery('<div class="tool_'+tool.id+' tool" data-id="'+tool.id+'" title="'+tool.name+shortCutInfo+'">');
 		$tool.css({'background-image': 'url(assets/tools/tool_'+tool.id+'.svg)'});
-		$tool.click(function() {
+		$tool.on("click", function() {
 			switchTool(tool.id);
 		});
 		$toolsContainer.append($tool);
 	});
 	
 	pg.statusbar.update();
-
-	// set select tool as starting tool. timeout is needed...
-	setTimeout(function(){
-		if(paper.tools.length > 0) {
-			paper.tools[0].remove(); // remove default tool
-		}
-		setDefaultTool();
-	},300);
 };
-
-
 
 const getActiveTool = function() {
 	return activeTool;
@@ -104,6 +95,8 @@ const switchTool = function(toolID: string, forced?: boolean) {
 		tool.activateTool();
 		activeTool = tool;
 		jQuery('.tool_'+toolID+'').addClass('active');
+		// console.trace();
+		// console.log(`${toolID} is now active`, jQuery('.tool_'+toolID+''));
 
 	} catch(error) {
 		console.warn('The tool with the id "'+toolID+'" could not be loaded.', error);

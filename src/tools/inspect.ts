@@ -9,6 +9,10 @@ export const options = {};
 const menuEntries = {};
 
 export function objectToString(object: any) {
+	if (object?.data?.therionData?.className === "XVIStation") {
+		return object.data.therionData.name;
+	}
+
 	const s = getSettings(object);
 	if (!s) return "%inspect.unrecognized%";
 

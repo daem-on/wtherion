@@ -2,9 +2,9 @@ import { componentList } from "../../toolOptionPanel";
 import getSettings from "../model/getSettings";
 import AreaSettings from "../model/AreaSettings";
 import { objectOptionPanelConfig } from "../objectOptionPanel";
-import pg from "../../init";
 import wallList from "Res/walls-list.json";
 import areaList from "Res/area-list.json";
+import editTH2 from "../../editTH2";
 
 const wallTypes = wallList.labels
 	.concat(wallList.passages)
@@ -75,7 +75,7 @@ export default function(line: paper.Path): objectOptionPanelConfig {
 		settings.invisible = optionsCache.areaInvisible;
 		settings.lineSettings.id = optionsCache.id;
 		settings.lineSettings.otherSettings = optionsCache.otherSettings;
-		pg.editTH2.drawArea(line);
+		editTH2.drawArea(line);
 	};
 
 	return {

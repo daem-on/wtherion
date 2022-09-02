@@ -1,7 +1,7 @@
 // undo functionality
 // slightly modifed from https://github.com/memononen/stylii
-import pg from "./init";
 import paper from "paper";
+import layer from "../js/layer";
 
 type UndoState = {
 	type: string,
@@ -13,7 +13,7 @@ let head = -1;
 const maxUndos = 80;
 
 export function setup() {
-	pg.undo.snapshot('init');
+	snapshot('init');
 }
 
 export function snapshot(type: string) {
@@ -77,7 +77,7 @@ function restore(entry: UndoState) {
 	paper.project.clear();
 	paper.view.update();
 	paper.project.importJSON(entry.json);
-	pg.layer.reinitLayers(activeLayerID);
+	layer.reinitLayers(activeLayerID);
 }
 
 

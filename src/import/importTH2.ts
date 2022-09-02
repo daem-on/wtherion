@@ -1,4 +1,3 @@
-import pg from "../init";
 import LineSettings from "../objectSettings/model/LineSettings";
 import getSettings from "../objectSettings/model/getSettings";
 import AreaSettings from "../objectSettings/model/AreaSettings";
@@ -6,6 +5,10 @@ import PointSettings from "../objectSettings/model/PointSettings";
 import { importFiles, PositionList } from "./importXVI";
 import ScrapSettings from "../objectSettings/model/ScrapSettings";
 import { showMultipleFileSelect } from "../filesio/saveManagement";
+import { activateDefaultLayer, addNewLayer, getDefaultLayer } from "../../js/layer";
+import { updateLayerList } from "../layerPanel";
+import * as undo from "../undo";
+import editTH2 from "../editTH2";
 
 const toPoint = function(global: string[], global2: string[] = undefined) {
 	if (global2)
@@ -94,10 +97,10 @@ export default function(source: string) {
 	}
 	applyAreas();
 	loadEmbedded();
-	pg.layer.activateDefaultLayer();
-	pg.layerPanel.updateLayerList();
-	pg.undo.clear();
-	pg.undo.setup();
+	activateDefaultLayer();
+	updateLayerList();
+	undo.clear();
+	undo.setup();
 }
 
 function addSegment(line: string) {
@@ -179,7 +182,7 @@ function endLine() {
 	const lineSettings = getSettings(_currentPath) as LineSettings;
 	lineSettings.subtypes = _subtypes;
 	lineSettings.segmentSettings = _segmentOptions;
-	pg.editTH2.drawLine(_currentPath);
+	editTH2.drawLine(_currentPath);
 }
 				
 function addSubtype(line: string) {
@@ -196,7 +199,7 @@ function addSegmentOption(line: string) {
 				
 function createLine(line: string) {
 	const split = line.split(" ");
-	_currentPath = pg.editTH2.createPath();
+	_currentPath = editTH2.createPath();
 	_currentSegments = [];
 	_parsedOptions = {};
 	_linedef = true;
@@ -244,7 +247,7 @@ function applyAreas() {
 				line.data.therionData = AreaSettings.defaultSettings();
 				line.data.therionData.lineSettings = oldSettings;
 				line.data.therionData.type = area.type;
-				pg.editTH2.drawArea(line);
+				editTH2.drawArea(line);
 			}
 		}
 	}
@@ -252,7 +255,7 @@ function applyAreas() {
 				
 function createScrap(line: string) {
 	const split = line.split(" ");
-	const nl = pg.layer.addNewLayer(split[1], true);
+	const nl = addNewLayer(split[1], true);
 	nl.data.therionData.createdFrom = line;
 
 	const settings = getSettings(nl);
@@ -273,7 +276,7 @@ function createScrap(line: string) {
 }
 				
 function createPoint(line: string) {
-	const point = pg.editTH2.createPoint();
+	const point = editTH2.createPoint();
 	const split = line.split(" ");
 	const options = getOptions(split.slice(4).join(" "));
 	options.type = split[3];
@@ -281,7 +284,7 @@ function createPoint(line: string) {
 		point.rotation = Number.parseFloat(options.orient || options.orientation);
 	point.position = new paper.Point(toPoint(split.slice(1, 3)));
 	savePointSettings(point, options);
-	pg.editTH2.drawPoint(point);
+	editTH2.drawPoint(point);
 }
 
 function savePointSettings(point: paper.Shape, options: Record<string, string>) {
@@ -317,7 +320,7 @@ function savePointSettings(point: paper.Shape, options: Record<string, string>) 
 	}
 }
 async function loadEmbedded() {
-	const defaultLayer = pg.layer.getDefaultLayer();
+	const defaultLayer = getDefaultLayer();
 	if (defaultLayer) defaultLayer.data.therionData.xthSettings = _xthSettings;
 	
 	const list: PositionList = [];

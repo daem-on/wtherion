@@ -1,5 +1,4 @@
 import { componentList } from "../toolOptionPanel";
-import pg from "../init";
 import getSettings, { PaperItemType } from "./model/getSettings";
 import lineOptionPanel from "./panels/lineOptionPanel";
 import subtypeOptionPanel from "./panels/subtypeOptionPanel";
@@ -9,6 +8,9 @@ import pointOptionPanel from "./panels/pointOptionPanel";
 import multipleLineOptionPanel from "./panels/multipleLineOptionPanel";
 import multiplePointOptionPanel from "./panels/multiplePointOptionPanel";
 import * as wtConfig from "../filesio/configManagement";
+import { getSelectedItems } from "../selection";
+import toolbar from "../toolbar";
+import toolOptionPanel from "../toolOptionPanel";
 
 export type objectOptionPanelConfig = {
 	options: Record<string, any>,
@@ -21,7 +23,7 @@ function removeWindow() {
 }
 
 export function updateWindow() {
-	const selected = pg.selection.getSelectedItems() as PaperItemType[];
+	const selected = getSelectedItems() as PaperItemType[];
 	
 	removeWindow();
 	
@@ -35,7 +37,7 @@ export function updateWindow() {
 		for (const item of selected) {
 			if (item.className !== className) return;
 		}
-		if (pg.toolbar.getActiveTool().options.id === "select")
+		if (toolbar.getActiveTool().options.id === "select")
 		if (isPath(selected[0])
 			&& getSettings(selected[0]).className === "LineSettings") {
 			config = multipleLineOptionPanel(selected as paper.Path[]);
@@ -47,7 +49,7 @@ export function updateWindow() {
 	} else {
 
 		// Detail select
-		if (pg.toolbar.getActiveTool().options.id === "detailselect") {
+		if (toolbar.getActiveTool().options.id === "detailselect") {
 			if (selected.length > 1 ||selected[0].className !== "Path")
 				return;
 			// ensure only one segment is editable
@@ -79,7 +81,7 @@ export function updateWindow() {
 	}
 
 	if (!config) return;
-	pg.toolOptionPanel.setupFloating(
+	toolOptionPanel.setupFloating(
 		config.options,
 		config.components,
 		config.callback

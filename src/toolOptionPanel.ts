@@ -1,5 +1,6 @@
 import "jquery-ui/ui/widgets/draggable";
-import pg from "../src/init";
+import * as tools from "./tools";
+import toolbar from "./toolbar";
 import {constructSelect} from "../src/objectSettings/customToolbarInput";
 
 type ComponentType = "int" | "list" | "float" | "text" | "button" | "boolean" |
@@ -214,8 +215,8 @@ export default {
 
 		const $resetButton = jQuery('<button class="toolOptionResetButton" title="Reset Tool Settings">R</button>').click(function() {
 			if(confirm('Reset tool options to default?')) {
-				pg.tools.deleteLocalOptions(options.id);
-				pg.toolbar.switchTool(options.id, true);
+				tools.deleteLocalOptions(options.id);
+				toolbar.switchTool(options.id, true);
 			}
 		});
 		$title.append($resetButton);

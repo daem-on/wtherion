@@ -1,10 +1,20 @@
 // functions related to selecting stuff
-import pg from "../src/init";
+import pgDocument from "../js/document";
+import * as compoundPath from "../js/compoundPath";
+import stylebar from "../js/stylebar";
+import statusbar from "../js/statusbar";
+import * as hover from "../js/hover";
+import * as math from "../js/math";
+import * as geometry from "../js/geometry";
+import * as groups from "./group";
+import * as items from "./item";
+import toolbar from "./toolbar";
+import * as undo from "./undo";
 import paper from "paper";
 import getSettings from "./objectSettings/model/getSettings";
 
 export function getSelectionMode() {
-	const activeTool = pg.toolbar.getActiveTool();
+	const activeTool = toolbar.getActiveTool();
 	if(activeTool) {
 		const activeToolID = activeTool.options.id;
 		if(activeToolID === 'detailselect') {
@@ -17,7 +27,7 @@ export function getSelectionMode() {
 
 
 export function selectAllItems() {
-	const items = pg.document.getAllSelectableItems();
+	const items = pgDocument.getAllSelectableItems();
 	
 	for(let i=0; i<items.length; i++) {
 		setItemSelection(items[i], true);
@@ -26,10 +36,10 @@ export function selectAllItems() {
 
 
 export function selectRandomItems() {
-	const items = pg.document.getAllSelectableItems();
+	const items = pgDocument.getAllSelectableItems();
 	
 	for(let i=0; i<items.length; i++) {
-		if(pg.math.getRandomBoolean()) {
+		if(math.getRandomBoolean()) {
 			setItemSelection(items[i], true);
 		}
 	}
@@ -39,7 +49,7 @@ export function selectRandomItems() {
 
 
 export function selectAllSegments() {
-	const items = pg.document.getAllSelectableItems();
+	const items = pgDocument.getAllSelectableItems();
 	
 	for(let i=0; i<items.length; i++) {
 		selectItemSegments(items[i], true);
@@ -68,17 +78,17 @@ export function selectItemSegments(item, state) {
 
 export function clearSelection() {
 	paper.project.deselectAll();
-	pg.stylebar.sanitizeSettings();
+	stylebar.sanitizeSettings();
 	
-	pg.statusbar.update();
-	pg.stylebar.blurInputs();
-	pg.hover.clearHoveredItem();
+	statusbar.update();
+	stylebar.blurInputs();
+	hover.clearHoveredItem();
 	jQuery(document).trigger('SelectionChanged');
 }
 
 
 export function invertItemSelection() {
-	const items = pg.document.getAllSelectableItems();
+	const items = pgDocument.getAllSelectableItems();
 	
 	for(let i=0; i<items.length; i++) {
 		items[i].selected = !items[i].selected;
@@ -89,7 +99,7 @@ export function invertItemSelection() {
 
 
 export function invertSegmentSelection() {
-	const items = pg.document.getAllSelectableItems();
+	const items = pgDocument.getAllSelectableItems();
 	
 	for(let i=0; i<items.length; i++) {
 		const item = items[i];
@@ -123,7 +133,7 @@ export function deleteItemSelection() {
 	jQuery(document).trigger('DeleteItems');
 	jQuery(document).trigger('SelectionChanged');
 	paper.project.view.update();
-	pg.undo.snapshot('deleteItemSelection');
+	undo.snapshot('deleteItemSelection');
 }
 
 
@@ -137,7 +147,7 @@ export function deleteSegmentSelection() {
 	jQuery(document).trigger('DeleteSegments');
 	jQuery(document).trigger('SelectionChanged');
 	paper.project.view.update();
-	pg.undo.snapshot('deleteSegmentSelection');
+	undo.snapshot('deleteSegmentSelection');
 }
 
 
@@ -268,15 +278,15 @@ export function cloneSelection() {
 			cloned.data = JSON.parse(JSON.stringify(item.data));
 		item.selected = false;
 	}
-	pg.undo.snapshot('cloneSelection');
+	undo.snapshot('cloneSelection');
 
 }
 
 
 export function setItemSelection(item, state) {
 	if (item.layer !== paper.project.activeLayer) return;
-	const parentGroup = pg.group.getItemsGroup(item);
-	const itemsCompoundPath = pg.compoundPath.getItemsCompoundPath(item);
+	const parentGroup = groups.getItemsGroup(item);
+	const itemsCompoundPath = compoundPath.getItemsCompoundPath(item);
 	
 	// if selection is in a group, select group not individual items
 	if(parentGroup) {
@@ -295,7 +305,7 @@ export function setItemSelection(item, state) {
 		// then the item can be normally selected
 		item.selected = state;
 		// deselect children of compound-path or group for cleaner item selection
-		if(pg.compoundPath.isCompoundPath(item) || pg.group.isGroup(item)) {
+		if(compoundPath.isCompoundPath(item) || groups.isGroup(item)) {
 			
 			const children = item.children;
 			if(children) {
@@ -306,9 +316,9 @@ export function setItemSelection(item, state) {
 			}
 		}
 	}
-	pg.statusbar.update();
-	pg.stylebar.updateFromSelection();
-	pg.stylebar.blurInputs();
+	statusbar.update();
+	stylebar.updateFromSelection();
+	stylebar.blurInputs();
 	
 	jQuery(document).trigger('SelectionChanged');
 	
@@ -324,12 +334,12 @@ export function getSelectedItems() {
 
 	for(let i=0; i<allItems.length; i++) {
 		const item = allItems[i];
-		if(pg.item.isLayer(item)) {
+		if(items.isLayer(item)) {
 			continue;
 		}
-		if(pg.group.isGroup(item) &&
-			!pg.group.isGroup(item.parent) ||
-			!pg.group.isGroup(item.parent)) {
+		if(groups.isGroup(item) &&
+			!groups.isGroup(item.parent) ||
+			!groups.isGroup(item.parent)) {
 			if(item.data && !item.data.isSelectionBound) {
 				itemsAndGroups.push(item);
 			}
@@ -413,15 +423,15 @@ export function switchSelectedHandles(mode) {
 			const seg = segments[j];
 			if(!seg.selected) continue;
 
-			pg.geometry.switchHandle(seg, mode);
+			geometry.switchHandle(seg, mode);
 		}
 	}
-	pg.undo.snapshot('switchSelectedHandles');
+	undo.snapshot('switchSelectedHandles');
 }
 
 
 export function removeSelectedSegments() {
-	pg.undo.snapshot('removeSelectedSegments');
+	undo.snapshot('removeSelectedSegments');
 	
 	const items = getSelectedItems() as paper.Path[];
 	const segmentsToRemove: paper.Segment[] = [];
@@ -444,16 +454,16 @@ export function removeSelectedSegments() {
 
 
 export function processRectangularSelection(event: paper.Event, rect: paper.PathItem, mode?: string) {
-	const allItems = pg.document.getAllSelectableItems();
+	const allItems = pgDocument.getAllSelectableItems();
 	
 	itemLoop:
 	for(let i=0; i<allItems.length; i++) {
 		const item = allItems[i];
-		if(mode === 'detail' && pg.item.isPGTextItem(pg.item.getRootItem(item))) {
+		if(mode === 'detail' && item.isPGTextItem(item.getRootItem(item))) {
 			continue itemLoop;
 		}
 		// check for item segment points inside selectionRect
-		if(pg.group.isGroup(item) || pg.item.isCompoundPathItem(item)) {
+		if(groups.isGroup(item) || item.isCompoundPathItem(item)) {
 			if(!rectangularSelectionGroupLoop(item, rect, item, event, mode)) {
 				continue itemLoop;
 			}
@@ -472,7 +482,7 @@ export function rectangularSelectionGroupLoop(group: paper.Group | paper.Compoun
 	for(let i=0; i<group.children.length; i++) {
 		const child = group.children[i];
 		
-		if(pg.group.isGroup(child) || pg.item.isCompoundPathItem(child)) {
+		if(groups.isGroup(child) || items.isCompoundPathItem(child)) {
 			rectangularSelectionGroupLoop(child, rect, root, event, mode);
 			
 		} else {
@@ -487,7 +497,7 @@ export function rectangularSelectionGroupLoop(group: paper.Group | paper.Compoun
 
 export function handleRectangularSelectionItems(item: paper.Item, event: paper.Event, rect: paper.PathItem, mode?: string) {
 	if (item.layer !== paper.project.activeLayer) return;
-	if(pg.item.isPathItem(item)) {
+	if(items.isPathItem(item)) {
 		let segmentMode = false;
 		
 		// first round checks for segments inside the selectionRect
@@ -546,9 +556,9 @@ export function handleRectangularSelectionItems(item: paper.Item, event: paper.E
 				return false;
 			}
 		}
-		pg.statusbar.update();
+		statusbar.update();
 
-	} else if(pg.item.isBoundsItem(item)) {
+	} else if(items.isBoundsItem(item)) {
 		if(checkBoundsItem(rect, item, event)) {
 			return false;
 		}

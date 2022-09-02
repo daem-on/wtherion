@@ -1,14 +1,17 @@
-import pg from "../src/init";
+import * as selection from "./selection";
+import * as undo from "./undo";
+import statusbar from "../js/statusbar";
+import { getRootItem, isGroupItem } from "./item";
 
 // function related to groups and grouping
 
 export function groupSelection() {
-	const items = pg.selection.getSelectedItems();
+	const items = selection.getSelectedItems();
 		if(items.length > 0) {
 		const group = new paper.Group(items);
-		pg.selection.clearSelection();
-		pg.selection.setItemSelection(group, true);
-		pg.undo.snapshot('groupSelection');
+		selection.clearSelection();
+		selection.setItemSelection(group, true);
+		undo.snapshot('groupSelection');
 		jQuery(document).trigger('Grouped');
 		return group;
 	} else {
@@ -18,9 +21,9 @@ export function groupSelection() {
 
 
 export function ungroupSelection() {
-	const items = pg.selection.getSelectedItems();
+	const items = selection.getSelectedItems();
 	ungroupItems(items);
-	pg.statusbar.update();
+	statusbar.update();
 }
 
 
@@ -28,7 +31,7 @@ export function groupItems(items) {
 	if(items.length > 0) {
 		const group = new paper.Group(items);
 		jQuery(document).trigger('Grouped');
-		pg.undo.snapshot('groupItems');
+		undo.snapshot('groupItems');
 		return group;
 	} else {
 		return false;
@@ -55,7 +58,7 @@ export function ungroupItems(items) {
 		emptyGroups[j].remove();
 	}
 	jQuery(document).trigger('Ungrouped');
-	pg.undo.snapshot('ungroupItems');
+	undo.snapshot('ungroupItems');
 }
 
 
@@ -100,11 +103,11 @@ export function getItemsGroup(item) {
 
 
 export function isGroup(item: paper.Item): item is paper.Group {
-	return pg.item.isGroupItem(item);
+	return isGroupItem(item);
 }
 
 
 export function isGroupChild(item: paper.Item) {
-	const rootItem = pg.item.getRootItem(item);
+	const rootItem = getRootItem(item);
 	return isGroup(rootItem);
 }

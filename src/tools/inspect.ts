@@ -1,6 +1,9 @@
-import pg from "../init";
 import getSettings from "../objectSettings/model/getSettings";
 import paper from "paper";
+import * as selection from "../selection";
+import * as sb from "../../js/statusbar";
+import * as menu from "../menu";
+import * as hover from "../../js/hover";
 
 let tool: paper.Tool;
 
@@ -29,7 +32,7 @@ export function objectToString(object: any) {
 }
 
 export function activateTool() {	
-	pg.selection.clearSelection();	
+	selection.clearSelection();	
 	tool = new paper.Tool();
 			
 	const hitOptions = {
@@ -54,11 +57,11 @@ export function activateTool() {
 		const hovered = paper.project.hitTest(event.point, hitOptions);
 
 		if (hovered) {
-			pg.statusbar.showCustom(objectToString(hovered.item));
+			sb.showCustom(objectToString(hovered.item));
 		} else {
 			const x = event.point.x.toFixed(1);
 			const y = event.point.y.toFixed(1);
-			pg.statusbar.showCustom(`%inspect.position%: ${x}, ${y}`);
+			sb.showCustom(`%inspect.position%: ${x}, ${y}`);
 		}
 	};
 	
@@ -77,13 +80,13 @@ export function activateTool() {
 	// setup floating tool options panel in the editor
 	// pg.toolOptionPanel.setup(options, components, function(){ });
 	
-	pg.menu.setupToolEntries(menuEntries);
+	menu.setupToolEntries(menuEntries);
 	
 	tool.activate();
 }
 
 
 export function deactivateTool() {
-	pg.hover.clearHoveredItem();
-	pg.menu.clearToolEntries();
+	hover.clearHoveredItem();
+	menu.clearToolEntries();
 }

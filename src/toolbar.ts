@@ -1,5 +1,7 @@
-import pg from "./init";
 import paper from "paper";
+import stylebar from "../js/stylebar";
+import statusbar from "../js/statusbar";
+import * as tools from "./tools";
 
 export type PGToolOptions = {
 	id: string;
@@ -32,7 +34,7 @@ const setup = function() {
 
 
 const setupToolList = function() {
-	const toolList= pg.tools.getToolList();
+	const toolList= tools.getToolList();
 	const $toolsContainer = jQuery('.toolsContainer');
 	
 	jQuery.each(toolList, function(index, tool) {
@@ -50,7 +52,7 @@ const setupToolList = function() {
 		$toolsContainer.append($tool);
 	});
 	
-	pg.statusbar.update();
+	statusbar.update();
 };
 
 const getActiveTool = function() {
@@ -65,10 +67,10 @@ const getPreviousTool = function() {
 const switchTool = function(toolID: string, forced?: boolean) {
 	try {
 		activeTool?.deactivateTool?.();
-		const opts = pg.tools.getToolInfoByID(toolID);
+		const opts = tools.getToolInfoByID(toolID);
 		let tool: PGTool;
 		{
-			const toolEntry: PGTool | ToolConstructor = pg.tools.tools[toolID];
+			const toolEntry: PGTool | ToolConstructor = tools.tools[toolID];
 			if (typeof toolEntry === "function") tool = new toolEntry();
 			else tool = toolEntry;
 		}
@@ -91,7 +93,7 @@ const switchTool = function(toolID: string, forced?: boolean) {
 			previousTool = activeTool;
 		}
 		resetTools();
-		pg.stylebar.sanitizeSettings();
+		stylebar.sanitizeSettings();
 		tool.activateTool();
 		activeTool = tool;
 		jQuery('.tool_'+toolID+'').addClass('active');

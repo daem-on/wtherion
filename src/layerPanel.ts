@@ -1,7 +1,9 @@
 import "jquery-ui/ui/widgets/sortable";
 import paper from "paper";
-import pg from "./init";
+import * as selection from "./selection";
+import * as layers from "../js/layer";
 import * as wtConfig from "./filesio/configManagement";
+import helper from "../js/helper";
 
 let mode = "normal";
 
@@ -51,8 +53,8 @@ export function setup() {
 	const $newLayerButton = jQuery('<button class="newLayerButton">%scraps.add%</button>');
 	
 	$newLayerButton.on("click", function() {
-		const newLayer = pg.layer.addNewLayer();
-		pg.selection.clearSelection();
+		const newLayer = layers.addNewLayer();
+		selection.clearSelection();
 		updateLayerList();
 	});
 	
@@ -97,7 +99,7 @@ function setupLayerEntry(layer) {
 		|| mode === "xvi" && !isXVI) return;
 
 	let $activeClass = '';
-	if(pg.layer.isActiveLayer(layer)) {
+	if(layers.isActiveLayer(layer)) {
 		$activeClass= ' active';
 	}
 	const $layerEntry = jQuery('<ul class="layerEntry'+$activeClass+'" data-layer-id="'+layer.data.id+'">');
@@ -130,23 +132,23 @@ function setupLayerEntry(layer) {
 	
 	$layerDeleteButton.on("click", function() {
 		if(confirm('Delete this layer and all its children?')) {
-			pg.layer.deleteLayer(jQuery(this).attr('data-layer-id'));
+			layers.deleteLayer(jQuery(this).attr('data-layer-id'));
 			updateLayerList();
 		}
 	});
 
 	$layerSelectButton.on("click", function() {
 		if(jQuery(this).attr('checked')) {
-			pg.selection.clearSelection();
+			selection.clearSelection();
 			jQuery(this).removeAttr('checked');
 
 		} else {
-			pg.selection.clearSelection();
+			selection.clearSelection();
 			jQuery('.toolOptionPanel').remove();
 
-			const items = pg.helper.getPaperItemsByLayerID(layer.data.id);
+			const items = helper.getPaperItemsByLayerID(layer.data.id);
 			jQuery.each(items, function(index, item) {
-				pg.selection.setItemSelection(item, true);
+				selection.setItemSelection(item, true);
 			});
 			jQuery(this).attr('checked', items.length>0 ? "" : null);
 		}
@@ -165,7 +167,7 @@ function setupLayerEntry(layer) {
 
 function setActiveLayerEntry(layer) {
 	jQuery('.layerEntry').removeClass('active');
-	pg.layer.setActiveLayer(layer);
+	layers.setActiveLayer(layer);
 	jQuery('.layerEntry[data-layer-id="'+layer.data.id+'"]').addClass('active');
 }
 
@@ -175,7 +177,7 @@ function handleLayerOrderChange() {
 	jQuery('.layerEntries').children().each(function() {
 		order.push(jQuery(this).attr('data-layer-id'));
 	});
-	pg.layer.changeLayerOrderByIDArray(order);
+	layers.changeLayerOrderByIDArray(order);
 }
 
 
@@ -191,7 +193,7 @@ export function updateLayerList() {
 function updateLayerValues() {
 	jQuery('.layerEntry').each(function() {
 		const id = parseInt(jQuery(this).attr('data-layer-id'));
-		const layer = pg.layer.getLayerByID(id);
+		const layer = layers.getLayerByID(id);
 		if(layer) {
 			
 			let selectedItems = 0;

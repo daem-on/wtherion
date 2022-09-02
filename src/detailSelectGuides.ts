@@ -1,6 +1,7 @@
 import * as wtConfig from "./filesio/configManagement";
-import pg from "./init";
 import getSettings from "./objectSettings/model/getSettings";
+import * as selection from "./selection";
+import { getGuideLayer } from "../js/layer";
 
 const zero = new paper.Point(0, 0);
 const offset = new paper.Point(0, 7);
@@ -20,8 +21,8 @@ function getNextGuide() {
 
 export function drawGuides() {
 	if (!wtConfig.get("detailSelectGuides")) return;
-	const selected = pg.selection.getSelectedItems();
-	const layer = pg.layer.getGuideLayer();
+	const selected = selection.getSelectedItems();
+	const layer = getGuideLayer();
 	hideGuideNumbers();
 
 	if (layer === false) return;

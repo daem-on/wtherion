@@ -1,5 +1,4 @@
-import { componentList } from "./toolOptionPanel";
-import pg from "./init";
+import toolOptionPanel, { componentList } from "./toolOptionPanel";
 import { updateLayerList } from "./layerPanel";
 import * as wtConf from "./filesio/configManagement";
 
@@ -39,7 +38,7 @@ export function show() {
 		}
 	}
 
-	pg.toolOptionPanel.setupFloating(
+	toolOptionPanel.setupFloating(
 		optionsCache,
 		components,
 		() => {

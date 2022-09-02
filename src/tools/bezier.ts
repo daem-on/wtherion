@@ -1,21 +1,23 @@
 // bezier tool
 // adapted from the paperjs examples (Tools/BezierTool.html)
 
-import pg from "../../src/init";
 import paper from "paper";
 import subtypeList from "Res/subtype-list.json";
-import { default as getSettings } from "../../src/objectSettings/model/getSettings";
+import getSettings from "../../src/objectSettings/model/getSettings";
 import { wallTypes } from "Res/wallTypes";
-import { componentList } from "../toolOptionPanel";
+import toolOptionPanel, { componentList } from "../toolOptionPanel";
 import LineSettings from "../../src/objectSettings/model/LineSettings";
-import { getToolInfoByID } from "../../src/tools";
+import { getLocalOptions, getToolInfoByID, setLocalOptions } from "../../src/tools";
 import { PGTool } from "src/toolbar";
+import editTH2 from "../editTH2";
+import * as undo from "../undo";
+import { clearSelection } from "../selection";
 
 let dirty = false;
 
 function snapshotIfDirty() {
 	if (dirty) {
-		pg.undo.snapshot("bezier");
+		undo.snapshot("bezier");
 		dirty = false;
 	}
 }
@@ -56,7 +58,7 @@ export default function(): PGTool {
 
 	const activateTool = function() {
 		tool = new paper.Tool();
-		options = pg.tools.getLocalOptions(options);
+		options = getLocalOptions(options);
 		const toolInfo = getToolInfoByID("bezier");
 		
 		let path: paper.Path;
@@ -76,7 +78,7 @@ export default function(): PGTool {
 		};
 
 		function createNewPath() {
-			path = pg.editTH2.createPath();
+			path = editTH2.createPath();
 
 			const settings = getSettings(path) as LineSettings;
 			settings.type = options.type;
@@ -84,7 +86,7 @@ export default function(): PGTool {
 				settings.subtype = options.subtype;
 			if (options.type === "slope")
 				settings.size = options.size;
-			pg.editTH2.drawLine(path);
+			editTH2.drawLine(path);
 			jQuery('.toolOptionPanel').remove();
 		}
 		
@@ -99,7 +101,7 @@ export default function(): PGTool {
 			
 			if(!path) {
 				if(!hoveredItem) {
-					pg.selection.clearSelection();
+					clearSelection();
 					createNewPath();
 					dirty = true;
 					
@@ -213,7 +215,7 @@ export default function(): PGTool {
 			if(event.event.button > 0) return;  // only first mouse button
 			
 			if(path && path.closed) {
-				pg.undo.snapshot('bezier');
+				undo.snapshot('bezier');
 				dirty = false;
 				path = null;
 			}
@@ -222,15 +224,15 @@ export default function(): PGTool {
 
 		tool.onKeyDown = function(event: paper.KeyEvent) {
 			if (event.key === "enter" || event.key === toolInfo.usedKeys.toolbar) {
-				pg.selection.clearSelection();
-				pg.undo.snapshot('bezier');
+				clearSelection();
+				undo.snapshot('bezier');
 				dirty = false;
 				path = null;
 			}
 		};
 		
-		pg.toolOptionPanel.setupFloating(options, components, function() {
-			pg.tools.setLocalOptions(options);
+		toolOptionPanel.setupFloating(options, components, function() {
+			setLocalOptions(options);
 		});
 		
 		tool.activate();

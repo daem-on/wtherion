@@ -2,10 +2,16 @@
 
 import * as importerXvi from "../src/import/importXVI";
 import importerTh2 from "../src/import/importTH2";
-import pg from "../src/init";
 import * as saves from "./filesio/saveManagement";
 import pgDocument from "../js/document";
 import * as layerPanel from "./layerPanel";
+import * as helper from "../js/helper";
+import * as selection from "./selection";
+import * as exporter from "../js/export";
+import * as importer from "../js/import";
+import * as undo from "./undo";
+import * as view from "./view";
+import * as modal from "../js/modal";
 import { getVersionNumber } from "./filesio/configManagement";
 import * as configEditor from "./configEditor";
 import { openSearchDialog } from "./search";
@@ -73,28 +79,28 @@ function setupFileSection() {
 	
 	// handle change on hidden file input in menu item
 	jQuery('#fileUploadSVG').on('change', function(event) {
-		pg.helper.processFileInput('text', event.target, function(data) {
-			pg.import.importAndAddSVG(data);
+		helper.processFileInput('text', event.target, function(data) {
+			importer.importAndAddSVG(data);
 		});
 	});
 	
 	// handle change on hidden file input in menu item
 	jQuery('#fileUploadJSON').on('change', function(event) {
-		pg.helper.processFileInput('text', event.target, function(data) {
-			pg.document.loadJSONDocument(data);
+		helper.processFileInput('text', event.target, function(data) {
+			pgDocument.loadJSONDocument(data);
 		});
 	});
 
 	// handle change on hidden file input in menu item
 	jQuery('#fileUploadTH2').on('change', function(event) {
-		pg.helper.processFileInput('text', event.target, function(data) {
+		helper.processFileInput('text', event.target, function(data) {
 			importerTh2(data);
 		});
 	});
 
 	// handle change on hidden file input in menu item
 	jQuery('#fileUploadXVI').on('change', function(event) {
-		pg.helper.processFileInput('text', event.target, function(data) {
+		helper.processFileInput('text', event.target, function(data) {
 			importerXvi.importXVI(data, (event.target as HTMLInputElement).files[0].name);
 		});
 	});
@@ -102,8 +108,8 @@ function setupFileSection() {
 	
 	// handle change on hidden file input in menu item
 	jQuery('#fileUploadImage').on('change', function(event) {
-		pg.helper.processFileInput('dataURL', event.target, function(dataURL) {
-			pg.import.importAndAddImage(dataURL);
+		helper.processFileInput('dataURL', event.target, function(dataURL) {
+			importer.importAndAddImage(dataURL);
 		});
 	});
 
@@ -111,19 +117,19 @@ function setupFileSection() {
 
 export const handlers = {
 	
-	undo: () => pg.undo.undo(),
+	undo: () => undo.undo(),
 	
-	redo: () => pg.undo.redo(),
+	redo: () => undo.redo(),
 	
-	resetZoom: () => pg.view.resetZoom(),
+	resetZoom: () => view.resetZoom(),
 	
-	resetPan: () => pg.view.resetPan(),
+	resetPan: () => view.resetPan(),
 	
 	layerPanel: layerPanel.toggleVisibility,
 	
-	exportSVG: () => pg.export.exportAndPromptSVG(),
+	exportSVG: () => exporter.exportAndPromptSVG(),
 
-	exportImage: () => pg.export.exportAndPromptImage(),
+	exportImage: () => exporter.exportAndPromptImage(),
 	
 	about: showAboutModal,
 
@@ -138,27 +144,27 @@ export const handlers = {
 	importImageFromURL: function() {
 		const url = prompt("%import.imageURL% (jpg, png, gif)", "http://");
 		if(url) {
-			pg.import.importAndAddExternalImage(url);
+			importer.importAndAddExternalImage(url);
 		}
 	},
 	
 	importSVGFromURL: function () {
 		const url = prompt("%import.svgURL%", "http://");
 		if (url) {
-			pg.import.importAndAddSVG(url);
+			importer.importAndAddSVG(url);
 		}
 	},
 	
 	zoomIn: function() {
-		pg.view.zoomBy(1.25);
+		view.zoomBy(1.25);
 	},
 	
 	zoomOut: function() {
-		pg.view.zoomBy(1/1.25);
+		view.zoomBy(1/1.25);
 	},
 
 	panToScrap: function() {
-		pg.view.centerView();
+		view.centerView();
 	},
 
 	resetSettings: function() {
@@ -169,7 +175,7 @@ export const handlers = {
 
 	clearDocument: function() {
 		if (confirm('%clearDocument%')) {
-			pg.document.clear();
+			document.clear();
 			saves.setSaveFileName(null);
 		}
 	},
@@ -214,7 +220,7 @@ export function setupToolEntries(entries) {
 			
 			$toolButton.on("click", function() {
 				const func = jQuery(this).attr('data-click');
-				pg.helper.executeFunctionByName(func, window);
+				helper.executeFunctionByName(func, window);
 				setTimeout(function() {
 					hideMenus();
 				}, 100);
@@ -239,7 +245,7 @@ export function clearToolEntries() {
 export function showContextMenu(event) {
 
 	// check for selected items, so the right context menu can be opened
-	if(pg.selection.getSelectedItems().length > 0) {
+	if(selection.getSelectedItems().length > 0) {
 		if(jQuery('#appNavContextMenu').length > 0) {
 			return;
 		}
@@ -298,7 +304,7 @@ function showAboutModal() {
 			Powered by <a href="http://paperjs.org/" target="_blank">Paper.js</a>. Published under the MIT license.
 		</p>
 	`;
-	pg.modal.floater('appInfoWindow', 'About', html, 600, 100);
+	modal.floater('appInfoWindow', 'About', html, 600, 100);
 	jQuery("#appInfoWindow").css("padding", 0);
 }
 

@@ -1,7 +1,7 @@
-import { componentList } from "./toolOptionPanel";
-import pg from "./init";
+import toolOptionPanel, { componentList } from "./toolOptionPanel";
 import getSettings from "./objectSettings/model/getSettings";
 import ScrapSettings from "./objectSettings/model/ScrapSettings";
+import layer from "../js/layer";
 
 const optionsCache = {
 	projection: "",
@@ -37,7 +37,7 @@ const components: componentList<typeof optionsCache> = {
 };
 
 export function show() {
-	const scrap = pg.layer.getActiveLayer();
+	const scrap = layer.getActiveLayer();
 	const settings = getSettings(scrap);
 
 	for (const key in optionsCache) {
@@ -46,7 +46,7 @@ export function show() {
 		}
 	}
 
-	pg.toolOptionPanel.setupFloating(
+	toolOptionPanel.setupFloating(
 		optionsCache,
 		components,
 		() => {

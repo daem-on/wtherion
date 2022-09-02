@@ -1,7 +1,7 @@
 import { componentList } from "../../toolOptionPanel";
 import getSettings from "../model/getSettings";
 import { objectOptionPanelConfig } from "../objectOptionPanel";
-import pg from "../../init";
+import editTH2 from "../../editTH2";
 import { pointTypes } from "../pointSymbolList";
 
 // const types = symbolList["special objects"]
@@ -104,7 +104,7 @@ export default function(shape: paper.Shape): objectOptionPanelConfig {
 	
 	const modifyObject = () => {
 		Object.assign(settings, optionsCache);
-		pg.editTH2.drawPoint(shape);
+		editTH2.drawPoint(shape);
 	};
 	return {
 		options: optionsCache,

@@ -1,4 +1,7 @@
-import pg from "../init";
+import { updateLayerList } from "../layerPanel";
+import { importAndAddImage } from "../../js/import";
+import { activateDefaultLayer, addNewLayer } from "../../js/layer";
+
 const COMMMON_COLOR = new paper.Color(0.2, 0.2, 0.2);
 const COMMMON_FILL = new paper.Color(0.2, 0.2, 0.2, 0.1);
 
@@ -11,7 +14,7 @@ enum ProcessingState {
 let state: ProcessingState = 0;
 
 function createLayer(name?: string): paper.Layer {
-	const l = pg.layer.addNewLayer(name ?? "therion.xviLayer");
+	const l = addNewLayer(name ?? "therion.xviLayer");
 	// l.locked = true;
 	l.data.isGuideLayer = true;
 	l.data.xviLayer = true;
@@ -33,7 +36,7 @@ export function importFiles(files: File[], list: PositionList): void {
 			const reader = new FileReader();
 			reader.readAsDataURL(file);
 			reader.onload = function () {
-				pg.import.importAndAddImage(reader.result);
+				importAndAddImage(reader.result);
 			};
 		}
 	}
@@ -76,14 +79,14 @@ export function importXVI(source: string, name?: string, moveTo?: paper.Point) {
 		}
 	}
 	new paper.Group([...layer.children]);
-	pg.layerPanel.updateLayerList();
+	updateLayerList();
 	if (moveTo != null && firstStation != null) {
 		const [x, y] = firstStation;
 		const point = new paper.Point(Number.parseFloat(x), -Number.parseFloat(y));
 		layer.translate(moveTo.subtract(point));
 	}
 	layer.sendToBack();
-	pg.layer.activateDefaultLayer();
+	activateDefaultLayer();
 }
 
 function createStation(x: string, y: string, n: string) {

@@ -1,4 +1,4 @@
-import pg from "./init";
+import initPG from "./init";
 import jQuery from "jquery";
 import * as exporter from "./export/exportTH2";
 import "./styles.ts";
@@ -10,11 +10,11 @@ declare global {
     interface Window { pg: any; }
 }
 
-window["pg"] = pg;
+window["pg"] = initPG;
 window["exporter"] = exporter;
 // set pg up on window load
 jQuery(window).on("load", function() {
-	pg.init();
+	initPG.init();
 	
 	// fade out loading screen and reveal ui
 	jQuery('#loadingScreen').addClass('disabled').on('transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd',

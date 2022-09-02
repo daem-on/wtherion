@@ -1,12 +1,15 @@
 // drawing tool
 // adapted from resources on http://paperjs.org
 
-import pg from "../init";
-import { componentList } from "../toolOptionPanel";
+import { getLocalOptions, setLocalOptions } from "../../src/tools";
+import editTH2 from "../editTH2";
+import * as undo from "../undo";
+import toolOptionPanel, { componentList } from "../toolOptionPanel";
 import subtypeList from "Res/subtype-list.json";
 import { default as getSettings } from "../objectSettings/model/getSettings";
 import { wallTypes } from "Res/wallTypes";
 import LineSettings from "../objectSettings/model/LineSettings";
+import math from "../../js/math";
 
 export default function() {
 	let tool: paper.Tool;
@@ -91,7 +94,7 @@ export default function() {
 		let paths: paper.Path[] = [];
 		
 		// get options from local storage if present
-		options = pg.tools.getLocalOptions(options) as typeof options;
+		options = getLocalOptions(options) as typeof options;
 		
 		tool = new paper.Tool();
 		
@@ -110,7 +113,7 @@ export default function() {
 		
 			for( let i=0; i < lineCount; i++) {
 				let path = paths[i];
-				path = pg.editTH2.createPath();
+				path = editTH2.createPath();
 				
 				const settings = getSettings(path) as LineSettings;
 				settings.type = options.type;
@@ -118,7 +121,7 @@ export default function() {
 					settings.subtype = options.subtype;
 				if (options.type === "slope")
 					settings.size = options.size;
-				pg.editTH2.drawLine(path);
+				editTH2.drawLine(path);
 				
 				paths.push(path);
 			}
@@ -152,7 +155,7 @@ export default function() {
 				group = new paper.Group();
 			}
 
-			const nearStart = pg.math.checkPointsClose(paths[0].firstSegment.point, event.point, 30);
+			const nearStart = math.checkPointsClose(paths[0].firstSegment.point, event.point, 30);
 			for( let i=0; i < lineCount; i++) {
 				const path = paths[i];
 				
@@ -170,12 +173,12 @@ export default function() {
 			}
 
 			paths = [];
-			pg.undo.snapshot('draw');
+			undo.snapshot('draw');
 		};
 		
 		// setup floating tool options panel in the editor
-		pg.toolOptionPanel.setupFloating(options, components, function() {
-			pg.tools.setLocalOptions(options);
+		toolOptionPanel.setupFloating(options, components, function() {
+			setLocalOptions(options);
 			lineCount = options.lines;
 			tool.fixedDistance = options.pointDistance;
 		});

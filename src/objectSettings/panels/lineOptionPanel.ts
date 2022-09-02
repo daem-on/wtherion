@@ -2,7 +2,7 @@ import { componentList } from "../../toolOptionPanel";
 import LineSettings from "../model/LineSettings";
 import getSettings from "../model/getSettings";
 import { objectOptionPanelConfig } from "../objectOptionPanel";
-import pg from "../../init";
+import editTH2 from "../../editTH2";
 import subtypeList from "Res/subtype-list.json";
 import { wallTypes } from "Res/wallTypes";
 	
@@ -139,7 +139,7 @@ export default function(line: paper.Path): objectOptionPanelConfig {
 			case "water-flow": settings.subtype = optionsCache._subtypeWater; break;
 			default: settings.subtype = "";
 		}
-		pg.editTH2.drawLine(line);
+		editTH2.drawLine(line);
 	};
 	return {
 		options: optionsCache,

@@ -1,5 +1,7 @@
-import { componentList } from "../toolOptionPanel";
-import pg from "../init";
+import { getLocalOptions, setLocalOptions } from "../../src/tools";
+import editTH2 from "../editTH2";
+import toolOptionPanel, { componentList } from "../toolOptionPanel";
+import * as undo from "../undo";
 import getSettings from "../objectSettings/model/getSettings";
 import PointSettings from "../objectSettings/model/PointSettings";
 import paper from "paper";
@@ -31,7 +33,7 @@ export function activateTool() {
 	const tool = new paper.Tool();
 
 	// get options from local storage if present
-	options = pg.tools.getLocalOptions(options) as any;
+	options = getLocalOptions(options) as any;
 
 	tool.onMouseDown = function(event: correctToolEvent) {
 		if (event.event.button > 0) return;
@@ -40,7 +42,7 @@ export function activateTool() {
 			fill: true
 		});
 
-		const point = pg.editTH2.createPoint(event.point);
+		const point = editTH2.createPoint(event.point);
 		const settings = getSettings(point) as PointSettings;
 
 		if (result?.item.data?.therionData?.className === "XVIStation") {
@@ -54,12 +56,12 @@ export function activateTool() {
 				increaseStationNumber();
 			}
 		}
-		pg.editTH2.drawPoint(point);
-		pg.undo.snapshot("point");
+		editTH2.drawPoint(point);
+		undo.snapshot("point");
 	};
 
-	pg.toolOptionPanel.setupFloating(options, components, function() {
-		pg.tools.setLocalOptions(options);
+	toolOptionPanel.setupFloating(options, components, function() {
+		setLocalOptions(options);
 	}); 
 
 	tool.activate();
@@ -69,7 +71,7 @@ function increaseStationNumber() {
 	if (options.stationName.includes("@")) {
 		const split = options.stationName.split("@");
 		options.stationName = (Number.parseInt(split[0])+1) + "@" + split[1];
-		pg.tools.setLocalOptions(options);
-		pg.toolOptionPanel.update(options);
+		setLocalOptions(options);
+		toolOptionPanel.update(options);
 	}
 }

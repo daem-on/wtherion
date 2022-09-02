@@ -4,7 +4,17 @@
 
 import { default as getSettings } from "../../src/objectSettings/model/getSettings";
 import { updateWindow } from "../../src/objectSettings/objectOptionPanel";
-import pg from "../../src/init";
+import hover from "../../js/hover";
+import layer from "../../js/layer";
+import guides from "../../js/guides";
+import edit from "../../js/edit";
+import compoundPath from "../../js/compoundPath";
+import math from "../../js/math";
+import * as group from "../group";
+import * as item from "../item";
+import * as menu from "../menu";
+import * as undo from "../undo";
+import * as selection from "../selection";
 import paper from "paper";
 import LineSettings from "../../src/objectSettings/model/LineSettings";
 
@@ -164,7 +174,7 @@ export default function() {
 
 		tool.onMouseDown = function(event: correctToolEvent) {
 			if(event.event.button > 0) return;  // only first mouse button
-			pg.hover.clearHoveredItem();
+			hover.clearHoveredItem();
 			
 			const hitResult = paper.project.hitTest(event.point, hitOptions);
 			hit: if (hitResult) {
@@ -178,15 +188,15 @@ export default function() {
 					corner = boundsPath.bounds[getRectCornerNameByIndex(index)].clone();
 					origSize = corner.subtract(pivot);
 					origCenter = boundsPath.bounds.center;
-					scaleItems = pg.selection.getSelectedItems();
+					scaleItems = selection.getSelectedItems();
 					
 				} else if(hitResult.item.data?.isRotHandle) {
 					mode = 'rotate';
 					if (boundsPath)
 						rotGroupPivot = boundsPath.bounds.center;
 					else
-						rotGroupPivot = pg.selection.getSelectedItems()[0].position;
-					rotItems = pg.selection.getSelectedItems();
+						rotGroupPivot = selection.getSelectedItems()[0].position;
+					rotItems = selection.getSelectedItems();
 					
 					jQuery.each(rotItems, function(i, item) {
 						prevRot[i] = event.point.subtract(rotGroupPivot).angle;
@@ -198,25 +208,25 @@ export default function() {
 					// also needs some special love for compound paths and groups,
 					// as their children are not marked as "selected"
 					if(!event.modifiers.shift) {
-						const root = pg.item.getRootItem(hitResult.item);
-						if(pg.item.isCompoundPathItem(root) || pg.group.isGroup(root)) {
+						const root = item.getRootItem(hitResult.item);
+						if(item.isCompoundPathItem(root) || group.isGroup(root)) {
 							if(!root.selected) {
-								pg.selection.clearSelection();
+								selection.clearSelection();
 							}
 						} else if(!hitResult.item.selected) {
-							pg.selection.clearSelection();
+							selection.clearSelection();
 						}
 					}
 					// deselect a currently selected item if shift is pressed
 					if(event.modifiers.shift && hitResult.item.selected) {
-						pg.selection.setItemSelection(hitResult.item, false);
+						selection.setItemSelection(hitResult.item, false);
 
 					} else {
-						pg.selection.setItemSelection(hitResult.item, true);
+						selection.setItemSelection(hitResult.item, true);
 
 						if(event.modifiers.alt) {
 							mode = 'cloneMove';
-							pg.selection.cloneSelection();
+							selection.cloneSelection();
 
 						} else {
 							mode = 'move';
@@ -226,9 +236,9 @@ export default function() {
 						// if (hitResult.item.selected) {
 						// 	if(event.modifiers.alt) {
 						// 		mode = 'cloneMove';
-						// 		pg.selection.cloneSelection();
+						// 		selection.cloneSelection();
 						// 	} else mode = 'move';
-						// } else pg.selection.setItemSelection(hitResult.item, true);
+						// } else selection.setItemSelection(hitResult.item, true);
 					}
 				}
 				// while transforming object, never show the bounds stuff
@@ -239,13 +249,13 @@ export default function() {
 
 			if (!event.modifiers.shift) {
 				removeBoundsPath();
-				pg.selection.clearSelection();
+				selection.clearSelection();
 			}
 			mode = 'rectSelection';
 		};
 
 		tool.onMouseMove = function(event: correctToolEvent) {			
-			pg.hover.handleHoveredItem(hitOptions, event);
+			hover.handleHoveredItem(hitOptions, event);
 		};
 
 		
@@ -255,7 +265,7 @@ export default function() {
 			let modOrigSize = origSize;
 			
 			if(mode === 'rectSelection') {
-				selectionRect = pg.guides.rectSelect(event);
+				selectionRect = guides.rectSelect(event);
 				// Remove this rect on the next drag and up event
 				selectionRect.removeOnDrag();
 
@@ -329,7 +339,7 @@ export default function() {
 			} else if(mode === 'move' || mode === 'cloneMove') {
 				
 				const dragVector = (event.point.subtract(event.downPoint));
-				const selectedItems = pg.selection.getSelectedItems();
+				const selectedItems = selection.getSelectedItems();
 
 				for(let i=0; i<selectedItems.length; i++) {
 					const item = selectedItems[i];
@@ -341,7 +351,7 @@ export default function() {
 
 					if (event.modifiers.shift) {
 						item.position = item.data.origPos.add(
-							pg.math.snapDeltaToAngle(dragVector, Math.PI*2/8)
+							math.snapDeltaToAngle(dragVector, Math.PI*2/8)
 						);
 
 					} else {
@@ -355,19 +365,19 @@ export default function() {
 			if(event.event.button > 0) return; // only first mouse button
 			
 			if(mode === 'rectSelection' && selectionRect) {
-				pg.selection.processRectangularSelection(event, selectionRect);
+				selection.processRectangularSelection(event, selectionRect);
 				selectionRect.remove();
 				
 			} else if(mode === 'move' || mode === 'cloneMove') {
 				
 				// resetting the items origin point for the next usage
-				const selectedItems = pg.selection.getSelectedItems();
+				const selectedItems = selection.getSelectedItems();
 
 				jQuery.each(selectedItems, function(index, item) {
 					// remove the orig pos again
 					item.data.origPos = null;			
 				});
-				pg.undo.snapshot('moveSelection');
+				undo.snapshot('moveSelection');
 				
 			} else if(mode === 'scale') {
 				// this means the original setting is lost, but whatever
@@ -384,19 +394,19 @@ export default function() {
 				
 				itemGroup.layer.addChildren(itemGroup.children);
 				itemGroup.remove();
-				pg.undo.snapshot('scaleSelection');
+				undo.snapshot('scaleSelection');
 				
 			} else if(mode === 'rotate') {
 				jQuery.each(rotItems, function(i, item) {
 					item.applyMatrix = true;
 				});
-				pg.undo.snapshot('rotateSelection');
+				undo.snapshot('rotateSelection');
 			}
 			
 			mode = 'none';
 			selectionRect = null;
 			
-			if(pg.selection.getSelectedItems().length <= 0) {
+			if(selection.getSelectedItems().length <= 0) {
 				removeBoundsPath();
 			} else {
 				setSelectionBounds();
@@ -411,21 +421,21 @@ export default function() {
 			
 			if(keyModifiers.control && keyModifiers.shift) {
 				if (event.key === 'g') {
-					pg.group.ungroupSelection();
+					group.ungroupSelection();
 				}
 				
 			} else if (keyModifiers.control
 				&& document.activeElement.tagName !== 'INPUT') {
 				if(event.key === 'a') {
-					pg.selection.selectAllItems();
+					selection.selectAllItems();
 				} else if(event.key === 'i') {
-					pg.selection.invertItemSelection();
+					selection.invertItemSelection();
 				} else if(event.key === 'g') {
-					pg.group.groupSelection();
+					group.groupSelection();
 				} else if(event.key === 'c') {
-					pg.edit.copySelectionToClipboard();
+					edit.copySelectionToClipboard();
 				} else if(event.key === 'v') {
-					pg.edit.pasteObjectsFromClipboard();
+					edit.pasteObjectsFromClipboard();
 				}	
 			}
 			
@@ -440,16 +450,16 @@ export default function() {
 		// setup floating tool options panel in the editor
 		//pg.toolOptionPanel.setup(options, components, function(){ });
 		
-		pg.menu.setupToolEntries(menuEntries);
+		menu.setupToolEntries(menuEntries);
 		
 		tool.activate();
 	};
 
 
 	const deactivateTool = function() {
-		pg.hover.clearHoveredItem();
+		hover.clearHoveredItem();
 		removeBoundsPath();
-		pg.menu.clearToolEntries();
+		menu.clearToolEntries();
 		jQuery(document).off('DeleteItems Undo Redo Grouped Ungrouped SelectionChanged');
 	};
 	
@@ -457,7 +467,7 @@ export default function() {
 	const setSelectionBounds = function() {
 		removeBoundsPath();
 		
-		const items = pg.selection.getSelectedItems();
+		const items = selection.getSelectedItems();
 		if(items.length <= 0) return;
 
 		// If there are items with noDrawHandle, don't draw regular handles
@@ -466,7 +476,7 @@ export default function() {
 			return;
 		}
 
-		if (items.length === 1 && pg.item.isPathItem(items[0])) {
+		if (items.length === 1 && item.isPathItem(items[0])) {
 			const settings = getSettings(items[0]);
 			if (settings.className === "LineSettings")
 				showLineDirectionTick(items[0], settings);
@@ -494,7 +504,7 @@ export default function() {
 		boundsPath.fillColor = null;
 		boundsPath.strokeScaling = false;
 		boundsPath.fullySelected = true;
-		boundsPath.parent = pg.layer.getGuideLayer() || null;
+		boundsPath.parent = layer.getGuideLayer() || null;
 		
 		jQuery.each(boundsPath.segments, function(index: number, segment) {
 			let size = 4;
@@ -516,10 +526,10 @@ export default function() {
 						noHover: true
 					},
 					radius: 5 / paper.view.zoom,
-					strokeColor: pg.guides.getGuideColor('blue'),
+					strokeColor: guides.getGuideColor('blue'),
 					fillColor: 'white',
 					strokeWidth: 0.5 / paper.view.zoom,
-					parent: pg.layer.getGuideLayer()
+					parent: layer.getGuideLayer()
 				});
 			}
 			
@@ -534,15 +544,15 @@ export default function() {
 						noHover: true
 					},
 					size: [size/paper.view.zoom,size/paper.view.zoom],
-					fillColor: pg.guides.getGuideColor('blue'),
-					parent: pg.layer.getGuideLayer()
+					fillColor: guides.getGuideColor('blue'),
+					parent: layer.getGuideLayer()
 				});
 		});
 	};	
 
 	
 	const removeBoundsPath = function() {
-		pg.guides.removeHelperItems();
+		guides.removeHelperItems();
 		boundsPath = null;
 		boundsScaleHandles.length = 0;
 		boundsRotHandles.length = 0;
@@ -561,12 +571,12 @@ function preProcessSelection() {
 	// when switching to the select tool while having a child object of a
 	// compound path selected, deselect the child and select the compound path
 	// instead. (otherwise the compound path breaks because of scale-grouping)
-	const items = pg.selection.getSelectedItems();
+	const items = selection.getSelectedItems();
 	jQuery.each(items, function(index, item) {
-		if(pg.compoundPath.isCompoundPathChild(item)) {
-			const cp = pg.compoundPath.getItemsCompoundPath(item);
-			pg.selection.setItemSelection(item, false);
-			pg.selection.setItemSelection(cp, true);
+		if(compoundPath.isCompoundPathChild(item)) {
+			const cp = compoundPath.getItemsCompoundPath(item);
+			selection.setItemSelection(item, false);
+			selection.setItemSelection(cp, true);
 		}
 	});
 }
@@ -609,7 +619,7 @@ function showLineDirectionTick(line: paper.Path, settings: LineSettings) {
 	directionIndicator.strokeColor = new paper.Color("#fcba03");
 	directionIndicator.data.isHelperItem = true;
 	directionIndicator["guide"] = true;
-	directionIndicator.parent = pg.layer.getGuideLayer() || null;
+	directionIndicator.parent = layer.getGuideLayer() || null;
 }
 
 function showRotateHandle(item: paper.Item) {
@@ -625,9 +635,9 @@ function showRotateHandle(item: paper.Item) {
 				.subtract(new paper.Point(0, 6)),
 			to: item.position
 				.subtract(new paper.Point(0, 10 + (paper.view.zoom / 60))),
-			strokeColor: pg.guides.getGuideColor('blue'),
+			strokeColor: guides.getGuideColor('blue'),
 			strokeWidth: 4 / paper.view.zoom,
-			parent: pg.layer.getGuideLayer()
+			parent: layer.getGuideLayer()
 		});
 	thPointRotHandle.rotate(item.rotation, item.position);
 }

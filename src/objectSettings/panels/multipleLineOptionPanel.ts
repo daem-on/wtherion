@@ -2,7 +2,7 @@ import { componentList } from "../../toolOptionPanel";
 import LineSettings from "../model/LineSettings";
 import getSettings from "../model/getSettings";
 import { objectOptionPanelConfig } from "../objectOptionPanel";
-import pg from "../../init";
+import editTH2 from "../../editTH2";
 import wallList from "Res/walls-list.json";
 import subtypeList from "Res/subtype-list.json";
 
@@ -74,7 +74,7 @@ function modifyObject() {
 		if (optionsCache.invisible !== 0)
 			line.invisible = booleanValues[optionsCache.invisible];
 	}
-	for (const line of lineArray) pg.editTH2.drawLine(line);
+	for (const line of lineArray) editTH2.drawLine(line);
 }
 
 export default function(lines: paper.Path[]): objectOptionPanelConfig {

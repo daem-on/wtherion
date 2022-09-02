@@ -1,7 +1,7 @@
 import { componentList } from "../../toolOptionPanel";
 import getSettings from "../model/getSettings";
 import { objectOptionPanelConfig } from "../objectOptionPanel";
-import pg from "../../init";
+import editTH2 from "../../editTH2";
 import PointSettings from "../model/PointSettings";
 import { pointTypes } from "../pointSymbolList";
 
@@ -57,7 +57,7 @@ function modifyObject() {
 		if (optionsCache.invisible !== 0)
 			point.invisible = booleanValues[optionsCache.invisible];
 	}
-	for (const point of pointArray) pg.editTH2.drawPoint(point);
+	for (const point of pointArray) editTH2.drawPoint(point);
 }
 
 export default function(points: paper.Shape[]): objectOptionPanelConfig {

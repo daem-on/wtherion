@@ -1,11 +1,14 @@
 import LineSettings from "./objectSettings/model/LineSettings";
-import pg from "./init";
 import getSettings, { PaperItemType } from "./objectSettings/model/getSettings";
 import AreaSettings from "./objectSettings/model/AreaSettings";
 import PointSettings from "./objectSettings/model/PointSettings";
+import { getSelectedItems } from "./selection";
+import { isPathItem } from "./item";
 
 import colorDefs from "Res/color-defs.json";
 import * as scrapOptions from "./scrapOptions";
+import { snapshot } from "./undo";
+import helper from "../js/helper";
 
 const typeColors
 	= generateColors(colorDefs.typeColors);
@@ -100,7 +103,7 @@ export default {
 	},
 
 	lineToArea: function() {
-		const selection = pg.selection.getSelectedItems();
+		const selection = getSelectedItems();
 		if (selection.length !== 1) return;
 
 		const line = selection[0];
@@ -115,7 +118,7 @@ export default {
 	},
 
 	areaToLine: function() {
-		const selection = pg.selection.getSelectedItems();
+		const selection = getSelectedItems();
 		if (selection.length !== 1) return;
 
 		const area = selection[0];
@@ -128,17 +131,17 @@ export default {
 	},
 
 	toggleItemsLocked: function() {
-		const selection = pg.selection.getSelectedItems();
+		const selection = getSelectedItems();
 		for (const item of selection)
 			item.locked = !item.locked;
-		pg.undo.snapshot("Toggle locked");
+		snapshot("Toggle locked");
 	},
 
 	changeStationsNamespace: function(addToEmpty = false) {
 		const newNamespace = prompt("%edit.namespacePrompt%");
 		if (!newNamespace) return;
 
-		for (const item of pg.helper.getAllPaperItems() as any[]) {
+		for (const item of helper.getAllPaperItems() as any[]) {
 			const settings = getSettings(item);
 			if (!settings || settings.className !== "PointSettings") continue;
 			if (settings.type !== "station") continue;
@@ -152,7 +155,7 @@ export default {
 	},
 	
 	randomizeRotation: function() {
-		const selection: paper.Item[] = pg.selection.getSelectedItems();
+		const selection: paper.Item[] = getSelectedItems();
 		for (const item of selection) {
 			if (item.className === "Shape") {
 				const s = getSettings(item as paper.Shape);
@@ -165,36 +168,36 @@ export default {
 	},
 	
 	mergeLines: function() {
-		const selection = pg.selection.getSelectedItems();
+		const selection = getSelectedItems();
 		if (selection.length !== 2) {
 			console.error("Only possible with 2 lines");
 			return;
 		}
-		if (!pg.item.isPathItem(selection[0]) || !pg.item.isPathItem(selection[1])) {
+		if (!isPathItem(selection[0]) || !isPathItem(selection[1])) {
 			console.error("Only lines");
 			return;
 		}
 	
 		selection[0].join(selection[1], 6);
-		pg.undo.snapshot("mergeLines");
+		snapshot("mergeLines");
 	},
 	
 	smooth: function() {
-		const selection = pg.selection.getSelectedItems();
+		const selection = getSelectedItems();
 		
 		for (const item of selection)
-			if (pg.item.isPathItem(item)) item.smooth();
+			if (isPathItem(item)) item.smooth();
 	
-		pg.undo.snapshot("smoothLine");
+		snapshot("smoothLine");
 	},
 
 	simplify: function() {
-		const selection = pg.selection.getSelectedItems();
+		const selection = getSelectedItems();
 		
 		for (const item of selection)
-			if (pg.item.isPathItem(item)) item.simplify();
+			if (isPathItem(item)) item.simplify();
 	
-		pg.undo.snapshot("simplifyLine");
+		snapshot("simplifyLine");
 	},
 
 	showScrapOptionsPanel: function() {

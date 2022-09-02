@@ -35,6 +35,7 @@ export function openSearchDialog() {
 	}
 
 	searchButton.on("click", () => {
+		if (searchInput.val() === "") return;
 		search(searchInput.val() as string);
 		updateResultsText();
 	});

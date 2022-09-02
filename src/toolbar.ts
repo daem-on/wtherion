@@ -35,21 +35,22 @@ const setup = function() {
 
 const setupToolList = function() {
 	const toolList= tools.getToolList();
-	const $toolsContainer = jQuery('.toolsContainer');
+	const $toolsContainer = jQuery(".toolsContainer");
 	
 	jQuery.each(toolList, function(index, tool) {
-		if(tool.type === 'hidden') return true;
+		if(tool.type === "hidden") return true;
 		
-		let shortCutInfo = '';
-		if(tool.usedKeys && tool.usedKeys.toolbar !== '') {
-			shortCutInfo = ' ('+(tool.usedKeys.toolbar).toUpperCase()+')';
+		let shortCutInfo = "";
+		if(tool.usedKeys && tool.usedKeys.toolbar !== "") {
+			shortCutInfo = " ("+(tool.usedKeys.toolbar).toUpperCase()+")";
 		}
-		const $tool = jQuery('<div class="tool_'+tool.id+' tool" data-id="'+tool.id+'" title="'+tool.name+shortCutInfo+'">');
-		$tool.css({'background-image': 'url(assets/tools/tool_'+tool.id+'.svg)'});
-		$tool.on("click", function() {
-			switchTool(tool.id);
-		});
-		$toolsContainer.append($tool);
+		const $tool = jQuery(`<div>`)
+			.addClass(`tool_${tool.id} tool`)
+			.attr("data-id", tool.id)
+			.attr("title", tool.name + shortCutInfo)
+			.css({"background-image": `url(assets/tools/tool_${tool.id}.svg)`})
+			.on("click", () => switchTool(tool.id))
+			.appendTo($toolsContainer);
 	});
 	
 	statusbar.update();
@@ -89,19 +90,19 @@ const switchTool = function(toolID: string, forced?: boolean) {
 
 		//don't assign a hidden tool to previous tool state
 		//that is only useful/wanted for toolbar items
-		if(activeTool && activeTool.options.type !== 'hidden') {
+		if(activeTool && activeTool.options.type !== "hidden") {
 			previousTool = activeTool;
 		}
 		resetTools();
 		stylebar.sanitizeSettings();
 		tool.activateTool();
 		activeTool = tool;
-		jQuery('.tool_'+toolID+'').addClass('active');
+		jQuery(`.tool_${toolID}`).addClass("active");
 		// console.trace();
 		// console.log(`${toolID} is now active`, jQuery('.tool_'+toolID+''));
 
 	} catch(error) {
-		console.warn('The tool with the id "'+toolID+'" could not be loaded.', error);
+		console.warn(`The tool with the id "${toolID}" could not be loaded.`, error);
 	}
 };
 
@@ -117,13 +118,13 @@ const resetTools = function() {
 			paper.tools[i].remove();
 		}
 	}
-	jQuery('.toolOptionPanel').remove();
-	jQuery('.tool').removeClass('active');
+	jQuery(".toolOptionPanel").remove();
+	jQuery(".tool").removeClass("active");
 };
 
 
 const setDefaultTool = function() {
-	switchTool('select');
+	switchTool("select");
 };
 	
 	

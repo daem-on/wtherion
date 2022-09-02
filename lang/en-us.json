@@ -94,7 +94,9 @@
 			"commitNew": "Commit new file",
 			"commit": "Commit"
 		},
-		"historyPanel": "History panel"
+		"historyPanel": "History panel",
+		"search": "Search",
+		"changeNamespace": "Change stations' namespace"
 	},
 	"tools.itemSelect": "Item Select",
 	"tools.detailSelect": "Detail Select",
@@ -147,5 +149,9 @@
 	"edit.changeNamespace": "Change namespace of all stations",
 	"edit.namespacePrompt": "Enter the new namespace. This will override all existing stations' namespace.",
 	"error.title": "Encountered an error",
-	"error.report": "Report this error on GitHub"
+	"error.report": "Report this error on GitHub",
+	"search.search": "Search",
+	"search.previous": "Previous",
+	"search.next": "Next",
+	"search.noResults": "No results found"
 }

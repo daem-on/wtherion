@@ -8,6 +8,7 @@ import pgDocument from "../js/document";
 import * as layerPanel from "./layerPanel";
 import { getVersionNumber } from "./filesio/configManagement";
 import * as configEditor from "./configEditor";
+import { openSearchDialog } from "./search";
 
 export function setup() {
 	setupNavigationLogic();
@@ -186,7 +187,9 @@ export const handlers = {
 	historyPanel: function() {
 		jQuery("#historyPanel").toggleClass("hidden");
 		jQuery(document).trigger("HistoryChanged");
-	}
+	},
+
+	searchDialog: openSearchDialog,
 };
 
 export function showCommitButton(show: boolean) {

@@ -130,3 +130,16 @@ select::-ms-expand {
 button {
 	cursor:pointer;
 }
+
+.search-ui {
+	display: flex;
+	flex-direction: row;
+}
+
+.search-ui input {
+	flex: 1;
+}
+
+.search-ui div {
+	margin: 0 10px;
+}

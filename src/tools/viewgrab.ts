@@ -1,26 +1,27 @@
 // view pan tool
 // adapted from http://sketch.paperjs.org/
+import paper from "paper";
+import { correctToolEvent } from "./select";
 
-
-module.exports = function() {
-	var tool;
-	var lastPoint;
+export default function() {
+	let tool: paper.Tool;
+	let lastPoint: paper.Point;
 	
-	var options = {};
-	var currentCursor = "";
+	const options = {};
+	let currentCursor = "";
 	
-	var activateTool = function() {
+	const activateTool = function() {
 		tool = new paper.Tool();
 		
 		setCursor('grab');
 		
-		tool.onMouseDown = function(event) {
+		tool.onMouseDown = function(event: correctToolEvent) {
 			if(event.event.button > 0) return; // only first mouse button
 			lastPoint = paper.view.projectToView(event.point);
 			setCursor('grabbing'); 
 		};
 		
-		tool.onMouseDrag = function(event) {
+		tool.onMouseDrag = function(event: correctToolEvent) {
 			if(event.event.button > 0) return; // only first mouse button
 			setCursor('grabbing'); 
 			
@@ -28,18 +29,19 @@ module.exports = function() {
 			// dragging, we need to convert coordinates to view space,
 			// and then back to project space after the view space has
 			// changed.
-			var point = paper.view.projectToView(event.point);
-			var  last = paper.view.viewToProject(lastPoint);
-			paper.view.scrollBy(last.subtract(event.point));
+			const point = paper.view.projectToView(event.point);
+			const  last = paper.view.viewToProject(lastPoint);
+			// uuuuh I guess they left it out of the docs??
+			(paper.view as any).scrollBy(last.subtract(event.point));
 			lastPoint = point;
 		};
 		
-		tool.onMouseUp = function(event) {
+		tool.onMouseUp = function(event: correctToolEvent) {
 			setCursor('grab');
 		};
 		
-		var keyDownFired = false;
-		tool.onKeyDown = function(event) {
+		let keyDownFired = false;
+		tool.onKeyDown = function(event: paper.KeyEvent) {
 			if(keyDownFired) return;
 			keyDownFired = true;
 			
@@ -48,7 +50,7 @@ module.exports = function() {
 			}
 		};
 	
-		tool.onKeyUp = function(event) {
+		tool.onKeyUp = function(event: paper.KeyEvent) {
 			keyDownFired = false;
 			
 			if (event.key === 'space') {
@@ -61,9 +63,9 @@ module.exports = function() {
 	};
 	
 	
-	var setCursor = function(cursorString) {
+	const setCursor = function(cursorString?: string) {
 		if (cursorString === currentCursor) return;
-		var $body = jQuery('body');
+		const $body = jQuery('body');
 		$body.removeClass('grab');
 		$body.removeClass('grabbing');
 		
@@ -78,4 +80,4 @@ module.exports = function() {
 		options:options,
 		activateTool : activateTool
 	};
-};
+}

@@ -1,13 +1,15 @@
 // view zoom tool
 // adapted from http://sketch.paperjs.org/
+import paper from "paper";
+import { zoomBy } from "../view";
 
 module.exports = function() {
-	var tool;
+	let tool: paper.Tool;
 	// var ePoint;
 	
-	var options = {};
+	const options = {};
 	
-	var activateTool = function() {
+	const activateTool = function() {
 		tool = new paper.Tool();
 		
 		// ePoint = paper.view.center;
@@ -20,9 +22,9 @@ module.exports = function() {
 	};
 	
 	
-	var updateTool = function(updateInfo) {
+	const updateTool = function(updateInfo) {
 						
-		var factor = 1.25;
+		let factor = 1.25;
 		if (updateInfo.wheelDelta > 0 || updateInfo.detail < 0) {
 			// scroll up / zoom in
 
@@ -31,14 +33,14 @@ module.exports = function() {
 			factor = 1 / factor;
 		}
 
-		pg.view.zoomBy(factor);
-		var viewPosition = paper.view.getEventPoint(updateInfo);
+		zoomBy(factor);
+		const viewPosition = paper.view.getEventPoint(updateInfo);
 			
-		var mpos = viewPosition;
-		var ctr = paper.view.center;
+		const mpos = viewPosition;
+		const ctr = paper.view.center;
 		
-		var pc = mpos.subtract(ctr);
-		var offset = mpos.subtract(pc.multiply(factor)).subtract(ctr).multiply(-1);
+		const pc = mpos.subtract(ctr);
+		const offset = mpos.subtract(pc.multiply(factor)).subtract(ctr).multiply(-1);
 		paper.view.center = paper.view.center.add(offset);
 	};
 	

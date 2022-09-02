@@ -1,16 +1,27 @@
 // select tool
 // adapted from resources on http://paperjs.org and 
 // https://github.com/memononen/stylii
-const { drawGuides, clearGuideNumbers, hideGuideNumbers } = require("../../src/detailSelectGuides");
-const { updateWindow } = require("../../src/objectSettings/objectOptionPanel");
+import { drawGuides, clearGuideNumbers, hideGuideNumbers } from "../../src/detailSelectGuides";
+import { updateWindow } from "../../src/objectSettings/objectOptionPanel";
+import paper from "paper";
+import hover from "../../js/hover";
+import guides from "../../js/guides";
+import compoundPath from "../../js/compoundPath";
+import math from "../../js/math";
+import statusbar from "../../js/statusbar";
+import * as items from "../item";
+import * as menu from "../menu";
+import * as undo from "../undo";
+import * as selection from "../selection";
+import { correctToolEvent } from "./select";
 
-module.exports = function() {
-	var tool;
-	var keyModifiers = {};
+export default function() {
+	let tool: paper.Tool;
+	const keyModifiers: Record<string, boolean> = {};
 	
-	var options = {};
+	const options = {};
 	
-	var menuEntries = {
+	const menuEntries = {
 		selectionTitle: {
 			type : 'title',
 			text :'Selection'
@@ -65,10 +76,10 @@ module.exports = function() {
 		},
 	};
 
-	var activateTool = function() {		
+	const activateTool = function() {		
 		tool = new paper.Tool();
 				
-		var hitOptions = {
+		const hitOptions = {
 			segments: true,
 			stroke: true,
 			curves: true,
@@ -78,26 +89,26 @@ module.exports = function() {
 			tolerance: 3 / paper.view.zoom
 		};
 		
-		var doRectSelection = false;
-		var selectionRect;
+		let doRectSelection = false;
+		let selectionRect;
 		
-		var hitType;
+		let hitType;
 		
-		var lastEvent = null;
-		var selectionDragged = false;
+		let lastEvent = null;
+		let selectionDragged = false;
 		
 		tool.onMouseDown = function(event) {
 			if(event.event.button > 0) return; // only first mouse button
 			
 			selectionDragged = false;
 			
-			var doubleClicked = false;
+			let doubleClicked = false;
 			
 			if(lastEvent) {
 				if((event.event.timeStamp - lastEvent.event.timeStamp) < 250) {
 					doubleClicked = true;
 					if (!event.modifiers.shift) {
-						pg.selection.clearSelection();
+						selection.clearSelection();
 					}
 				} else {
 					doubleClicked = false;
@@ -106,22 +117,22 @@ module.exports = function() {
 			lastEvent = event;
 			
 			hitType = null;
-			pg.hover.clearHoveredItem();
-			var hitResult = paper.project.hitTest(event.point, hitOptions);
-			if (!hitResult || (hitResult.item.layer != paper.project.activeLayer)) {
+			hover.clearHoveredItem();
+			const hitResult = paper.project.hitTest(event.point, hitOptions);
+			if (!hitResult || (hitResult.item.layer !== paper.project.activeLayer)) {
 				if (!event.modifiers.shift) {
-					pg.selection.clearSelection();
+					selection.clearSelection();
 				}
 				doRectSelection = true;
 				return;
 			}
 			
 			// dont allow detail-selection of PGTextItem
-			if(hitResult && pg.item.isPGTextItem(pg.item.getRootItem(hitResult.item))) {
+			if(hitResult && items.isPGTextItem(items.getRootItem(hitResult.item))) {
 				return;
 			}
 				
-			if(hitResult.type === 'fill' || doubleClicked) {
+			if ((hitResult.type === 'fill' || doubleClicked) && itemIsPath(hitResult.item)) {
 
 				hitType = 'fill';
 				if(hitResult.item.selected) {
@@ -175,7 +186,7 @@ module.exports = function() {
 				hitResult.type === 'curve') {
 				hitType = 'curve';
 
-				var curve = hitResult.location.curve;
+				const curve = hitResult.location.curve;
 				if(event.modifiers.shift) {
 					curve.selected = !curve.selected;
 
@@ -199,19 +210,19 @@ module.exports = function() {
 				hitResult.segment.handleOut.selected = true;
 			}
 			
-			pg.statusbar.update();
+			statusbar.update();
 			hideGuideNumbers();
 		};
 		
-		tool.onMouseMove = function(event) {
-			pg.hover.handleHoveredItem(hitOptions, event);
+		tool.onMouseMove = function(event: correctToolEvent) {
+			hover.handleHoveredItem(hitOptions, event);
 		};
 		
-		tool.onMouseDrag = function(event) {
+		tool.onMouseDrag = function(event: correctToolEvent) {
 			if(event.event.button > 0) return; // only first mouse button
 			
 			if(doRectSelection) {
-				selectionRect = pg.guides.rectSelect(event);
+				selectionRect = guides.rectSelect(event);
 				// Remove this rect on the next drag and up event
 				selectionRect.removeOnDrag();
 
@@ -219,17 +230,18 @@ module.exports = function() {
 				doRectSelection = false;
 				selectionDragged = true;
 				
-				var selectedItems = pg.selection.getSelectedItems();
-				var dragVector = (event.point.subtract(event.downPoint));
+				const selectedItems = selection.getSelectedItems();
+				const dragVector = (event.point.subtract(event.downPoint));
 				
-				for(var i=0; i < selectedItems.length; i++) {
-					var item = selectedItems[i];
+				for(let i=0; i < selectedItems.length; i++) {
+					const item = selectedItems[i] as
+						paper.Path & {origPos?: paper.Point};
 
-					if(hitType === 'fill' || !item.segments) {
+					if(hitType === 'fill' || !("segments" in item)) {
 						
 						// if the item has a compound path as a parent, don't move its
 						// own item, as it would lead to double movement
-						if(item.parent && pg.compoundPath.isCompoundPath(item.parent)) {
+						if(item.parent && compoundPath.isCompoundPath(item.parent)) {
 							continue;
 						}
 						
@@ -241,7 +253,7 @@ module.exports = function() {
 
 						if (event.modifiers.shift) {
 							item.position = item.origPos.add(
-								pg.math.snapDeltaToAngle(dragVector, Math.PI*2/8)
+								math.snapDeltaToAngle(dragVector, Math.PI*2/8)
 							);
 
 						} else {
@@ -249,8 +261,9 @@ module.exports = function() {
 						}
 
 					} else {
-						for(var j=0; j < item.segments.length; j++) {
-							var seg = item.segments[j];
+						for(let j=0; j < item.segments.length; j++) {
+							const seg = item.segments[j] as
+								paper.Segment & {origPoint?: paper.Point};
 							// add the point of the segment before the drag started
 							// for later use in the snap calculation
 							if(!seg.origPoint) {
@@ -264,7 +277,7 @@ module.exports = function() {
 
 								if (event.modifiers.shift) {
 									seg.point = seg.origPoint.add(
-										pg.math.snapDeltaToAngle(dragVector, Math.PI*2/8)
+										math.snapDeltaToAngle(dragVector, Math.PI*2/8)
 									);
 
 								} else {
@@ -276,7 +289,7 @@ module.exports = function() {
 								//if option is pressed or handles have been split, 
 								//they're no longer parallel and move independently
 								if( event.modifiers.option ||
-									!seg.handleOut.isColinear(seg.handleIn)) {
+									!seg.handleOut.isCollinear(seg.handleIn)) {
 									seg.handleOut = seg.handleOut.add(event.delta);
 
 								} else {
@@ -290,7 +303,7 @@ module.exports = function() {
 								//if option is pressed or handles have been split, 
 								//they're no longer parallel and move independently
 								if( event.modifiers.option ||
-									!seg.handleOut.isColinear(seg.handleIn)) {
+									!seg.handleOut.isCollinear(seg.handleIn)) {
 									seg.handleIn = seg.handleIn.add(event.delta);
 
 								} else {
@@ -305,31 +318,33 @@ module.exports = function() {
 			}
 		};
 
-		tool.onMouseUp = function(event) {
+		tool.onMouseUp = function(event: correctToolEvent) {
 			if(event.event.button > 0) return; // only first mouse button
 		
 			if(doRectSelection && selectionRect) {
-				pg.selection.processRectangularSelection(event, selectionRect, 'detail');
+				selection.processRectangularSelection(event, selectionRect, 'detail');
 				selectionRect.remove();
 				
 			} else {
 				
 				if(selectionDragged) {
-					pg.undo.snapshot('moveSelection');
+					undo.snapshot('moveSelection');
 					selectionDragged = false;
 				}
 				
 				// resetting the items and segments origin points for the next usage
-				var selectedItems = pg.selection.getSelectedItems();
+				const selectedItems = selection.getSelectedItems();
 
-				for(var i=0; i < selectedItems.length; i++) {
-					var item = selectedItems[i];
+				for(let i=0; i < selectedItems.length; i++) {
+					const item = selectedItems[i] as
+						paper.Path & {origPos?: paper.Point};
 					// for the item
 					item.origPos = null;
 					// and for all segments of the item
 					if(item.segments) {
-						for(var j=0; j < item.segments.length; j++) {
-							var seg = item.segments[j];
+						for(let j=0; j < item.segments.length; j++) {
+							const seg = item.segments[j] as 
+								paper.Segment & {origPoint?: paper.Point};
 								seg.origPoint = null;
 						}
 					}
@@ -343,33 +358,33 @@ module.exports = function() {
 			drawGuides();
 		};
 		
-		tool.onKeyDown = function(event) {
+		tool.onKeyDown = function(event: paper.KeyEvent) {
 			keyModifiers[event.key] = true;
 		};
 		
-		tool.onKeyUp = function(event) {
+		tool.onKeyUp = function(event: paper.KeyEvent) {
 			if(keyModifiers.control) {
 				if(event.key === 'a') {
-					pg.selection.selectAllSegments();
+					selection.selectAllSegments();
 				} else if(event.key === 'i') {
-					pg.selection.invertSegmentSelection();
+					selection.invertSegmentSelection();
 				}
 			}
 			keyModifiers[event.key] = false;
 		};
 		
 		// setup floating tool options panel in the editor
-		//pg.toolOptionPanel.setup(options, components, function(){ });
+		//toolOptionPanel.setup(options, components, function(){ });
 		
-		pg.menu.setupToolEntries(menuEntries);
+		menu.setupToolEntries(menuEntries);
 		
 		tool.activate();
 	};
 
 	
-	var deactivateTool = function() {
-		pg.hover.clearHoveredItem();
-		pg.menu.clearToolEntries();
+	const deactivateTool = function() {
+		hover.clearHoveredItem();
+		menu.clearToolEntries();
 		clearGuideNumbers();
 	};
 
@@ -380,4 +395,8 @@ module.exports = function() {
 		deactivateTool: deactivateTool
 	};
 	
-};
+}
+
+function itemIsPath(item: paper.Item): item is paper.Path {
+	return item.className === 'Path';
+}

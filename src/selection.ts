@@ -459,11 +459,11 @@ export function processRectangularSelection(event: paper.Event, rect: paper.Path
 	itemLoop:
 	for(let i=0; i<allItems.length; i++) {
 		const item = allItems[i];
-		if(mode === 'detail' && item.isPGTextItem(item.getRootItem(item))) {
+		if(mode === 'detail' && items.isPGTextItem(items.getRootItem(item))) {
 			continue itemLoop;
 		}
 		// check for item segment points inside selectionRect
-		if(groups.isGroup(item) || item.isCompoundPathItem(item)) {
+		if(groups.isGroup(item) || items.isCompoundPathItem(item)) {
 			if(!rectangularSelectionGroupLoop(item, rect, item, event, mode)) {
 				continue itemLoop;
 			}

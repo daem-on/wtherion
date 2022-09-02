@@ -1,3 +1,4 @@
+const { openSearchDialog } = require("../src/search");
 let { save, exportTH2 } = require("../src/filesio/saveManagement");
 
 // functions releated to input (mouse, keyboard)
@@ -64,6 +65,11 @@ module.exports = function() {
 			if ((event.keyCode === 90) && event.ctrlKey && event.shiftKey) {
 				event.preventDefault();
 				pg.undo.redo();
+			}
+
+			if (event.key === "f" && event.ctrlKey) {
+				event.preventDefault();
+				openSearchDialog();
 			}
 
 			if (event.key === "s" && event.ctrlKey) {

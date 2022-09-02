@@ -1,5 +1,6 @@
 import { componentList } from "./toolOptionPanel";
 import pg from "./init";
+import { updateLayerList } from "./layerPanel";
 import * as wtConf from "./filesio/configManagement";
 
 const optionsCache = {
@@ -43,6 +44,9 @@ export function show() {
 		components,
 		() => {
 			wtConf.assign(optionsCache);
+
+			// update because lockLayerNames might have changed
+			updateLayerList();
 		},
 		"%configTitle%"
 	);

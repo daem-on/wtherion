@@ -410,11 +410,12 @@ export default function() {
 		tool.onKeyUp = function(event: paper.KeyEvent) {
 			
 			if(keyModifiers.control && keyModifiers.shift) {
-				if(event.key === 'g') {
+				if (event.key === 'g') {
 					pg.group.ungroupSelection();
 				}
 				
-			} else if(keyModifiers.control) {
+			} else if (keyModifiers.control
+				&& document.activeElement.tagName !== 'INPUT') {
 				if(event.key === 'a') {
 					pg.selection.selectAllItems();
 				} else if(event.key === 'i') {

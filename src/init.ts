@@ -6,7 +6,7 @@ import pgExport from "../js/export.js";
 import text from "../js/text.js";
 import * as menu from "./menu";
 import * as modal from "../js/modal.js";
-import toolbar from "./toolbar";
+import * as toolbar from "./toolbar";
 import stylebar from "../js/stylebar.js";
 import statusbar from "../js/statusbar.js";
 import * as input from "./input";

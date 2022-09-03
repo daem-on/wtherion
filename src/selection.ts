@@ -8,7 +8,7 @@ import * as math from "../js/math";
 import * as geometry from "../js/geometry";
 import * as groups from "./group";
 import * as items from "./item";
-import toolbar from "./toolbar";
+import * as toolbar from "./toolbar";
 import * as undo from "./undo";
 import paper from "paper";
 import getSettings from "./objectSettings/model/getSettings";

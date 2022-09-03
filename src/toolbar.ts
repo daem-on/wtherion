@@ -9,8 +9,8 @@ export type PGToolOptions = {
 	type?: string;
 	usedKeys?: {
 		[name: string]: string;
-	};
-};
+	}
+}
 
 export type PGTool = {
 	activateTool: () => void,
@@ -21,22 +21,27 @@ export type PGTool = {
 
 type ToolConstructor = {
 	new (): PGTool;
-};
+}
 
 // functions related to the toolbar
 
 let activeTool: PGTool;
 let previousTool: PGTool;
 
-const setup = function() {
+export function setup() {
 	setupToolList();
 	setDefaultTool();
-};
+	console.log("toolbar.ts setup");
+}
 
+if (import.meta.webpackHot) {
+	import.meta.webpackHot.accept("./tools", setup);
+}
 
-const setupToolList = function() {
+function setupToolList() {
 	const toolList= tools.getToolList();
 	const $toolsContainer = jQuery(".toolsContainer");
+	$toolsContainer.empty();
 	
 	jQuery.each(toolList, function(index, tool) {
 		if(tool.type === "hidden") return true;
@@ -55,18 +60,18 @@ const setupToolList = function() {
 	});
 	
 	statusbar.update();
-};
+}
 
-const getActiveTool = function() {
+export function getActiveTool() {
 	return activeTool;
-};
+}
 
 
-const getPreviousTool = function() {
+export function getPreviousTool() {
 	return previousTool;
-};
+}
 
-const switchTool = function(toolID: string, forced?: boolean) {
+export function switchTool(toolID: string, forced?: boolean) {
 	try {
 		activeTool?.deactivateTool?.();
 		const opts = tools.getToolInfoByID(toolID);
@@ -99,16 +104,16 @@ const switchTool = function(toolID: string, forced?: boolean) {
 		tool.activateTool();
 		activeTool = tool;
 		jQuery(`.tool_${toolID}`).addClass("active");
-		// console.trace();
-		// console.log(`${toolID} is now active`, jQuery('.tool_'+toolID+''));
+		
+		// console.log(`${previousTool?.options.id} \u2192 ${toolID}`);
 
 	} catch(error) {
 		console.warn(`The tool with the id "${toolID}" could not be loaded.`, error);
 	}
-};
+}
 
 
-const resetTools = function() {
+export function resetTools() {
 	if(activeTool != null) {
 		try {
 			activeTool.deactivateTool();
@@ -121,19 +126,10 @@ const resetTools = function() {
 	}
 	jQuery(".toolOptionPanel").remove();
 	jQuery(".tool").removeClass("active");
-};
+}
 
 
-const setDefaultTool = function() {
+export function setDefaultTool() {
 	switchTool("select");
-};
-	
-	
-export default {
-	setup: setup,
-	getActiveTool: getActiveTool,
-	getPreviousTool: getPreviousTool,
-	switchTool: switchTool,
-	resetTools: resetTools,
-	setDefaultTool: setDefaultTool
-};
+}
+

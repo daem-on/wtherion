@@ -1,6 +1,6 @@
 import "jquery-ui/ui/widgets/draggable";
 import * as tools from "./tools";
-import toolbar from "./toolbar";
+import * as toolbar from "./toolbar";
 import {constructSelect} from "../src/objectSettings/customToolbarInput";
 
 type ComponentType = "int" | "list" | "float" | "text" | "button" | "boolean" |

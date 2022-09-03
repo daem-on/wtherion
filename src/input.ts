@@ -3,7 +3,7 @@ import { save, exportTH2 } from "./filesio/saveManagement";
 import stylebar from "../js/stylebar";
 import * as view from "./view";
 import * as undo from "./undo";
-import toolbar from "./toolbar";
+import * as toolbar from "./toolbar";
 import * as menu from "./menu";
 import * as tools from "./tools";
 import * as selection from "./selection";
@@ -19,12 +19,31 @@ let mouseIsDown = false;
 export function setup() {
 	setupKeyboard();
 	setupMouse();
+	console.log("input.ts setup");
+}
+
+if (import.meta.webpackHot) {
+	import.meta.webpackHot.accept(
+		[
+			"./search",
+			"./filesio/saveManagement",
+			"./view",
+			"./undo",
+			"./toolbar",
+			"./menu",
+			"./tools",
+			"./selection",
+			"./tools/viewzoom",
+		], setup);
+	console.log("Hot reloading input.ts");
 }
 
 function setupKeyboard() {
 	const toolList = tools.getToolList();
+
+	jQuery(document).off(".pg");
 	
-	jQuery(document).off('keydown').on('keydown', function (event) {
+	jQuery(document).on("keydown.pg", function (event) {
 
 		if(!isKeyDown(event.key)) {
 			storeDownKey(event.key);
@@ -114,7 +133,7 @@ function setupKeyboard() {
 	});
 
 
-	jQuery(document).off('keyup').on('keyup', function( event ) {
+	jQuery(document).on("keyup.pg", function( event ) {
 
 		// remove event key from downkeys
 		downKeys[event.key] = false;

@@ -9,7 +9,7 @@ import multipleLineOptionPanel from "./panels/multipleLineOptionPanel";
 import multiplePointOptionPanel from "./panels/multiplePointOptionPanel";
 import * as wtConfig from "../filesio/configManagement";
 import { getSelectedItems } from "../selection";
-import toolbar from "../toolbar";
+import * as toolbar from "../toolbar";
 import toolOptionPanel from "../toolOptionPanel";
 
 export type objectOptionPanelConfig = {

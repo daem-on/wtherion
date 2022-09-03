@@ -3,38 +3,24 @@
 import paper from "paper";
 import { zoomBy } from "../view";
 
-module.exports = function() {
+export default function() {
 	let tool: paper.Tool;
-	// var ePoint;
-	
 	const options = {};
 	
 	const activateTool = function() {
 		tool = new paper.Tool();
-		
-		// ePoint = paper.view.center;
-		
-		// tool.onMouseMove = function(event) {
-		// 	ePoint = event.event;
-		// };
-		
 		tool.activate();
 	};
 	
-	
-	const updateTool = function(updateInfo) {
-						
+	const updateTool = function(updateInfo: WheelEvent) {
 		let factor = 1.25;
-		if (updateInfo.wheelDelta > 0 || updateInfo.detail < 0) {
-			// scroll up / zoom in
-
-		} else {
+		if (updateInfo.deltaY >= 0 && updateInfo.detail >= 0) {
 			// scroll down / zoom out
 			factor = 1 / factor;
 		}
 
 		zoomBy(factor);
-		const viewPosition = paper.view.getEventPoint(updateInfo);
+		const viewPosition = paper.view.getEventPoint(updateInfo as any);
 			
 		const mpos = viewPosition;
 		const ctr = paper.view.center;
@@ -46,11 +32,11 @@ module.exports = function() {
 	
 	
 	return {
-		options:options,
-		activateTool : activateTool,
+		options: options,
+		activateTool: activateTool,
 		updateTool: updateTool
 	};
-};
+}
 
 
 

@@ -9,7 +9,7 @@ import * as modal from "../js/modal.js";
 import toolbar from "./toolbar";
 import stylebar from "../js/stylebar.js";
 import statusbar from "../js/statusbar.js";
-import input from "./input";
+import * as input from "./input";
 import * as undo from "./undo";
 import * as tools from "./tools";
 import * as selection from "./selection";

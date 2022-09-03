@@ -15,6 +15,7 @@ export type PGToolOptions = {
 export type PGTool = {
 	activateTool: () => void,
 	deactivateTool: () => void,
+	updateTool?: (e: WheelEvent) => void,
 	options: Record<string, any>
 }
 

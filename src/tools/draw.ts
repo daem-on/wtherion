@@ -91,7 +91,6 @@ export default function() {
 	};
 
 	const activateTool = function() {
-		console.log("You just activated draw");
 		let paths: paper.Path[] = [];
 		
 		// get options from local storage if present

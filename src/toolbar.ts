@@ -31,7 +31,6 @@ let previousTool: PGTool;
 export function setup() {
 	setupToolList();
 	setDefaultTool();
-	console.log("toolbar.ts setup");
 }
 
 if (import.meta.webpackHot) {

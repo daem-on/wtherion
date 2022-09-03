@@ -11,7 +11,6 @@ export default function() {
 	let currentCursor = "";
 	
 	const activateTool = function() {
-		console.log("You just activated viewgrab89976");
 		tool = new paper.Tool();
 		
 		setCursor('grab');

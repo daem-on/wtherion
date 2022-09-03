@@ -19,7 +19,6 @@ let mouseIsDown = false;
 export function setup() {
 	setupKeyboard();
 	setupMouse();
-	console.log("input.ts setup");
 }
 
 if (import.meta.webpackHot) {
@@ -35,7 +34,6 @@ if (import.meta.webpackHot) {
 			"./selection",
 			"./tools/viewzoom",
 		], setup);
-	console.log("Hot reloading input.ts");
 }
 
 function setupKeyboard() {

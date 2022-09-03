@@ -61,7 +61,10 @@ const options: PGToolOptions[] = [
 	},
 	{
 		id: 'draw',
-		name: '%tools.draw%'
+		name: '%tools.draw%',
+		usedKeys : {
+			toolbar : 'd'
+		}
 	},
 	{
 		id: 'bezier',
@@ -79,10 +82,7 @@ const options: PGToolOptions[] = [
 	},
 	{
 		id: 'inspect',
-		name: '%tools.inspect%',
-		usedKeys : {
-			toolbar : 'm'
-		}
+		name: '%tools.inspect%'
 	},
 ];
 export default options;

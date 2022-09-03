@@ -127,14 +127,26 @@ function setupKeyboard() {
 		}
 
 		// space / pan tool
-		if(event.key === " " && !userIsTyping(event)) {
-			event.preventDefault();
-			toolbar.switchTool('viewgrab');
+		// m / inspect tool
+		if (!userIsTyping(event)) {
+			switch (event.key) {
+				case " ":
+					if (toolbar.getActiveTool().options.id === "viewgrab")
+						break;
+					event.preventDefault();
+					toolbar.switchTool('viewgrab');
+					break;
+				case "m":
+					if (toolbar.getActiveTool().options.id === "inspect")
+						break;
+					event.preventDefault();
+					toolbar.switchTool('inspect');
+			}
 		}
 	});
 
 
-	jQuery(document).on("keyup.pg", function( event ) {
+	jQuery(document).on("keyup.pg", function( event: JQuery.KeyUpEvent ) {
 
 		// remove event key from downkeys
 		downKeys[event.key] = false;
@@ -151,7 +163,8 @@ function setupKeyboard() {
 		if(userIsTyping(event)) return;
 
 		// space : stop pan tool on keyup
-		if(event.key === " ") {
+		// m: same for inspect tool
+		if(event.key === " " || event.key === "m") {
 			if(!isModifierKeyDown(event)) {
 				event.preventDefault();
 				resetToPreviousTool();
@@ -203,7 +216,7 @@ function isKeyDown(keyCode: string) {
 }
 
 
-export function isModifierKeyDown(event) {
+export function isModifierKeyDown(event: JQuery.KeyUpEvent) {
 	if( event.altKey || 
 		event.shiftKey || 
 		event.ctrlKey || 

@@ -20,16 +20,27 @@ export function objectToString(object: any) {
 	const s = getSettings(object);
 	if (!s) return null;
 
+	let text = "";
+
 	switch (s.className) {
 		case "LineSettings":
 			const subtype = s.subtype ? ":"+s.subtype : "";
-			return `%inspect.line% ${s.type + subtype} ${s.invisible ? "invisible" : ""}`;
+			text += "%inspect.line%";
+			text += ` ${s.type + subtype}`;
+			text += s.invisible ? " invisible" : "";
+			break;
 		case "AreaSettings":
-			return `%inspect.area% ${s.type} %inspect.withLine% ${s.lineSettings.type}`;
+			text += `%inspect.area% ${s.type}`;
+			text += ` %inspect.withLine% ${s.lineSettings.type}`;
+			break;
 		case "PointSettings":
-			if (s.type === "station") return `%inspect.point% ${s.type} ${s.name}`;
-			else return `%inspect.point% ${s.type}`;
+			text += "%inspect.point%";
+			text += " ";
+			if (s.type === "station") text += `${s.type} ${s.name}`;
+			else text += `${s.type}`;
 	}
+
+	return text;
 }
 
 export function activateTool() {	
@@ -99,4 +110,5 @@ export function activateTool() {
 export function deactivateTool() {
 	hover.clearHoveredItem();
 	menu.clearToolEntries();
+	sb.showCustom("");
 }

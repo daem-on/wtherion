@@ -7,6 +7,7 @@ const optionsCache = {
 	showSegmentOptionPanel: false,
 	lockLayerNames: false,
 	githubToken: "",
+	inspectTolerance: 8,
 };
 const components: componentList<typeof optionsCache> = {
 	detailSelectGuides: {
@@ -25,6 +26,11 @@ const components: componentList<typeof optionsCache> = {
 		type: "text",
 		label: "%config.githubToken%",
 		tooltip: "%config.githubToken.tooltip%"
+	},
+	inspectTolerance: {
+		type: "int",
+		label: "%config.inspectTolerance%",
+		min: 0,
 	}
 };
 

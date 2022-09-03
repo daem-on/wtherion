@@ -4,6 +4,7 @@ import * as selection from "../selection";
 import * as sb from "../../js/statusbar";
 import * as menu from "../menu";
 import * as hover from "../../js/hover";
+import * as config from "../filesio/configManagement";
 
 let tool: paper.Tool;
 
@@ -34,6 +35,8 @@ export function objectToString(object: any) {
 export function activateTool() {	
 	selection.clearSelection();	
 	tool = new paper.Tool();
+
+	const tolerance = config.get("inspectTolerance") ?? 8;
 			
 	const hitOptions = {
 		segments: true,
@@ -42,7 +45,7 @@ export function activateTool() {
 		handles: true,
 		fill: true,
 		guide: false,
-		tolerance: 1
+		tolerance: tolerance / paper.view.zoom
 	};
 	
 	let hitType;

@@ -37,18 +37,20 @@ export function activateTool() {
 
 	tool.onMouseDown = function(event: correctToolEvent) {
 		if (event.event.button > 0) return;
-
-		const result = paper.project.hitTest(event.point, {
-			fill: true
-		});
-
+		
 		const point = editTH2.createPoint(event.point);
 		const settings = getSettings(point) as PointSettings;
 
-		if (result?.item.data?.therionData?.className === "XVIStation") {
-			point.position = result.item.position;
+		const xviPoint = paper.project.hitTest(event.point, {
+			fill: true,
+			match: (item: paper.HitResult) =>
+				item.item?.data?.therionData?.className === "XVIStation",
+		});
+
+		if (xviPoint) {
+			point.position = xviPoint.item.position;
 			settings.type = "station";
-			settings.name = result.item.data.therionData.name;
+			settings.name = xviPoint.item.data.therionData.name;
 		} else {
 			settings.type = options.type;
 			if (options.type === "station") {

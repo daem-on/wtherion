@@ -34,6 +34,9 @@ if (import.meta.webpackHot) {
 			"./selection",
 			"./tools/viewzoom",
 		], setup);
+	import.meta.webpackHot.dispose(() => {
+		window.removeEventListener("wheel", onMouseWheel);
+	});
 }
 
 function setupKeyboard() {
@@ -278,15 +281,17 @@ const setupMouse = function() {
 	});
 	
 	// jQuery(window).on('mousewheel DOMMouseScroll', function(event){
-	window.addEventListener("wheel", function (event) {
-		if(event.ctrlKey) {
-			event.preventDefault();
-			if (toolbar.getActiveTool().options.id !== 'viewzoom') {
-				toolbar.switchTool('viewzoom');
-			}
-			if(toolbar.getActiveTool()) {
-				(toolbar.getActiveTool() as ViewzoomTool).updateTool(event);
-			}
-		}
-	}, {passive: false});
+	window.addEventListener("wheel", onMouseWheel, {passive: false});
 };
+
+function onMouseWheel(event: WheelEvent) {
+	if(event.ctrlKey) {
+		event.preventDefault();
+		if (toolbar.getActiveTool().options.id !== 'viewzoom') {
+			toolbar.switchTool('viewzoom');
+		}
+		if(toolbar.getActiveTool()) {
+			(toolbar.getActiveTool() as ViewzoomTool).updateTool(event);
+		}
+	}
+}

@@ -13,11 +13,11 @@ const menuEntries = {};
 
 export function objectToString(object: any) {
 	if (object?.data?.therionData?.className === "XVIStation") {
-		return object.data.therionData.name;
+		return `XVI: ${object.data.therionData.name}`;
 	}
 
 	const s = getSettings(object);
-	if (!s) return "%inspect.unrecognized%";
+	if (!s) return null;
 
 	switch (s.className) {
 		case "LineSettings":
@@ -42,7 +42,7 @@ export function activateTool() {
 		handles: true,
 		fill: true,
 		guide: false,
-		tolerance: 3
+		tolerance: 1
 	};
 	
 	let hitType;
@@ -54,10 +54,17 @@ export function activateTool() {
 		// pg.hover.handleHoveredItem(hitOptions, event);
 		// const hovered = pg.hover.getHoveredItem();
 
-		const hovered = paper.project.hitTest(event.point, hitOptions);
+		const hovered = paper.project.hitTestAll(event.point, hitOptions);
 
-		if (hovered) {
-			sb.showCustom(objectToString(hovered.item));
+		if (hovered != null && hovered[0] != null) {
+			for (const hit of hovered) {
+				const s = objectToString(hit.item);
+				if (s) {
+					sb.showCustom(s);
+					return;
+				}
+			}
+			sb.showCustom("%inspect.unrecognized%");
 		} else {
 			const x = event.point.x.toFixed(1);
 			const y = event.point.y.toFixed(1);

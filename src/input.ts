@@ -13,7 +13,7 @@ import viewzoom from "./tools/viewzoom";
 
 type ViewzoomTool = ReturnType<typeof viewzoom>;
 	
-const downKeys = [];
+const downKeys: Record<string, boolean> = {};
 let mouseIsDown = false;
 
 export function setup() {
@@ -21,56 +21,52 @@ export function setup() {
 	setupMouse();
 }
 
-const setupKeyboard = function() {
+function setupKeyboard() {
 	const toolList = tools.getToolList();
 	
-	jQuery(document).unbind('keydown').bind('keydown', function (event) {
+	jQuery(document).off('keydown').on('keydown', function (event) {
 
-		if(!isKeyDown(event.keyCode)) {
-			storeDownKey(event.keyCode);
+		if(!isKeyDown(event.key)) {
+			storeDownKey(event.key);
 		}
 		
 		// only prevent default keypresses (see tools/select.js for more)
 		// ctrl-a / select all
-		if (event.keyCode === 65 && event.ctrlKey) {
+		if (event.key === "a" && event.ctrlKey) {
 			if(!textIsSelected() && !userIsTyping(event)) {
 				event.preventDefault();
 			}
 		}
 		// ctrl-i / invert selection
-		if (event.keyCode === 73 && event.ctrlKey) {
+		if (event.key === "i" && event.ctrlKey) {
 			event.preventDefault();
 		}
 		
 		// ctrl-g / group
-		if (event.keyCode === 71 && event.ctrlKey && !event.shiftKey) {
+		if (event.key === "g" && event.ctrlKey && !event.shiftKey) {
 			event.preventDefault();
 		}
 
 		// ctrl-shift-g / ungroup
-		if (event.keyCode === 71 && event.ctrlKey && event.shiftKey) {
+		if (event.key === "g" && event.ctrlKey && event.shiftKey) {
 			event.preventDefault();
 		}
 
 
 		// ctrl-1 / reset view to 100%
-		if ((event.keyCode === 97 || 
-			event.keyCode === 49) &&
-			event.ctrlKey && 
-			!event.shiftKey) {
-
+		if ((event.key === "1") && event.ctrlKey && !event.shiftKey) {
 			event.preventDefault();
 			view.resetZoom();
 		}
 
 		// ctrl-z / undo
-		if ((event.keyCode === 90) && event.ctrlKey && !event.shiftKey) {
+		if ((event.key === "z") && event.ctrlKey && !event.shiftKey) {
 			event.preventDefault();
 			undo.undo();
 		}
 
 		// ctrl-shift-z / undo
-		if ((event.keyCode === 90) && event.ctrlKey && event.shiftKey) {
+		if ((event.key === "z") && event.ctrlKey && event.shiftKey) {
 			event.preventDefault();
 			undo.redo();
 		}
@@ -91,7 +87,7 @@ const setupKeyboard = function() {
 		}
 
 		// backspace / stop browsers "back" functionality
-		if(event.keyCode === 8 && !userIsTyping(event)) {
+		if(event.key === "Backspace" && !userIsTyping(event)) {
 			event.preventDefault();
 		}
 
@@ -101,7 +97,7 @@ const setupKeyboard = function() {
 
 
 		// alt
-		if(event.keyCode === 18) {
+		if(event.key === "Alt") {
 			event.preventDefault();
 		}
 
@@ -118,32 +114,27 @@ const setupKeyboard = function() {
 	});
 
 
-	jQuery(document).unbind('keyup').bind('keyup', function( event ) {
+	jQuery(document).off('keyup').on('keyup', function( event ) {
 
 		// remove event key from downkeys
-		const index = downKeys.indexOf(event.keyCode);
-		if(index > -1) {
-			downKeys.splice(index, 1);
-		}
-
+		downKeys[event.key] = false;
 
 		// ctrl
 		if(event.key === "Control") {
 			// if viewZoom is active and we just released ctrl,
 			// reset tool to previous
 			if(toolbar.getActiveTool().options.id === 'viewzoom') {
-				toolbar.switchTool(toolbar.getPreviousTool().options.id);
+				resetToPreviousTool();
 			}
 		}
 		
 		if(userIsTyping(event)) return;
 
-
 		// space : stop pan tool on keyup
-		if(event.keyCode === 32) {
+		if(event.key === " ") {
 			if(!isModifierKeyDown(event)) {
 				event.preventDefault();
-				toolbar.switchTool(toolbar.getPreviousTool().options.id);
+				resetToPreviousTool();
 			}
 		}
 
@@ -155,47 +146,41 @@ const setupKeyboard = function() {
 		// keys that don't fire if modifier key down or mousedown or typing
 
 		// backspace, delete : delete selection
-		if(event.keyCode === 8 || event.keyCode === 46) {
+		if(event.key === "Backspace" || event.key === "Delete") {
 			selection.deleteSelection();
-		}
-
-		// x : switch color
-		if(event.keyCode === 88) {
-			stylebar.switchColors();
 		}
 
 		// tool keys (switching to tool by key shortcut)
 		jQuery.each(toolList, function(index, toolEntry) {
 			if(toolEntry.usedKeys && toolEntry.usedKeys.toolbar) {
-				if(event.keyCode === toolEntry.usedKeys.toolbar.toUpperCase().charCodeAt(0)) {
+				if(event.key === toolEntry.usedKeys.toolbar.toLowerCase()) {
 					toolbar.switchTool(toolEntry.id);
 				}
 			}
 		});
 		
 	});
-};
+}
 
+function resetToPreviousTool() {
+	const previous = toolbar.getPreviousTool();
+	toolbar.switchTool(previous?.options.id ?? "select");
+}
 
-const storeDownKey = function(keyCode) {
-	if(downKeys.indexOf(keyCode) < 0) {
-		downKeys.push(keyCode);
+function storeDownKey(keyCode: string) {
+	if(downKeys[keyCode]) {
+		downKeys[keyCode] = true;
 	}
-};
-
+}
 
 export function isMouseDown() {
 	return mouseIsDown;
 }
 
 
-const isKeyDown = function(keyCode) {
-	if(downKeys.indexOf(keyCode) < 0) {
-		return false;
-	} else {
-		return true;
-	}
-};
+function isKeyDown(keyCode: string) {
+	return downKeys[keyCode];
+}
 
 
 export function isModifierKeyDown(event) {

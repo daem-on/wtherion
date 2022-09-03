@@ -67,11 +67,19 @@ export function activateTool() {
 	tool.activate();
 }
 
+function increment(original: string): string {
+	const number = Number.parseInt(original);
+	if (isNaN(number)) return original;
+	else return (number + 1).toString();
+}
+
 function increaseStationNumber() {
 	if (options.stationName.includes("@")) {
 		const split = options.stationName.split("@");
-		options.stationName = (Number.parseInt(split[0])+1) + "@" + split[1];
-		setLocalOptions(options);
-		toolOptionPanel.update(options);
+		options.stationName = increment(split[0]) + "@" + split[1];
+	} else {
+		options.stationName = increment(options.stationName);
 	}
+	setLocalOptions(options);
+	toolOptionPanel.update(options);
 }

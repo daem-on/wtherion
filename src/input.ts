@@ -44,11 +44,15 @@ function setupKeyboard() {
 
 	jQuery(document).off(".pg");
 	
-	jQuery(document).on("keydown.pg", function (event) {
+	jQuery(document).on("keydown.pg", function (event: JQuery.KeyDownEvent) {
 
 		if(!isKeyDown(event.key)) {
 			storeDownKey(event.key);
 		}
+
+		// we're only interested in the original keydown events
+		// not the repeats
+		if (event.originalEvent.repeat) return;
 		
 		// only prevent default keypresses (see tools/select.js for more)
 		// ctrl-a / select all

@@ -97,7 +97,8 @@ export default {
 		const circle = new paper.Shape.Circle({
 			center: pos,
 		});
-		circle.data.noDrawHandle = true;
+		circle.data.fixedScale = true;
+		circle.data.onlyRotateHandle = true;
 		circle.data.therionData = PointSettings.defaultSettings();
 		return circle;
 	},

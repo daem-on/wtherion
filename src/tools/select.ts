@@ -389,6 +389,13 @@ export default function() {
 					const child = itemGroup.children[i];
 					if(child.data.isPGTextItem) {
 						child.data.wasScaled = true;
+					} else if (child.data.fixedScale) {
+						const old = new paper.Matrix(child.matrix);
+						child.matrix = new paper.Matrix();
+						child.rotation = old.rotation;
+						child.position = old.translation;
+						
+						child.scaling = new paper.Point(1, 1);
 					}
 				}
 				
@@ -472,7 +479,11 @@ export default function() {
 
 		// If there are items with noDrawHandle, don't draw regular handles
 		if (items.some(item => (item.data?.noDrawHandle))) {
-			if (items.length === 1) showRotateHandle(items[0]);
+			return;
+		}
+		
+		if (items.length === 1 && items[0].data?.onlyRotateHandle) {
+			showRotateHandle(items[0]);
 			return;
 		}
 

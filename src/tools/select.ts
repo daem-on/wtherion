@@ -270,11 +270,15 @@ export default function() {
 				selectionRect.removeOnDrag();
 
 			} else if(mode === 'scale') {
-				itemGroup = new paper.Group(scaleItems);
-				itemGroup.addChild(boundsPath);
-				itemGroup.data.isHelperItem = true;
-				itemGroup.strokeScaling = false;
-				itemGroup.applyMatrix = false;
+				if (itemGroup == null) {
+					itemGroup = new paper.Group(scaleItems);
+					itemGroup.addChild(boundsPath);
+					itemGroup.data.isHelperItem = true;
+					itemGroup.strokeScaling = false;
+					itemGroup.applyMatrix = false;
+				} else {
+					itemGroup.matrix = new paper.Matrix();
+				}
 
 				if (event.modifiers.alt) {
 					pivot = origCenter;
@@ -401,6 +405,7 @@ export default function() {
 				
 				itemGroup.layer.addChildren(itemGroup.children);
 				itemGroup.remove();
+				itemGroup = null;
 				undo.snapshot('scaleSelection');
 				
 			} else if(mode === 'rotate') {

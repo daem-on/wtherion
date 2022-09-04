@@ -142,6 +142,7 @@
 	"config.lockLayerNames": "Lock layer names",
 	"config.githubToken": "GitHub token",
 	"config.githubToken.tooltip": "A GitHub Personal Access Token with the 'repo' scope",
+	"config.inspectTolerance": "Inspect tolerance",
 	"ok": "OK",
 	"scraps": "Scraps",
 	"scraps.add": "Add",

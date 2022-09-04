@@ -8,7 +8,7 @@ import { wallTypes } from "Res/wallTypes";
 import toolOptionPanel, { componentList } from "../toolOptionPanel";
 import LineSettings from "../../src/objectSettings/model/LineSettings";
 import { getLocalOptions, getToolInfoByID, setLocalOptions } from "../../src/tools";
-import { PGTool } from "src/toolbar";
+import { keybinds, PGTool } from "../toolbar";
 import editTH2 from "../editTH2";
 import * as undo from "../undo";
 import { clearSelection } from "../selection";
@@ -59,7 +59,8 @@ export default function(): PGTool {
 	const activateTool = function() {
 		tool = new paper.Tool();
 		options = getLocalOptions(options);
-		const toolInfo = getToolInfoByID("bezier");
+		const toolKeybind = Object.entries(keybinds)
+			.find(([key, value]) => value === "bezier")[0];
 		
 		let path: paper.Path;
 
@@ -223,7 +224,7 @@ export default function(): PGTool {
 		};
 
 		tool.onKeyDown = function(event: paper.KeyEvent) {
-			if (event.key === "enter" || event.key === toolInfo.usedKeys.toolbar) {
+			if (event.key === "enter" || event.key === toolKeybind) {
 				clearSelection();
 				undo.snapshot('bezier');
 				dirty = false;

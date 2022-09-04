@@ -43,7 +43,6 @@ const options: PGToolOptions[] = [
 		id: 'select',
 		name: '%tools.itemSelect%',
 		usedKeys : {
-			toolbar : 'v',
 			selectAll : 'ctrl-a',
 			invertSelection: 'ctrl-i',
 			groupSelection : 'ctrl-g',
@@ -55,30 +54,18 @@ const options: PGToolOptions[] = [
 	{
 		id: 'detailselect',
 		name: '%tools.detailSelect%',
-		usedKeys : {
-			toolbar : 'a'
-		}
 	},
 	{
 		id: 'draw',
 		name: '%tools.draw%',
-		usedKeys : {
-			toolbar : 'd'
-		}
 	},
 	{
 		id: 'bezier',
 		name: '%tools.bezier%',
-		usedKeys : {
-			toolbar : 'p'
-		}
 	},
 	{
 		id: 'point',
 		name: '%tools.point%',
-		usedKeys : {
-			toolbar : 'k'
-		}
 	},
 	{
 		id: 'inspect',

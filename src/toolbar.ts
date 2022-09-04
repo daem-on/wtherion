@@ -2,6 +2,7 @@ import paper from "paper";
 import stylebar from "../js/stylebar";
 import statusbar from "../js/statusbar";
 import * as tools from "./tools";
+import * as config from "./filesio/configManagement";
 
 export type PGToolOptions = {
 	id: string;
@@ -19,6 +20,14 @@ export type PGTool = {
 	options: Record<string, any>
 }
 
+export const keybinds: Record<string, string> = {
+	"v": "select",
+	"a": "detailselect",
+	"d": "draw",
+	"p": "bezier",
+	"k": "point"
+};
+
 type ToolConstructor = {
 	new (): PGTool;
 }
@@ -29,8 +38,16 @@ let activeTool: PGTool;
 let previousTool: PGTool;
 
 export function setup() {
+	setupKeybinds();
 	setupToolList();
 	setDefaultTool();
+}
+
+function setupKeybinds() {
+	if (config.exists("keybinds")) {
+		const keybindsConfig = config.get("keybinds");
+		Object.assign(keybinds, keybindsConfig);
+	}
 }
 
 if (import.meta.webpackHot) {
@@ -46,8 +63,9 @@ function setupToolList() {
 		if(tool.type === "hidden") return true;
 		
 		let shortCutInfo = "";
-		if(tool.usedKeys && tool.usedKeys.toolbar !== "") {
-			shortCutInfo = " ("+(tool.usedKeys.toolbar).toUpperCase()+")";
+		const keybind = Object.entries(keybinds).find(([key, value]) => value === tool.id);
+		if (keybind != null) {
+			shortCutInfo = ` (${keybind[0].toUpperCase()})`;
 		}
 		const $tool = jQuery(`<div>`)
 			.addClass(`tool_${tool.id} tool`)

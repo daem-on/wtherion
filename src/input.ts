@@ -188,13 +188,11 @@ function setupKeyboard() {
 		}
 
 		// tool keys (switching to tool by key shortcut)
-		jQuery.each(toolList, function(index, toolEntry) {
-			if(toolEntry.usedKeys && toolEntry.usedKeys.toolbar) {
-				if(event.key === toolEntry.usedKeys.toolbar.toLowerCase()) {
-					toolbar.switchTool(toolEntry.id);
-				}
+		for (const keybind in toolbar.keybinds) {
+			if (event.key === keybind) {
+				toolbar.switchTool(toolbar.keybinds[keybind]);
 			}
-		});
+		}
 		
 	});
 }

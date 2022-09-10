@@ -40,7 +40,11 @@ const config = {
                 "loc": localization,
                 "isProduction": isProduction,
                 "builtAt": new Date().toISOString()
-            }
+            },
+            meta: {
+                "built-at": new Date().toISOString()
+            },
+            
         }),
         new webpack.ProvidePlugin({
             paper: 'paper',

@@ -175,7 +175,7 @@ export const handlers = {
 
 	clearDocument: function() {
 		if (confirm('%clearDocument%')) {
-			document.clear();
+			pgDocument.clear();
 			saves.setSaveFileName(null);
 		}
 	},

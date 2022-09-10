@@ -8,6 +8,7 @@ const optionsCache = {
 	lockLayerNames: false,
 	githubToken: "",
 	inspectTolerance: 8,
+	colorInactive: false,
 };
 const components: componentList<typeof optionsCache> = {
 	detailSelectGuides: {
@@ -31,6 +32,10 @@ const components: componentList<typeof optionsCache> = {
 		type: "int",
 		label: "%config.inspectTolerance%",
 		min: 0,
+	},
+	colorInactive: {
+		type: "boolean",
+		label: "%config.colorInactive%"
 	}
 };
 

@@ -4,6 +4,7 @@ import * as selection from "./selection";
 import * as layers from "../js/layer";
 import * as wtConfig from "./filesio/configManagement";
 import helper from "../js/helper";
+import editTH2 from "./editTH2";
 
 let mode = "normal";
 
@@ -168,6 +169,7 @@ function setupLayerEntry(layer) {
 function setActiveLayerEntry(layer) {
 	jQuery('.layerEntry').removeClass('active');
 	layers.setActiveLayer(layer);
+	editTH2.updateInactiveScraps();
 	jQuery('.layerEntry[data-layer-id="'+layer.data.id+'"]').addClass('active');
 }
 
@@ -187,7 +189,7 @@ export function updateLayerList() {
 	jQuery.each(paper.project.layers, function(index, layer) {
 		setupLayerEntry(layer);
 	});
-	
+	editTH2.updateInactiveScraps();
 }
 
 function updateLayerValues() {

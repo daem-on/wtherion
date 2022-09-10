@@ -9,6 +9,9 @@ import colorDefs from "Res/color-defs.json";
 import * as scrapOptions from "./scrapOptions";
 import { snapshot } from "./undo";
 import helper from "../js/helper";
+import * as config from "./filesio/configManagement";
+
+import paper from "paper";
 
 const typeColors
 	= generateColors(colorDefs.typeColors);
@@ -19,8 +22,26 @@ const areaColors
 
 function generateColors(from: Record<string, string>) {
 	const r: Record<string, paper.Color> = {};
-	for (const entry in from) r[entry] = new paper.Color(from[entry]);
+	for (const entry in from) {
+		r[entry] = new paper.Color(from[entry]);
+		const inactive = r[entry].clone();
+		inactive.saturation = 0.05;
+		inactive.brightness = 0.7;
+		r[entry + "-inactive"] = inactive;
+	}
 	return r;
+}
+
+export function overrideColors(object: Record<string, Record<string, string>>) {
+	if ("lineColors" in object)
+		Object.assign(typeColors, generateColors(object.lineColors));
+	if ("pointColors" in object)
+		Object.assign(pointColors, generateColors(object.pointColors));
+	if ("areaColors" in object)
+		Object.assign(areaColors, generateColors(object.areaColors));
+	if ("background" in object)
+		jQuery("#paperCanvas")
+			.css("background-color", object.background["fill"]);
 }
 
 export default {
@@ -38,9 +59,7 @@ export default {
 	drawArea: function(a: paper.Path) {
 		const settings = getSettings(a) as AreaSettings;
 		this.drawLine(a, settings.lineSettings);
-		a.fillColor = new paper.Color(0.2, 0.2, 0.2, 0.2);
-		a.fillColor = (settings.type in areaColors) ?
-			areaColors[settings.type] : areaColors.default;
+		this.setColorFromList(a, areaColors, settings.type, true);
 	},
 
 	drawPoint: function(p: paper.Shape) {
@@ -48,10 +67,7 @@ export default {
 		const isStation = settings.type === "station";
 
 		p.radius = settings.type === "station" ? 3 : 5;
-		if (settings.type in pointColors)
-			p.fillColor = pointColors[settings.type];
-		else
-			p.fillColor = pointColors.default;
+		this.setColorFromList(p, pointColors, settings.type, true);
 		// p.strokeColor = pointColors.default;
 		// p.strokeWidth = 2;
 	},
@@ -68,10 +84,8 @@ export default {
 		else
 			l.strokeWidth = 1;
 		
-		if (settings.type in typeColors)
-			l.strokeColor = typeColors[settings.type];
-		else
-			l.strokeColor = typeColors.default;
+		this.setColorFromList(l, typeColors, settings.type);
+
 		if (settings.subtype === "presumed")
 			l.dashArray = [3, 6];
 		else l.dashArray = null;
@@ -81,10 +95,51 @@ export default {
 	drawObject: function(object: PaperItemType) {
 		const settings = getSettings(object);
 		if (!settings) return;
-		if (settings.className === "AreaSettings") {
-			this.drawArea(object as paper.Path);
-		} else if (settings.className === "LineSettings") {
-			this.drawLine(object as paper.Path);
+
+		switch (settings.className) {
+			case "AreaSettings":
+				this.drawArea(object as paper.Path);
+				break;
+			case "LineSettings":
+				this.drawLine(object as paper.Path);
+				break;
+			case "PointSettings":
+				this.drawPoint(object as paper.Shape);
+				break;
+		}
+	},
+
+	setColorFromList: function(
+		object: PaperItemType,
+		list: Record<string, paper.Color>,
+		name: string,
+		fill = false
+	) {
+		if (list[name] == null) name = "default";
+		if (config.get("colorInactive"))
+			if (paper.project.activeLayer !== object.layer)
+				name += "-inactive";
+		
+		const color = list[name];
+		if (fill) object.fillColor = color;
+		else object.strokeColor = color;
+	},
+
+	updateInactiveScraps: function() {
+		// only if enabled in config
+		if (!config.get("colorInactive")) return;
+
+		for (const layer of paper.project.layers) {
+			const isActive = layer === paper.project.activeLayer;
+			if (layer.visible
+				&& layer.data.activeWhenLastDrawn !== isActive
+				&& !layer.data.isGuideLayer) {
+
+				for (const item of layer.children) {
+					this.drawObject(item as PaperItemType);
+				}
+				layer.data.activeWhenLastDrawn = isActive;
+			}
 		}
 	},
 	

@@ -110,10 +110,8 @@ function setupLayerEntry(layer) {
 	const $layerNameInput = jQuery('<input type="text">').val(layer.name);
 	const $layerActionSection = jQuery('<li class="layerActions">');
 	const $layerDeleteButton = jQuery('<button class="layerDeleteButton" data-layer-id="'+layer.data.id+'" title="Delete layer">&times;</button>');
-	const $layerInfo = jQuery('<li class="layerInfo" title="Selected 0/0 Total">i</li>');
-	const $layerSelectSection = jQuery('<li class="layerSelectSection">');
-	const $layerSelectButton = jQuery('<input type="radio" class="layerSelectToggle" title="Select all/none">');
-	
+	const $layerInfo = jQuery('<li class="layerInfo" title="Selected 0/0 Total">0/0</li>');
+
 	$layerEntry.on("click", function() {
 		setActiveLayerEntry(layer);
 	});
@@ -138,30 +136,13 @@ function setupLayerEntry(layer) {
 		}
 	});
 
-	$layerSelectButton.on("click", function() {
-		if(jQuery(this).attr('checked')) {
-			selection.clearSelection();
-			jQuery(this).removeAttr('checked');
-
-		} else {
-			selection.clearSelection();
-			jQuery('.toolOptionPanel').remove();
-
-			const items = helper.getPaperItemsByLayerID(layer.data.id);
-			jQuery.each(items, function(index, item) {
-				selection.setItemSelection(item, true);
-			});
-			jQuery(this).attr('checked', items.length>0 ? "" : null);
-		}
-	});
-
 	$layerVisSection.append($layerVisButton);
 	$layerNameSection.append($layerNameInput);
 	if(!layer.data.isDefaultLayer) {
 		$layerActionSection.append($layerDeleteButton);
 	}
-	$layerSelectSection.append($layerSelectButton);
-	$layerEntry.append($layerVisSection, $layerNameSection, $layerActionSection, $layerInfo, $layerSelectSection);
+	// $layerSelectSection.append($layerSelectButton);
+	$layerEntry.append($layerVisSection, $layerNameSection, $layerActionSection, $layerInfo);
 	jQuery('.layerEntries').prepend($layerEntry);
 }
 
@@ -189,10 +170,12 @@ export function updateLayerList() {
 	jQuery.each(paper.project.layers, function(index, layer) {
 		setupLayerEntry(layer);
 	});
+	updateLayerValues();
 	editTH2.updateInactiveScraps();
 }
 
 function updateLayerValues() {
+	if (jQuery('.layerPanel').hasClass('hidden')) return;
 	jQuery('.layerEntry').each(function() {
 		const id = parseInt(jQuery(this).attr('data-layer-id'));
 		const layer = layers.getLayerByID(id);
@@ -206,13 +189,10 @@ function updateLayerValues() {
 			});
 
 			const $entry = jQuery(this);
-			$entry.find('.layerInfo').attr('title','Selected '+selectedItems+'/'+layer.children.length+' Total');
+			$entry.find(".layerInfo")
+				.text(`${selectedItems}/${layer.children.length}`)
+				.attr("title",`Selected ${selectedItems}/${layer.children.length} Total`);
 
-			if(layer.children.length > 0 && selectedItems === layer.children.length) {
-				$entry.find('.layerSelectToggle').prop('checked', true);
-			} else {
-				$entry.find('.layerSelectToggle').prop('checked', false);
-			}
 		}
 	});
 }

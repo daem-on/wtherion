@@ -94,7 +94,9 @@
 			"commitNew": "Új fájl kommittálása",
 			"commit": "Kommittálás"
 		},
-		"historyPanel": "Előzmények"
+		"historyPanel": "Előzmények",
+		"search": "Keresés",
+		"changeNamespace": "Állomások névterének változtatása"
 	},
 	"tools.itemSelect": "Elem kijelölés",
 	"tools.detailSelect": "Részlet kijelölés",
@@ -140,10 +142,18 @@
 	"config.lockLayerNames": "Scrap nevek zárolása",
 	"config.githubToken": "GitHub token",
 	"config.githubToken.tooltip": "Egy GitHub Personal Access Token a 'repo' hozzáféréssel",
+	"config.inspectTolerance": "Vizsgálat érzékenysége",
+	"config.colorInactive": "Inaktív scrap-ek színe",
 	"ok": "OK",
 	"scraps": "Scrap-ek",
 	"scraps.add": "Új",
 	"history": "Előzmények",
 	"edit.changeNamespace": "Összes állomás névterének megváltoztatása",
-	"edit.namespacePrompt": "Ez a művelet felülírja az összes állomás névterét. Új névtér:"
+	"edit.namespacePrompt": "Ez a művelet felülírja az összes állomás névterét. Új névtér:",
+	"error.title": "Hiba történt",
+	"error.report": "Hiba jelentése GitHub-on",
+	"search.search": "Keresés",
+	"search.previous": "Előző",
+	"search.next": "Következő",
+	"search.noResults": "Nincs találat"
 }

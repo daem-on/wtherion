@@ -22,11 +22,17 @@ const toPoint = function(global: string[], global2: string[] = undefined) {
 	]);
 };
 
-const trimEnclosing = (text: string) =>
-	text.trim()
-	// eslint-disable-next-line no-useless-escape
-	.replace(/^["'\[]/, "")
-	.replace(/["'\]]$/, "");
+function trimEnclosing(text: string): string {
+	text = text.trim();
+	const starting = text.charAt(0);
+	const ending = text.charAt(text.length - 1);
+	if ([`"`, `'`].includes(starting) && starting === ending) {
+		return text.substring(1, text.length - 1);
+	} else if (starting === `[` && ending === `]`) {
+		return text.substring(1, text.length - 1);
+	}
+	return text;
+}
 
 const getOptions = function(source: string) {
 	const options: Record<string, string> = {};
@@ -293,7 +299,7 @@ function savePointSettings(point: paper.Shape, options: Record<string, string>) 
 
 	for (const key of PointSettings.stringSettings) {
 		if (key in options) {
-			s[key] = o[key]; delete o[key];
+			s[key] = trimEnclosing(o[key]); delete o[key];
 		}
 	}
 

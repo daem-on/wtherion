@@ -20,9 +20,7 @@ export function setSaveFileName(name: string) {
 }
 
 export function save(clearName = false) {
-	if (clearName) setSaveFileName(null);
-
-	if (!saveFileName) {
+	if (!saveFileName || clearName) {
 		setSaveFileName(prompt("%save.saveFileName%"));
 		if (saveFileName == null) return;
 	}

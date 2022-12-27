@@ -138,7 +138,6 @@ export async function exportTH2(clearHandle = false) {
 	try {
 		const blob = asBlob();
 		
-		saveAs(blob, "export.th2");
 		if (window.showSaveFilePicker) {
 			const writable = await exportFileHandle.createWritable();
 			await writable.write(blob);

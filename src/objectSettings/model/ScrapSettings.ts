@@ -1,3 +1,5 @@
+import { assertValid } from "../../validate";
+
 export default class ScrapSettings {
 	
 	static readonly stringSettings: ReadonlyArray<string> = 
@@ -18,5 +20,13 @@ export default class ScrapSettings {
 		s.copyright = "";
 		s.otherSettings = "";
 		return s;
+	}
+
+	static validate(s: ScrapSettings) {
+		for (const setting of this.stringSettings) {
+			assertValid(!(s[setting] == null), `Missing ${setting}`, s);
+		}
+		assertValid(!(s.otherSettings == null), `Missing otherSettings`, s);
+		// TODO: check if projection is correctly formatted
 	}
 }

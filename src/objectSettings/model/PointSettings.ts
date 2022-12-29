@@ -1,3 +1,4 @@
+import { assertValid } from "../../validate";
 import { Clip, Place } from "./LineSettings";
 
 export default class PointSettings {
@@ -32,5 +33,20 @@ export default class PointSettings {
 		ls.rotation = 0;
 		ls.id = "";
 		return ls;
+	}
+
+	static validate(s: PointSettings) {
+		for (const setting of this.stringSettings) {
+			assertValid(!(s[setting] == null), `Missing ${setting}`, s);
+		}
+		assertValid(!(s.otherSettings == null), `Missing otherSettings`, s);
+		assertValid(!(s.rotation == null), `Missing rotation`, s);
+		if (s.type === "station") {
+			assertValid(!(s.name == null), `Missing name`, s);
+			assertValid(s.rotation === 0, `Station rotation must be 0`, s);
+		}
+		assertValid(!(s.invisible == null), `Missing invisible`, s);
+		assertValid(Object.values(Clip).includes(s.clip), `Invalid clip`, s);
+		assertValid(Object.values(Place).includes(s.place), `Invalid place`, s);
 	}
 }

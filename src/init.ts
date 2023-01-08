@@ -1,5 +1,4 @@
 import jQuery from "jquery";
-import pgDocument from "../js/document.js";
 import layer from "../js/layer.js";
 import * as layerPanel from "./layerPanel";
 import pgExport from "../js/export.js";
@@ -38,7 +37,6 @@ import {setup as configSetup} from "./filesio/configManagement";
 // functions related to initializing pg
 
 export default {
-	document: pgDocument,
 	layer: layer,
 	layerPanel: layerPanel,
 	export: pgExport,
@@ -74,7 +72,6 @@ export default {
 		jQuery.ajaxSetup({ cache: false });
 
 		configSetup();
-		this.document.setup();
 		this.layer.setup();
 		this.export.setup();
 		this.menu.setup();

@@ -1,5 +1,5 @@
 // functions related to selecting stuff
-import pgDocument from "../js/document";
+import * as pgDocument from "./document";
 import * as compoundPath from "../js/compoundPath";
 import stylebar from "../js/stylebar";
 import statusbar from "../js/statusbar";
@@ -102,7 +102,8 @@ export function invertSegmentSelection() {
 	const items = pgDocument.getAllSelectableItems();
 	
 	for(let i=0; i<items.length; i++) {
-		const item = items[i];
+		const item = items[i] as paper.Item & paper.Path;
+		if (!item.segments) continue;
 		for(let j=0; j<item.segments.length; j++) {
 			const segment = item.segments[j];
 			segment.selected = !segment.selected;
@@ -283,7 +284,7 @@ export function cloneSelection() {
 }
 
 
-export function setItemSelection(item, state) {
+export function setItemSelection(item: paper.Item, state: boolean) {
 	if (item.layer !== paper.project.activeLayer) return;
 	const parentGroup = groups.getItemsGroup(item);
 	const itemsCompoundPath = compoundPath.getItemsCompoundPath(item);
@@ -301,7 +302,7 @@ export function setItemSelection(item, state) {
 			return;
 		}
 		// fully selected segments need to be unselected first
-		item.fullySelected = false; 
+		(item as any).fullySelected = false; 
 		// then the item can be normally selected
 		item.selected = state;
 		// deselect children of compound-path or group for cleaner item selection

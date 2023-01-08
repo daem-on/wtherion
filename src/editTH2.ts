@@ -197,8 +197,8 @@ export default {
 		const newNamespace = prompt("%edit.namespacePrompt%");
 		if (!newNamespace) return;
 
-		for (const item of helper.getAllPaperItems() as any[]) {
-			const settings = getSettings(item);
+		for (const item of paper.project.getItems({ recursive: true })) {
+			const settings = getSettings(item as any);
 			if (!settings || settings.className !== "PointSettings") continue;
 			if (settings.type !== "station") continue;
 			if (settings.name.includes("@")) {

@@ -59,7 +59,7 @@ function search(query: string) {
 	const re = new RegExp(query, "i");
 	results.length = 0;
 
-	for (const item of helper.getAllPaperItems()) {
+	for (const item of paper.project.getItems({ recursive: true })) {
 		const s = getSettings(item as any);
 
 		const match = (

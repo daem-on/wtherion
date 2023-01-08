@@ -1,4 +1,4 @@
-import pgDocument from "../../js/document";
+import * as pgDocument from "../document";
 import { floater } from "../../js/modal";
 import { asBlob } from "../export/exportTH2";
 import { saveAs } from "file-saver";
@@ -46,7 +46,7 @@ export function showLoadSelect() {
 		}
 	}
 
-	floater("loadWindow", "Saved files", content, 400, 200);
+	floater("loadWindow", "%load.title%", content, 400, 200);
 }
 
 export function showMultipleFileSelect(filenames: string[]): Promise<File[]> {

@@ -1,5 +1,5 @@
 import importTH2 from "../import/importTH2";
-import { loadJSONDocument } from "../../js/document";
+import { loadJSONDocument } from "../document";
 
 export function cancelAll(event: Event) {
 	event.preventDefault();

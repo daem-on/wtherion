@@ -1,10 +1,9 @@
 import "jquery-ui/ui/widgets/sortable";
 import paper from "paper";
-import * as selection from "./selection";
 import * as layers from "../js/layer";
-import * as wtConfig from "./filesio/configManagement";
-import helper from "../js/helper";
 import editTH2 from "./editTH2";
+import * as wtConfig from "./filesio/configManagement";
+import * as selection from "./selection";
 
 let mode = "normal";
 
@@ -93,7 +92,7 @@ export function setup() {
 }
 
 
-function setupLayerEntry(layer) {
+function setupLayerEntry(layer: paper.Layer) {
 	const isGuide = (layer.data && layer.data.isGuideLayer);
 	const isXVI = (layer.data && layer.data.xviLayer);
 	if (mode === "normal" && isGuide
@@ -105,7 +104,7 @@ function setupLayerEntry(layer) {
 	}
 	const $layerEntry = jQuery('<ul class="layerEntry'+$activeClass+'" data-layer-id="'+layer.data.id+'">');
 	const $layerVisSection = jQuery('<li class="layerVisSection">');
-	const $layerVisButton = jQuery('<input type="checkbox" class="layerVisibilityToggle" title="Layer visibility">').attr('checked', layer.visible);
+	const $layerVisButton = jQuery('<input type="checkbox" class="layerVisibilityToggle" title="Layer visibility">').attr('checked', layer.visible.toString());
 	const $layerNameSection = jQuery('<li class="layerName" title="">');
 	const $layerNameInput = jQuery('<input type="text">').val(layer.name);
 	const $layerActionSection = jQuery('<li class="layerActions">');
@@ -126,28 +125,29 @@ function setupLayerEntry(layer) {
 	
 	
 	$layerNameInput.on('change', function() {
-		layer.name = jQuery(this).val();
+		layer.name = $layerNameInput.val() as string;
 	});
 	
 	$layerDeleteButton.on("click", function() {
-		if(confirm('Delete this layer and all its children?')) {
-			layers.deleteLayer(jQuery(this).attr('data-layer-id'));
-			updateLayerList();
+		if(confirm('%scraps.delete.confirm%')) {
+			if (layer.data.isDefaultLayer) layer.removeChildren();
+			else {
+				layers.deleteLayer(jQuery(this).attr('data-layer-id'));
+				updateLayerList();
+			}
 		}
 	});
 
 	$layerVisSection.append($layerVisButton);
 	$layerNameSection.append($layerNameInput);
-	if(!layer.data.isDefaultLayer) {
-		$layerActionSection.append($layerDeleteButton);
-	}
+	$layerActionSection.append($layerDeleteButton);
 	// $layerSelectSection.append($layerSelectButton);
 	$layerEntry.append($layerVisSection, $layerNameSection, $layerActionSection, $layerInfo);
 	jQuery('.layerEntries').prepend($layerEntry);
 }
 
 
-function setActiveLayerEntry(layer) {
+function setActiveLayerEntry(layer: paper.Layer) {
 	jQuery('.layerEntry').removeClass('active');
 	layers.setActiveLayer(layer);
 	editTH2.updateInactiveScraps();

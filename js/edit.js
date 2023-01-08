@@ -1,13 +1,14 @@
+pgDocument = require('../src/document');
 
 module.exports = function() {
 	
 	var copySelectionToClipboard = function() {
-		pg.document.clearClipboard();
+		pgDocument.clearClipboard();
 		var selectedItems = pg.selection.getSelectedItems();
 		if(selectedItems.length > 0) {
 			for(var i=0; i < selectedItems.length; i++) {
 				var jsonItem = selectedItems[i].exportJSON({asString:false});
-				pg.document.pushClipboard(jsonItem);
+				pgDocument.pushClipboard(jsonItem);
 			}
 		}
 	};
@@ -16,7 +17,7 @@ module.exports = function() {
 		pg.undo.snapshot('pasteObjectsFromClipboard');
 		pg.selection.clearSelection();
 		
-		var clipboard = pg.document.getClipboard();
+		var clipboard = pgDocument.getClipboard();
 		if(clipboard && clipboard.length > 0) {
 			for(var i = 0; i < clipboard.length; i++) {
 				var item = paper.Base.importJSON(clipboard[i]);

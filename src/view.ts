@@ -1,7 +1,7 @@
 import paper from "paper";
 import statusbar from "../js/statusbar";
 import layer from "../js/layer";
-import pgDocument from "../js/document";
+import * as pgDocument from "./document";
 
 export function zoomBy(factor: number) {
 	paper.view.zoom *= factor;

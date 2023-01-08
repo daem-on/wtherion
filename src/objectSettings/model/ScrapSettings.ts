@@ -27,6 +27,9 @@ export default class ScrapSettings {
 			assertValid(!(s[setting] == null), `Missing ${setting}`, s);
 		}
 		assertValid(!(s.otherSettings == null), `Missing otherSettings`, s);
-		// TODO: check if projection is correctly formatted
+
+		const dateAndStringformat = /^[0-9-.]+ (".+"|[^ ]+)$/g;
+		assertValid(dateAndStringformat.test(s.author.trim()), `Invalid author`, s);
+		assertValid(dateAndStringformat.test(s.copyright.trim()), `Invalid copyright`, s);
 	}
 }

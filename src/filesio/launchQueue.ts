@@ -1,4 +1,4 @@
-import { loadJSONDocument } from "../../js/document";
+import { loadJSONDocument } from "../document";
 import importTH2 from "../import/importTH2";
 
 export function setup() {

@@ -15,6 +15,7 @@ import * as modal from "../js/modal";
 import { getVersionNumber } from "./filesio/configManagement";
 import * as configEditor from "./configEditor";
 import { openSearchDialog } from "./search";
+import { showValidationWindow } from "./validate";
 
 export function setup() {
 	setupNavigationLogic();
@@ -196,6 +197,8 @@ export const handlers = {
 	},
 
 	searchDialog: openSearchDialog,
+
+	validate: showValidationWindow,
 };
 
 export function showCommitButton(show: boolean) {

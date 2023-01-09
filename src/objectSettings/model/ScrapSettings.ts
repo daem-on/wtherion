@@ -10,6 +10,7 @@ export default class ScrapSettings {
 	scale: string;
 	author: string;
 	copyright: string;
+	stationNames: string;
 	otherSettings: string;
 
 	static defaultSettings(): ScrapSettings {
@@ -18,6 +19,7 @@ export default class ScrapSettings {
 		s.scale = "";
 		s.author = "";
 		s.copyright = "";
+		s.stationNames = "";
 		s.otherSettings = "";
 		return s;
 	}

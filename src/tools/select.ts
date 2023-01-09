@@ -5,7 +5,7 @@
 import { default as getSettings } from "../../src/objectSettings/model/getSettings";
 import { updateWindow } from "../../src/objectSettings/objectOptionPanel";
 import hover from "../../js/hover";
-import layer from "../../js/layer";
+import * as layer from "../layer";
 import guides from "../../js/guides";
 import edit from "../../js/edit";
 import compoundPath from "../../js/compoundPath";

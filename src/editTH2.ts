@@ -1,15 +1,14 @@
-import LineSettings from "./objectSettings/model/LineSettings";
-import getSettings, { PaperItemType } from "./objectSettings/model/getSettings";
+import { isPathItem } from "./item";
 import AreaSettings from "./objectSettings/model/AreaSettings";
+import getSettings, { PaperItemType } from "./objectSettings/model/getSettings";
+import LineSettings from "./objectSettings/model/LineSettings";
 import PointSettings from "./objectSettings/model/PointSettings";
 import { getSelectedItems } from "./selection";
-import { isPathItem } from "./item";
 
 import colorDefs from "Res/color-defs.json";
+import * as config from "./filesio/configManagement";
 import * as scrapOptions from "./scrapOptions";
 import { snapshot } from "./undo";
-import helper from "../js/helper";
-import * as config from "./filesio/configManagement";
 
 import paper from "paper";
 
@@ -139,6 +138,14 @@ export default {
 					this.drawObject(item as PaperItemType);
 				}
 				layer.data.activeWhenLastDrawn = isActive;
+			}
+		}
+	},
+
+	redrawAll: function() {
+		for (const layer of paper.project.layers) {
+			for (const item of layer.children) {
+				this.drawObject(item as PaperItemType);
 			}
 		}
 	},

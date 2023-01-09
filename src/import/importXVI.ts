@@ -1,6 +1,6 @@
 import { updateLayerList } from "../layerPanel";
 import { importAndAddImage } from "../../js/import";
-import { activateDefaultLayer, addNewLayer } from "../../js/layer";
+import { activateDefaultLayer, addNewLayer } from "../layer";
 
 const COMMMON_COLOR = new paper.Color(0.2, 0.2, 0.2);
 const COMMMON_FILL = new paper.Color(0.2, 0.2, 0.2, 0.1);

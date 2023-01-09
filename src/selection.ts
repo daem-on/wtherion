@@ -1,17 +1,18 @@
 // functions related to selecting stuff
-import * as pgDocument from "./document";
+import paper from "paper";
 import * as compoundPath from "../js/compoundPath";
-import stylebar from "../js/stylebar";
-import statusbar from "../js/statusbar";
+import * as geometry from "../js/geometry";
 import * as hover from "../js/hover";
 import * as math from "../js/math";
-import * as geometry from "../js/geometry";
+import statusbar from "../js/statusbar";
+import stylebar from "../js/stylebar";
+import * as pgDocument from "./document";
 import * as groups from "./group";
 import * as items from "./item";
+import { setActiveLayer } from "./layer";
+import getSettings from "./objectSettings/model/getSettings";
 import * as toolbar from "./toolbar";
 import * as undo from "./undo";
-import paper from "paper";
-import getSettings from "./objectSettings/model/getSettings";
 
 export function getSelectionMode() {
 	const activeTool = toolbar.getActiveTool();
@@ -45,8 +46,15 @@ export function selectRandomItems() {
 	}
 }
 
-
-
+export function focusItem(item: paper.Item): void {
+	paper.project.deselectAll();
+	if (item.layer !== paper.project.activeLayer) {
+		setActiveLayer(item.layer);
+	}
+	item.selected = true;
+	paper.view.center = item.bounds.center;
+	jQuery(document).trigger('SelectionChanged');
+}
 
 export function selectAllSegments() {
 	const items = pgDocument.getAllSelectableItems();

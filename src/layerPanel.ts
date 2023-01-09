@@ -1,6 +1,6 @@
 import "jquery-ui/ui/widgets/sortable";
 import paper from "paper";
-import * as layers from "../js/layer";
+import * as pgLayer from "./layer";
 import editTH2 from "./editTH2";
 import * as wtConfig from "./filesio/configManagement";
 import * as selection from "./selection";
@@ -53,7 +53,7 @@ export function setup() {
 	const $newLayerButton = jQuery('<button class="newLayerButton">%scraps.add%</button>');
 	
 	$newLayerButton.on("click", function() {
-		const newLayer = layers.addNewLayer();
+		const newLayer = pgLayer.addNewLayer();
 		selection.clearSelection();
 		updateLayerList();
 	});
@@ -99,7 +99,7 @@ function setupLayerEntry(layer: paper.Layer) {
 		|| mode === "xvi" && !isXVI) return;
 
 	let $activeClass = '';
-	if(layers.isActiveLayer(layer)) {
+	if(pgLayer.isActiveLayer(layer)) {
 		$activeClass= ' active';
 	}
 	const $layerEntry = jQuery('<ul class="layerEntry'+$activeClass+'" data-layer-id="'+layer.data.id+'">');
@@ -112,7 +112,7 @@ function setupLayerEntry(layer: paper.Layer) {
 	const $layerInfo = jQuery('<li class="layerInfo" title="Selected 0/0 Total">0/0</li>');
 
 	$layerEntry.on("click", function() {
-		setActiveLayerEntry(layer);
+		pgLayer.setActiveLayer(layer);
 	});
 	
 	$layerVisButton.on("click", function() {
@@ -132,7 +132,7 @@ function setupLayerEntry(layer: paper.Layer) {
 		if(confirm('%scraps.delete.confirm%')) {
 			if (layer.data.isDefaultLayer) layer.removeChildren();
 			else {
-				layers.deleteLayer(jQuery(this).attr('data-layer-id'));
+				pgLayer.deleteLayer(jQuery(this).attr('data-layer-id'));
 				updateLayerList();
 			}
 		}
@@ -146,11 +146,8 @@ function setupLayerEntry(layer: paper.Layer) {
 	jQuery('.layerEntries').prepend($layerEntry);
 }
 
-
-function setActiveLayerEntry(layer: paper.Layer) {
+export function setActiveLayerEntry(layer: paper.Layer) {
 	jQuery('.layerEntry').removeClass('active');
-	layers.setActiveLayer(layer);
-	editTH2.updateInactiveScraps();
 	jQuery('.layerEntry[data-layer-id="'+layer.data.id+'"]').addClass('active');
 }
 
@@ -160,7 +157,7 @@ function handleLayerOrderChange() {
 	jQuery('.layerEntries').children().each(function() {
 		order.push(jQuery(this).attr('data-layer-id'));
 	});
-	layers.changeLayerOrderByIDArray(order);
+	pgLayer.changeLayerOrderByIDArray(order);
 }
 
 
@@ -178,7 +175,7 @@ function updateLayerValues() {
 	if (jQuery('.layerPanel').hasClass('hidden')) return;
 	jQuery('.layerEntry').each(function() {
 		const id = parseInt(jQuery(this).attr('data-layer-id'));
-		const layer = layers.getLayerByID(id);
+		const layer = pgLayer.getLayerByID(id);
 		if(layer) {
 			
 			let selectedItems = 0;

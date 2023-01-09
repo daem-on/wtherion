@@ -4,7 +4,8 @@ import paper from "paper";
 import pgExport from "../js/export";
 import guides from "../js/guides";
 import hover from "../js/hover";
-import layer from "../js/layer";
+import editTH2 from "./editTH2";
+import * as layer from "./layer";
 import * as selection from "./selection";
 import * as toolbar from "./toolbar";
 import * as undo from "./undo";
@@ -28,11 +29,11 @@ export function setup() {
 	// };
 	
 	
-	window.onbeforeunload = (function(e) {
+	window.onbeforeunload = function() {
 		if(undo.getStates().length > 1) {
 			return 'Unsaved changes will be lost. Leave anyway?';
 		}
-	});
+	};
 }
 
 
@@ -90,6 +91,7 @@ export function loadJSONDocument(jsonString) {
 	if(exportRect) {
 		pgExport.setExportRect(new paper.Rectangle(exportRect.data.exportRectBounds));
 	}
+	editTH2.redrawAll();
 	undo.clear();
 	undo.snapshot('loadJSONDocument');
 }

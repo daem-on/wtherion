@@ -1,5 +1,5 @@
 import jQuery from "jquery";
-import layer from "../js/layer.js";
+import * as layer from "./layer";
 import * as layerPanel from "./layerPanel";
 import pgExport from "../js/export.js";
 import text from "../js/text.js";

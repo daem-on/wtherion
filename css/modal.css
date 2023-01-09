@@ -118,7 +118,7 @@
 
 .modal a:hover {
 	color: inherit;
-	border-bottom: 1px solid black;
+    text-decoration: underline;
 }
 
 

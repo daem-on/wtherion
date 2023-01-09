@@ -143,3 +143,7 @@ button {
 .search-ui div {
 	margin: 0 10px;
 }
+
+#validationResult a {
+	display: block;
+}

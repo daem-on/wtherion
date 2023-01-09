@@ -1,7 +1,7 @@
 // undo functionality
 // slightly modifed from https://github.com/memononen/stylii
 import paper from "paper";
-import layer from "../js/layer";
+import * as layer from "./layer";
 
 type UndoState = {
 	type: string,

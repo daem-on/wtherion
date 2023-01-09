@@ -2,6 +2,7 @@ import helper from "../js/helper";
 import { floater } from "../js/modal";
 import getSettings from "./objectSettings/model/getSettings";
 import paper from "paper";
+import { focusItem } from "./selection";
 
 const results: paper.Item[] = [];
 let currentIndex = 0;
@@ -77,9 +78,6 @@ function search(query: string) {
 
 function focusSelection() {
 	if (results.length > 0) {
-		paper.project.deselectAll();
-		results[currentIndex].selected = true;
-		paper.view.center = results[currentIndex].bounds.center;
-		jQuery(document).trigger('SelectionChanged');
+		focusItem(results[currentIndex]);
 	}
 }

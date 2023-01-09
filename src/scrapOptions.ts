@@ -1,13 +1,13 @@
-import toolOptionPanel, { componentList } from "./toolOptionPanel";
+import * as layer from "./layer";
 import getSettings from "./objectSettings/model/getSettings";
-import ScrapSettings from "./objectSettings/model/ScrapSettings";
-import layer from "../js/layer";
+import toolOptionPanel, { componentList } from "./toolOptionPanel";
 
 const optionsCache = {
 	projection: "",
 	scale: "",
 	author: "",
 	copyright: "",
+	stationNames: "",
 	otherSettings: ""
 };
 const components: componentList<typeof optionsCache> = {
@@ -28,6 +28,10 @@ const components: componentList<typeof optionsCache> = {
 	copyright: {
 		type: "text",
 		label: "%scrap.copyright%"
+	},
+	stationNames: {
+		type: "text",
+		label: "%scrap.stationNames%"
 	},
 	otherSettings: {
 		type: "textarea",

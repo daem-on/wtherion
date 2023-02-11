@@ -4,7 +4,7 @@ import AreaSettings from "../objectSettings/model/AreaSettings";
 import PointSettings from "../objectSettings/model/PointSettings";
 import { importFiles, PositionList } from "./importXVI";
 import ScrapSettings from "../objectSettings/model/ScrapSettings";
-import { showMultipleFileSelect } from "../filesio/saveManagement";
+import { showMultipleFileSelect } from "../filesio/saveManagement/saveManagement";
 import { activateDefaultLayer, addNewLayer, getDefaultLayer } from "../../js/layer";
 import { updateLayerList } from "../layerPanel";
 import * as undo from "../undo";

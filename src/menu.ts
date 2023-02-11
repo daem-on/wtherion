@@ -2,7 +2,7 @@
 
 import * as importerXvi from "../src/import/importXVI";
 import importerTh2 from "../src/import/importTH2";
-import * as saves from "./filesio/saveManagement";
+import * as saves from "./filesio/saveManagement/saveManagement";
 import * as pgDocument from "./document";
 import * as layerPanel from "./layerPanel";
 import * as helper from "../js/helper";

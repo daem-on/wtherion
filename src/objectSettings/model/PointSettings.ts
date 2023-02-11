@@ -44,6 +44,7 @@ export default class PointSettings {
 		if (s.type === "station") {
 			assertValid(!(s.name == null), `Missing name`, s);
 			assertValid(s.rotation === 0, `Station rotation must be 0`, s);
+			assertValid(!s.name.includes(" "), `Station name cannot contain spaces`, s);
 		}
 		assertValid(!(s.invisible == null), `Missing invisible`, s);
 		assertValid(Object.values(Clip).includes(s.clip), `Invalid clip`, s);

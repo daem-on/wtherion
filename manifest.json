@@ -14,7 +14,7 @@
 		{
 			"action": "/",
 			"accept": {
-				"application/json+wtherion": [".wtherion"]
+				"application/json+wtherion": [".wth"]
 			},
 			"icons": [],
 			"launch_type": "multiple-clients"

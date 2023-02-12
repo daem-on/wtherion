@@ -2,6 +2,7 @@ import initPG from "./init";
 import jQuery from "jquery";
 import * as exporter from "./export/exportTH2";
 import "./styles.ts";
+import { showErrorWindow } from "./errorHandling";
 
 // import spectrumSetup from "../js/lib/spectrum.js";
 // spectrumSetup(window, jQuery);
@@ -28,3 +29,8 @@ if (module.hot) {
 	// window["pg"] = pg;
 	module.hot.accept();
 }
+
+addEventListener("error", (e) => {
+	showErrorWindow(e.error);
+	console.error(e.error);
+});

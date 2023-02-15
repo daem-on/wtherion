@@ -39,7 +39,9 @@ function setSaveFileName(name: string | undefined) {
 
 function loadFromStorage(name: string) {
 	jQuery("#loadWindow").remove();
-	setWindowTitle(name.substring(9));
+	const fileName = name.substring(9);
+	setWindowTitle(fileName);
+	saveFileName = fileName;
 	return localStorage.getItem(name);
 }
 

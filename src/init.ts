@@ -24,7 +24,7 @@ import math from "../js/math.js";
 import geometry from "../js/geometry.js";
 import * as view from "./view";
 import boolean from "../js/boolean.js";
-import edit from "../js/edit.js";
+import * as edit from "./edit";
 import importHelper from "../js/import.js";
 import order from "../js/order.js";
 import * as dropfiles from "./filesio/dropfiles";

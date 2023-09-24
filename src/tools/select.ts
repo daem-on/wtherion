@@ -7,7 +7,7 @@ import { updateWindow } from "../../src/objectSettings/objectOptionPanel";
 import hover from "../../js/hover";
 import * as layer from "../layer";
 import guides from "../../js/guides";
-import edit from "../../js/edit";
+import * as edit from "../edit";
 import compoundPath from "../../js/compoundPath";
 import math from "../../js/math";
 import * as group from "../group";

@@ -148,6 +148,7 @@
 	"config.saveHandler": "Save handler",
 	"config.saveHandler.localStorage": "Local storage",
 	"config.saveHandler.fileSystem": "File system",
+	"config.asyncClipboard": "Use the Async Clipboard API",
 	"ok": "OK",
 	"scraps": "Scraps",
 	"scraps.add": "Add",

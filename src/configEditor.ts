@@ -9,7 +9,8 @@ const optionsCache = {
 	githubToken: "",
 	inspectTolerance: 8,
 	colorInactive: false,
-	saveHandler: "localStorage"
+	saveHandler: "localStorage",
+	enableAsyncClipboard: false,
 };
 const components: componentList<typeof optionsCache> = {
 	detailSelectGuides: {
@@ -45,6 +46,10 @@ const components: componentList<typeof optionsCache> = {
 			["%config.saveHandler.localStorage%", "localStorage"],
 			["%config.saveHandler.fileSystem%", "fileSystem"]
 		]
+	},
+	enableAsyncClipboard: {
+		type: "boolean",
+		label: "%config.asyncClipboard%"
 	}
 };
 

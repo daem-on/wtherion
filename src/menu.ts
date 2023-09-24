@@ -2,7 +2,8 @@
 
 import * as importerXvi from "../src/import/importXVI";
 import importerTh2 from "../src/import/importTH2";
-import * as saves from "./filesio/saveManagement";
+import * as saves from "./filesio/saveManagement/saveManagement";
+import * as github from "./filesio/saveManagement/github";
 import * as pgDocument from "./document";
 import * as layerPanel from "./layerPanel";
 import * as helper from "../js/helper";
@@ -136,7 +137,7 @@ export const handlers = {
 
 	saveJSON: saves.save,
 
-	open: saves.showLoadSelect,
+	open: saves.open,
 
 	downloadJSON: pgDocument.saveJSONDocument,
 
@@ -177,7 +178,7 @@ export const handlers = {
 	clearDocument: function() {
 		if (confirm('%clearDocument%')) {
 			pgDocument.clear();
-			saves.setSaveFileName(null);
+			saves.clearSaveFileName();
 		}
 	},
 
@@ -185,11 +186,11 @@ export const handlers = {
 
 	showConfigEditor: configEditor.show,
 
-	commit: saves.saveJSONToGitHub,
+	commit: github.saveJSONToGitHub,
 
-	commitNew: saves.saveAsNewFileToGitHub,
+	commitNew: github.saveAsNewFileToGitHub,
 
-	loadFromGitHub: saves.showGitHubLoadModal,
+	loadFromGitHub: github.showGitHubLoadModal,
 
 	historyPanel: function() {
 		jQuery("#historyPanel").toggleClass("hidden");

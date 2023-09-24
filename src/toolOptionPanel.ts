@@ -12,7 +12,7 @@ type component = {
 	max?: number,
 	label?: string,
 	options?: string[],
-	optionValuePairs?: [string, string|number][],
+	optionValuePairs?: [name: string, value: string|number][],
 	click?: () => void,
 	maxWidth?: any,
 	minWidth?: number,

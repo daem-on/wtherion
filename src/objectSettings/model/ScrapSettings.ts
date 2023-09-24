@@ -31,7 +31,9 @@ export default class ScrapSettings {
 		assertValid(!(s.otherSettings == null), `Missing otherSettings`, s);
 
 		const dateAndStringformat = /^[0-9-.]+ (".+"|[^ ]+)$/g;
-		assertValid(dateAndStringformat.test(s.author.trim()), `Invalid author`, s);
-		assertValid(dateAndStringformat.test(s.copyright.trim()), `Invalid copyright`, s);
+		if (s.author.trim())
+			assertValid(dateAndStringformat.test(s.author.trim()), `Invalid author`, s);
+		if (s.copyright.trim())
+			assertValid(dateAndStringformat.test(s.copyright.trim()), `Invalid copyright`, s);
 	}
 }

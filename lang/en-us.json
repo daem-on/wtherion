@@ -96,7 +96,8 @@
 		},
 		"historyPanel": "History panel",
 		"search": "Search",
-		"changeNamespace": "Change stations' namespace"
+		"changeNamespace": "Change stations' namespace",
+		"validate": "Run validation"
 	},
 	"tools.itemSelect": "Item Select",
 	"tools.detailSelect": "Detail Select",
@@ -157,5 +158,7 @@
 	"search.previous": "Previous",
 	"search.next": "Next",
 	"search.noResults": "No results found",
-	"load.title": "Saved files"
+	"load.title": "Saved files",
+	"edit.validationResult": "Validation result",
+	"edit.validationSuccess": "Validation successful"
 }

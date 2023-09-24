@@ -50,6 +50,8 @@ export function show() {
 		}
 	}
 
+	jQuery('.toolOptionPanel').remove();
+
 	toolOptionPanel.setupFloating(
 		optionsCache,
 		components,

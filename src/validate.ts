@@ -5,7 +5,9 @@ import getSettings from "./objectSettings/model/getSettings";
 import LineSettings from "./objectSettings/model/LineSettings";
 import PointSettings from "./objectSettings/model/PointSettings";
 import ScrapSettings from "./objectSettings/model/ScrapSettings";
-import { focusItem } from "./selection";
+import { clearSelection, focusItem } from "./selection";
+import { setActiveLayer } from "./layer";
+import editTH2 from "./editTH2";
 
 function isExportableChild(item: paper.Item) {
 	return item.className === "Path"
@@ -85,7 +87,9 @@ export function showValidationWindow() {
 			));
 			if (item[1].className === "Layer") {
 				$item.on("click", () => {
-					// TODO: focus layer
+					clearSelection();
+					setActiveLayer(item[1] as paper.Layer);
+					editTH2.showScrapOptionsPanel();
 				});
 			} else {
 				$item.on("click", () => { focusItem(item[1]); });

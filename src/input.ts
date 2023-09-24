@@ -1,5 +1,5 @@
 import { openSearchDialog } from "./search";
-import { save, exportTH2 } from "./filesio/saveManagement";
+import { save, exportTH2 } from "./filesio/saveManagement/saveManagement";
 import stylebar from "../js/stylebar";
 import * as view from "./view";
 import * as undo from "./undo";
@@ -25,7 +25,7 @@ if (import.meta.webpackHot) {
 	import.meta.webpackHot.accept(
 		[
 			"./search",
-			"./filesio/saveManagement",
+			"./filesio/saveManagement/saveManagement",
 			"./view",
 			"./undo",
 			"./toolbar",

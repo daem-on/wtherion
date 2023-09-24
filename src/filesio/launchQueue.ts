@@ -17,7 +17,7 @@ async function handleFiles(files: FileSystemFileHandle[]) {
 
         if (file.name.endsWith(".th2")) {
 			importTH2(text);
-		} else if (file.name.endsWith(".json") || file.name.endsWith(".wtherion")) {
+		} else if (file.name.endsWith(".json") || file.name.endsWith(".wth")) {
 			loadJSONDocument(text);
 		}
     }

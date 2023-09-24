@@ -9,6 +9,7 @@ const optionsCache = {
 	githubToken: "",
 	inspectTolerance: 8,
 	colorInactive: false,
+	saveHandler: "localStorage"
 };
 const components: componentList<typeof optionsCache> = {
 	detailSelectGuides: {
@@ -36,6 +37,14 @@ const components: componentList<typeof optionsCache> = {
 	colorInactive: {
 		type: "boolean",
 		label: "%config.colorInactive%"
+	},
+	saveHandler: {
+		type: "list",
+		label: "%config.saveHandler%",
+		optionValuePairs: [
+			["%config.saveHandler.localStorage%", "localStorage"],
+			["%config.saveHandler.fileSystem%", "fileSystem"]
+		]
 	}
 };
 

@@ -72,17 +72,23 @@ export default {
 		jQuery.ajaxSetup({ cache: false });
 
 		configSetup();
-		this.layer.setup();
-		this.export.setup();
-		this.menu.setup();
-		this.toolbar.setup();
-		this.stylebar.setup();
-		this.statusbar.setup();
-		this.input.setup();
-		this.undo.setup();
-		this.layerPanel.setup();
-		historyPanel.setup();
-		launchQueue.setup();
+		this.setupAll([
+			this.layer,
+			this.export,
+			this.menu,
+			this.toolbar,
+			this.stylebar,
+			this.statusbar,
+			this.input,
+			this.undo,
+			this.layerPanel,
+			historyPanel,
+			launchQueue,
+		]);
+	},
+
+	setupAll(modules: { setup: () => void }[]) {
+		for (const module of modules) module.setup.bind(module)();
 	}
 };
 

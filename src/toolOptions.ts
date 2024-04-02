@@ -11,34 +11,6 @@ const options: PGToolOptions[] = [
 		name: 'View grab',
 		type: 'hidden'
 	},
-	// {
-	// 	id: 'zoom',
-	// 	name: 'Zoom',
-	// 	usedKeys : {
-	// 		toolbar : 'z'
-	// 	}
-	// },
-	// {
-	// 	id: 'text',
-	// 	name: 'Text',
-	// 	usedKeys : {
-	// 		toolbar : 't'
-	// 	}
-	// },
-	// {
-	// 	id: 'scale',
-	// 	name: 'Scale',
-	// 	usedKeys : {
-	// 		toolbar : 's'
-	// 	}
-	// },
-	// {
-	// 	id: 'rotate',
-	// 	name: 'Rotate',
-	// 	usedKeys : {
-	// 		toolbar : 'r'
-	// 	}
-	// },
 	{
 		id: 'select',
 		name: '%tools.itemSelect%',

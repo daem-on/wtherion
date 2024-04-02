@@ -4,9 +4,6 @@ import * as exporter from "./export/exportTH2";
 import "./styles.ts";
 import { showErrorWindow } from "./errorHandling";
 
-// import spectrumSetup from "../js/lib/spectrum.js";
-// spectrumSetup(window, jQuery);
-
 declare global {
     interface Window { pg: any; }
 }
@@ -26,7 +23,6 @@ jQuery(window).on("load", function() {
 });
 
 if (module.hot) {
-	// window["pg"] = pg;
 	module.hot.accept();
 }
 

@@ -5,7 +5,7 @@ import LineSettings from "./objectSettings/model/LineSettings";
 import PointSettings from "./objectSettings/model/PointSettings";
 import { getSelectedItems } from "./selection";
 
-import colorDefs from "Res/color-defs.json";
+import colorDefs from "./res/color-defs.json";
 import * as config from "./filesio/configManagement";
 import * as scrapOptions from "./scrapOptions";
 import { snapshot } from "./undo";

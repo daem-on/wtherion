@@ -1,6 +1,6 @@
 import * as selection from "./selection";
 import * as undo from "./undo";
-import statusbar from "../js/statusbar";
+import * as statusbar from "./statusbar";
 import { getRootItem, isGroupItem } from "./item";
 
 // function related to groups and grouping

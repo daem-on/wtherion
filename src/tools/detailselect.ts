@@ -4,11 +4,11 @@
 import { drawGuides, clearGuideNumbers, hideGuideNumbers } from "../../src/detailSelectGuides";
 import { updateWindow } from "../../src/objectSettings/objectOptionPanel";
 import paper from "paper";
-import hover from "../../js/hover";
-import guides from "../../js/guides";
-import compoundPath from "../../js/compoundPath";
-import math from "../../js/math";
-import statusbar from "../../js/statusbar";
+import * as hover from "../hover";
+import * as guides from "../guides";
+import * as compoundPath from "../compoundPath";
+import * as math from "../math";
+import * as statusbar from "../statusbar";
 import * as items from "../item";
 import * as menu from "../menu";
 import * as undo from "../undo";

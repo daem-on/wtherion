@@ -1,9 +1,9 @@
 import saveAs from "file-saver";
 import paper from "paper";
 
-import pgExport from "../js/export";
-import guides from "../js/guides";
-import hover from "../js/hover";
+import * as pgExport from "./export";
+import * as guides from "./guides";
+import * as hover from "./hover";
 import editTH2 from "./editTH2";
 import * as layer from "./layer";
 import * as selection from "./selection";

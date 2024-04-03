@@ -2,6 +2,7 @@ import * as wtConfig from "./filesio/configManagement";
 import getSettings from "./objectSettings/model/getSettings";
 import * as selection from "./selection";
 import { getGuideLayer } from "./layer";
+import paper from "paper";
 
 const zero = new paper.Point(0, 0);
 const offset = new paper.Point(0, 7);

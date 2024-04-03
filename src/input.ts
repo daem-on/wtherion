@@ -1,6 +1,5 @@
 import { openSearchDialog } from "./search";
 import { save, exportTH2 } from "./filesio/saveManagement/saveManagement";
-import stylebar from "../js/stylebar";
 import * as view from "./view";
 import * as undo from "./undo";
 import * as toolbar from "./toolbar";
@@ -19,24 +18,6 @@ let mouseIsDown = false;
 export function setup() {
 	setupKeyboard();
 	setupMouse();
-}
-
-if (import.meta.webpackHot) {
-	import.meta.webpackHot.accept(
-		[
-			"./search",
-			"./filesio/saveManagement/saveManagement",
-			"./view",
-			"./undo",
-			"./toolbar",
-			"./menu",
-			"./tools",
-			"./selection",
-			"./tools/viewzoom",
-		], setup);
-	import.meta.webpackHot.dispose(() => {
-		window.removeEventListener("wheel", onMouseWheel);
-	});
 }
 
 function setupKeyboard() {

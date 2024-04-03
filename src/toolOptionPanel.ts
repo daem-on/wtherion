@@ -1,4 +1,3 @@
-import "jquery-ui/ui/widgets/draggable";
 import * as tools from "./tools";
 import * as toolbar from "./toolbar";
 import {constructSelect} from "../src/objectSettings/customToolbarInput";
@@ -249,11 +248,6 @@ export default {
 		const $panel = this.setup(options, components, changeCallback, title);
 		
 		jQuery('body').append($panel);
-		
-		$panel.draggable({
-			containment: '#paperCanvas',
-			handle: '.panelTitle'
-		});
 
 		return $panel;
 	},

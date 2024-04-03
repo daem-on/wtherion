@@ -3,8 +3,8 @@ import LineSettings from "../model/LineSettings";
 import getSettings from "../model/getSettings";
 import { objectOptionPanelConfig } from "../objectOptionPanel";
 import editTH2 from "../../editTH2";
-import subtypeList from "Res/subtype-list.json";
-import { wallTypes } from "Res/wallTypes";
+import subtypeList from "../../res/subtype-list.json";
+import { wallTypes } from "../../res/wallTypes";
 	
 const optionsCache = {
 	reverse: undefined,

@@ -4,12 +4,12 @@
 
 import { default as getSettings } from "../../src/objectSettings/model/getSettings";
 import { updateWindow } from "../../src/objectSettings/objectOptionPanel";
-import hover from "../../js/hover";
+import * as hover from "../hover";
 import * as layer from "../layer";
-import guides from "../../js/guides";
+import * as guides from "../guides";
 import * as edit from "../edit";
-import compoundPath from "../../js/compoundPath";
-import math from "../../js/math";
+import * as compoundPath from "../compoundPath";
+import * as math from "../math";
 import * as group from "../group";
 import * as item from "../item";
 import * as menu from "../menu";

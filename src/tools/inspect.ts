@@ -1,9 +1,9 @@
 import getSettings from "../objectSettings/model/getSettings";
 import paper from "paper";
 import * as selection from "../selection";
-import * as sb from "../../js/statusbar";
+import * as sb from "../statusbar";
 import * as menu from "../menu";
-import * as hover from "../../js/hover";
+import * as hover from "../hover";
 import * as config from "../filesio/configManagement";
 
 let tool: paper.Tool;

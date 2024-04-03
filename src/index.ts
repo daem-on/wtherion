@@ -1,30 +1,15 @@
-import initPG from "./init";
 import jQuery from "jquery";
 import * as exporter from "./export/exportTH2";
 import "./styles.ts";
 import { showErrorWindow } from "./errorHandling";
+import { createApp } from "vue";
+import MainComponent from "./components/Main.vue";
 
-declare global {
-    interface Window { pg: any; }
-}
-
-window["pg"] = initPG;
+window["jQuery"] = jQuery;
 window["exporter"] = exporter;
-// set pg up on window load
-jQuery(window).on("load", function() {
-	initPG.init();
-	
-	// fade out loading screen and reveal ui
-	jQuery('#loadingScreen').addClass('disabled').on('transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd',
-		function () {
-			jQuery(this).remove();
-		});
-	
-});
 
-if (module.hot) {
-	module.hot.accept();
-}
+const app = createApp(MainComponent);
+app.mount("#vue-app");
 
 addEventListener("error", (e) => {
 	showErrorWindow(e.error);

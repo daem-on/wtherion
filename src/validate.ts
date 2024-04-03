@@ -1,4 +1,4 @@
-import { floater } from "../js/modal";
+import { floater } from "./modal";
 import paper from "paper";
 import AreaSettings from "./objectSettings/model/AreaSettings";
 import getSettings from "./objectSettings/model/getSettings";

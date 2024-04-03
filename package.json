@@ -3,46 +3,32 @@
   "version": "1.0.0",
   "main": "main.js",
   "scripts": {
-    "build": "webpack --mode=production --node-env=production",
-    "build:dev": "webpack --mode=development",
-    "build:prod": "webpack --mode=production --node-env=production",
-    "watch": "webpack --watch",
-    "serve": "webpack serve",
     "lint": "eslint ."
   },
   "repository": "https://github.com/daem-on/wtherion.git",
   "author": "daem-on <daem_on@icloud.com>",
   "license": "MIT",
-  "private": false,
   "dependencies": {
     "@octokit/rest": "^19.0.4",
     "file-saver": "^2.0.5",
     "jquery": "^3.6.0",
     "jquery-ui": "^1.13.0",
-    "paper": "^0.12.15"
+    "paper": "^0.12.15",
+    "vue": "3.4.21"
   },
   "devDependencies": {
     "@playwright/test": "^1.25.1",
     "@types/jquery": "^3.5.9",
     "@types/jqueryui": "^1.12.16",
     "@types/paper": "^0.12.3",
-    "@types/webpack-env": "^1.16.3",
     "@types/wicg-file-system-access": "^2020.9.5",
     "@typescript-eslint/eslint-plugin": "^5.12.0",
     "@typescript-eslint/parser": "^5.12.0",
-    "@webpack-cli/generators": "^2.4.1",
-    "copy-webpack-plugin": "^10.0.0",
-    "css-loader": "^6.5.1",
+    "@vitejs/plugin-vue": "5.0.4",
     "eslint": "^8.9.0",
-    "html-webpack-plugin": "^5.5.0",
-    "string-replace-loader": "^3.1.0",
-    "style-loader": "^3.3.1",
-    "ts-loader": "^9.2.6",
     "typescript": "^4.5.2",
-    "webpack": "^5.64.4",
-    "webpack-cli": "^4.9.1",
-    "webpack-dev-server": "^4.6.0",
-    "workbox-webpack-plugin": "^6.4.1"
+    "vite": "5.2.8"
   },
-  "description": ""
+  "description": "",
+  "packageManager": "yarn@4.1.1"
 }

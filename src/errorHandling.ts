@@ -1,4 +1,4 @@
-import { floater } from "../js/modal";
+import { floater } from "./modal";
 
 export function showErrorWindow(e: Error) {
 	const content = jQuery(document.createElement("div"));

@@ -5,11 +5,12 @@ import { getLocalOptions, setLocalOptions } from "../../src/tools";
 import editTH2 from "../editTH2";
 import * as undo from "../undo";
 import toolOptionPanel, { componentList } from "../toolOptionPanel";
-import subtypeList from "Res/subtype-list.json";
+import subtypeList from "../res/subtype-list.json";
 import { default as getSettings } from "../objectSettings/model/getSettings";
-import { wallTypes } from "Res/wallTypes";
+import { wallTypes } from "../res/wallTypes";
 import LineSettings from "../objectSettings/model/LineSettings";
-import math from "../../js/math";
+import * as math from "../math";
+import paper from "paper";
 
 export default function() {
 	let tool: paper.Tool;

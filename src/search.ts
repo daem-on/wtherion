@@ -1,5 +1,4 @@
-import helper from "../js/helper";
-import { floater } from "../js/modal";
+import { floater } from "./modal";
 import getSettings from "./objectSettings/model/getSettings";
 import paper from "paper";
 import { focusItem } from "./selection";

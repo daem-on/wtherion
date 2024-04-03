@@ -1,5 +1,5 @@
 import paper from "paper";
-import statusbar from "../js/statusbar";
+import * as statusbar from "./statusbar";
 import * as layer from "./layer";
 import * as pgDocument from "./document";
 

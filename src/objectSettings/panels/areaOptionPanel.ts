@@ -2,8 +2,8 @@ import { componentList } from "../../toolOptionPanel";
 import getSettings from "../model/getSettings";
 import AreaSettings from "../model/AreaSettings";
 import { objectOptionPanelConfig } from "../objectOptionPanel";
-import wallList from "Res/walls-list.json";
-import areaList from "Res/area-list.json";
+import wallList from "../../res/walls-list.json";
+import areaList from "../../res/area-list.json";
 import editTH2 from "../../editTH2";
 
 const wallTypes = wallList.labels

@@ -1,4 +1,4 @@
-import symbolList from "Res/symbol-list.json";
+import symbolList from "../res/symbol-list.json";
 
 export const pointTypes: string[] = [];
 for (const category in symbolList) {

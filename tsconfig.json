@@ -11,7 +11,6 @@
     "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
-      "Res/*": ["src/res/*"],
       "Lang": ["lang/en-us.json"]
     }
   },

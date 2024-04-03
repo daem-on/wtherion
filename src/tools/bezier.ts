@@ -2,9 +2,9 @@
 // adapted from the paperjs examples (Tools/BezierTool.html)
 
 import paper from "paper";
-import subtypeList from "Res/subtype-list.json";
+import subtypeList from "../res/subtype-list.json";
 import getSettings from "../../src/objectSettings/model/getSettings";
-import { wallTypes } from "Res/wallTypes";
+import { wallTypes } from "../res/wallTypes";
 import toolOptionPanel, { componentList } from "../toolOptionPanel";
 import LineSettings from "../../src/objectSettings/model/LineSettings";
 import { getLocalOptions, getToolInfoByID, setLocalOptions } from "../../src/tools";

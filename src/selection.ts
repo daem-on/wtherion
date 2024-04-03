@@ -1,11 +1,10 @@
 // functions related to selecting stuff
 import paper from "paper";
-import * as compoundPath from "../js/compoundPath";
-import * as geometry from "../js/geometry";
-import * as hover from "../js/hover";
-import * as math from "../js/math";
-import statusbar from "../js/statusbar";
-import stylebar from "../js/stylebar";
+import * as compoundPath from "./compoundPath";
+import * as geometry from "./geometry";
+import * as hover from "./hover";
+import * as math from "./math";
+import * as statusbar from "./statusbar";
 import * as pgDocument from "./document";
 import * as groups from "./group";
 import * as items from "./item";
@@ -86,10 +85,8 @@ export function selectItemSegments(item, state) {
 
 export function clearSelection() {
 	paper.project.deselectAll();
-	stylebar.sanitizeSettings();
 	
 	statusbar.update();
-	stylebar.blurInputs();
 	hover.clearHoveredItem();
 	jQuery(document).trigger('SelectionChanged');
 }
@@ -326,8 +323,6 @@ export function setItemSelection(item: paper.Item, state: boolean) {
 		}
 	}
 	statusbar.update();
-	stylebar.updateFromSelection();
-	stylebar.blurInputs();
 	
 	jQuery(document).trigger('SelectionChanged');
 	

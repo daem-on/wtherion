@@ -1,4 +1,3 @@
-import "jquery-ui/ui/widgets/sortable";
 import paper from "paper";
 import * as pgLayer from "./layer";
 import editTH2 from "./editTH2";
@@ -61,15 +60,6 @@ export function setup() {
 	$header.append($newLayerButton);
 
 	const $layerEntries = jQuery('<div class="layerEntries">');
-	$layerEntries.sortable({
-		containment: 'parent',
-		forcePlaceholderSize: true,
-		tolerance: 'pointer',
-		delay: 300,
-		stop: function(event, ui) {
-			handleLayerOrderChange();
-		}
-	});
 	
 	$panel.append($header,$layerEntries);
 	jQuery('body').append($panel);

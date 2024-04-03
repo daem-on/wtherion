@@ -1,6 +1,5 @@
 import paper from "paper";
-import stylebar from "../js/stylebar";
-import statusbar from "../js/statusbar";
+import * as statusbar from "./statusbar";
 import * as tools from "./tools";
 import * as config from "./filesio/configManagement";
 
@@ -48,10 +47,6 @@ function setupKeybinds() {
 		const keybindsConfig = config.get("keybinds");
 		Object.assign(keybinds, keybindsConfig);
 	}
-}
-
-if (import.meta.webpackHot) {
-	import.meta.webpackHot.accept("./tools", setup);
 }
 
 function setupToolList() {
@@ -117,7 +112,6 @@ export function switchTool(toolID: string, forced?: boolean) {
 			previousTool = activeTool;
 		}
 		resetTools();
-		stylebar.sanitizeSettings();
 		tool.activateTool();
 		activeTool = tool;
 		jQuery(`.tool_${toolID}`).addClass("active");

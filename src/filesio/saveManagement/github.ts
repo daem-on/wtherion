@@ -1,8 +1,10 @@
 import * as pgDocument from "../../document";
 import * as wtConfig from "../configManagement";
-import { Octokit } from "@octokit/rest";
+// import { Octokit } from "@octokit/rest";
 import importTH2 from "../../import/importTH2";
 import { showCommitButton } from "../../menu";
+
+const Octokit = {} as any;
 
 const gitHubDetails = {
 	path: "",

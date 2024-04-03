@@ -1,4 +1,4 @@
-import { floater } from "../../../js/modal";
+import { floater } from "../../modal";
 import { SaveHandler, setWindowTitle } from "./saveManagement";
 
 let saveFileName: string;

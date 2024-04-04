@@ -9,7 +9,7 @@ import multipleLineOptionPanel from "./panels/multipleLineOptionPanel";
 import multiplePointOptionPanel from "./panels/multiplePointOptionPanel";
 import * as wtConfig from "../filesio/configManagement";
 import { getSelectedItems } from "../selection";
-import * as toolbar from "../toolbar";
+import * as tools from "../tools";
 import toolOptionPanel from "../toolOptionPanel";
 
 export type objectOptionPanelConfig = {
@@ -37,7 +37,7 @@ export function updateWindow() {
 		for (const item of selected) {
 			if (item.className !== className) return;
 		}
-		if (toolbar.getActiveTool().options.id === "select")
+		if (tools.getActiveTool().options.id === "select")
 		if (isPath(selected[0])
 			&& getSettings(selected[0]).className === "LineSettings") {
 			config = multipleLineOptionPanel(selected as paper.Path[]);
@@ -49,7 +49,7 @@ export function updateWindow() {
 	} else {
 
 		// Detail select
-		if (toolbar.getActiveTool().options.id === "detailselect") {
+		if (tools.getActiveTool().options.id === "detailselect") {
 			if (selected.length > 1 ||selected[0].className !== "Path")
 				return;
 			// ensure only one segment is editable

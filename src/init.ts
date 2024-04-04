@@ -4,11 +4,10 @@ import * as layerPanel from "./layerPanel";
 import * as pgExport from "./export.js";
 import * as menu from "./menu";
 import * as modal from "./modal.js";
-import * as toolbar from "./toolbar";
+import * as tools from "./tools";
 import * as statusbar from "./statusbar.js";
 import * as input from "./input";
 import * as undo from "./undo";
-import * as tools from "./tools";
 import * as selection from "./selection";
 import * as guides from "./guides.js";
 import * as helper from "./helper.js";
@@ -40,11 +39,10 @@ export default {
 	export: pgExport,
 	menu: menu,
 	modal: modal,
-	toolbar: toolbar,
+	tools: tools,
 	statusbar: statusbar,
 	input: input,
 	undo: undo,
-	tools: tools,
 	selection: selection,
 	guides: guides,
 	helper: helper,
@@ -71,7 +69,7 @@ export default {
 		this.layer.setup();
 		this.export.setup();
 		this.menu.setup();
-		this.toolbar.setup();
+		this.tools.setup();
 		this.statusbar.setup();
 		this.input.setup();
 		this.undo.setup();

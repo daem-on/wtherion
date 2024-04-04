@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { activeToolRef, previousToolRef, switchTool } from "../toolbar";
+import { activeToolRef, previousToolRef, switchTool } from "../tools";
 import { getToolList } from "../tools";
 
 const toolList = getToolList().filter(tool => tool.type !== "hidden");

@@ -2,9 +2,8 @@ import { openSearchDialog } from "./search";
 import { save, exportTH2 } from "./filesio/saveManagement/saveManagement";
 import * as view from "./view";
 import * as undo from "./undo";
-import * as toolbar from "./toolbar";
-import * as menu from "./menu";
 import * as tools from "./tools";
+import * as menu from "./menu";
 import * as selection from "./selection";
 import viewzoom from "./tools/viewzoom";
 
@@ -114,16 +113,16 @@ function setupKeyboard() {
 		if (!userIsTyping(event)) {
 			switch (event.key) {
 				case " ":
-					if (toolbar.getActiveTool().options.id === "viewgrab")
+					if (tools.getActiveTool().options.id === "viewgrab")
 						break;
 					event.preventDefault();
-					toolbar.switchTool('viewgrab');
+					tools.switchTool('viewgrab');
 					break;
 				case "m":
-					if (toolbar.getActiveTool().options.id === "inspect")
+					if (tools.getActiveTool().options.id === "inspect")
 						break;
 					event.preventDefault();
-					toolbar.switchTool('inspect');
+					tools.switchTool('inspect');
 			}
 		}
 	});
@@ -138,7 +137,7 @@ function setupKeyboard() {
 		if(event.key === "Control") {
 			// if viewZoom is active and we just released ctrl,
 			// reset tool to previous
-			if(toolbar.getActiveTool().options.id === 'viewzoom') {
+			if(tools.getActiveTool().options.id === 'viewzoom') {
 				resetToPreviousTool();
 			}
 		}
@@ -167,9 +166,9 @@ function setupKeyboard() {
 		}
 
 		// tool keys (switching to tool by key shortcut)
-		for (const keybind in toolbar.keybinds) {
+		for (const keybind in tools.keybinds) {
 			if (event.key === keybind) {
-				toolbar.switchTool(toolbar.keybinds[keybind]);
+				tools.switchTool(tools.keybinds[keybind]);
 			}
 		}
 		
@@ -177,8 +176,8 @@ function setupKeyboard() {
 }
 
 function resetToPreviousTool() {
-	const previous = toolbar.previousToolRef.value;
-	toolbar.switchTool(previous?.options.id ?? "select");
+	const previous = tools.previousToolRef.value;
+	tools.switchTool(previous?.options.id ?? "select");
 }
 
 function storeDownKey(keyCode: string) {
@@ -281,11 +280,11 @@ const setupMouse = function() {
 function onMouseWheel(event: WheelEvent) {
 	if(event.ctrlKey) {
 		event.preventDefault();
-		if (toolbar.getActiveTool().options.id !== 'viewzoom') {
-			toolbar.switchTool('viewzoom');
+		if (tools.getActiveTool().options.id !== 'viewzoom') {
+			tools.switchTool('viewzoom');
 		}
-		if(toolbar.getActiveTool()) {
-			(toolbar.getActiveTool() as ViewzoomTool).updateTool(event);
+		if(tools.getActiveTool()) {
+			(tools.getActiveTool() as ViewzoomTool).updateTool(event);
 		}
 	}
 }

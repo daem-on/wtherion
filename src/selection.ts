@@ -10,11 +10,11 @@ import * as groups from "./group";
 import * as items from "./item";
 import { setActiveLayer } from "./layer";
 import getSettings from "./objectSettings/model/getSettings";
-import * as toolbar from "./toolbar";
+import * as tools from "./tools";
 import * as undo from "./undo";
 
+const activeTool = tools.getActiveTool();
 export function getSelectionMode() {
-	const activeTool = toolbar.getActiveTool();
 	if(activeTool) {
 		const activeToolID = activeTool.options.id;
 		if(activeToolID === 'detailselect') {

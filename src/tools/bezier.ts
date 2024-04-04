@@ -7,8 +7,8 @@ import getSettings from "../../src/objectSettings/model/getSettings";
 import { wallTypes } from "../res/wallTypes";
 import toolOptionPanel, { componentList } from "../toolOptionPanel";
 import LineSettings from "../../src/objectSettings/model/LineSettings";
-import { getLocalOptions, setLocalOptions } from "../../src/tools";
-import { keybinds, PGTool } from "../toolbar";
+import { defineTool, getLocalOptions, setLocalOptions } from "../tools";
+import { keybinds } from "../tools";
 import editTH2 from "../editTH2";
 import * as undo from "../undo";
 import { clearSelection } from "../selection";
@@ -22,46 +22,55 @@ function snapshotIfDirty() {
 	}
 }
 
-export default function(): PGTool {
-	let tool: paper.Tool;
-	
-	let options = {
-		id: "draw",
-		type: "wall",
-		subtype: "",
-		size: 0,
-	};
+let options = {
+	id: "draw",
+	type: "wall",
+	subtype: "",
+	size: 0,
+};
 
-	const components: componentList<Partial<typeof options>> = {
-		type: {
-			type: "customList",
-			label: "%type%",
-			options: wallTypes,
-		},
-		subtype: {
-			type: "customList",
-			label: "%subtype%",
-			requirements: {type: ["wall", "border", "water-flow"]},
-			options: subtypeList.wall,
-			imageRoot: "assets/rendered/subtype"
-		},
-		size: {
-			type: "int",
-			label: "%size%",
-			requirements: {
-				type: "slope"
-			}
+const components: componentList<Partial<typeof options>> = {
+	type: {
+		type: "customList",
+		label: "%type%",
+		options: wallTypes,
+	},
+	subtype: {
+		type: "customList",
+		label: "%subtype%",
+		requirements: {type: ["wall", "border", "water-flow"]},
+		options: subtypeList.wall,
+		imageRoot: "assets/rendered/subtype"
+	},
+	size: {
+		type: "int",
+		label: "%size%",
+		requirements: {
+			type: "slope"
 		}
-	};
+	}
+};
+	
+type TypedHitResult<T extends paper.Item> = paper.HitResult & {item: T}
 
-	type TypedHitResult<T extends paper.Item> = paper.HitResult & {item: T}
-
-	const activateTool = function() {
-		tool = new paper.Tool();
-		options = getLocalOptions(options);
-		const toolKeybind = Object.entries(keybinds)
-			.find(([key, value]) => value === "bezier")[0];
+export const bezier = defineTool({
+	definition: {
+		id: 'bezier',
+		name: '%tools.bezier%',
+		options,
+	},
+	setup(on) {
+		on("activate", () => {
+			options = getLocalOptions(options);
+			
+			toolOptionPanel.setupFloating(options, components, function() {
+				setLocalOptions(options);
+			});
+		});
 		
+		const toolKeybind = Object.entries(keybinds)
+		.find(([key, value]) => value === "bezier")[0];
+	
 		let path: paper.Path;
 
 		let currentSegment: paper.Segment;
@@ -91,8 +100,8 @@ export default function(): PGTool {
 			jQuery('.toolOptionPanel').remove();
 		}
 		
-		tool.onMouseDown = function(event) {
-			if(event.event.button > 0) return;  // only first mouse button
+		on("mousedown", event => {
+			if (event.event.button > 0) return;  // only first mouse button
 
 			const selectedSegment = currentSegment?.selected ? currentSegment : null;
 			function unselectSegment() {
@@ -100,19 +109,19 @@ export default function(): PGTool {
 			}
 			mode = type = currentSegment = null;
 			
-			if(!path) {
-				if(!hoveredItem) {
+			if (!path) {
+				if (!hoveredItem) {
 					clearSelection();
 					createNewPath();
 					dirty = true;
 					
 				} else {
 					path = hoveredItem.item;
-					if(!hoveredItem.item.closed
+					if (!hoveredItem.item.closed
 						&& findHandle(path, event.point)) {
 						mode = 'continue';
 						currentSegment = hoveredItem.segment;
-						if(hoveredItem.item.lastSegment !== hoveredItem.segment) {
+						if (hoveredItem.item.lastSegment !== hoveredItem.segment) {
 							path.reverse();
 						}
 						
@@ -121,13 +130,13 @@ export default function(): PGTool {
 				
 			}
 			
-			if(path) {
+			if (path) {
 				const result = findHandle(path, event.point);
 				if (result && mode !== 'continue') {
 					currentSegment = result.segment;
 					type = result.type;
 					if (result.type === 'point') {
-						if( result.segment.index === 0 && 
+						if (result.segment.index === 0 && 
 							path.segments.length > 1 &&
 							!path.closed) {
 							mode = 'close';
@@ -146,8 +155,8 @@ export default function(): PGTool {
 
 				
 				if (!currentSegment) {
-					if(hoveredItem) {
-						if(hoveredItem.type === 'segment' && 
+					if (hoveredItem) {
+						if (hoveredItem.type === 'segment' && 
 							!hoveredItem.item.closed) {
 						
 							// joining two paths
@@ -165,7 +174,7 @@ export default function(): PGTool {
 							unselectSegment();
 							dirty = true;
 
-						} else if(hoveredItem.type === 'curve' || 
+						} else if (hoveredItem.type === 'curve' || 
 							hoveredItem.type === 'stroke') {
 						
 							mode = 'add';
@@ -191,17 +200,17 @@ export default function(): PGTool {
 				if (mode === "add" || mode === "continue") dirty = true;
 			}
 
-		};
+		});
 		
-		tool.onMouseMove = function(event) {			
+		on("mousemove", event => {
 			const hitResult = paper.project.hitTest(event.point, hitOptions) as TypedHitResult<paper.Path>;
 			
-			if(hitResult?.item?.selected) hoveredItem = hitResult;
+			if (hitResult?.item?.selected) hoveredItem = hitResult;
 			else hoveredItem = null;
-		};
+		});
 		
-		tool.onMouseDrag = function(event) {
-			if(event.event.button > 0) return;  // only first mouse button
+		on("mousedrag", event => {
+			if (event.event.button > 0) return;  // only first mouse button
 			if (!currentSegment) return;
 			
 			let delta = event.delta.clone();
@@ -210,69 +219,53 @@ export default function(): PGTool {
 			}
 			currentSegment.handleIn = currentSegment.handleIn.add(delta);
 			currentSegment.handleOut = currentSegment.handleOut.subtract(delta);
-		};
+		});
 		
-		tool.onMouseUp = function(event) {
-			if(event.event.button > 0) return;  // only first mouse button
+		on("mouseup", event => {
+			if (event.event.button > 0) return;  // only first mouse button
 			
-			if(path && path.closed) {
+			if (path && path.closed) {
 				undo.snapshot('bezier');
 				dirty = false;
 				path = null;
 			}
 			
-		};
+		});
 
-		tool.onKeyDown = function(event: paper.KeyEvent) {
+		on("keydown", event => {
 			if (event.key === "enter" || event.key === toolKeybind) {
 				clearSelection();
 				undo.snapshot('bezier');
 				dirty = false;
 				path = null;
 			}
-		};
-		
-		toolOptionPanel.setupFloating(options, components, function() {
-			setLocalOptions(options);
 		});
-		
-		tool.activate();
-	};
 
-	const deactivateTool = function() {
-		snapshotIfDirty();
-	};
+		on("deactivate", () => snapshotIfDirty());
+	},
+});
 	
-	const findHandle = function(path: paper.Path, point: paper.Point) {
-		const types = ['point', 'handleIn', 'handleOut'];
-		const tolerance = 6/paper.view.zoom;
-		for (let i = 0, l = path.segments.length; i < l; i++) {
-			const segment = path.segments[i];
-			if (segment.selected) {
-				for (let j = 0; j < 3; j++) {
-					const type = types[j];
-					const segmentPoint = type === 'point'
-							? segment.point
-							: segment.point.add(segment[type]);
-					const distance = (point.subtract(segmentPoint)).length;
-					if (distance < tolerance) {
-						return { type: type, segment: segment };
-					}
+const findHandle = function(path: paper.Path, point: paper.Point) {
+	const types = ['point', 'handleIn', 'handleOut'];
+	const tolerance = 6/paper.view.zoom;
+	for (let i = 0, l = path.segments.length; i < l; i++) {
+		const segment = path.segments[i];
+		if (segment.selected) {
+			for (let j = 0; j < 3; j++) {
+				const type = types[j];
+				const segmentPoint = type === 'point'
+						? segment.point
+						: segment.point.add(segment[type]);
+				const distance = (point.subtract(segmentPoint)).length;
+				if (distance < tolerance) {
+					return { type: type, segment: segment };
 				}
-			} else {
-				const distance = (point.subtract(segment.point)).length;
-				if (distance < tolerance)
-					return { type: "point", segment: segment };
 			}
+		} else {
+			const distance = (point.subtract(segment.point)).length;
+			if (distance < tolerance)
+				return { type: "point", segment: segment };
 		}
-		return null;
-	};
-
-	
-	return {
-		options: options,
-		activateTool : activateTool,
-		deactivateTool : deactivateTool,
-	};
-	
-}
+	}
+	return null;
+};

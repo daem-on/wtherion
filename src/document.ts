@@ -7,7 +7,7 @@ import * as hover from "./hover";
 import editTH2 from "./editTH2";
 import * as layer from "./layer";
 import * as selection from "./selection";
-import * as toolbar from "./toolbar";
+import * as tools from "./tools";
 import * as undo from "./undo";
 
 let center: paper.Point;
@@ -80,7 +80,7 @@ export function getAllSelectableItems() {
 export function loadJSONDocument(jsonString) {
 	const activeLayerID = paper.project.activeLayer.data.id;
 	paper.project.clear();
-	toolbar.setDefaultTool();
+	tools.setDefaultTool();
 	pgExport.setExportRect();
 
 	paper.project.importJSON(jsonString);

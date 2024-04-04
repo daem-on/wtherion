@@ -7,7 +7,7 @@ import getSettings from "../../src/objectSettings/model/getSettings";
 import { wallTypes } from "../res/wallTypes";
 import toolOptionPanel, { componentList } from "../toolOptionPanel";
 import LineSettings from "../../src/objectSettings/model/LineSettings";
-import { getLocalOptions, getToolInfoByID, setLocalOptions } from "../../src/tools";
+import { getLocalOptions, setLocalOptions } from "../../src/tools";
 import { keybinds, PGTool } from "../toolbar";
 import editTH2 from "../editTH2";
 import * as undo from "../undo";

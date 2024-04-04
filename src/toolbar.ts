@@ -1,7 +1,7 @@
 import paper from "paper";
-import * as statusbar from "./statusbar";
 import * as tools from "./tools";
 import * as config from "./filesio/configManagement";
+import { computed, ref } from "vue";
 
 export type PGToolOptions = {
 	id: string;
@@ -16,7 +16,7 @@ export type PGTool = {
 	activateTool: () => void,
 	deactivateTool: () => void,
 	updateTool?: (e: WheelEvent) => void,
-	options: Record<string, any>
+	options: PGToolOptions
 }
 
 export const keybinds: Record<string, string> = {
@@ -33,12 +33,11 @@ type ToolConstructor = {
 
 // functions related to the toolbar
 
-let activeTool: PGTool;
-let previousTool: PGTool;
+const activeTool = ref<PGTool | undefined>(undefined);
+const previousTool = ref<PGTool | undefined>(undefined);
 
 export function setup() {
 	setupKeybinds();
-	setupToolList();
 	setDefaultTool();
 }
 
@@ -49,43 +48,16 @@ function setupKeybinds() {
 	}
 }
 
-function setupToolList() {
-	const toolList= tools.getToolList();
-	const $toolsContainer = jQuery(".toolsContainer");
-	$toolsContainer.empty();
-	
-	jQuery.each(toolList, function(index, tool) {
-		if(tool.type === "hidden") return true;
-		
-		let shortCutInfo = "";
-		const keybind = Object.entries(keybinds).find(([key, value]) => value === tool.id);
-		if (keybind != null) {
-			shortCutInfo = ` (${keybind[0].toUpperCase()})`;
-		}
-		const $tool = jQuery(`<div>`)
-			.addClass(`tool_${tool.id} tool`)
-			.attr("data-id", tool.id)
-			.attr("title", tool.name + shortCutInfo)
-			.css({"background-image": `url(assets/tools/tool_${tool.id}.svg)`})
-			.on("click", () => switchTool(tool.id))
-			.appendTo($toolsContainer);
-	});
-	
-	statusbar.update();
+export function getActiveTool(): PGTool | undefined {
+	return activeTool.value;
 }
 
-export function getActiveTool() {
-	return activeTool;
-}
-
-
-export function getPreviousTool() {
-	return previousTool;
-}
+export const activeToolRef = computed<PGTool | undefined>(() => activeTool.value);
+export const previousToolRef = computed<PGTool | undefined>(() => previousTool.value);
 
 export function switchTool(toolID: string, forced?: boolean) {
 	try {
-		activeTool?.deactivateTool?.();
+		activeTool.value?.deactivateTool?.();
 		const opts = tools.getToolInfoByID(toolID);
 		let tool: PGTool;
 		{
@@ -100,45 +72,42 @@ export function switchTool(toolID: string, forced?: boolean) {
 		});
 		
 		// don't switch to the same tool again unless "forced" is true
-		if( activeTool && 
-			activeTool.options.id === tool.options.id && 
+		if (activeTool.value && 
+			activeTool.value.options.id === tool.options.id && 
 			!forced) {
 			return;
 		}
 
 		//don't assign a hidden tool to previous tool state
 		//that is only useful/wanted for toolbar items
-		if(activeTool && activeTool.options.type !== "hidden") {
-			previousTool = activeTool;
+		if (activeTool.value && activeTool.value.options.type !== "hidden") {
+			previousTool.value = activeTool.value;
 		}
 		resetTools();
 		tool.activateTool();
-		activeTool = tool;
-		jQuery(`.tool_${toolID}`).addClass("active");
+		activeTool.value = tool;
 		
 		// console.log(`${previousTool?.options.id} \u2192 ${toolID}`);
 
-	} catch(error) {
+	} catch (error) {
 		console.warn(`The tool with the id "${toolID}" could not be loaded.`, error);
 	}
 }
 
-
 export function resetTools() {
-	if(activeTool != null) {
+	if (activeTool.value != null) {
 		try {
-			activeTool.deactivateTool();
-		} catch(e) {
+			activeTool.value.deactivateTool();
+		} catch (e) {
 			// this tool has no (optional) deactivateTool function
 		}
-		for(let i=0; i < paper.tools.length; i++) {
+		for (let i=0; i < paper.tools.length; i++) {
 			paper.tools[i].remove();
 		}
 	}
 	jQuery(".toolOptionPanel").remove();
 	jQuery(".tool").removeClass("active");
 }
-
 
 export function setDefaultTool() {
 	switchTool("select");

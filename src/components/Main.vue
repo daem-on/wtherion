@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import Toolbar from "./Toolbar.vue";
 import { onMounted } from "vue";
 import pg from "../init";
@@ -10,7 +10,6 @@ onMounted(() => {
 
 <template>
 	<div class="ui">
-		Main works!
 		<Toolbar />
 	</div>
 

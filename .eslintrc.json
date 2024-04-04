@@ -24,6 +24,16 @@
         "@typescript-eslint/no-unused-vars": "off",
         "no-case-declarations": "off",
         "semi": ["warn", "always"],
-        "eqeqeq": ["warn", "always", {"null": "never"}]
+        "eqeqeq": ["warn", "always", {"null": "never"}],
+        "space-before-function-paren": ["warn", {
+            "anonymous": "never",
+            "named": "never",
+            "asyncArrow": "always"
+        }],
+        "keyword-spacing": ["warn", {
+            "before": true,
+            "after": true
+        }],
+        "space-in-parens": ["warn", "never"]
     }
 }

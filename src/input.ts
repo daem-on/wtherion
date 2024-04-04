@@ -21,8 +21,6 @@ export function setup() {
 }
 
 function setupKeyboard() {
-	const toolList = tools.getToolList();
-
 	jQuery(document).off(".pg");
 	
 	jQuery(document).on("keydown.pg", function (event: JQuery.KeyDownEvent) {
@@ -179,7 +177,7 @@ function setupKeyboard() {
 }
 
 function resetToPreviousTool() {
-	const previous = toolbar.getPreviousTool();
+	const previous = toolbar.previousToolRef.value;
 	toolbar.switchTool(previous?.options.id ?? "select");
 }
 

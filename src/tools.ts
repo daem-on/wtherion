@@ -12,18 +12,14 @@ import * as inspect from "./tools/inspect";
 import toolOptions from "./toolOptions";
 
 export const tools = {
-	select: select,
-	detailselect: detailselect,
-	draw: draw,
-	bezier: bezier,
-	point: point,
-	// text: text,
-	// rotate: rotate,
-	// scale: scale,
-	// zoom: zoom,
-	viewgrab: viewgrab,
-	viewzoom: viewzoom,
-	inspect: inspect,
+	select,
+	detailselect,
+	draw,
+	bezier,
+	point,
+	viewgrab,
+	viewzoom,
+	inspect,
 };
 
 const toolList = toolOptions;

@@ -1,18 +1,18 @@
-// functions related to tools
-
-import select from "./tools/select";
-import detailselect from "./tools/detailselect";
-import draw from "./tools/draw";
+import { select } from "./tools/select";
+import { detailselect } from "./tools/detailselect";
+import { draw } from "./tools/draw";
 import { bezier } from "./tools/bezier";
 import { point } from "./tools/point";
 import { viewgrab } from "./tools/viewgrab";
 import { viewzoom } from "./tools/viewzoom";
-import * as inspect from "./tools/inspect";
+import { inspect } from "./tools/inspect";
 import paper from "paper";
 import * as config from "./filesio/configManagement";
 import { computed, ref } from "vue";
 
-export const tools: Record<string, WtTool> = {
+const createToolRegistry = <Id extends string>(defintions: { [K in Id]: WtTool<K> }) => defintions;
+
+export const tools = createToolRegistry({
 	select,
 	detailselect,
 	draw,
@@ -21,7 +21,9 @@ export const tools: Record<string, WtTool> = {
 	viewgrab,
 	viewzoom,
 	inspect,
-};
+});
+
+type ToolId = keyof typeof tools;
 
 type ToolEvent<T extends Event> = paper.ToolEvent & { event: T };
 type ToolEventMap = {
@@ -45,31 +47,28 @@ type CustomHandlers = {
 	onDeactivate?: EventHandler<"deactivate">,
 };
 
-type WtTool = {
+type WtTool<Id extends string = ToolId> = {
 	tool: paper.Tool,
-	definition: ToolDefinition,
+	definition: ToolDefinition<Id>,
 	customHandlers: CustomHandlers,
 };
 
-export function defineTool(settings: {
-	definition: ToolDefinition,
-	setup: (on: EventHandlerRegisterer) => void
-}): WtTool {
+export function defineTool<Id extends string>(settings: {
+	definition: ToolDefinition<Id>,
+	setup: (on: EventHandlerRegisterer, tool: paper.Tool) => void
+}): WtTool<Id> {
 	const tool = new paper.Tool();
-	const events: { eventName: keyof ToolEventMap, handler: EventHandler<any> }[] = [];
-	const addEvent: EventHandlerRegisterer = (eventName, handler) => events.push({ eventName, handler });
-	settings.setup(addEvent);
 
 	const customHandlers: CustomHandlers = {};
-
-	for (const event of events) {
-		switch (event.eventName) {
-			case "wheel": customHandlers.onWheel = event.handler; break;
-			case "activate": customHandlers.onActivate = event.handler; break;
-			case "deactivate": customHandlers.onDeactivate = event.handler; break;
-			default: tool.on(event.eventName, event.handler);
+	const addEvent: EventHandlerRegisterer = (eventName, handler: EventHandler<any>) => {
+		switch (eventName) {
+			case "wheel": customHandlers.onWheel = handler; break;
+			case "activate": customHandlers.onActivate = handler; break;
+			case "deactivate": customHandlers.onDeactivate = handler; break;
+			default: tool.on(eventName, handler);
 		}
-	}
+	};
+	settings.setup(addEvent, tool);
 	return {
 		tool,
 		customHandlers,
@@ -81,15 +80,6 @@ export function getToolList(): WtTool[] {
 	return Object.values(tools);
 }
 
-
-export function getToolInfoByID(id: string) {
-	for(let i=0; i<toolList.length; i++) {
-		if(toolList[i].id === id) {
-			return toolList[i];
-		}
-	}
-}
-
 type ToolSettings = {
 	[key: string]: any,
 	id: string
@@ -98,13 +88,13 @@ type ToolSettings = {
 // localstorage
 export function getLocalOptions<T extends ToolSettings>(options: T): T {
 	const storageJSON = localStorage.getItem('pg.tools.'+options.id);
-	if(storageJSON && storageJSON.length > 0) {
+	if (storageJSON && storageJSON.length > 0) {
 		const storageOptions = JSON.parse(storageJSON);
 		
 		// only overwrite options that are stored
 		// new options will use their default value
-		for(const option in options) {
-			if(Object.prototype.hasOwnProperty.call(storageOptions, option)) {
+		for (const option in options) {
+			if (Object.prototype.hasOwnProperty.call(storageOptions, option)) {
 				options[option] = storageOptions[option];
 			}
 		}
@@ -123,21 +113,14 @@ export function deleteLocalOptions(id: string) {
 	localStorage.removeItem('pg.tools.'+id);
 }
 
-export type ToolDefinition = {
-	id: string;
+export type ToolDefinition<Id extends string> = {
+	id: Id;
 	name: string;
 	type?: "hidden";
 	usedKeys?: {
 		[name: string]: string;
 	},
 	options: Record<string, any>
-}
-
-export type PGTool = {
-	activateTool: () => void,
-	deactivateTool: () => void,
-	updateTool?: (e: WheelEvent) => void,
-	options: ToolDefinition
 }
 
 export const keybinds: Record<string, string> = {
@@ -148,14 +131,8 @@ export const keybinds: Record<string, string> = {
 	"k": "point"
 };
 
-type ToolConstructor = {
-	new (): PGTool;
-}
-
-// functions related to the toolbar
-
-const activeTool = ref<PGTool | undefined>(undefined);
-const previousTool = ref<PGTool | undefined>(undefined);
+const activeTool = ref<WtTool | undefined>(undefined);
+const previousTool = ref<WtTool | undefined>(undefined);
 
 export function setup() {
 	setupKeybinds();
@@ -169,43 +146,33 @@ function setupKeybinds() {
 	}
 }
 
-export function getActiveTool(): PGTool | undefined {
+export function getActiveTool(): WtTool | undefined {
 	return activeTool.value;
 }
 
-export const activeToolRef = computed<PGTool | undefined>(() => activeTool.value);
-export const previousToolRef = computed<PGTool | undefined>(() => previousTool.value);
+export const activeToolRef = computed<WtTool | undefined>(() => activeTool.value);
+export const previousToolRef = computed<WtTool | undefined>(() => previousTool.value);
 
-export function switchTool(toolID: string, forced?: boolean) {
+export function switchTool(toolID: ToolId, options?: { force?: true, duck?: true }) {
 	try {
-		activeTool.value?.deactivateTool?.();
-		const opts = tools.getToolInfoByID(toolID);
-		let tool: PGTool;
-		{
-			const toolEntry: PGTool | ToolConstructor = tools.tools[toolID];
-			if (typeof toolEntry === "function") tool = new toolEntry();
-			else tool = toolEntry;
-		}
-		
-		// writing the tool infos back into the tool.options object
-		jQuery.each(opts, function(name, value: any) {
-			tool.options[name] = value;
-		});
+		const active = activeTool.value;
+		active.customHandlers.onDeactivate?.();
+
+		const tool = tools[toolID];
 		
 		// don't switch to the same tool again unless "forced" is true
-		if (activeTool.value && 
-			activeTool.value.options.id === tool.options.id && 
-			!forced) {
+		if (active && active.definition.id === tool.definition.id && !options.force) {
 			return;
 		}
 
 		//don't assign a hidden tool to previous tool state
 		//that is only useful/wanted for toolbar items
-		if (activeTool.value && activeTool.value.options.type !== "hidden") {
-			previousTool.value = activeTool.value;
+		if (active && active.definition.options.type !== "hidden") {
+			previousTool.value = active;
 		}
 		resetTools();
-		tool.activateTool();
+		tool.tool.activate();
+		tool.customHandlers.onActivate?.();
 		activeTool.value = tool;
 		
 		// console.log(`${previousTool?.options.id} \u2192 ${toolID}`);
@@ -216,9 +183,10 @@ export function switchTool(toolID: string, forced?: boolean) {
 }
 
 export function resetTools() {
-	if (activeTool.value != null) {
+	const active = activeTool.value;
+	if (active != null) {
 		try {
-			activeTool.value.deactivateTool();
+			active.customHandlers.onDeactivate?.();
 		} catch (e) {
 			// this tool has no (optional) deactivateTool function
 		}
@@ -226,8 +194,6 @@ export function resetTools() {
 			paper.tools[i].remove();
 		}
 	}
-	jQuery(".toolOptionPanel").remove();
-	jQuery(".tool").removeClass("active");
 }
 
 export function setDefaultTool() {

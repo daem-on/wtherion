@@ -214,7 +214,7 @@ export default {
 		const $resetButton = jQuery('<button class="toolOptionResetButton" title="Reset Tool Settings">R</button>').click(function() {
 			if(confirm('Reset tool options to default?')) {
 				tools.deleteLocalOptions(options.id);
-				tools.switchTool(options.id, true);
+				tools.switchTool(options.id, { force: true });
 			}
 		});
 		$title.append($resetButton);

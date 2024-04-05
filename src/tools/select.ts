@@ -129,7 +129,7 @@ const menuEntries = {
 export const select = defineTool({
 	definition: {
 		id: 'select',
-		name: '%tools.itemSelect%',
+		name: 'tools.itemSelect',
 		usedKeys : {
 			selectAll : 'ctrl-a',
 			invertSelection: 'ctrl-i',

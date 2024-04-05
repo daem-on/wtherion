@@ -31,7 +31,7 @@ const components: componentList<Partial<typeof options>> = {
 export const point = defineTool({
 	definition: {
 		id: "point",
-		name: "Point",
+		name: "tools.point",
 		options: options,
 	},
 	setup(on) {

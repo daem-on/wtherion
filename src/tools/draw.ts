@@ -91,7 +91,7 @@ const components: comp = {
 export const draw = defineTool({
 	definition: {
 		id: 'draw',
-		name: '%tools.draw%',
+		name: 'tools.draw',
 		options,
 	},
 	setup(on, tool) {

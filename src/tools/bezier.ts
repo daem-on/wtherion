@@ -55,7 +55,7 @@ type TypedHitResult<T extends paper.Item> = paper.HitResult & {item: T}
 export const bezier = defineTool({
 	definition: {
 		id: 'bezier',
-		name: '%tools.bezier%',
+		name: 'tools.bezier',
 		options,
 	},
 	setup(on) {

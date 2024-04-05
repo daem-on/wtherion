@@ -73,7 +73,7 @@ const menuEntries = {
 export const detailselect = defineTool({
 	definition: {
 		id: 'detailselect',
-		name: '%tools.detailSelect%',
+		name: 'tools.detailSelect',
 		options: {},
 	},
 	setup(on) {

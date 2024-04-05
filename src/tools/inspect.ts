@@ -41,7 +41,7 @@ function objectToString(object: any) {
 export const inspect = defineTool({
 	definition: {
 		id: 'inspect',
-		name: '%tools.inspect%',
+		name: 'tools.inspect',
 		options: {},
 	},
 	setup(on) {

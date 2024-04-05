@@ -16,7 +16,7 @@ const toolList = computed(() => {
 			v-for="tool in toolList"
 			:key="tool.definition.id"
 			@click="switchTool(tool)"
-			:title="tool.definition.name"
+			:title="$t(tool.definition.name)"
 			:class="{
 				active: activeToolRef === tool,
 				ducked: duckedToolRef === tool,

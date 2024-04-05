@@ -15,7 +15,8 @@
     "jquery": "^3.6.0",
     "jquery-ui": "^1.13.0",
     "paper": "^0.12.15",
-    "vue": "3.4.21"
+    "vue": "^3.4.21",
+    "vue-i18n": "^9.11.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.25.1",

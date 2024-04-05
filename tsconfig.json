@@ -1,11 +1,13 @@
 {
   "compilerOptions": {
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
+    "noEmit": true,
     "noImplicitAny": false,
     "noImplicitThis": true,
     "module": "ES2020",
     "lib": ["ES2022", "DOM"],
+    "allowImportingTsExtensions": true,
     "target": "es6",
     "allowJs": true,
     "outDir": "./dist",

@@ -13,7 +13,7 @@ import * as items from "../item";
 import * as menu from "../menu";
 import * as undo from "../undo";
 import * as selection from "../selection";
-import { defineTool } from "src/tools";
+import { defineTool } from "../tools";
 
 const menuEntries = {
 	selectionTitle: {

@@ -17,7 +17,7 @@ import * as undo from "../undo";
 import * as selection from "../selection";
 import paper from "paper";
 import LineSettings from "../../src/objectSettings/model/LineSettings";
-import { defineTool } from "src/tools";
+import { defineTool } from "../tools";
 
 const menuEntries = {
 	editTitle: {

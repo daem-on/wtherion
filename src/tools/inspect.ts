@@ -5,7 +5,7 @@ import * as sb from "../statusbar";
 import * as menu from "../menu";
 import * as hover from "../hover";
 import * as config from "../filesio/configManagement";
-import { defineTool } from "src/tools";
+import { defineTool } from "../tools";
 
 function objectToString(object: any) {
 	if (object?.data?.therionData?.className === "XVIStation") {

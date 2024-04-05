@@ -8,7 +8,6 @@ import { wallTypes } from "../res/wallTypes";
 import toolOptionPanel, { componentList } from "../toolOptionPanel";
 import LineSettings from "../../src/objectSettings/model/LineSettings";
 import { defineTool, getLocalOptions, setLocalOptions } from "../tools";
-import { keybinds } from "../tools";
 import editTH2 from "../editTH2";
 import * as undo from "../undo";
 import { clearSelection } from "../selection";
@@ -67,9 +66,6 @@ export const bezier = defineTool({
 				setLocalOptions(options);
 			});
 		});
-		
-		const toolKeybind = Object.entries(keybinds)
-		.find(([key, value]) => value === "bezier")[0];
 	
 		let path: paper.Path;
 
@@ -233,7 +229,7 @@ export const bezier = defineTool({
 		});
 
 		on("keydown", event => {
-			if (event.key === "enter" || event.key === toolKeybind) {
+			if (event.key === "enter") {
 				clearSelection();
 				undo.snapshot('bezier');
 				dirty = false;

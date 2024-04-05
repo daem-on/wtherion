@@ -1,290 +1,149 @@
 import { openSearchDialog } from "./search";
 import { save, exportTH2 } from "./filesio/saveManagement/saveManagement";
-import * as view from "./view";
-import * as undo from "./undo";
-import * as tools from "./tools";
 import * as menu from "./menu";
-import * as selection from "./selection";
-import viewzoom from "./tools/viewzoom";
-
-// functions releated to input (mouse, keyboard)
-
-type ViewzoomTool = ReturnType<typeof viewzoom>;
-	
-const downKeys: Record<string, boolean> = {};
-let mouseIsDown = false;
+import * as config from "./filesio/configManagement";
+import { getActiveTool, switchToolById, unduckTool } from "./tools";
+import { resetZoom } from "./view";
+import { redo, undo } from "./undo";
+import { deleteSelection } from "./selection";
 
 export function setup() {
 	setupKeyboard();
 	setupMouse();
+	loadCustomKeybinds();
+}
+
+const keys = [
+	'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
+	'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
+	'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
+	'Enter', 'Backspace', 'Delete', 'Escape', ' ', 'Control'
+] as const;
+
+type Key = typeof keys[number];
+type KeySpec = `${'ctrl-' | ''}${'shift-' | ''}${Key}${'-up' | ''}`;
+
+const currentBinds = new Map<KeySpec, string>();
+const actionCallbacks = new Map<string, () => void>();
+
+export function registerAction(name: string, callback: () => void, defaultBind: KeySpec) {
+	actionCallbacks.set(name, callback);
+	currentBinds.set(defaultBind, name);
+}
+
+function loadCustomKeybinds() {
+	if (config.exists("keybinds")) {
+		const keybindsConfig = config.get("keybinds");
+		currentBinds.clear();
+		for (const bind of keybindsConfig) {
+			if (keySpecIsValid(bind.key))
+				currentBinds.set(bind.key, bind.command);
+		}
+	}
+}
+
+const keySpecRegex = /^(ctrl-)?(shift-)?([a-z0-9]+)(-up)?$/;
+function keySpecIsValid(input: string): input is KeySpec {
+	const match = keySpecRegex.exec(input);
+	if (!match) return false;
+	if (!keys.includes(match[3] as Key)) return false;
+	return true;
+}
+
+function getSpec(event: KeyboardEvent, up: boolean): KeySpec {
+	let spec = "";
+	if (event.ctrlKey) spec += "ctrl-";
+	if (event.shiftKey) spec += "shift-";
+	spec += event.key;
+	if (up) spec += "-up";
+	return spec as KeySpec;
 }
 
 function setupKeyboard() {
-	jQuery(document).off(".pg");
-	
-	jQuery(document).on("keydown.pg", function (event: JQuery.KeyDownEvent) {
-
-		if(!isKeyDown(event.key)) {
-			storeDownKey(event.key);
-		}
-
-		// we're only interested in the original keydown events
-		// not the repeats
-		if (event.originalEvent.repeat) return;
-		
-		// only prevent default keypresses (see tools/select.js for more)
-		// ctrl-a / select all
-		if (event.key === "a" && event.ctrlKey) {
-			if(!textIsSelected() && !userIsTyping(event)) {
-				event.preventDefault();
-			}
-		}
-		// ctrl-i / invert selection
-		if (event.key === "i" && event.ctrlKey) {
+	function handleKeyEvent(event: KeyboardEvent, up: boolean) {
+		if (userIsTyping(event)) return;
+		if (event.repeat) return;
+		const spec = getSpec(event, up);
+		if (currentBinds.has(spec)) {
+			const action = currentBinds.get(spec);
+			actionCallbacks.get(action)();
 			event.preventDefault();
 		}
-		
-		// ctrl-g / group
-		if (event.key === "g" && event.ctrlKey && !event.shiftKey) {
-			event.preventDefault();
-		}
+	}
 
-		// ctrl-shift-g / ungroup
-		if (event.key === "g" && event.ctrlKey && event.shiftKey) {
-			event.preventDefault();
-		}
-
-
-		// ctrl-1 / reset view to 100%
-		if ((event.key === "1") && event.ctrlKey && !event.shiftKey) {
-			event.preventDefault();
-			view.resetZoom();
-		}
-
-		// ctrl-z / undo
-		if ((event.key === "z") && event.ctrlKey && !event.shiftKey) {
-			event.preventDefault();
-			undo.undo();
-		}
-
-		// ctrl-shift-z / undo
-		if ((event.key === "z") && event.ctrlKey && event.shiftKey) {
-			event.preventDefault();
-			undo.redo();
-		}
-
-		if (event.key === "f" && event.ctrlKey) {
-			event.preventDefault();
-			openSearchDialog();
-		}
-
-		if (event.key === "s" && event.ctrlKey) {
-			event.preventDefault();
-			save();
-		}
-
-		if (event.key === "e" && event.ctrlKey) {
-			event.preventDefault();
-			exportTH2();
-		}
-
-		// backspace / stop browsers "back" functionality
-		if(event.key === "Backspace" && !userIsTyping(event)) {
-			event.preventDefault();
-		}
-
-
-		// everything after this is blocked by mousedown!
-		if(mouseIsDown) return;
-
-
-		// alt
-		if(event.key === "Alt") {
-			event.preventDefault();
-		}
-
-		// esc: blur all inputs
-		if(event.key === "Escape") {
-			jQuery('input, select, textarea, button').trigger("blur");
-		}
-
-		// space / pan tool
-		// m / inspect tool
-		if (!userIsTyping(event)) {
-			switch (event.key) {
-				case " ":
-					if (tools.getActiveTool().options.id === "viewgrab")
-						break;
-					event.preventDefault();
-					tools.switchTool('viewgrab');
-					break;
-				case "m":
-					if (tools.getActiveTool().options.id === "inspect")
-						break;
-					event.preventDefault();
-					tools.switchTool('inspect');
-			}
-		}
+	window.addEventListener("keydown", event => {
+		handleKeyEvent(event, false);
 	});
 
-
-	jQuery(document).on("keyup.pg", function( event: JQuery.KeyUpEvent ) {
-
-		// remove event key from downkeys
-		downKeys[event.key] = false;
-
-		// ctrl
-		if(event.key === "Control") {
-			// if viewZoom is active and we just released ctrl,
-			// reset tool to previous
-			if(tools.getActiveTool().options.id === 'viewzoom') {
-				resetToPreviousTool();
-			}
-		}
-		
-		if(userIsTyping(event)) return;
-
-		// space : stop pan tool on keyup
-		// m: same for inspect tool
-		if(event.key === " " || event.key === "m") {
-			if(!isModifierKeyDown(event)) {
-				event.preventDefault();
-				resetToPreviousTool();
-			}
-		}
-
-		if(mouseIsDown) return;
-		if(isModifierKeyDown(event)) return;
-
-
-		// ----------------------------------------
-		// keys that don't fire if modifier key down or mousedown or typing
-
-		// backspace, delete : delete selection
-		if(event.key === "Backspace" || event.key === "Delete") {
-			selection.deleteSelection();
-		}
-
-		// tool keys (switching to tool by key shortcut)
-		for (const keybind in tools.keybinds) {
-			if (event.key === keybind) {
-				tools.switchTool(tools.keybinds[keybind]);
-			}
-		}
-		
+	window.addEventListener("keyup", event => {
+		handleKeyEvent(event, true);
 	});
+
+	registerAction("global.tool.select", () => switchToolById("select"), "v");
+	registerAction("global.tool.detailselect", () => switchToolById("detailselect"), "a");
+	registerAction("global.tool.draw", () => switchToolById("draw"), "d");
+	registerAction("global.tool.bezier", () => switchToolById("bezier"), "p");
+	registerAction("global.tool.point", () => switchToolById("point"), "k");
+
+	registerAction("global.tool.viewgrab", () => switchToolById("viewgrab", { duck: true }), " ");
+	registerAction("global.tool.viewgrab.up", () => unduckTool(), " -up");
+
+	registerAction("global.tool.inspect", () => switchToolById("inspect", { duck: true }), "m");
+	registerAction("global.tool.inspect.up", () => unduckTool(), "m-up");
+
+	registerAction("global.tool.viewzoom.up", unduckViewzoom, "Control-up");
+
+	registerAction("global.resetzoom", resetZoom, "ctrl-0");
+	registerAction("global.undo", undo, "ctrl-z");
+	registerAction("global.redo", redo, "ctrl-shift-z");
+	registerAction("global.search", openSearchDialog, "ctrl-f");
+	registerAction("global.save", save, "ctrl-s");
+	registerAction("global.export", exportTH2, "ctrl-e");
+
+	registerAction("global.blur", blurCurrent, "Escape");
+
+	registerAction("global.delete", deleteSelection, "Delete");
 }
-
-function resetToPreviousTool() {
-	const previous = tools.previousToolRef.value;
-	tools.switchTool(previous?.options.id ?? "select");
-}
-
-function storeDownKey(keyCode: string) {
-	if(downKeys[keyCode]) {
-		downKeys[keyCode] = true;
-	}
-}
-
-export function isMouseDown() {
-	return mouseIsDown;
-}
-
-
-function isKeyDown(keyCode: string) {
-	return downKeys[keyCode];
-}
-
-
-export function isModifierKeyDown(event: JQuery.KeyUpEvent) {
-	if( event.altKey || 
-		event.shiftKey || 
-		event.ctrlKey || 
-		(event.ctrlKey && event.altKey)) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
 
 export function textIsSelected() {
 	if (window.getSelection().toString()) {
 		return true;
 	}
-	// if(document.selection && document.selection.createRange().text) {
-	// 	return true;
-	// }
 
 	return false;
 }
 
-
-export function userIsTyping(event) {		
-	const d = event.srcElement || event.target;
-	if ((d.tagName.toUpperCase() === 'INPUT' &&
-		(
-			d.type.toUpperCase() === 'TEXT' ||
-			d.type.toUpperCase() === 'PASSWORD' ||
-			d.type.toUpperCase() === 'FILE' || 
-			d.type.toUpperCase() === 'EMAIL' ||
-			d.type.toUpperCase() === 'SEARCH' ||
-			d.type.toUpperCase() === 'DATE' ||
-			d.type.toUpperCase() === 'NUMBER' )
-		)
-	|| d.tagName.toUpperCase() === 'TEXTAREA') {
-		return true;
-	}
-	
-	return false;
+export function userIsTyping(event: KeyboardEvent) {
+	return event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement;
 }
 
-
+function blurCurrent() {
+	const active = document.activeElement;
+	if (active instanceof HTMLElement) active.blur();
+}
 
 // mouse stuff
 
 const setupMouse = function() {
-
-	jQuery('body').on('mousedown', function (e) {
-		if ((e.which === 1)) { //left
-			mouseIsDown = true;
-		}
-		if ((e.which === 3)) { // right
-			
-		}
-		if ((e.which === 2)) { //middle
-			
-		}
-		
-		
-	}).on('mouseup', function(e) {
-		if ((e.which === 1)) { // left
-			mouseIsDown = false;
-		}
-		if ((e.which === 2)) { // middle
-			
-		}
-		if((e.which === 3)) { //right
-			
-		}
-
-	}).on('contextmenu', function (e) {
+	window.addEventListener("contextmenu", e => {
 		e.preventDefault();
 		menu.showContextMenu(e);
 	});
-	
-	// jQuery(window).on('mousewheel DOMMouseScroll', function(event){
-	window.addEventListener("wheel", onMouseWheel, {passive: false});
+
+	// special case for viewzoom, which cannot be handled by the keybinds
+	window.addEventListener("wheel", event => {
+		if (event.ctrlKey) {
+			event.preventDefault();
+
+			if (getActiveTool().definition.id !== "viewzoom")
+				switchToolById("viewzoom", { duck: true });
+		}
+		getActiveTool().customHandlers.onWheel?.(event);
+	}, { passive: false });
 };
 
-function onMouseWheel(event: WheelEvent) {
-	if(event.ctrlKey) {
-		event.preventDefault();
-		if (tools.getActiveTool().options.id !== 'viewzoom') {
-			tools.switchTool('viewzoom');
-		}
-		if(tools.getActiveTool()) {
-			(tools.getActiveTool() as ViewzoomTool).updateTool(event);
-		}
+function unduckViewzoom() {
+	if (getActiveTool().definition.id === "viewzoom") {
+		unduckTool();
 	}
 }

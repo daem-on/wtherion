@@ -1,18 +1,12 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { activeToolRef, previousToolRef, switchTool } from "../tools";
-import { getToolList } from "../tools";
+import { activeToolRef, duckedToolRef, switchTool } from "../tools";
+import { toolsRef } from "../tools";
 
-const toolList = getToolList().filter(tool => tool.type !== "hidden");
-
-const activeToolId = computed(() => {
-	return activeToolRef.value?.options.id;
+const toolList = computed(() => {
+	if (!toolsRef.value) return [];
+	return Object.values(toolsRef.value).filter(tool => tool.definition.type !== "hidden");
 });
-
-const previousToolId = computed(() => {
-	return previousToolRef.value?.options.id;
-});
-
 </script>
 
 <template>
@@ -20,15 +14,15 @@ const previousToolId = computed(() => {
 		<button
 			class="tool"
 			v-for="tool in toolList"
-			:key="tool.id"
-			@click="switchTool(tool.id)"
-			:title="tool.name"
+			:key="tool.definition.id"
+			@click="switchTool(tool)"
+			:title="tool.definition.name"
 			:class="{
-				active: activeToolId === tool.id,
-				previous: previousToolId === tool.id,
+				active: activeToolRef === tool,
+				ducked: duckedToolRef === tool,
 			}">
 
-			<img :src="`assets/tools/tool_${tool.id}.svg`">
+			<img :src="`assets/tools/tool_${tool.definition.id}.svg`">
 		</button>
 	</div>
 </template>
@@ -73,7 +67,7 @@ const previousToolId = computed(() => {
 	background-color: #e2e2e2;
 }
 
-.tool.previous {
+.tool.ducked {
 	outline: 1px solid var(--primary-color);
 }
 </style>

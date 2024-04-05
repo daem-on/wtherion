@@ -1,3 +1,4 @@
+import paper from "paper";
 import { select } from "./tools/select";
 import { detailselect } from "./tools/detailselect";
 import { draw } from "./tools/draw";
@@ -6,13 +7,11 @@ import { point } from "./tools/point";
 import { viewgrab } from "./tools/viewgrab";
 import { viewzoom } from "./tools/viewzoom";
 import { inspect } from "./tools/inspect";
-import paper from "paper";
-import * as config from "./filesio/configManagement";
 import { computed, ref } from "vue";
 
-const createToolRegistry = <Id extends string>(defintions: { [K in Id]: WtTool<K> }) => defintions;
+const createToolRegistry = <Id extends string>(initializers: { [K in Id]: WtToolInitializer<K> }) => initializers;
 
-export const tools = createToolRegistry({
+const registry = createToolRegistry({
 	select,
 	detailselect,
 	draw,
@@ -23,7 +22,11 @@ export const tools = createToolRegistry({
 	inspect,
 });
 
-type ToolId = keyof typeof tools;
+type ToolId = keyof typeof registry;
+
+const tools = ref<{ [K in ToolId]: WtTool<K> } | undefined>();
+
+export const toolsRef = computed(() => tools.value);
 
 type ToolEvent<T extends Event> = paper.ToolEvent & { event: T };
 type ToolEventMap = {
@@ -53,31 +56,31 @@ type WtTool<Id extends string = ToolId> = {
 	customHandlers: CustomHandlers,
 };
 
+type WtToolInitializer<Id extends string> = () => WtTool<Id>;
+
 export function defineTool<Id extends string>(settings: {
 	definition: ToolDefinition<Id>,
 	setup: (on: EventHandlerRegisterer, tool: paper.Tool) => void
-}): WtTool<Id> {
-	const tool = new paper.Tool();
-
-	const customHandlers: CustomHandlers = {};
-	const addEvent: EventHandlerRegisterer = (eventName, handler: EventHandler<any>) => {
-		switch (eventName) {
-			case "wheel": customHandlers.onWheel = handler; break;
-			case "activate": customHandlers.onActivate = handler; break;
-			case "deactivate": customHandlers.onDeactivate = handler; break;
-			default: tool.on(eventName, handler);
-		}
+}): WtToolInitializer<Id> {
+	return (): WtTool<Id> => {
+		const tool = new paper.Tool();
+	
+		const customHandlers: CustomHandlers = {};
+		const addEvent: EventHandlerRegisterer = (eventName, handler: EventHandler<any>) => {
+			switch (eventName) {
+				case "wheel": customHandlers.onWheel = handler; break;
+				case "activate": customHandlers.onActivate = handler; break;
+				case "deactivate": customHandlers.onDeactivate = handler; break;
+				default: tool.on(eventName, handler);
+			}
+		};
+		settings.setup(addEvent, tool);
+		return {
+			tool,
+			customHandlers,
+			definition: settings.definition,
+		};
 	};
-	settings.setup(addEvent, tool);
-	return {
-		tool,
-		customHandlers,
-		definition: settings.definition,
-	};
-}
-
-export function getToolList(): WtTool[] {
-	return Object.values(tools);
 }
 
 type ToolSettings = {
@@ -123,27 +126,20 @@ export type ToolDefinition<Id extends string> = {
 	options: Record<string, any>
 }
 
-export const keybinds: Record<string, string> = {
-	"v": "select",
-	"a": "detailselect",
-	"d": "draw",
-	"p": "bezier",
-	"k": "point"
-};
-
 const activeTool = ref<WtTool | undefined>(undefined);
-const previousTool = ref<WtTool | undefined>(undefined);
+const duckedTool = ref<WtTool | undefined>(undefined);
 
 export function setup() {
-	setupKeybinds();
+	initializeTools();
 	setDefaultTool();
 }
 
-function setupKeybinds() {
-	if (config.exists("keybinds")) {
-		const keybindsConfig = config.get("keybinds");
-		Object.assign(keybinds, keybindsConfig);
+function initializeTools() {
+	const tempTools = {};
+	for (const key in registry) {
+		tempTools[key] = registry[key]();
 	}
+	tools.value = tempTools as any;
 }
 
 export function getActiveTool(): WtTool | undefined {
@@ -151,51 +147,47 @@ export function getActiveTool(): WtTool | undefined {
 }
 
 export const activeToolRef = computed<WtTool | undefined>(() => activeTool.value);
-export const previousToolRef = computed<WtTool | undefined>(() => previousTool.value);
+export const duckedToolRef = computed<WtTool | undefined>(() => duckedTool.value);
 
-export function switchTool(toolID: ToolId, options?: { force?: true, duck?: true }) {
+export function switchToolById(toolId: ToolId, options?: { force?: true, duck?: true }) {
+	switchTool(tools.value[toolId], options);
+}
+
+export function switchTool(tool: WtTool, options?: { force?: true, duck?: true }) {
+	const toolId = tool.definition.id;
+
 	try {
 		const active = activeTool.value;
-		active.customHandlers.onDeactivate?.();
-
-		const tool = tools[toolID];
+		active?.customHandlers.onDeactivate?.();
 		
-		// don't switch to the same tool again unless "forced" is true
-		if (active && active.definition.id === tool.definition.id && !options.force) {
+		if (active?.definition.id === toolId && !options?.force) {
 			return;
 		}
 
-		//don't assign a hidden tool to previous tool state
-		//that is only useful/wanted for toolbar items
-		if (active && active.definition.options.type !== "hidden") {
-			previousTool.value = active;
+		if (active?.definition.options.type !== "hidden" && options?.duck) {
+			duckedTool.value = active;
+		} else {
+			duckedTool.value = undefined;
 		}
-		resetTools();
+		
+		const previousTool = active;
 		tool.tool.activate();
 		tool.customHandlers.onActivate?.();
 		activeTool.value = tool;
 		
-		// console.log(`${previousTool?.options.id} \u2192 ${toolID}`);
+		console.log(`${previousTool?.definition.id} \u2192 ${toolId}`);
 
 	} catch (error) {
-		console.warn(`The tool with the id "${toolID}" could not be loaded.`, error);
-	}
-}
-
-export function resetTools() {
-	const active = activeTool.value;
-	if (active != null) {
-		try {
-			active.customHandlers.onDeactivate?.();
-		} catch (e) {
-			// this tool has no (optional) deactivateTool function
-		}
-		for (let i=0; i < paper.tools.length; i++) {
-			paper.tools[i].remove();
-		}
+		console.warn(`The tool with the id "${toolId}" could not be loaded.`, error);
 	}
 }
 
 export function setDefaultTool() {
-	switchTool("select");
+	switchToolById("select");
+}
+
+export function unduckTool() {
+	if (duckedTool.value) {
+		switchTool(duckedTool.value);
+	}
 }

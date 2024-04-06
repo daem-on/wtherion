@@ -1,18 +1,17 @@
 // drawing tool
 // adapted from resources on http://paperjs.org
 
-import { defineTool, getLocalOptions, setLocalOptions } from "../../src/tools";
-import editTH2 from "../editTH2";
-import * as undo from "../undo";
-import toolOptionPanel, { componentList } from "../toolOptionPanel";
-import subtypeList from "../res/subtype-list.json";
-import { default as getSettings } from "../objectSettings/model/getSettings";
-import { wallTypes } from "../res/wallTypes";
-import LineSettings from "../objectSettings/model/LineSettings";
-import * as math from "../math";
 import paper from "paper";
+import { markRaw, ref } from "vue";
+import { defineTool } from "../../src/tools";
+import DrawPanel from "../components/panels/DrawPanel.vue";
+import editTH2 from "../editTH2";
+import * as math from "../math";
+import LineSettings from "../objectSettings/model/LineSettings";
+import { default as getSettings } from "../objectSettings/model/getSettings";
+import * as undo from "../undo";
 
-let options = {
+export const drawOptions = ref({
 	id: "draw",
 	type: "wall",
 	subtype: "",
@@ -24,96 +23,26 @@ let options = {
 	closePath: 'near start',
 	smoothPath : true,
 	simplifyPath : true
-};
-	
-type comp = componentList<Partial<typeof options> & {toolOptions}>;
-
-const components: comp = {
-	type: {
-		type: "customList",
-		label: "%type%",
-		options: wallTypes,
-	},
-	subtype: {
-		type: "customList",
-		label: "%subtype%",
-		requirements: {type: ["wall", "border", "water-flow"]},
-		options: subtypeList.wall,
-		imageRoot: "assets/rendered/subtype"
-	},
-	size: {
-		type: "int",
-		label: "%size%",
-		requirements: {
-			type: "slope"
-		}
-	},
-	toolOptions: {
-		type: "title",
-		text: "%toolOptions%"
-	},
-	pointDistance: {
-		type: 'int',
-		label: '%draw.pointDistance%',
-		min: 1
-	},
-	drawParallelLines: {
-		type: 'boolean',
-		label: '%draw.drawParallelLines%'
-	},
-	lines: {
-		type: 'int',
-		label: '%draw.lines%',
-		requirements : {drawParallelLines: true},
-		min: 1
-	},
-	lineDistance: {
-		type: 'float',
-		label: '%draw.lineDistance%',
-		requirements : {drawParallelLines: true},
-		min: 0
-	},
-	closePath: {
-		type: 'list',
-		label: '%draw.closePath%',
-		options: [ 'near start', 'always', 'never' ]
-	},
-	smoothPath: {
-		type: 'boolean',
-		label: '%draw.smoothPath%'
-	},
-	simplifyPath: {
-		type: 'boolean',
-		label: '%draw.simplifyPath%'
-	}
-};
+});
 
 export const draw = defineTool({
 	definition: {
 		id: 'draw',
 		name: 'tools.draw',
-		options,
+		panel: markRaw(DrawPanel),
+	},
+	uiState: {
+		options: drawOptions.value
 	},
 	setup(on, tool) {
 		let paths: paper.Path[] = [];
 		
-		// get options from local storage if present
-		options = getLocalOptions(options) as typeof options;
-		
 		let lineCount: number;
-
-		on("activate", () => {
-			// setup floating tool options panel in the editor
-			toolOptionPanel.setupFloating(options, components, function() {
-				setLocalOptions(options);
-				lineCount = options.lines;
-				tool.fixedDistance = options.pointDistance;
-			});
-		});
 
 		on("mousedown", event => {
 			if (event.event.button > 0) return;  // only first mouse button
 			
+			const options = drawOptions.value;
 			tool.fixedDistance = options.pointDistance;
 
 			if (options.drawParallelLines) {
@@ -145,7 +74,7 @@ export const draw = defineTool({
 			offset.angle += 90;
 			for (let i=0; i < lineCount; i++) {
 				const path = paths[i];
-				offset.length = options.lineDistance * i;
+				offset.length = drawOptions.value.lineDistance * i;
 				path.add(event.middlePoint.add(offset));
 			}
 		});
@@ -167,6 +96,7 @@ export const draw = defineTool({
 			}
 
 			const nearStart = math.checkPointsClose(paths[0].firstSegment.point, event.point, 30);
+			const options = drawOptions.value;
 			for (let i=0; i < lineCount; i++) {
 				const path = paths[i];
 				

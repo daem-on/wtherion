@@ -26,7 +26,7 @@ const select = (option: string) => {
 		<input type="text" v-model="model" @click="open = !open" @keydown="onKeydown" />
 		<div class="select-options">
 			<div v-for="option in options" :key="option" @click="select(option)">
-				<img :src="`${imageRoot}/${option || 'empty'}.svg`" class="crop-svg" />
+				<img v-if="imageRoot" :src="`${imageRoot}/${option || 'empty'}.svg`" class="crop-svg" />
 				<p>{{ option || '(none)' }}</p>
 			</div>
 		</div>

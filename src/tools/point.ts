@@ -1,38 +1,27 @@
-import { defineTool, getLocalOptions, setLocalOptions } from "../tools";
+import { defineTool, setLocalOptions } from "../tools";
 import editTH2 from "../editTH2";
-import toolOptionPanel, { componentList } from "../toolOptionPanel";
+import toolOptionPanel from "../toolOptionPanel";
 import * as undo from "../undo";
 import getSettings from "../objectSettings/model/getSettings";
 import PointSettings from "../objectSettings/model/PointSettings";
 import paper from "paper";
-import { pointTypes } from "../objectSettings/pointSymbolList";
+import { markRaw, ref } from "vue";
+import PointPanel from "../components/panels/PointPanel.vue";
 
-export let options = {
+export const pointOptions = ref({
 	id: "point",
 	type: "station",
 	stationName: "",
-};
-
-const components: componentList<Partial<typeof options>> = {
-	type: {
-		type: "list",
-		label: "%type%",
-		options: pointTypes
-	},
-	stationName: {
-		type: "text",
-		label: "%stationName%",
-		requirements: {
-			type: "station"
-		}
-	},
-};
+});
 
 export const point = defineTool({
 	definition: {
 		id: "point",
 		name: "tools.point",
-		options: options,
+		panel: markRaw(PointPanel),
+	},
+	uiState: {
+		options: pointOptions.value,
 	},
 	setup(on) {
 		on("mousedown", event => {
@@ -52,6 +41,7 @@ export const point = defineTool({
 				settings.type = "station";
 				settings.name = xviPoint.item.data.therionData.name;
 			} else {
+				const options = pointOptions.value;
 				settings.type = options.type;
 				if (options.type === "station") {
 					settings.name = options.stationName;
@@ -60,13 +50,6 @@ export const point = defineTool({
 			}
 			editTH2.drawPoint(point);
 			undo.snapshot("point");
-		});
-		
-		on("activate", () => {
-			options = getLocalOptions(options) as any;
-			toolOptionPanel.setupFloating(options, components, function() {
-				setLocalOptions(options);
-			});
 		});
 	},
 });
@@ -78,6 +61,7 @@ function increment(original: string): string {
 }
 
 function increaseStationNumber() {
+	const options = pointOptions.value;
 	if (options.stationName.includes("@")) {
 		const split = options.stationName.split("@");
 		options.stationName = increment(split[0]) + "@" + split[1];

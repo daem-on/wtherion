@@ -28,10 +28,13 @@ onMounted(() => {
 </template>
 
 <style scoped>
-	.ui {
-		position: absolute;
-		top: 0;
-		left: 0;
-		z-index: 10;
-	}
+.ui {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 10;
+
+	color: var(--text-color);
+	color-scheme: light dark;
+}
 </style>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { openMenu } from '../../menuSync';
+import { ref, watch } from 'vue';
 
 const model = defineModel<string>();
 
@@ -19,10 +20,20 @@ const select = (option: string) => {
 	open.value = false;
 };
 
+const menuRef = ref<HTMLElement | null>(null);
+
+watch(open, value => {
+	if (value) openMenu.value = menuRef.value;
+});
+
+watch(openMenu, value => {
+	if (value !== menuRef.value) open.value = false;
+}, { immediate: true });
+
 </script>
 
 <template>
-	<div class="custom-list" :class="{ open }">
+	<div class="custom-list" :class="{ open }" ref="menuRef">
 		<input type="text" v-model="model" @click="open = !open" @keydown="onKeydown" />
 		<div class="select-options">
 			<div v-for="option in options" :key="option" @click="select(option)">
@@ -51,18 +62,25 @@ const select = (option: string) => {
 	display: flex;
     flex-direction: column;
     align-items: center;
+	border-radius: 4px;
+}
+
+.select-options div:hover {
+	background-color: var(--card-color);
 }
 
 .custom-list.open .select-options {
-	display: unset;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	gap: 8px;
+	padding: 8px;
 	position: absolute;
-	background-color: rgb(255, 255, 255);
+	background-color: var(--background-color);
 	border-radius: 2px;
-	border: rgb(112, 112, 112) 1px solid;
+	border: var(--border-color) 1px solid;
 	box-shadow: #0000006b 0px 3px 8px;
 	top: 100%;
 	left: 0;
-	right: 0;
 	z-index: 99;
 	max-height: 50vh;
 	overflow-y: auto;
@@ -70,5 +88,11 @@ const select = (option: string) => {
 
 .custom-list .select-options {
 	display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+	img {
+		filter: invert(1);
+	}
 }
 </style>

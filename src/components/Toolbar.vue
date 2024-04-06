@@ -34,7 +34,7 @@ const toolList = computed(() => {
 	padding: 14px 5px 8px 8px;
 	top: 30px;
 	left:0px;
-	background-color: #fff;
+	background-color: var(--background-color);
 	border-radius: 0 0 3px 0;
 	z-index: 20;
 	max-height: calc(100vh - 30px);
@@ -45,7 +45,7 @@ const toolList = computed(() => {
 .tool {
 	position: relative;
 	display:inline-block;
-	background-color: #fff;
+	background-color: var(--background-color);
 	line-height: 0;
 	text-align: center;
 	font-size: 0;
@@ -61,9 +61,15 @@ const toolList = computed(() => {
 	border: none;
 }
 
+@media (prefers-color-scheme: dark) {
+	.tool img {
+		filter: invert(1);
+	}
+}
+
 .tool:hover,
 .tool.active {
-	background-color: #e2e2e2;
+	background-color: var(--card-color);
 }
 
 .tool.ducked {

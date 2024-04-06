@@ -24,43 +24,43 @@ const canHaveText = computed(() => {
 
 <template>
 	<PanelContent>
-		<div class="panel-section">
+		<label class="panel-section">
 			<h2>{{ $t("type") }}</h2>
 			<CustomList v-model="settings.type" :options="pointTypes" />
-		</div>
-		<div class="panel-section">
+		</label>
+		<label class="panel-section">
 			<h2>{{ $t("invisible") }}</h2>
 			<BooleanInput v-model="settings.invisible" />
-		</div>
-		<div class="panel-section" v-if="canHaveValue">
+		</label>
+		<label class="panel-section" v-if="canHaveValue">
 			<h2>{{ $t("value") }}</h2>
 			<input type="text" v-model="settings.value" />
-		</div>
-		<div class="panel-section" v-if="canHaveText">
+		</label>
+		<label class="panel-section" v-if="canHaveText">
 			<h2>{{ $t("text") }}</h2>
 			<input type="text" v-model="settings.text" />
-		</div>
-		<div class="panel-section" v-if="settings.type === `station`">
+		</label>
+		<label class="panel-section" v-if="settings.type === `station`">
 			<h2>{{ $t("stationName") }}</h2>
 			<input type="text" v-model="settings.name" />
-		</div>
+		</label>
 		<Foldable>
 			<template #title>
 				{{ $t("advanced") }}
 			</template>
-			<div class="panel-section">
+			<label class="panel-section">
 				<h2>{{ $t("id") }}</h2>
 				<input type="text" v-model="settings.id" />
-			</div>
-			<div class="panel-section">
+			</label>
+			<label class="panel-section">
 				<h2>{{ $t("clip") }}</h2>
 				<select v-model="settings.clip">
 					<option value="default">{{ $t("clip.default") }}</option>
 					<option value="on">{{ $t("clip.on") }}</option>
 					<option value="off">{{ $t("clip.off") }}</option>
 				</select>
-			</div>
-			<div class="panel-section">
+			</label>
+			<label class="panel-section">
 				<h2>{{ $t("scale") }}</h2>
 				<select v-model="settings.scale">
 					<option value="xs">XS</option>
@@ -69,19 +69,19 @@ const canHaveText = computed(() => {
 					<option value="l">L</option>
 					<option value="xl">XL</option>
 				</select>
-			</div>
-			<div class="panel-section">
+			</label>
+			<label class="panel-section">
 				<h2>{{ $t("place") }}</h2>
 				<select v-model="settings.place">
 					<option value="top">{{ $t("place.top") }}</option>
 					<option value="bottom">{{ $t("place.bottom") }}</option>
 					<option value="default">{{ $t("place.default") }}</option>
 				</select>
-			</div>
-			<div class="panel-section">
+			</label>
+			<label class="panel-section">
 				<h2>{{ $t("otherSettings") }}</h2>
 				<textarea v-model="settings.otherSettings" />
-			</div>
+			</label>
 		</Foldable>
 	</PanelContent>
 </template>

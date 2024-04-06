@@ -9,13 +9,13 @@ const options = pointOptions;
 
 <template>
 	<PanelContent>
-		<div class="panel-section">
+		<label class="panel-section">
 			<h2>{{ $t("type") }}</h2>
 			<CustomList v-model="options.type" :options="pointTypes" />
-		</div>
-		<div class="panel-section" v-if="options.type === `station`">
+		</label>
+		<label class="panel-section" v-if="options.type === `station`">
 			<h2>{{ $t("stationName") }}</h2>
 			<input type="text" v-model="options.stationName" />
-		</div>
+		</label>
 	</PanelContent>
-</template>../../../objectSettings/pointSymbolList../../../tools/point
+</template>

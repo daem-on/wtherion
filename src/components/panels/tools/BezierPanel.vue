@@ -12,17 +12,17 @@ const options = bezierOptions;
 
 <template>
 	<PanelContent v-if="showBezierPanel">
-		<div class="panel-section">
+		<label class="panel-section">
 			<h2>{{ $t("type") }}</h2>
 			<CustomList v-model="options.type" :options="wallTypes" :imageRoot="`assets/rendered`" />
-		</div>
-		<div class="panel-section" v-if="[`wall`, `border`, `water-flow`].includes(options.type)">
+		</label>
+		<label class="panel-section" v-if="[`wall`, `border`, `water-flow`].includes(options.type)">
 			<h2>{{ $t("subtype") }}</h2>
 			<CustomList v-model="options.subtype" :options="subtypeList.wall" :imageRoot="`assets/rendered/subtype`" />
-		</div>
-		<div class="panel-section" v-if="options.type === `slope`">
+		</label>
+		<label class="panel-section" v-if="options.type === `slope`">
 			<h2>{{ $t("size") }}</h2>
 			<IntInput v-model="options.size" />
-		</div>
+		</label>
 	</PanelContent>
-</template>../../../tools/bezier../../../res/subtype-list.json../../../res/wallTypes
+</template>

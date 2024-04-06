@@ -7,7 +7,7 @@ import { point } from "./tools/point";
 import { viewgrab } from "./tools/viewgrab";
 import { viewzoom } from "./tools/viewzoom";
 import { inspect } from "./tools/inspect";
-import { computed, ref } from "vue";
+import { Component, Ref, computed, ref, watch } from "vue";
 import { KeySpec, registerAction } from "./input";
 
 const createToolRegistry = <Id extends string>(initializers: { [K in Id]: WtToolInitializer<K> }) => initializers;
@@ -50,6 +50,7 @@ type EventEmitter = <T extends keyof ToolEventMap>(eventName: T, event: ToolEven
 type WtTool<Id extends string = ToolId> = {
 	tool: paper.Tool,
 	definition: ToolDefinition<Id>,
+	uiState?: ToolUiState,
 	emit: EventEmitter,
 };
 
@@ -57,6 +58,7 @@ type WtToolInitializer<Id extends string> = () => WtTool<Id>;
 
 export function defineTool<Id extends string>(settings: {
 	definition: ToolDefinition<Id>,
+	uiState?: ToolUiState,
 	setup: (on: EventHandlerRegisterer, tool: paper.Tool) => void
 }): WtToolInitializer<Id> {
 	return (): WtTool<Id> => {
@@ -79,6 +81,7 @@ export function defineTool<Id extends string>(settings: {
 		return {
 			tool,
 			emit: (eventName, event) => tool.emit(eventName, event as any),
+			uiState: settings.uiState,
 			definition: settings.definition,
 		};
 	};
@@ -93,13 +96,12 @@ function createActionCallback(toolId: string, action: string) {
 	};
 }
 
-type ToolSettings = {
-	[key: string]: any,
-	id: string
+type ToolUiState = {
+	options: Record<string, any>;
 }
 
-// localstorage
-export function getLocalOptions<T extends ToolSettings>(options: T): T {
+// legacy localstorage
+export function getLocalOptions<T extends { id: string }>(options: T): T {
 	const storageJSON = localStorage.getItem('pg.tools.'+options.id);
 	if (storageJSON && storageJSON.length > 0) {
 		const storageOptions = JSON.parse(storageJSON);
@@ -126,6 +128,25 @@ export function deleteLocalOptions(id: string) {
 	localStorage.removeItem('pg.tools.'+id);
 }
 
+// new localstorage
+function persistOptions(id: ToolId, options: Record<string, any>) {
+	localStorage.setItem(`pg.tools.${id}`, JSON.stringify(options));
+}
+
+function loadOptions(id: ToolId): Record<string, any> {
+	const optionsJSON = localStorage.getItem(`pg.tools.${id}`);
+	return optionsJSON ? JSON.parse(optionsJSON) : {};
+}
+
+function watchOptionsChanges() {
+	watch(() => activeTool.value?.uiState?.options, (options, oldValue) => {
+		const id = activeTool.value?.definition.id;
+		// only persist when values *inside* the object change, not the object itself
+		if (options !== oldValue) return;
+		if (id && options) persistOptions(id, options);
+	}, { deep: true });
+}
+
 export type ToolDefinition<Id extends string> = {
 	id: Id;
 	name: string;
@@ -133,7 +154,7 @@ export type ToolDefinition<Id extends string> = {
 	actions?: {
 		[name: string]: KeySpec;
 	},
-	options: Record<string, any>
+	panel?: Component,
 }
 
 const activeTool = ref<WtTool | undefined>(undefined);
@@ -150,6 +171,12 @@ function initializeTools() {
 		tempTools[key] = registry[key]();
 	}
 	tools.value = tempTools as any;
+	for (const tool of Object.values(tools.value)) {
+		if (tool.uiState) {
+			Object.assign(tool.uiState.options, loadOptions(tool.definition.id));
+		}
+	}
+	watchOptionsChanges();
 }
 
 export function getActiveTool(): WtTool | undefined {
@@ -168,13 +195,12 @@ export function switchTool(tool: WtTool, options?: { force?: true, duck?: true }
 
 	try {
 		const active = activeTool.value;
-		active?.emit("deactivate", undefined);
-		
-		if (active?.definition.id === toolId && !options?.force) {
-			return;
-		}
 
-		if (active?.definition.options.type !== "hidden" && options?.duck) {
+		if (active?.definition.id === toolId && !options?.force) return;
+
+		active?.emit("deactivate", undefined);
+
+		if (active?.definition.type !== "hidden" && options?.duck) {
 			duckedTool.value = active;
 		} else {
 			duckedTool.value = undefined;

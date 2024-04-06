@@ -28,6 +28,8 @@ const actionCallbacks = new Map<string, () => void>();
 
 export function registerAction(name: string, callback: () => void, defaultBind: KeySpec) {
 	actionCallbacks.set(name, callback);
+	if (currentBinds.has(defaultBind))
+		console.warn(`Keybind conflict: ${defaultBind} is already bound to ${currentBinds.get(defaultBind)}`);
 	currentBinds.set(defaultBind, name);
 }
 

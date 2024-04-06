@@ -2,75 +2,47 @@
 // adapted from the paperjs examples (Tools/BezierTool.html)
 
 import paper from "paper";
-import subtypeList from "../res/subtype-list.json";
-import getSettings from "../../src/objectSettings/model/getSettings";
-import { wallTypes } from "../res/wallTypes";
-import toolOptionPanel, { componentList } from "../toolOptionPanel";
+import { markRaw, ref } from "vue";
 import LineSettings from "../../src/objectSettings/model/LineSettings";
-import { defineTool, getLocalOptions, setLocalOptions } from "../tools";
+import getSettings from "../../src/objectSettings/model/getSettings";
+import BezierPanel from "../components/panels/BezierPanel.vue";
 import editTH2 from "../editTH2";
-import * as undo from "../undo";
 import { clearSelection } from "../selection";
+import { defineTool } from "../tools";
+import * as undo from "../undo";
 
-let dirty = false;
-
-function snapshotIfDirty() {
-	if (dirty) {
-		undo.snapshot("bezier");
-		dirty = false;
-	}
-}
-
-let options = {
-	id: "draw",
+export const bezierOptions = ref({
 	type: "wall",
 	subtype: "",
 	size: 0,
-};
+});
 
-const components: componentList<Partial<typeof options>> = {
-	type: {
-		type: "customList",
-		label: "%type%",
-		options: wallTypes,
-	},
-	subtype: {
-		type: "customList",
-		label: "%subtype%",
-		requirements: {type: ["wall", "border", "water-flow"]},
-		options: subtypeList.wall,
-		imageRoot: "assets/rendered/subtype"
-	},
-	size: {
-		type: "int",
-		label: "%size%",
-		requirements: {
-			type: "slope"
-		}
-	}
-};
-	
+export const showBezierPanel = ref(true);
+
 type TypedHitResult<T extends paper.Item> = paper.HitResult & {item: T}
 
 export const bezier = defineTool({
 	definition: {
 		id: 'bezier',
 		name: 'tools.bezier',
-		options,
+		panel: markRaw(BezierPanel),
+		actions: {
+			finish: "enter",
+		}
+	},
+	uiState: {
+		options: bezierOptions.value
 	},
 	setup(on) {
 		on("activate", () => {
-			options = getLocalOptions(options);
-			
-			toolOptionPanel.setupFloating(options, components, function() {
-				setLocalOptions(options);
-			});
+			showBezierPanel.value = true;
 		});
-	
+
 		let path: paper.Path;
 
 		let currentSegment: paper.Segment;
 
+		let dirty = false;
 		let mode: "continue" | "close" | "remove" | "add";
 		let type: string;
 		let hoveredItem: TypedHitResult<paper.Path> = null;
@@ -87,13 +59,29 @@ export const bezier = defineTool({
 			path = editTH2.createPath();
 
 			const settings = getSettings(path) as LineSettings;
+			const options = bezierOptions.value;
 			settings.type = options.type;
 			if (["wall", "border", "water-flow"].includes(options.type))
 				settings.subtype = options.subtype;
 			if (options.type === "slope")
 				settings.size = options.size;
 			editTH2.drawLine(path);
-			jQuery('.toolOptionPanel').remove();
+			
+			showBezierPanel.value = false;
+		}
+
+		function finish() {
+			clearSelection();
+			undo.snapshot('bezier');
+			dirty = false;
+			path = null;
+		}
+
+		function snapshotIfDirty() {
+			if (dirty) {
+				undo.snapshot("bezier");
+				dirty = false;
+			}
 		}
 		
 		on("mousedown", event => {
@@ -220,24 +208,17 @@ export const bezier = defineTool({
 		on("mouseup", event => {
 			if (event.event.button > 0) return;  // only first mouse button
 			
-			if (path && path.closed) {
-				undo.snapshot('bezier');
-				dirty = false;
-				path = null;
-			}
-			
+			if (path && path.closed) finish();
 		});
 
-		on("keydown", event => {
-			if (event.key === "enter") {
-				clearSelection();
-				undo.snapshot('bezier');
-				dirty = false;
-				path = null;
-			}
+		on("action", action => {
+			if (action === "finish") finish();
 		});
 
-		on("deactivate", () => snapshotIfDirty());
+		on("deactivate", () => {
+			snapshotIfDirty();
+			path = null;
+		});
 	},
 });
 	

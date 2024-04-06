@@ -34,7 +34,6 @@ const toolList = computed(() => {
 	padding: 14px 5px 8px 8px;
 	top: 30px;
 	left:0px;
-	width: 76px;
 	background-color: #fff;
 	border-radius: 0 0 3px 0;
 	z-index: 20;

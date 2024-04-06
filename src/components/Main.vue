@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Toolbar from "./Toolbar.vue";
+import Sidebar from "./Sidebar.vue";
 import { onMounted } from "vue";
 import pg from "../init";
 
@@ -11,6 +12,7 @@ onMounted(() => {
 <template>
 	<div class="ui">
 		<Toolbar />
+		<Sidebar />
 	</div>
 
 	<div id="fileDropzone">

@@ -130,7 +130,7 @@ export const select = defineTool({
 	definition: {
 		id: 'select',
 		name: 'tools.itemSelect',
-		commands: {
+		actions: {
 			selectAll: 'ctrl-a',
 			invertSelection: 'ctrl-i',
 			groupSelection: 'ctrl-g',
@@ -440,8 +440,8 @@ export const select = defineTool({
 			}
 		});
 
-		on("command", command => {
-			switch (command) {
+		on("action", action => {
+			switch (action) {
 				case 'selectAll':
 					selection.selectAllItems();
 					break;

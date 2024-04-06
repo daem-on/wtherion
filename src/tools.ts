@@ -40,7 +40,7 @@ type ToolEventMap = {
 	"wheel": WheelEvent,
 	"activate": void,
 	"deactivate": void,
-	"command": string,
+	"action": string,
 };
 
 type EventHandler<T extends keyof ToolEventMap> = (event: ToolEventMap[T]) => void
@@ -68,10 +68,12 @@ export function defineTool<Id extends string>(settings: {
 
 		settings.setup(addEvent, tool);
 
-		if (settings.definition.commands) {
-			for (const command in settings.definition.commands) {
-				const key = settings.definition.commands[command];
-				registerAction(command, createActionCallback(settings.definition.id, command), key);
+		if (settings.definition.actions) {
+			for (const action in settings.definition.actions) {
+				const key = settings.definition.actions[action];
+				const id = settings.definition.id;
+				const name = `${id}.${action}`;
+				registerAction(name, createActionCallback(id, action), key);
 			}
 		}
 		return {
@@ -82,11 +84,11 @@ export function defineTool<Id extends string>(settings: {
 	};
 }
 
-function createActionCallback(toolId: string, command: string) {
+function createActionCallback(toolId: string, action: string) {
 	return () => {
 		const active = activeTool.value;
 		if (active?.definition.id === toolId) {
-			active.emit("command", command);
+			active.emit("action", action);
 		}
 	};
 }
@@ -128,7 +130,7 @@ export type ToolDefinition<Id extends string> = {
 	id: Id;
 	name: string;
 	type?: "hidden";
-	commands?: {
+	actions?: {
 		[name: string]: KeySpec;
 	},
 	options: Record<string, any>

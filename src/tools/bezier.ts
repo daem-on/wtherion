@@ -5,7 +5,7 @@ import paper from "paper";
 import { markRaw, ref } from "vue";
 import LineSettings from "../../src/objectSettings/model/LineSettings";
 import getSettings from "../../src/objectSettings/model/getSettings";
-import BezierPanel from "../components/panels/BezierPanel.vue";
+import BezierPanel from "../components/panels/tools/BezierPanel.vue";
 import editTH2 from "../editTH2";
 import { clearSelection } from "../selection";
 import { defineTool } from "../tools";

@@ -4,7 +4,7 @@
 import paper from "paper";
 import { markRaw, ref } from "vue";
 import { defineTool } from "../../src/tools";
-import DrawPanel from "../components/panels/DrawPanel.vue";
+import DrawPanel from "../components/panels/tools/DrawPanel.vue";
 import editTH2 from "../editTH2";
 import * as math from "../math";
 import LineSettings from "../objectSettings/model/LineSettings";

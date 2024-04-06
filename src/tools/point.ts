@@ -6,7 +6,7 @@ import getSettings from "../objectSettings/model/getSettings";
 import PointSettings from "../objectSettings/model/PointSettings";
 import paper from "paper";
 import { markRaw, ref } from "vue";
-import PointPanel from "../components/panels/PointPanel.vue";
+import PointPanel from "../components/panels/tools/PointPanel.vue";
 
 export const pointOptions = ref({
 	id: "point",

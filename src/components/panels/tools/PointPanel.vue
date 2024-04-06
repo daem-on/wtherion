@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { pointTypes } from "../../objectSettings/pointSymbolList";
-import CustomList from '../common/CustomList.vue';
-import PanelContent from '../common/PanelContent.vue';
-import { pointOptions } from "../../tools/point";
+import { pointTypes } from "../../../objectSettings/pointSymbolList";
+import CustomList from "../../common/CustomList.vue";
+import PanelContent from "../../common/PanelContent.vue";
+import { pointOptions } from "../../../tools/point";
 
 const options = pointOptions;
 </script>
@@ -18,4 +18,4 @@ const options = pointOptions;
 			<input type="text" v-model="options.stationName" />
 		</div>
 	</PanelContent>
-</template>
+</template>../../../objectSettings/pointSymbolList../../../tools/point

@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import PanelContent from '../common/PanelContent.vue';
-import BooleanInput from '../common/BooleanInput.vue';
-import FloatInput from '../common/FloatInput.vue';
-import IntInput from '../common/IntInput.vue';
-import CustomList from '../common/CustomList.vue';
-import { drawOptions } from '../../tools/draw';
-import { wallTypes } from '../../res/wallTypes';
-import subtypeList from '../../res/subtype-list.json';
-import Foldable from '../common/Foldable.vue';
+import PanelContent from "../../common/PanelContent.vue";
+import BooleanInput from "../../common/BooleanInput.vue";
+import FloatInput from "../../common/FloatInput.vue";
+import IntInput from "../../common/IntInput.vue";
+import CustomList from "../../common/CustomList.vue";
+import { drawOptions } from "../../../tools/draw";
+import { wallTypes } from "../../../res/wallTypes";
+import subtypeList from "../../../res/subtype-list.json";
+import Foldable from "../../common/Foldable.vue";
 
 const options = drawOptions;
 </script>
@@ -62,4 +62,4 @@ const options = drawOptions;
 			</div>
 		</Foldable>
 	</PanelContent>
-</template>
+</template>../../../tools/draw../../../res/wallTypes../../../res/subtype-list.json

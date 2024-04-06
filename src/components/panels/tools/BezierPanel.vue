@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { bezierOptions, showBezierPanel } from "../../tools/bezier";
-import subtypeList from "../../res/subtype-list.json";
-import { wallTypes } from '../../res/wallTypes';
-import CustomList from '../common/CustomList.vue';
-import IntInput from '../common/IntInput.vue';
-import PanelContent from '../common/PanelContent.vue';
+import { bezierOptions, showBezierPanel } from "../../../tools/bezier";
+import subtypeList from "../../../res/subtype-list.json";
+import { wallTypes } from "../../../res/wallTypes";
+import CustomList from "../../common/CustomList.vue";
+import IntInput from "../../common/IntInput.vue";
+import PanelContent from "../../common/PanelContent.vue";
 
 const options = bezierOptions;
 
@@ -25,4 +25,4 @@ const options = bezierOptions;
 			<IntInput v-model="options.size" />
 		</div>
 	</PanelContent>
-</template>
+</template>../../../tools/bezier../../../res/subtype-list.json../../../res/wallTypes

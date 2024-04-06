@@ -22,7 +22,5 @@ const activeToolPanel = computed<Component | undefined>(() => {
 	border-radius: 0 0 3px 0;
 	z-index: 20;
 	max-height: calc(100vh - 30px);
-	overflow-y: auto;
-	overflow-x: hidden;
 }
 </style>

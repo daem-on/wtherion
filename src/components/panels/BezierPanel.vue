@@ -14,7 +14,7 @@ const options = bezierOptions;
 	<PanelContent v-if="showBezierPanel">
 		<div class="panel-section">
 			<h2>{{ $t("type") }}</h2>
-			<CustomList v-model="options.type" :options="wallTypes" />
+			<CustomList v-model="options.type" :options="wallTypes" :imageRoot="`assets/rendered`" />
 		</div>
 		<div class="panel-section" v-if="[`wall`, `border`, `water-flow`].includes(options.type)">
 			<h2>{{ $t("subtype") }}</h2>

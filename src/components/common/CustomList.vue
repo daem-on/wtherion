@@ -17,7 +17,6 @@ const onKeydown = (e: KeyboardEvent) => {
 
 const select = (option: string) => {
 	model.value = option;
-	open.value = false;
 };
 
 const menuRef = ref<HTMLElement | null>(null);
@@ -47,7 +46,6 @@ watch(openMenu, value => {
 <style scoped>
 .custom-list {
 	position: relative;
-	font-family: Arial;
 	font-size: 0.85em;
 	max-width: 50ch;
 	min-width: 20ch;

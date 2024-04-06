@@ -5,3 +5,9 @@ const model = defineModel();
 <template>
 	<input type="number" step="1" v-model="model" />
 </template>
+
+<style scoped>
+input {
+	width: 8ch;
+}
+</style>

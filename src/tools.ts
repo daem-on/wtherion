@@ -45,18 +45,12 @@ type ToolEventMap = {
 
 type EventHandler<T extends keyof ToolEventMap> = (event: ToolEventMap[T]) => void
 type EventHandlerRegisterer = <T extends keyof ToolEventMap>(eventName: T, handler: EventHandler<T>) => void;
-
-type CustomHandlers = {
-	onWheel?: EventHandler<"wheel">,
-	onActivate?: EventHandler<"activate">,
-	onDeactivate?: EventHandler<"deactivate">,
-	onCommand?: EventHandler<"command">,
-};
+type EventEmitter = <T extends keyof ToolEventMap>(eventName: T, event: ToolEventMap[T]) => void;
 
 type WtTool<Id extends string = ToolId> = {
 	tool: paper.Tool,
 	definition: ToolDefinition<Id>,
-	customHandlers: CustomHandlers,
+	emit: EventEmitter,
 };
 
 type WtToolInitializer<Id extends string> = () => WtTool<Id>;
@@ -68,37 +62,31 @@ export function defineTool<Id extends string>(settings: {
 	return (): WtTool<Id> => {
 		const tool = new paper.Tool();
 	
-		const customHandlers: CustomHandlers = {};
 		const addEvent: EventHandlerRegisterer = (eventName, handler: EventHandler<any>) => {
-			switch (eventName) {
-				case "wheel": customHandlers.onWheel = handler; break;
-				case "activate": customHandlers.onActivate = handler; break;
-				case "deactivate": customHandlers.onDeactivate = handler; break;
-				case "command": customHandlers.onCommand = handler; break;
-				default: tool.on(eventName, handler);
-			}
+			tool.on(eventName, handler);
 		};
 
 		settings.setup(addEvent, tool);
 
-		if (settings.definition.commands && customHandlers.onCommand) {
+		if (settings.definition.commands) {
 			for (const command in settings.definition.commands) {
 				const key = settings.definition.commands[command];
-				registerAction(command, createActionCallback(settings.definition.id, command, customHandlers.onCommand), key);
+				registerAction(command, createActionCallback(settings.definition.id, command), key);
 			}
 		}
 		return {
 			tool,
-			customHandlers,
+			emit: (eventName, event) => tool.emit(eventName, event as any),
 			definition: settings.definition,
 		};
 	};
 }
 
-function createActionCallback(toolId: string, command: string, handler: EventHandler<"command">) {
+function createActionCallback(toolId: string, command: string) {
 	return () => {
-		if (activeTool.value?.definition.id === toolId) {
-			handler(command);
+		const active = activeTool.value;
+		if (active?.definition.id === toolId) {
+			active.emit("command", command);
 		}
 	};
 }
@@ -178,7 +166,7 @@ export function switchTool(tool: WtTool, options?: { force?: true, duck?: true }
 
 	try {
 		const active = activeTool.value;
-		active?.customHandlers.onDeactivate?.();
+		active?.emit("deactivate", undefined);
 		
 		if (active?.definition.id === toolId && !options?.force) {
 			return;
@@ -192,7 +180,7 @@ export function switchTool(tool: WtTool, options?: { force?: true, duck?: true }
 		
 		const previousTool = active;
 		tool.tool.activate();
-		tool.customHandlers.onActivate?.();
+		tool.emit("activate", undefined);
 		activeTool.value = tool;
 		
 		console.log(`${previousTool?.definition.id} \u2192 ${toolId}`);

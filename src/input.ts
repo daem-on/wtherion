@@ -17,7 +17,7 @@ const keys = [
 	'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
 	'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
 	'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
-	'Enter', 'Backspace', 'Delete', 'Escape', ' ', 'Control'
+	'enter', 'backspace', 'delete', 'escape', ' ', 'control'
 ] as const;
 
 type Key = typeof keys[number];
@@ -91,7 +91,7 @@ function setupKeyboard() {
 	registerAction("global.tool.inspect", () => switchToolById("inspect", { duck: true }), "m");
 	registerAction("global.tool.inspect.up", () => unduckTool(), "m-up");
 
-	registerAction("global.tool.viewzoom.up", unduckViewzoom, "Control-up");
+	registerAction("global.tool.viewzoom.up", unduckViewzoom, "control-up");
 
 	registerAction("global.resetzoom", resetZoom, "ctrl-0");
 	registerAction("global.undo", undo, "ctrl-z");
@@ -100,9 +100,9 @@ function setupKeyboard() {
 	registerAction("global.save", save, "ctrl-s");
 	registerAction("global.export", exportTH2, "ctrl-e");
 
-	registerAction("global.blur", blurCurrent, "Escape");
+	registerAction("global.blur", blurCurrent, "escape");
 
-	registerAction("global.delete", deleteSelection, "Delete");
+	registerAction("global.delete", deleteSelection, "delete");
 }
 
 export function textIsSelected() {
@@ -138,7 +138,7 @@ const setupMouse = function() {
 			if (getActiveTool().definition.id !== "viewzoom")
 				switchToolById("viewzoom", { duck: true });
 		}
-		getActiveTool().customHandlers.onWheel?.(event);
+		getActiveTool().emit("wheel", event);
 	}, { passive: false });
 };
 

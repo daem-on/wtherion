@@ -55,9 +55,9 @@ const canHaveText = computed(() => {
 			<label class="panel-section">
 				<h2>{{ $t("clip") }}</h2>
 				<select v-model="settings.clip">
-					<option value="default">{{ $t("clip.default") }}</option>
-					<option value="on">{{ $t("clip.on") }}</option>
-					<option value="off">{{ $t("clip.off") }}</option>
+					<option :value="0">{{ $t("clip.default") }}</option>
+					<option :value="1">{{ $t("clip.on") }}</option>
+					<option :value="2">{{ $t("clip.off") }}</option>
 				</select>
 			</label>
 			<label class="panel-section">
@@ -73,9 +73,9 @@ const canHaveText = computed(() => {
 			<label class="panel-section">
 				<h2>{{ $t("place") }}</h2>
 				<select v-model="settings.place">
-					<option value="top">{{ $t("place.top") }}</option>
-					<option value="bottom">{{ $t("place.bottom") }}</option>
-					<option value="default">{{ $t("place.default") }}</option>
+					<option :value="2">{{ $t("top") }}</option>
+					<option :value="1">{{ $t("bottom") }}</option>
+					<option :value="0">{{ $t("default") }}</option>
 				</select>
 			</label>
 			<label class="panel-section">

@@ -21,7 +21,7 @@ const keys = [
 ] as const;
 
 type Key = typeof keys[number];
-type KeySpec = `${'ctrl-' | ''}${'shift-' | ''}${Key}${'-up' | ''}`;
+export type KeySpec = `${'ctrl-' | ''}${'shift-' | ''}${Key}${'-up' | ''}`;
 
 const currentBinds = new Map<KeySpec, string>();
 const actionCallbacks = new Map<string, () => void>();
@@ -54,7 +54,7 @@ function getSpec(event: KeyboardEvent, up: boolean): KeySpec {
 	let spec = "";
 	if (event.ctrlKey) spec += "ctrl-";
 	if (event.shiftKey) spec += "shift-";
-	spec += event.key;
+	spec += event.key.toLowerCase();
 	if (up) spec += "-up";
 	return spec as KeySpec;
 }

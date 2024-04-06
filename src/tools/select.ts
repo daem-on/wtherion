@@ -130,19 +130,17 @@ export const select = defineTool({
 	definition: {
 		id: 'select',
 		name: 'tools.itemSelect',
-		usedKeys : {
-			selectAll : 'ctrl-a',
+		commands: {
+			selectAll: 'ctrl-a',
 			invertSelection: 'ctrl-i',
-			groupSelection : 'ctrl-g',
-			ungroupSelection : 'ctrl-shift-g',
+			groupSelection: 'ctrl-g',
+			ungroupSelection: 'ctrl-shift-g',
 			copySelection: 'ctrl-c',
-			pasteSelection : 'ctrl-v'
+			pasteSelection: 'ctrl-v'
 		},
 		options: {},
 	},
 	setup(on) {
-		const keyModifiers: Record<string, boolean> = {};
-				
 		let boundsPath: paper.Path;
 		const boundsScaleHandles = [];
 		const boundsRotHandles = [];
@@ -441,34 +439,28 @@ export const select = defineTool({
 				setSelectionBounds();
 			}
 		});
-		
-		on("keydown", (event: paper.KeyEvent) => {
-			keyModifiers[event.key] = true;
-		});
-		
-		on("keyup", (event: paper.KeyEvent) => {
-			
-			if (keyModifiers.control && keyModifiers.shift) {
-				if (event.key === 'g') {
-					group.ungroupSelection();
-				}
-				
-			} else if (keyModifiers.control
-				&& document.activeElement.tagName !== 'INPUT') {
-				if (event.key === 'a') {
+
+		on("command", command => {
+			switch (command) {
+				case 'selectAll':
 					selection.selectAllItems();
-				} else if (event.key === 'i') {
+					break;
+				case 'invertSelection':
 					selection.invertItemSelection();
-				} else if (event.key === 'g') {
+					break;
+				case 'groupSelection':
 					group.groupSelection();
-				} else if (event.key === 'c') {
+					break;
+				case 'ungroupSelection':
+					group.ungroupSelection();
+					break;
+				case 'copySelection':
 					edit.copySelectionToClipboard();
-				} else if (event.key === 'v') {
+					break;
+				case 'pasteSelection':
 					edit.pasteObjectsFromClipboard();
-				}	
+					break;
 			}
-			
-			keyModifiers[event.key] = false;
 		});
 
 		on("deactivate", () => {

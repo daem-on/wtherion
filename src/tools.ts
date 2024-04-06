@@ -8,6 +8,7 @@ import { viewgrab } from "./tools/viewgrab";
 import { viewzoom } from "./tools/viewzoom";
 import { inspect } from "./tools/inspect";
 import { computed, ref } from "vue";
+import { KeySpec, registerAction } from "./input";
 
 const createToolRegistry = <Id extends string>(initializers: { [K in Id]: WtToolInitializer<K> }) => initializers;
 
@@ -39,6 +40,7 @@ type ToolEventMap = {
 	"wheel": WheelEvent,
 	"activate": void,
 	"deactivate": void,
+	"command": string,
 };
 
 type EventHandler<T extends keyof ToolEventMap> = (event: ToolEventMap[T]) => void
@@ -48,6 +50,7 @@ type CustomHandlers = {
 	onWheel?: EventHandler<"wheel">,
 	onActivate?: EventHandler<"activate">,
 	onDeactivate?: EventHandler<"deactivate">,
+	onCommand?: EventHandler<"command">,
 };
 
 type WtTool<Id extends string = ToolId> = {
@@ -71,15 +74,32 @@ export function defineTool<Id extends string>(settings: {
 				case "wheel": customHandlers.onWheel = handler; break;
 				case "activate": customHandlers.onActivate = handler; break;
 				case "deactivate": customHandlers.onDeactivate = handler; break;
+				case "command": customHandlers.onCommand = handler; break;
 				default: tool.on(eventName, handler);
 			}
 		};
+
 		settings.setup(addEvent, tool);
+
+		if (settings.definition.commands && customHandlers.onCommand) {
+			for (const command in settings.definition.commands) {
+				const key = settings.definition.commands[command];
+				registerAction(command, createActionCallback(settings.definition.id, command, customHandlers.onCommand), key);
+			}
+		}
 		return {
 			tool,
 			customHandlers,
 			definition: settings.definition,
 		};
+	};
+}
+
+function createActionCallback(toolId: string, command: string, handler: EventHandler<"command">) {
+	return () => {
+		if (activeTool.value?.definition.id === toolId) {
+			handler(command);
+		}
 	};
 }
 
@@ -120,8 +140,8 @@ export type ToolDefinition<Id extends string> = {
 	id: Id;
 	name: string;
 	type?: "hidden";
-	usedKeys?: {
-		[name: string]: string;
+	commands?: {
+		[name: string]: KeySpec;
 	},
 	options: Record<string, any>
 }

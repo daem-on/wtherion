@@ -139,7 +139,6 @@ export const select = defineTool({
 			copySelection: 'ctrl-c',
 			pasteSelection: 'ctrl-v'
 		},
-		options: {},
 	},
 	setup(on) {
 		let boundsPath: paper.Path;

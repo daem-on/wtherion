@@ -74,11 +74,12 @@ export const detailselect = defineTool({
 	definition: {
 		id: 'detailselect',
 		name: 'tools.detailSelect',
-		options: {},
+		actions: {
+			selectAll: 'ctrl-a',
+			invertSelection: 'ctrl-i'
+		}
 	},
 	setup(on) {
-		const keyModifiers: Record<string, boolean> = {};
-		
 		const hitOptions = {
 			segments: true,
 			stroke: true,
@@ -365,20 +366,16 @@ export const detailselect = defineTool({
 			updateWindow();
 			drawGuides();
 		});
-		
-		on("keydown", (event: paper.KeyEvent) => {
-			keyModifiers[event.key] = true;
-		});
-		
-		on("keyup", (event: paper.KeyEvent) => {
-			if (keyModifiers.control) {
-				if (event.key === 'a') {
+
+		on("action", action => {
+			switch (action) {
+				case "selectAll":
 					selection.selectAllSegments();
-				} else if (event.key === 'i') {
+					break;
+				case "invertSelection":
 					selection.invertSegmentSelection();
-				}
+					break;
 			}
-			keyModifiers[event.key] = false;
 		});
 		
 		on("deactivate", () => {

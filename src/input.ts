@@ -23,14 +23,15 @@ const keys = [
 type Key = typeof keys[number];
 export type KeySpec = `${'ctrl-' | ''}${'shift-' | ''}${Key}${'-up' | ''}`;
 
-const currentBinds = new Map<KeySpec, string>();
+const currentBinds = new Map<KeySpec, Set<string>>();
 const actionCallbacks = new Map<string, () => void>();
 
 export function registerAction(name: string, callback: () => void, defaultBind: KeySpec) {
 	actionCallbacks.set(name, callback);
-	if (currentBinds.has(defaultBind))
-		console.warn(`Keybind conflict: ${defaultBind} is already bound to ${currentBinds.get(defaultBind)}`);
-	currentBinds.set(defaultBind, name);
+	if (!currentBinds.has(defaultBind)) {
+		currentBinds.set(defaultBind, new Set());
+	}
+	currentBinds.get(defaultBind).add(name);
 }
 
 function loadCustomKeybinds() {
@@ -54,7 +55,7 @@ function keySpecIsValid(input: string): input is KeySpec {
 
 function getSpec(event: KeyboardEvent, up: boolean): KeySpec {
 	let spec = "";
-	if (event.ctrlKey) spec += "ctrl-";
+	if (event.ctrlKey || event.metaKey) spec += "ctrl-";
 	if (event.shiftKey) spec += "shift-";
 	spec += event.key.toLowerCase();
 	if (up) spec += "-up";
@@ -67,8 +68,10 @@ function setupKeyboard() {
 		if (event.repeat) return;
 		const spec = getSpec(event, up);
 		if (currentBinds.has(spec)) {
-			const action = currentBinds.get(spec);
-			actionCallbacks.get(action)();
+			const actions = currentBinds.get(spec);
+			for (const action of actions) {
+				actionCallbacks.get(action)();
+			}
 			event.preventDefault();
 		}
 	}

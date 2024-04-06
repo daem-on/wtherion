@@ -18,6 +18,7 @@ import * as selection from "../selection";
 import paper from "paper";
 import LineSettings from "../../src/objectSettings/model/LineSettings";
 import { defineTool } from "../tools";
+import { triggers } from "../triggers";
 
 const menuEntries = {
 	editTitle: {
@@ -170,11 +171,6 @@ export const select = defineTool({
 		let rotItems: paper.Item[] = [];
 		let rotGroupPivot: paper.Point;
 		const prevRot: number[] = [];
-		
-		jQuery(document).on('DeleteItems Undo Redo Grouped Ungrouped SelectionChanged', function(){
-			setSelectionBounds();
-			updateWindow();
-		});
 
 		on("activate", () => {
 			setSelectionBounds();
@@ -185,6 +181,7 @@ export const select = defineTool({
 			//pg.toolOptionPanel.setup(options, components, function(){ });
 			
 			menu.setupToolEntries(menuEntries);
+			triggers.onAny(['DeleteItems', 'Undo', 'Redo', 'Grouped', 'Ungrouped', 'SelectionChanged'], triggerHandler);
 		});
 
 		on("mousedown", event => {
@@ -467,8 +464,13 @@ export const select = defineTool({
 			hover.clearHoveredItem();
 			removeBoundsPath();
 			menu.clearToolEntries();
-			jQuery(document).off('DeleteItems Undo Redo Grouped Ungrouped SelectionChanged');
+			triggers.offAny(['DeleteItems', 'Undo', 'Redo', 'Grouped', 'Ungrouped', 'SelectionChanged'], triggerHandler);
 		});
+
+		function triggerHandler() {
+			setSelectionBounds();
+			updateWindow();
+		}
 
 		const setSelectionBounds = function() {
 			removeBoundsPath();

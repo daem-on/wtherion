@@ -3,6 +3,7 @@ import * as pgLayer from "./layer";
 import editTH2 from "./editTH2";
 import * as wtConfig from "./filesio/configManagement";
 import * as selection from "./selection";
+import { triggers } from "./triggers";
 
 let mode = "normal";
 
@@ -72,7 +73,7 @@ export function setup() {
 	
 	updateLayerValues();
 	
-	jQuery(document).on('LayerAdded LayerRemoved', function() {
+	triggers.onAny(["LayerAdded", "LayerRemoved"], function() {
 		updateLayerList();
 	});
 	

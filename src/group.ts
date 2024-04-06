@@ -2,6 +2,7 @@ import * as selection from "./selection";
 import * as undo from "./undo";
 import * as statusbar from "./statusbar";
 import { getRootItem, isGroupItem } from "./item";
+import { triggers } from "./triggers";
 
 // function related to groups and grouping
 
@@ -12,7 +13,7 @@ export function groupSelection() {
 		selection.clearSelection();
 		selection.setItemSelection(group, true);
 		undo.snapshot('groupSelection');
-		jQuery(document).trigger('Grouped');
+		triggers.emit("Grouped");
 		return group;
 	} else {
 		return false;
@@ -30,7 +31,7 @@ export function ungroupSelection() {
 export function groupItems(items) {
 	if(items.length > 0) {
 		const group = new paper.Group(items);
-		jQuery(document).trigger('Grouped');
+		triggers.emit("Grouped");
 		undo.snapshot('groupItems');
 		return group;
 	} else {
@@ -57,7 +58,7 @@ export function ungroupItems(items) {
 	for(let j=0; j<emptyGroups.length; j++) {
 		emptyGroups[j].remove();
 	}
-	jQuery(document).trigger('Ungrouped');
+	triggers.emit("Ungrouped");
 	undo.snapshot('ungroupItems');
 }
 

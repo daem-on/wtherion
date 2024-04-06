@@ -2,6 +2,7 @@
 // slightly modifed from https://github.com/memononen/stylii
 import paper from "paper";
 import * as layer from "./layer";
+import { triggers } from "./triggers";
 
 type UndoState = {
 	type: string,
@@ -23,7 +24,7 @@ export function snapshot(type: string) {
 	};
 	
 	// remove all states after the current head
-	if(head < states.length-1) {
+	if (head < states.length-1) {
 		states = states.slice(0, head+1);
 	}
 	
@@ -31,31 +32,31 @@ export function snapshot(type: string) {
 	states.push(state);
 	
 	// limit states to maxUndos by shifing states (kills first state)
-	if(states.length > maxUndos) {
+	if (states.length > maxUndos) {
 		states.shift();
 	}
 	
 	// set the head to the states length
 	head = states.length-1;
 	
-	jQuery(document).trigger("Snapshot");
+	triggers.emit("Snapshot");
 }
 
 
 export function undo() {
-	if(head > 0) {
+	if (head > 0) {
 		head--;
 		restore(states[head]);
-		jQuery(document).trigger('Undo').trigger("HistoryChanged");
+		triggers.emitAll(["Undo", "HistoryChanged"]);
 	}
 }
 
 
 export function redo() {
-	if(head < states.length-1) {
+	if (head < states.length-1) {
 		head++;
 		restore(states[head]);
-		jQuery(document).trigger('Redo').trigger("HistoryChanged");
+		triggers.emitAll(["Redo", "HistoryChanged"]);
 	}
 }
 

@@ -12,17 +12,16 @@ import { setActiveLayer } from "./layer";
 import getSettings from "./objectSettings/model/getSettings";
 import * as tools from "./tools";
 import * as undo from "./undo";
+import { triggers } from "./triggers";
 
-const activeTool = tools.getActiveTool();
-export function getSelectionMode() {
-	if(activeTool) {
-		const activeToolID = activeTool.options.id;
-		if(activeToolID === 'detailselect') {
-			return 'Segment';
-		} else {
-			return 'Item';
-		}
+export function getSelectionMode(): "Segment" | "Item" | undefined {
+	const activeToolId = tools.getActiveTool()?.definition.id;
+	if (activeToolId === "detailselect") {
+		return 'Segment';
+	} else if (activeToolId === "select") {
+		return 'Item';
 	}
+	return;
 }
 
 
@@ -52,7 +51,7 @@ export function focusItem(item: paper.Item): void {
 	}
 	item.selected = true;
 	paper.view.center = item.bounds.center;
-	jQuery(document).trigger('SelectionChanged');
+	triggers.emit("SelectionChanged");
 }
 
 export function selectAllSegments() {
@@ -88,7 +87,7 @@ export function clearSelection() {
 	
 	statusbar.update();
 	hover.clearHoveredItem();
-	jQuery(document).trigger('SelectionChanged');
+	triggers.emit("SelectionChanged");
 }
 
 
@@ -99,7 +98,7 @@ export function invertItemSelection() {
 		items[i].selected = !items[i].selected;
 	}
 	
-	jQuery(document).trigger('SelectionChanged');
+	triggers.emit("SelectionChanged");
 }
 
 
@@ -115,45 +114,38 @@ export function invertSegmentSelection() {
 		}
 	}
 	
-	//jQuery(document).trigger('SelectionChanged');
+	//triggers.emit("SelectionChanged");
 }
 
 
 export function deleteSelection() {
 	const selectionMode = getSelectionMode();
 	
-	if(selectionMode === 'Segment') {
+	if (selectionMode === 'Segment') {
 		deleteSegmentSelection();
 	} else {
 		deleteItemSelection();
 	}
-}
-
-
-export function deleteItemSelection() {
-	const items = getSelectedItems();
-	for(let i=0; i<items.length; i++) {
-		items[i].remove();
-	}
 	
-	jQuery(document).trigger('DeleteItems');
-	jQuery(document).trigger('SelectionChanged');
+	triggers.emitAll(["DeleteItems", "SelectionChanged"]);
 	paper.project.view.update();
 	undo.snapshot('deleteItemSelection');
 }
 
 
-export function deleteSegmentSelection() {
-	
+export function deleteItemSelection() {
 	const items = getSelectedItems();
-	for(let i=0; i<items.length; i++) {
+	for (let i=0; i<items.length; i++) {
+		items[i].remove();
+	}
+}
+
+
+export function deleteSegmentSelection() {
+	const items = getSelectedItems();
+	for (let i=0; i<items.length; i++) {
 		deleteSegments(items[i]);
 	}
-	
-	jQuery(document).trigger('DeleteSegments');
-	jQuery(document).trigger('SelectionChanged');
-	paper.project.view.update();
-	undo.snapshot('deleteSegmentSelection');
 }
 
 
@@ -324,7 +316,7 @@ export function setItemSelection(item: paper.Item, state: boolean) {
 	}
 	statusbar.update();
 	
-	jQuery(document).trigger('SelectionChanged');
+	triggers.emit("SelectionChanged");
 	
 }
 

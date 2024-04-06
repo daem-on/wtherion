@@ -11,6 +11,7 @@ import * as wtConfig from "../filesio/configManagement";
 import { getSelectedItems } from "../selection";
 import * as tools from "../tools";
 import toolOptionPanel from "../toolOptionPanel";
+import { Ref, ref } from "vue";
 
 export type objectOptionPanelConfig = {
 	options: Record<string, any>,
@@ -22,8 +23,11 @@ function removeWindow() {
 	jQuery('.toolOptionPanel').remove();
 }
 
+export const selectedObjects: Ref<PaperItemType[]> = ref([]);
+
 export function updateWindow() {
 	const selected = getSelectedItems() as PaperItemType[];
+	selectedObjects.value = selected;
 	
 	removeWindow();
 	

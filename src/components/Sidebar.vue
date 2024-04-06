@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import { computed, type Component } from 'vue';
 import { activeToolRef } from '../tools';
-import { type Component, computed } from 'vue';
+import ObjectOptionPanel from './panels/ObjectOptionPanel.vue';
 
 const activeToolPanel = computed<Component | undefined>(() => {
 	return activeToolRef.value?.definition.panel;
@@ -9,6 +10,7 @@ const activeToolPanel = computed<Component | undefined>(() => {
 <template>
 	<div class="sidebar">
 		<component :is="activeToolPanel" />
+		<ObjectOptionPanel />
 	</div>
 </template>
 

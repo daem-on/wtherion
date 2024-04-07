@@ -4,9 +4,10 @@ import Foldable from '../../common/Foldable.vue';
 import PanelContent from '../../common/PanelContent.vue';
 import getSettings from '../../../objectSettings/model/getSettings';
 import { pointTypes } from '../../../objectSettings/pointSymbolList';
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 import BooleanInput from '../../common/BooleanInput.vue';
 import PanelSection from '../../common/PanelSection.vue';
+import editTH2 from '../../../editTH2';
 
 const props = defineProps<{
 	selection: paper.Shape
@@ -21,6 +22,10 @@ const canHaveValue = computed(() => {
 const canHaveText = computed(() => {
 	return ["label", "remark", "continuation"].includes(settings.value.type);
 });
+
+watch(settings, () => {
+	editTH2.drawPoint(props.selection);
+}, { deep: true });
 </script>
 
 <template>

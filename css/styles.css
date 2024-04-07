@@ -8,6 +8,7 @@ body, html {
 body {
 	font-family: 'Poppins', sans-serif;
 	--primary-color: #3AAB75;
+	--hover-color: #3aab7434;
 }
 
 @media (prefers-color-scheme: dark) {

@@ -77,7 +77,7 @@ export default {
 		this.layerPanel.setup();
 		historyPanel.setup();
 		launchQueue.setup();
-		setupCustomRenderer()
+		setupCustomRenderer();
 	},
 };
 

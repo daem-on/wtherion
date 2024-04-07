@@ -1,9 +1,11 @@
+import { Component, computed, ref } from "vue";
+
 export function notice(msg, type) {
 	const $fader = jQuery('<div class="modal fader admin">');
 	const $container = jQuery('<div class="container '+type+'">');
 	const $header = jQuery('<h2 class="modalTitle">Notice</h2>');
 	const $okButton = jQuery('<button class="okButton adminButton">Ok</button>');
-	if(type === 'error') {
+	if (type === 'error') {
 		$header.text('Error');
 	}
 	const $message = jQuery('<p>'+msg+'</p>');
@@ -24,7 +26,7 @@ export function notice(msg, type) {
 }
 
 export function floater(id, title, html, width?, top?) {
-	if(jQuery('#'+id).length > 0) return;
+	if (jQuery('#'+id).length > 0) return;
 	
 	const $container = jQuery('<div id="'+id+'" class="modal floater">');
 	const $header = jQuery('<header>');
@@ -116,4 +118,18 @@ export function form(html, title, callback) {
 			'margin-top': -$container.outerHeight()*0.5+'px' 
 		});
 	}, 10);
+}
+
+export type DialogData<T> = { id: string, title: string, content: T };
+export type DialogComponent<T> = Component<{ data: DialogData<T> }>;
+
+const activeDialogs = ref(new Map<string, { component: DialogComponent<any>, data: DialogData<any> }>());
+export const activeDialogList = computed(() => Array.from(activeDialogs.value.values()));
+
+export function addDialog<T>(component: DialogComponent<T>, data: DialogData<T>): void {
+	activeDialogs.value.set(data.id, { component, data });
+}
+
+export function removeDialog(id: string): void {
+	activeDialogs.value.delete(id);
 }

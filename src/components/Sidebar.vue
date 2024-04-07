@@ -2,6 +2,7 @@
 import { computed, type Component } from 'vue';
 import { activeToolRef } from '../tools';
 import ObjectOptionPanel from './panels/ObjectOptionPanel.vue';
+import MainMenu from './menu/MainMenu.vue';
 
 const activeToolPanel = computed<Component | undefined>(() => {
 	return activeToolRef.value?.definition.panel;
@@ -9,15 +10,20 @@ const activeToolPanel = computed<Component | undefined>(() => {
 </script>
 <template>
 	<div class="sidebar">
-		<component :is="activeToolPanel" />
-		<ObjectOptionPanel />
+		<MainMenu />
+		<div class="sidebar-content">
+			<component :is="activeToolPanel" />
+			<ObjectOptionPanel />
+		</div>
 	</div>
 </template>
 
 <style scoped>
 .sidebar {
+	border-right: var(--border-color) solid 1px;
+}
+.sidebar-content {
 	padding: 8px;
 	background-color: var(--background-color);
-	border-right: var(--border-color) solid 1px;
 }
 </style>

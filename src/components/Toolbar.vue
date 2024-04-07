@@ -52,10 +52,10 @@ watch(() => enableCustomRender.value, value => {
 	flex-direction: column;
 	gap: 4px;
 	padding: 8px;
-	top: 30px;
-	left:0px;
+	top: 0px;
+	left: 0px;
 	background-color: var(--background-color);
-	border-radius: 0 0 3px 0;
+	border-radius: 4px;
 	z-index: 20;
 	max-height: calc(100vh - 30px);
 	overflow-y: auto;

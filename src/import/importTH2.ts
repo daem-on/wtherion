@@ -9,6 +9,7 @@ import { showMultipleFileSelect } from "../filesio/saveManagement/saveManagement
 import { updateLayerList } from "../layerPanel";
 import * as undo from "../undo";
 import editTH2 from "../editTH2";
+import paper from "paper";
 
 const toPoint = function(global: string[], global2: string[] = undefined) {
 	if (global2)

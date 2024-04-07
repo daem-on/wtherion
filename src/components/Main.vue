@@ -6,6 +6,8 @@ import pg from "../init";
 import leftPanelOpenUrl from "../../assets/ui/left_panel_open.svg";
 import leftPanelCloseUrl from "../../assets/ui/left_panel_close.svg";
 import ToolButton from "./common/ToolButton.vue";
+import DialogContainer from "./dialogs/DialogContainer.vue";
+import { cancelAll, drop } from "../filesio/dropfiles";
 
 onMounted(() => {
 	pg.init();
@@ -20,6 +22,7 @@ watch(showSidebar, () => {
 
 <template>
 	<main>
+		<DialogContainer />
 		<Sidebar v-if="showSidebar" />
 		<div class="canvas" id="fileDropzone">
 			<div class="floating-ui">
@@ -32,9 +35,9 @@ watch(showSidebar, () => {
 				id="paperCanvas"
 				data-paper-resize="true"
 				data-paper-hidpi="off"
-				ondragenter="pg.dropfiles.cancelAll(event);"
-				ondragover="pg.dropfiles.cancelAll(event);"
-				ondrop="pg.dropfiles.cancelAll(event); pg.dropfiles.drop(event);"
+				@dragenter="cancelAll($event);"
+				@dragover="cancelAll($event);"
+				@drop="cancelAll($event); drop($event);"
 			></canvas>
 		</div>
 	</main>

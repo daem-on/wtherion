@@ -1,12 +1,17 @@
-import { floater } from "./modal";
+import { addDialog, floater } from "./modal";
 import getSettings from "./objectSettings/model/getSettings";
 import paper from "paper";
 import { focusItem } from "./selection";
+import SearchDialog from "./components/dialogs/SearchDialog.vue";
 
 const results: paper.Item[] = [];
 let currentIndex = 0;
 
 export function openSearchDialog() {
+	addDialog(SearchDialog, { id: "searchWindow", content: undefined, title: "Search" });
+
+	return; // legacy code below
+
 	jQuery("#searchWindow").remove();
 	results.length = 0;
 

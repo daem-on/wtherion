@@ -7,7 +7,7 @@ const open = ref(false);
 
 <template>
 	<div class="foldable">
-		<h2 @click="open = !open">
+		<h2 @click="open = !open; $event.stopPropagation()">
 			<slot name="title"></slot>
 			{{ open ? "⯅" : "⯆" }}
 		</h2>
@@ -21,7 +21,7 @@ const open = ref(false);
 .foldable {
 	margin: 8px 0;
 	border: var(--border-color) solid 1px;
-	border-radius: 3px;
+	border-radius: 4px;
 }
 
 h2 {

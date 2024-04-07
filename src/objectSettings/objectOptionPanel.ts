@@ -30,6 +30,8 @@ export function updateWindow() {
 	selectedObjects.value = selected;
 	
 	removeWindow();
+
+	return; // legacy code below
 	
 	let config: objectOptionPanelConfig;
 

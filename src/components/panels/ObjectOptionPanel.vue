@@ -59,7 +59,7 @@ const isSingleSegment = computed(() => {
 					<MultipleLinePanel :selection="selectedObjects" />
 				</template>
 				<template v-else-if="isPoint">
-					<MultiplePointPanel :selection="selectedObjects" />
+					<MultiplePointPanel :selection="(selectedObjects as paper.Shape[])" />
 				</template>
 			</template>
 			<template v-else>

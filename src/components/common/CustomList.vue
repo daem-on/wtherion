@@ -7,6 +7,7 @@ const model = defineModel<string>();
 defineProps<{
 	options: string[];
 	imageRoot?: string;
+	placeholder?: string;
 }>();
 
 const open = ref(false);
@@ -33,7 +34,7 @@ watch(openMenu, value => {
 
 <template>
 	<div class="custom-list" :class="{ open }" ref="menuRef">
-		<input type="text" v-model="model" @click="open = !open" @keydown="onKeydown" />
+		<input type="text" v-model="model" @click="open = !open" @keydown="onKeydown" :placeholder="placeholder" />
 		<div class="select-options">
 			<div v-for="option in options" :key="option" @click="select(option)">
 				<img v-if="imageRoot" :src="`${imageRoot}/${option || 'empty'}.svg`" class="crop-svg" />

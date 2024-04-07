@@ -164,5 +164,6 @@
 	"search.noResults": "No results found",
 	"load.title": "Saved files",
 	"edit.validationResult": "Validation result",
-	"edit.validationSuccess": "Validation successful"
+	"edit.validationSuccess": "Validation successful",
+	"mixed": "(mixed)"
 }

@@ -30,6 +30,7 @@ import * as historyPanel from "./historyPanel";
 
 import paper from "paper";
 import {setup as configSetup} from "./filesio/configManagement";
+import { setupCustomRenderer } from "./view";
 
 // functions related to initializing pg
 
@@ -76,6 +77,7 @@ export default {
 		this.layerPanel.setup();
 		historyPanel.setup();
 		launchQueue.setup();
+		setupCustomRenderer()
 	},
 };
 

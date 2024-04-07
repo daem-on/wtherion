@@ -11,6 +11,8 @@ import * as scrapOptions from "./scrapOptions";
 import { snapshot } from "./undo";
 
 import paper from "paper";
+import { updateWindow } from "./objectSettings/objectOptionPanel";
+import { reactive } from "vue";
 
 const typeColors
 	= generateColors(colorDefs.typeColors);
@@ -174,10 +176,12 @@ export default {
 		if (!settings || settings.className !== "LineSettings") return;
 
 		const oldSettings = settings;
-		line.data.therionData = AreaSettings.defaultSettings();
-		line.data.therionData.lineSettings = oldSettings;
-		line.data.therionData.type = "water";
+		const lineData = reactive(line.data);
+		lineData.therionData = AreaSettings.defaultSettings();
+		lineData.therionData.lineSettings = oldSettings;
+		lineData.therionData.type = "water";
 		this.drawArea(line as paper.Path);
+		updateWindow();
 	},
 
 	areaToLine: function() {
@@ -189,8 +193,9 @@ export default {
 		if (!settings || settings.className !== "AreaSettings") return;
 
 		const newSettings = area.data.therionData.lineSettings;
-		area.data.therionData = newSettings;
+		reactive(area.data).therionData = newSettings;
 		this.drawLine(area as paper.Path);
+		updateWindow();
 	},
 
 	toggleItemsLocked: function() {
@@ -198,6 +203,13 @@ export default {
 		for (const item of selection)
 			item.locked = !item.locked;
 		snapshot("Toggle locked");
+	},
+
+	unlockSelection: function() {
+		const selection = getSelectedItems();
+		for (const item of selection)
+			item.locked = false;
+		snapshot("Unlock selection");
 	},
 
 	changeStationsNamespace: function(addToEmpty = false) {

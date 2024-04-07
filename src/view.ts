@@ -6,19 +6,19 @@ import getSettings from "./objectSettings/model/getSettings.ts";
 
 let enableCustomRender = true;
 
-function drawSpikyLine(path: paper.Path, context: CanvasRenderingContext2D) {
+function drawSpikyLine(path: paper.Path, context: CanvasRenderingContext2D, reverse: boolean) {
 	context.beginPath();
 	for (let o = 0; o < path.length; o += 20) {
 		const pos = path.getLocationAt(o).point;
 		const normal = path.getNormalAt(o);
 		context.moveTo(pos.x, pos.y);
-		const target = pos.add(normal.multiply(10));
+		const target = pos.add(normal.multiply(reverse ? -10 : 10));
 		context.lineTo(target.x, target.y);
 	}
 	context.stroke();
 }
 
-function drawTriangleLine(path: paper.Path, context: CanvasRenderingContext2D) {
+function drawTriangleLine(path: paper.Path, context: CanvasRenderingContext2D, reverse: boolean) {
 	context.beginPath();
 	for (let o = 3; o < path.length - 3; o += 20) {
 		const posL = path.getLocationAt(o-3).point;
@@ -26,7 +26,7 @@ function drawTriangleLine(path: paper.Path, context: CanvasRenderingContext2D) {
 		const posR = path.getLocationAt(o+3).point;
 		const normal = path.getNormalAt(o);
 		context.moveTo(posL.x, posL.y);
-		const apex = posC.add(normal.multiply(10));
+		const apex = posC.add(normal.multiply(reverse ? -10 : 10));
 		context.lineTo(apex.x, apex.y);
 		context.lineTo(posR.x, posR.y);
 	}
@@ -60,10 +60,11 @@ export function setupCustomRenderer() {
 		for (const item of itemsToDraw) {
 			const settings = getSettings(item as any);
 			if (settings.className === "LineSettings") {
+				if (settings.invisible) continue;
 				if (settings.type === "pit")
-					drawSpikyLine(item as any, context);
+					drawSpikyLine(item as any, context, settings.reverse);
 				else if (settings.type === "overhang")
-					drawTriangleLine(item as any, context);
+					drawTriangleLine(item as any, context, settings.reverse);
 			}
 		}
 		context.resetTransform();

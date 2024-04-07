@@ -6,6 +6,7 @@ import { getActiveTool, switchToolById, unduckTool } from "./tools";
 import { resetZoom } from "./view";
 import { redo, undo } from "./undo";
 import { deleteSelection } from "./selection";
+import editTH2 from "./editTH2";
 
 export function setup() {
 	setupKeyboard();
@@ -108,6 +109,12 @@ function setupKeyboard() {
 	registerAction("global.blur", blurCurrent, "escape");
 
 	registerAction("global.delete", deleteSelection, "delete");
+
+	registerAction("th2.lineToArea", () => editTH2.lineToArea(), "ctrl-h");
+	registerAction("th2.areaToLine", () => editTH2.areaToLine(), "ctrl-shift-h");
+
+	registerAction("th2.toggleLocked", () => editTH2.toggleItemsLocked(), "ctrl-l");
+	registerAction("th2.unlock", () => editTH2.unlockSelection(), "ctrl-shift-l");
 }
 
 export function textIsSelected() {

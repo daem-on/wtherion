@@ -165,5 +165,15 @@
 	"load.title": "Saved files",
 	"edit.validationResult": "Validation result",
 	"edit.validationSuccess": "Validation successful",
-	"mixed": "(mixed)"
+	"mixed": "(mixed)",
+	"clip.on": "Clip",
+	"clip.off": "Don't clip",
+	"place.bottom": "Bottom",
+	"place.top": "Top",
+	"outline.in": "Inner outline",
+	"outline.out": "Outer outline",
+	"outline.none": "Not part of outline",
+	"draw.nearStart": "Near start",
+	"draw.always": "Always",
+	"draw.never": "Never"
 }

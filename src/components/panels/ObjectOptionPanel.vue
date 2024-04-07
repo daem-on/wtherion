@@ -16,24 +16,20 @@ const classNamesMatch = computed(() => {
 	return selectedObjects.value.every(obj => obj.className === first.value.className);
 });
 
-const isPath = computed(() => {
-	return first.value?.className === "Path";
-});
-
-const isShape = computed(() => {
-	return first.value?.className === "Shape";
+const firstSettingsClass = computed(() => {
+	return first.value ? getSettings(first.value).className : undefined;
 });
 
 const isLine = computed(() => {
-	return isPath.value && getSettings(first.value).className === "LineSettings";
+	return firstSettingsClass.value === "LineSettings";
 });
 
 const isPoint = computed(() => {
-	return isShape.value && getSettings(first.value).className === "PointSettings";
+	return firstSettingsClass.value === "PointSettings";
 });
 
 const isArea = computed(() => {
-	return isPath.value && getSettings(first.value).className === "AreaSettings";
+	return firstSettingsClass.value === "AreaSettings";
 });
 
 const activeToolId = computed(() => {
@@ -56,7 +52,7 @@ const isSingleSegment = computed(() => {
 		<template v-else-if="selectedObjects.length > 1">
 			<template v-if="classNamesMatch && activeToolId === `select`">
 				<template v-if="isLine">
-					<MultipleLinePanel :selection="selectedObjects" />
+					<MultipleLinePanel :selection="(selectedObjects as paper.Path[])" />
 				</template>
 				<template v-else-if="isPoint">
 					<MultiplePointPanel :selection="(selectedObjects as paper.Shape[])" />
@@ -76,10 +72,10 @@ const isSingleSegment = computed(() => {
 			</template>
 			<template v-else-if="activeToolId === `select`">
 				<template v-if="isLine">
-					<LinePanel :selection="selectedObjects" />
+					<LinePanel :selection="(first as paper.Path)" />
 				</template>
 				<template v-else-if="isArea">
-					<AreaPanel :selection="selectedObjects" />
+					<AreaPanel :selection="(first as paper.Path)" />
 				</template>
 				<template v-else-if="isPoint">
 					<PointObjectPanel :selection="(first as paper.Shape)" />

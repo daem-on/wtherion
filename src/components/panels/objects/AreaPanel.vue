@@ -33,7 +33,7 @@ watch(settings, () => {
 			<CustomList v-model="settings.type" :options="areaList" :imageRoot="`assets/rendered/area`" />
 		</PanelSection>
 		<PanelSection :label="$t(`outlineType`)">
-			<CustomList v-model="settings.lineSettings.type" :options="wallTypes" />
+			<CustomList v-model="settings.lineSettings.type" :options="wallTypes" :imageRoot="`assets/rendered`" />
 		</PanelSection>
 		<PanelSection :label="$t(`lineSubtype`)" v-if="canHaveLineSubtype">
 			<CustomList v-model="settings.lineSettings.subtype" v-if="settings.lineSettings.type === `wall`" :options="subtypeList.wall" :imageRoot="`assets/rendered/subtype`" />

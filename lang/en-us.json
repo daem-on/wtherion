@@ -176,5 +176,6 @@
 	"draw.nearStart": "Near start",
 	"draw.always": "Always",
 	"draw.never": "Never",
-	"enableCustomRender": "Enable custom rendering (may decrease performance)"
+	"enableCustomRender": "Enable custom rendering (may decrease performance)",
+	"lineSubtype": "Line subtype"
 }

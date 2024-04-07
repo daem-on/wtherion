@@ -41,17 +41,32 @@ body {
 	background-color: rgb(175, 230, 255);
 }
 
-body, input, button, textarea, label {
+body {
 	font-size: 14px;
 	line-height: 16px;
 }
 
-input, select {
-	/* border: 1px solid #aaa;
-	outline: none; */
+input, button, textarea, label, select {
+	font-size: inherit;
+	font-family: inherit;
+}
+
+input, select, textarea {
+	border: 1px solid var(--border-color);
+	border-radius: 4px;
 	padding: 0 4px;
 	height: 22px;
 	box-shadow: none;
+	max-width: 100%;
+	width: auto;
+}
+
+input[type=number], input[type=text] {
+	min-width: 5ch;
+}
+
+input[type=checkbox] {
+	min-width: 16px;
 }
 
 pre {
@@ -112,36 +127,8 @@ input::-webkit-outer-spin-button {
 }
 
 input[type=number] {
-	-moz-appearance:textfield;
-}
-
-select,
-.comboSelect {
-	height: 22px;
-	margin: 0;
-	outline: none;
-	cursor:pointer;
-}
-
-.comboSelect {
-	position: absolute;
-	right: 0;
-	width: 22px;
-	padding: 0;
-	top: 0;
-	background-color: transparent;
-	border: 0;
-}
-
-select,
-.comboSelect,
-select::-ms-expand {
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	background-image: url('../assets/selectButton.png');
-	background-repeat:no-repeat;
-	background-position: right center;
-
+	appearance: textfield;
+	-moz-appearance: textfield;
 }
 
 select::-ms-expand {

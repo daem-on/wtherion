@@ -11,7 +11,7 @@ const options = pointOptions;
 <template>
 	<PanelContent>
 		<PanelSection>
-			<tempalte #label>{{ $t("type") }}</tempalte>
+			<template #label>{{ $t("type") }}</template>
 			<CustomList v-model="options.type" :options="pointTypes" />
 		</PanelSection>
 		<PanelSection v-if="options.type === `station`">

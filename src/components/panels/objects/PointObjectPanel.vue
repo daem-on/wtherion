@@ -70,9 +70,17 @@ const canHaveText = computed(() => {
 					<option :value="0">{{ $t("default") }}</option>
 				</select>
 			</PanelSection>
-			<PanelSection :label="$t(`otherSettings`)">
+			<PanelSection :label="$t(`otherSettings`)" column>
 				<textarea v-model="settings.otherSettings" />
 			</PanelSection>
 		</Foldable>
 	</PanelContent>
 </template>
+
+<style scoped>
+textarea {
+	min-width: 100%;
+    max-width: 100%;
+	font-family: monospace;
+}
+</style>

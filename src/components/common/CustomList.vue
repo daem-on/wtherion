@@ -46,14 +46,14 @@ watch(openMenu, value => {
 <style scoped>
 .custom-list {
 	position: relative;
-	font-size: 0.85em;
 	max-width: 50ch;
-	min-width: 20ch;
+    min-width: 5ch;
 	width: fit-content;
 	user-select: none;
 }
 
 .select-options div {
+	font-size: 0.85em;
 	padding: 1px 3px;
 	border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
 	cursor: default;

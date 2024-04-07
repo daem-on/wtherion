@@ -2,6 +2,7 @@
 import { computed } from "vue";
 import { activeToolRef, duckedToolRef, switchTool } from "../tools";
 import { toolsRef } from "../tools";
+import ToolButton from "./common/ToolButton.vue";
 
 const toolList = computed(() => {
 	if (!toolsRef.value) return [];
@@ -11,8 +12,7 @@ const toolList = computed(() => {
 
 <template>
 	<div class="toolbar">
-		<button
-			class="tool"
+		<ToolButton
 			v-for="tool in toolList"
 			:key="tool.definition.id"
 			@click="switchTool(tool)"
@@ -23,7 +23,7 @@ const toolList = computed(() => {
 			}">
 
 			<img :src="`assets/tools/tool_${tool.definition.id}.svg`">
-		</button>
+		</ToolButton>
 	</div>
 </template>
 
@@ -31,7 +31,10 @@ const toolList = computed(() => {
 
 .toolbar {
 	position: absolute;
-	padding: 14px 5px 8px 8px;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	padding: 8px;
 	top: 30px;
 	left:0px;
 	background-color: var(--background-color);
@@ -42,34 +45,10 @@ const toolList = computed(() => {
 	overflow-x: hidden;
 }
 
-.tool {
-	position: relative;
-	display:inline-block;
-	background-color: var(--background-color);
-	line-height: 0;
-	text-align: center;
-	font-size: 0;
-	padding: 0;
-	width: 36px;
-	height: 36px;
-	margin: 0 0 2px 0;
-	cursor:pointer;
-	border-radius: 3px;
-	overflow: hidden;
-	background-repeat:no-repeat;
-	background-size: 28px;
-	border: none;
-}
-
 @media (prefers-color-scheme: dark) {
-	.tool img {
+	img {
 		filter: invert(1);
 	}
-}
-
-.tool:hover,
-.tool.active {
-	background-color: var(--card-color);
 }
 
 .tool.ducked {

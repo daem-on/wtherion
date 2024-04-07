@@ -13,6 +13,7 @@
     "outDir": "./dist",
     "resolveJsonModule": true,
     "baseUrl": ".",
+    "types": ["vite/client"]
   },
   "files": ["src/index.ts"],
   "include": [

@@ -16,13 +16,8 @@ const activeToolPanel = computed<Component | undefined>(() => {
 
 <style scoped>
 .sidebar {
-	position: absolute;
 	padding: 8px;
-	top: 30px;
-	left: 48px;
 	background-color: var(--background-color);
-	border-radius: 0 0 3px 0;
-	z-index: 20;
-	max-height: calc(100vh - 30px);
+	border-right: var(--border-color) solid 1px;
 }
 </style>

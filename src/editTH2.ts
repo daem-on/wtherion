@@ -13,6 +13,7 @@ import { snapshot } from "./undo";
 import paper from "paper";
 import { updateWindow } from "./objectSettings/objectOptionPanel";
 import { reactive } from "vue";
+import { CustomRenderStyle } from "./view";
 
 const typeColors
 	= generateColors(colorDefs.typeColors);
@@ -91,6 +92,15 @@ export default {
 			l.dashArray = [3, 6];
 		else l.dashArray = null;
 		l.strokeColor.alpha = settings.invisible ? 0.3 : 1;
+
+		l.data.customRenderStyle = undefined;
+		if (!settings.invisible) {
+			if (settings.type === "pit") {
+				l.data.customRenderStyle = settings.reverse ? CustomRenderStyle.SpikyReverse : CustomRenderStyle.Spiky;
+			} else if (settings.type === "overhang" || settings.subtype === "pit") {
+				l.data.customRenderStyle = settings.reverse ? CustomRenderStyle.TriangleReverse : CustomRenderStyle.Triangle;
+			}
+		}
 	},
 	
 	drawObject: function(object: PaperItemType) {

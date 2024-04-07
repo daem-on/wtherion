@@ -2,9 +2,16 @@ import paper from "paper";
 import * as statusbar from "./statusbar";
 import * as layer from "./layer";
 import * as pgDocument from "./document";
-import getSettings from "./objectSettings/model/getSettings.ts";
+
+export enum CustomRenderStyle {
+	Spiky, SpikyReverse, Triangle, TriangleReverse
+}
 
 let enableCustomRender = true;
+
+export function setCustomRender(enable: boolean) {
+	enableCustomRender = enable;
+}
 
 function drawSpikyLine(path: paper.Path, context: CanvasRenderingContext2D, reverse: boolean) {
 	context.beginPath();
@@ -49,7 +56,7 @@ export function setupCustomRenderer() {
 		if (event.count % 20 !== 0) return;
 		itemsToDraw = paper.project.getItems({
 			recursive: true,
-			match: item => item.layer?.visible && item.data?.therionData,
+			match: item => item.layer?.visible && item.data?.customRenderStyle != null,
 			overlapping: paper.view.bounds
 		});
 	});
@@ -58,13 +65,19 @@ export function setupCustomRenderer() {
 		if (!enableCustomRender) return;
 		paper.view.matrix.applyToContext(context);
 		for (const item of itemsToDraw) {
-			const settings = getSettings(item as any);
-			if (settings.className === "LineSettings") {
-				if (settings.invisible) continue;
-				if (settings.type === "pit")
-					drawSpikyLine(item as any, context, settings.reverse);
-				else if (settings.type === "overhang")
-					drawTriangleLine(item as any, context, settings.reverse);
+			switch (item.data.customRenderStyle) {
+				case CustomRenderStyle.Spiky:
+					drawSpikyLine(item as paper.Path, context, false);
+					break;
+				case CustomRenderStyle.SpikyReverse:
+					drawSpikyLine(item as paper.Path, context, true);
+					break;
+				case CustomRenderStyle.Triangle:
+					drawTriangleLine(item as paper.Path, context, false);
+					break;
+				case CustomRenderStyle.TriangleReverse:
+					drawTriangleLine(item as paper.Path, context, true);
+					break;
 			}
 		}
 		context.resetTransform();

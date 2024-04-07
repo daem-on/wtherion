@@ -1,12 +1,20 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref, watch } from "vue";
 import { activeToolRef, duckedToolRef, switchTool } from "../tools";
 import { toolsRef } from "../tools";
 import ToolButton from "./common/ToolButton.vue";
+import compareUrl from "../../assets/ui/compare.svg";
+import { setCustomRender } from "../view";
 
 const toolList = computed(() => {
 	if (!toolsRef.value) return [];
 	return Object.values(toolsRef.value).filter(tool => tool.definition.type !== "hidden");
+});
+
+const enableCustomRender = ref(true);
+
+watch(() => enableCustomRender.value, value => {
+	setCustomRender(value);
 });
 </script>
 
@@ -23,6 +31,15 @@ const toolList = computed(() => {
 			}">
 
 			<img :src="`assets/tools/tool_${tool.definition.id}.svg`">
+		</ToolButton>
+
+		<hr>
+
+		<ToolButton
+			@click="enableCustomRender = !enableCustomRender"
+			:title="$t('enableCustomRender')"
+			:class="{ active: enableCustomRender }">
+			<img :src="compareUrl" width="32" height="32">
 		</ToolButton>
 	</div>
 </template>
@@ -53,5 +70,9 @@ const toolList = computed(() => {
 
 .tool.ducked {
 	outline: 1px solid var(--primary-color);
+}
+
+hr {
+	width: 100%;
 }
 </style>

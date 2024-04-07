@@ -175,5 +175,6 @@
 	"outline.none": "Not part of outline",
 	"draw.nearStart": "Near start",
 	"draw.always": "Always",
-	"draw.never": "Never"
+	"draw.never": "Never",
+	"enableCustomRender": "Enable custom rendering (may decrease performance)"
 }

@@ -8,58 +8,49 @@ import { drawOptions } from "../../../tools/draw";
 import { wallTypes } from "../../../res/wallTypes";
 import subtypeList from "../../../res/subtype-list.json";
 import Foldable from "../../common/Foldable.vue";
+import PanelSection from "../../common/PanelSection.vue";
 
 const options = drawOptions;
 </script>
 
 <template>
 	<PanelContent>
-		<label class="panel-section">
-			<h2>{{ $t("type") }}</h2>
+		<PanelSection :label="$t(`type`)">
 			<CustomList v-model="options.type" :options="wallTypes" :imageRoot="`assets/rendered`" />
-		</label>
-		<label class="panel-section" v-if="[`wall`, `border`, `water-flow`].includes(options.type)">
-			<h2>{{ $t("subtype") }}</h2>
+		</PanelSection>
+		<PanelSection :label="$t(`subtype`)" v-if="[`wall`, `border`, `water-flow`].includes(options.type)">
 			<CustomList v-model="options.subtype" :options="subtypeList.wall" :imageRoot="`assets/rendered/subtype`" />
-		</label>
-		<label class="panel-section" v-if="options.type === `slope`">
-			<h2>{{ $t("size") }}</h2>
+		</PanelSection>
+		<PanelSection :label="$t(`size`)" v-if="options.type === `slope`">
 			<IntInput v-model="options.size" />
-		</label>
+		</PanelSection>
 		<Foldable>
 			<template #title>{{ $t("toolOptions") }}</template>
-			<label class="panel-section">
-				<h2>{{ $t("draw.pointDistance") }}</h2>
+			<PanelSection :label="$t(`draw.pointDistance`)">
 				<IntInput v-model="options.pointDistance" :min="1" />
-			</label>
-			<label class="panel-section">
-				<h2>{{ $t("draw.drawParallelLines") }}</h2>
+			</PanelSection>
+			<PanelSection :label="$t(`draw.drawParallelLines`)">
 				<BooleanInput v-model="options.drawParallelLines" />
-			</label>
-			<label class="panel-section" v-if="options.drawParallelLines">
-				<h2>{{ $t("draw.lines") }}</h2>
+			</PanelSection>
+			<PanelSection :label="$t(`draw.lines`)" v-if="options.drawParallelLines">
 				<IntInput v-model="options.lines" :min="1" />
-			</label>
-			<label class="panel-section" v-if="options.drawParallelLines">
-				<h2>{{ $t("draw.lineDistance") }}</h2>
+			</PanelSection>
+			<PanelSection :label="$t(`draw.lineDistance`)" v-if="options.drawParallelLines">
 				<FloatInput v-model="options.lineDistance" :min="0" />
-			</label>
-			<label class="panel-section">
-				<h2>{{ $t("draw.closePath") }}</h2>
+			</PanelSection>
+			<PanelSection :label="$t(`draw.closePath`)">
 				<select v-model="options.closePath">
 					<option value="near start">{{ $t("draw.nearStart") }}</option>
 					<option value="always">{{ $t("draw.always") }}</option>
 					<option value="never">{{ $t("draw.never") }}</option>
 				</select>
-			</label>
-			<label class="panel-section">
-				<h2>{{ $t("draw.smoothPath") }}</h2>
+			</PanelSection>
+			<PanelSection :label="$t(`draw.smoothPath`)">
 				<BooleanInput v-model="options.smoothPath" />
-			</label>
-			<label class="panel-section">
-				<h2>{{ $t("draw.simplifyPath") }}</h2>
+			</PanelSection>
+			<PanelSection :label="$t(`draw.simplifyPath`)">
 				<BooleanInput v-model="options.simplifyPath" />
-			</label>
+			</PanelSection>
 		</Foldable>
 	</PanelContent>
 </template>

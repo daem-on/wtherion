@@ -3,19 +3,20 @@ import { pointTypes } from "../../../objectSettings/pointSymbolList";
 import CustomList from "../../common/CustomList.vue";
 import PanelContent from "../../common/PanelContent.vue";
 import { pointOptions } from "../../../tools/point";
+import PanelSection from "../../common/PanelSection.vue";
 
 const options = pointOptions;
 </script>
 
 <template>
 	<PanelContent>
-		<label class="panel-section">
-			<h2>{{ $t("type") }}</h2>
+		<PanelSection>
+			<tempalte #label>{{ $t("type") }}</tempalte>
 			<CustomList v-model="options.type" :options="pointTypes" />
-		</label>
-		<label class="panel-section" v-if="options.type === `station`">
-			<h2>{{ $t("stationName") }}</h2>
+		</PanelSection>
+		<PanelSection v-if="options.type === `station`">
+			<template #label>{{ $t("stationName") }}</template>
 			<input type="text" v-model="options.stationName" />
-		</label>
+		</PanelSection>
 	</PanelContent>
 </template>

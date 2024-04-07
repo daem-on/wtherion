@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import PanelContent from './PanelContent.vue';
 
 const open = ref(false);
 </script>
@@ -10,9 +11,9 @@ const open = ref(false);
 			<slot name="title"></slot>
 			{{ open ? "⯅" : "⯆" }}
 		</h2>
-		<div class="content panel-content" :class="{ open }">
+		<PanelContent class="content" :class="{ open }">
 			<slot></slot>
-		</div>
+		</PanelContent>
 	</div>
 </template>
 

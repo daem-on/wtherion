@@ -5,6 +5,7 @@ import { wallTypes } from "../../../res/wallTypes";
 import CustomList from "../../common/CustomList.vue";
 import IntInput from "../../common/IntInput.vue";
 import PanelContent from "../../common/PanelContent.vue";
+import PanelSection from "../../common/PanelSection.vue";
 
 const options = bezierOptions;
 
@@ -12,17 +13,14 @@ const options = bezierOptions;
 
 <template>
 	<PanelContent v-if="showBezierPanel">
-		<label class="panel-section">
-			<h2>{{ $t("type") }}</h2>
+		<PanelSection :label="$t(`type`)">
 			<CustomList v-model="options.type" :options="wallTypes" :imageRoot="`assets/rendered`" />
-		</label>
-		<label class="panel-section" v-if="[`wall`, `border`, `water-flow`].includes(options.type)">
-			<h2>{{ $t("subtype") }}</h2>
+		</PanelSection>
+		<PanelSection :label="$t(`subtype`)" v-if="[`wall`, `border`, `water-flow`].includes(options.type)">
 			<CustomList v-model="options.subtype" :options="subtypeList.wall" :imageRoot="`assets/rendered/subtype`" />
-		</label>
-		<label class="panel-section" v-if="options.type === `slope`">
-			<h2>{{ $t("size") }}</h2>
+		</PanelSection>
+		<PanelSection :label="$t(`size`)" v-if="options.type === `slope`">
 			<IntInput v-model="options.size" />
-		</label>
+		</PanelSection>
 	</PanelContent>
 </template>

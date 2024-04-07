@@ -1,7 +1,5 @@
 import paper from "paper";
-import { saveAs, showErrorWindow } from "file-saver";
 import { processLayer } from "./processLayer";
-import { floater } from "../../js/modal";
 	
 export function toGlobal(global: number[], local = [0, 0]) {
 	const x = Math.round((global[0]+local[0])*100)/100;

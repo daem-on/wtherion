@@ -79,9 +79,9 @@ export function processLine(item: paperExportedPath, settings?: LineSettings) {
 		if (i in subtypes) {
 			addText("subtype " + subtypes[i]);
 		}
-		if (i in segmentSettings) {
-			addText(segmentSettings[i].replace(";", "\n"));
-		}
+		if (i in segmentSettings)
+			for (const line of segmentSettings[i].split(";"))
+				addText(line);
 	}
 
 	if (lineSettings.size !== undefined

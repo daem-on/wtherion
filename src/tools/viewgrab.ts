@@ -8,7 +8,6 @@ export const viewgrab = defineTool({
 		id: 'viewgrab',
 		name: 'View grab',
 		type: 'hidden',
-		options: {},
 	},
 	setup(on) {
 		let lastPoint: paper.Point;

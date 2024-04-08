@@ -29,7 +29,6 @@ export const viewzoom = defineTool({
 	definition: {
 		id: "viewzoom",
 		name: "Viewzoom",
-		options: {},
 		type: "hidden",
 	},
 	setup(on) {

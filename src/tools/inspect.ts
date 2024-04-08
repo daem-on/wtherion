@@ -42,7 +42,6 @@ export const inspect = defineTool({
 	definition: {
 		id: 'inspect',
 		name: 'tools.inspect',
-		options: {},
 	},
 	setup(on) {
 		const tolerance = config.get("inspectTolerance") ?? 8;

@@ -96,9 +96,11 @@ export default {
 		l.data.customRenderStyle = undefined;
 		if (!settings.invisible) {
 			if (settings.type === "pit") {
-				l.data.customRenderStyle = settings.reverse ? CustomRenderStyle.SpikyReverse : CustomRenderStyle.Spiky;
+				l.data.customRenderStyle = CustomRenderStyle.Spiky;
 			} else if (settings.type === "overhang" || settings.subtype === "pit") {
-				l.data.customRenderStyle = settings.reverse ? CustomRenderStyle.TriangleReverse : CustomRenderStyle.Triangle;
+				l.data.customRenderStyle = CustomRenderStyle.Triangle;
+			} else if (settings.type === "slope") {
+				l.data.customRenderStyle = CustomRenderStyle.Notched;
 			}
 		}
 	},

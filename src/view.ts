@@ -4,7 +4,7 @@ import * as layer from "./layer";
 import * as pgDocument from "./document";
 
 export enum CustomRenderStyle {
-	Spiky, SpikyReverse, Triangle, TriangleReverse
+	Spiky, Triangle, Notched
 }
 
 let enableCustomRender = true;
@@ -14,18 +14,20 @@ export function setCustomRender(enable: boolean) {
 }
 
 function drawSpikyLine(path: paper.Path, context: CanvasRenderingContext2D, reverse: boolean) {
+	const length = reverse ? -10 : 10;
 	context.beginPath();
 	for (let o = 0; o < path.length; o += 20) {
 		const pos = path.getLocationAt(o).point;
 		const normal = path.getNormalAt(o);
 		context.moveTo(pos.x, pos.y);
-		const target = pos.add(normal.multiply(reverse ? -10 : 10));
+		const target = pos.add(normal.multiply(length));
 		context.lineTo(target.x, target.y);
 	}
 	context.stroke();
 }
 
 function drawTriangleLine(path: paper.Path, context: CanvasRenderingContext2D, reverse: boolean) {
+	const length = reverse ? -10 : 10;
 	context.beginPath();
 	for (let o = 3; o < path.length - 3; o += 20) {
 		const posL = path.getLocationAt(o-3).point;
@@ -33,11 +35,25 @@ function drawTriangleLine(path: paper.Path, context: CanvasRenderingContext2D, r
 		const posR = path.getLocationAt(o+3).point;
 		const normal = path.getNormalAt(o);
 		context.moveTo(posL.x, posL.y);
-		const apex = posC.add(normal.multiply(reverse ? -10 : 10));
+		const apex = posC.add(normal.multiply(length));
 		context.lineTo(apex.x, apex.y);
 		context.lineTo(posR.x, posR.y);
 	}
 	context.fill();
+}
+
+function drawNotchedLine(path: paper.Path, context: CanvasRenderingContext2D, reverse: boolean) {
+	const multiplier = reverse ? -1 : 1;
+	context.beginPath();
+	for (let o = 0; o < path.length; o += 20) {
+		const pos = path.getLocationAt(o).point;
+		const normal = path.getNormalAt(o);
+		const length = o % 40 === 0 ? 20 : 10;
+		context.moveTo(pos.x, pos.y);
+		const target = pos.add(normal.multiply(length*multiplier));
+		context.lineTo(target.x, target.y);
+	}
+	context.stroke();
 }
 
 export function setupCustomRenderer() {
@@ -67,16 +83,13 @@ export function setupCustomRenderer() {
 		for (const item of itemsToDraw) {
 			switch (item.data.customRenderStyle) {
 				case CustomRenderStyle.Spiky:
-					drawSpikyLine(item as paper.Path, context, false);
-					break;
-				case CustomRenderStyle.SpikyReverse:
-					drawSpikyLine(item as paper.Path, context, true);
+					drawSpikyLine(item as paper.Path, context, item.data.therionData.reverse);
 					break;
 				case CustomRenderStyle.Triangle:
-					drawTriangleLine(item as paper.Path, context, false);
+					drawTriangleLine(item as paper.Path, context, item.data.therionData.reverse);
 					break;
-				case CustomRenderStyle.TriangleReverse:
-					drawTriangleLine(item as paper.Path, context, true);
+				case CustomRenderStyle.Notched:
+					drawNotchedLine(item as paper.Path, context, item.data.therionData.reverse);
 					break;
 			}
 		}

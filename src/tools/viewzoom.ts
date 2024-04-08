@@ -3,6 +3,7 @@
 import paper from "paper";
 import { zoomBy } from "../view";
 import { defineTool } from "../tools";
+import { triggers } from "../triggers";
 
 function onWheel(updateInfo: WheelEvent) {
 	let factor = 1.25;
@@ -20,6 +21,8 @@ function onWheel(updateInfo: WheelEvent) {
 	const pc = mpos.subtract(ctr);
 	const offset = mpos.subtract(pc.multiply(factor)).subtract(ctr).multiply(-1);
 	paper.view.center = paper.view.center.add(offset);
+
+	triggers.emit("Zoom");
 }
 
 export const viewzoom = defineTool({

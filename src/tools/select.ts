@@ -127,6 +127,15 @@ const menuEntries = {
 	}
 };
 
+const hitOptions = {
+	segments: true,
+	stroke: true,
+	curves: true,
+	fill: true,
+	guide: false,
+	tolerance: 0
+};
+
 export const select = defineTool({
 	definition: {
 		id: 'select',
@@ -144,15 +153,6 @@ export const select = defineTool({
 		let boundsPath: paper.Path;
 		const boundsScaleHandles = [];
 		const boundsRotHandles = [];
-
-		const hitOptions = {
-			segments: true,
-			stroke: true,
-			curves: true,
-			fill: true,
-			guide: false,
-			tolerance: 8 / paper.view.zoom
-		};
 
 		type selectToolMode = 
 			"none" | "scale" | "rotate" | "move" | "cloneMove" | "rectSelection";
@@ -181,6 +181,8 @@ export const select = defineTool({
 			
 			menu.setupToolEntries(menuEntries);
 			triggers.onAny(['DeleteItems', 'Undo', 'Redo', 'Grouped', 'Ungrouped', 'SelectionChanged'], triggerHandler);
+
+			hitOptions.tolerance = 8 / paper.view.zoom;
 		});
 
 		on("mousedown", event => {
@@ -646,3 +648,6 @@ function showRotateHandle(item: paper.Item) {
 	thPointRotHandle.rotate(item.rotation, item.position);
 }
 
+triggers.on('Zoom', () => {
+	hitOptions.tolerance = 8 / paper.view.zoom;
+});

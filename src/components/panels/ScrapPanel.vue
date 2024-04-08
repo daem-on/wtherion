@@ -9,11 +9,12 @@ const layers = ref<{ name: string, raw: Raw<paper.Layer> }[]>([]);
 
 function handleLayerChange() {
 	layers.value.length = 0;
-	for (const layer of paper.project.layers) {
+	for (const layer of paper.project?.layers ?? []) {
 		if (layer.data.isGuideLayer) continue;
 		layers.value.push({ name: layer.name, raw: markRaw(layer) });
 	}
 }
+handleLayerChange();
 
 triggers.onAny(["LayerAdded", "LayerRemoved", "LayersChanged"], handleLayerChange);
 
@@ -67,7 +68,7 @@ function deleteCurrentLayer(message: string) {
 .scrap-list {
 	display: flex;
 	flex-direction: column;
-	gap: 8px;
+	gap: 4px;
 }
 
 .header {

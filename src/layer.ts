@@ -45,6 +45,7 @@ export function ensureGuideLayer() {
 		guideLayer.data.isGuideLayer = true;
 		guideLayer.data.id = getUniqueLayerID();
 		guideLayer.bringToFront();
+		triggers.emit("LayersChanged");
 	}
 }
 

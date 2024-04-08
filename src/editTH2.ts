@@ -13,7 +13,7 @@ import { snapshot } from "./undo";
 import paper from "paper";
 import { updateWindow } from "./objectSettings/objectOptionPanel";
 import { reactive } from "vue";
-import { CustomRenderStyle } from "./view";
+import { CustomRenderStyle } from "./render";
 
 const typeColors
 	= generateColors(colorDefs.typeColors);

@@ -30,7 +30,7 @@ import * as historyPanel from "./historyPanel";
 
 import paper from "paper";
 import {setup as configSetup} from "./filesio/configManagement";
-import { setupCustomRenderer } from "./view";
+import { setupCustomRenderer } from "./render";
 
 // functions related to initializing pg
 

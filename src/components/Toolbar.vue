@@ -4,7 +4,7 @@ import { activeToolRef, duckedToolRef, switchTool } from "../tools";
 import { toolsRef } from "../tools";
 import ToolButton from "./common/ToolButton.vue";
 import compareUrl from "../../assets/ui/compare.svg";
-import { setCustomRender } from "../view";
+import { setCustomRender } from "../render";
 
 const toolList = computed(() => {
 	if (!toolsRef.value) return [];

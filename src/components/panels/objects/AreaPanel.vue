@@ -10,7 +10,7 @@ import AreaSettings from '../../../objectSettings/model/AreaSettings';
 import subtypeList from "../../../res/subtype-list.json";
 import { wallTypes } from "../../../res/wallTypes";
 import areaList from "../../../res/area-list.json";
-import Foldable from '../../common/Foldable.vue';
+import PanelFoldable from '../../common/PanelFoldable.vue';
 
 const props = defineProps<{
 	selection: paper.Path
@@ -49,7 +49,7 @@ watch(settings, () => {
 		<PanelSection :label="$t(`invisible`)">
 			<BooleanInput v-model="settings.invisible" />
 		</PanelSection>
-		<Foldable>
+		<PanelFoldable>
 			<template #title>{{ $t("advanced") }}</template>
 			<PanelSection :label="$t(`id`)">
 				<input type="text" v-model="settings.lineSettings.id" />
@@ -57,6 +57,6 @@ watch(settings, () => {
 			<PanelSection :label="$t(`otherSettings`)" column>
 				<textarea v-model="settings.lineSettings.otherSettings"></textarea>
 			</PanelSection>
-		</Foldable>
+		</PanelFoldable>
 	</PanelContent>
 </template>

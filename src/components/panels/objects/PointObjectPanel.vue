@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import CustomList from '../../common/CustomList.vue';
-import Foldable from '../../common/Foldable.vue';
+import PanelFoldable from '../../common/PanelFoldable.vue';
 import PanelContent from '../../common/PanelContent.vue';
 import getSettings from '../../../objectSettings/model/getSettings';
 import { pointTypes } from '../../../objectSettings/pointSymbolList';
@@ -45,7 +45,7 @@ watch(settings, () => {
 		<PanelSection :label="$t(`stationName`)" v-if="settings.type === `station`">
 			<input type="text" v-model="settings.name" />
 		</PanelSection>
-		<Foldable>
+		<PanelFoldable>
 			<template #title>
 				{{ $t("advanced") }}
 			</template>
@@ -78,7 +78,7 @@ watch(settings, () => {
 			<PanelSection :label="$t(`otherSettings`)" column>
 				<textarea v-model="settings.otherSettings" />
 			</PanelSection>
-		</Foldable>
+		</PanelFoldable>
 	</PanelContent>
 </template>
 

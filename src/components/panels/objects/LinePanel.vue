@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import CustomList from '../../common/CustomList.vue';
-import Foldable from '../../common/Foldable.vue';
+import PanelFoldable from '../../common/PanelFoldable.vue';
 import PanelContent from '../../common/PanelContent.vue';
 import getSettings from '../../../objectSettings/model/getSettings';
 import { computed, watch } from 'vue';
@@ -57,7 +57,7 @@ watch(settings, () => {
 			</select>
 		</PanelSection>
 
-		<Foldable>
+		<PanelFoldable>
 			<template #title>
 				{{ $t(`advanced`) }}
 			</template>
@@ -81,7 +81,7 @@ watch(settings, () => {
 			<PanelSection :label="$t(`otherSettings`)" column>
 				<textarea v-model="settings.otherSettings" />
 			</PanelSection>
-		</Foldable>
+		</PanelFoldable>
 	</PanelContent>
 </template>
 

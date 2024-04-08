@@ -7,7 +7,7 @@ import CustomList from "../../common/CustomList.vue";
 import { drawOptions } from "../../../tools/draw";
 import { wallTypes } from "../../../res/wallTypes";
 import subtypeList from "../../../res/subtype-list.json";
-import Foldable from "../../common/Foldable.vue";
+import PanelFoldable from "../../common/PanelFoldable.vue";
 import PanelSection from "../../common/PanelSection.vue";
 
 const options = drawOptions;
@@ -24,7 +24,7 @@ const options = drawOptions;
 		<PanelSection :label="$t(`size`)" v-if="options.type === `slope`">
 			<IntInput v-model="options.size" />
 		</PanelSection>
-		<Foldable>
+		<PanelFoldable>
 			<template #title>{{ $t("toolOptions") }}</template>
 			<PanelSection :label="$t(`draw.pointDistance`)">
 				<IntInput v-model="options.pointDistance" :min="1" />
@@ -51,6 +51,6 @@ const options = drawOptions;
 			<PanelSection :label="$t(`draw.simplifyPath`)">
 				<BooleanInput v-model="options.simplifyPath" />
 			</PanelSection>
-		</Foldable>
+		</PanelFoldable>
 	</PanelContent>
 </template>

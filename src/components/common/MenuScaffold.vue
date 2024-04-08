@@ -27,9 +27,11 @@ watch(openMenu, value => {
 				{{ label }}
 			</slot>
 		</button>
-		<div class="menu-content" @click="open = false">
-			<slot></slot>
-		</div>
+		<Transition>
+			<div class="menu-content" v-if="open" @click="open = false">
+				<slot></slot>
+			</div>
+		</Transition>
 	</div>
 </template>
 
@@ -51,7 +53,7 @@ button:hover {
 	background-color: var(--hover-color);
 }
 
-.menu.open .menu-content {
+.menu .menu-content {
 	display: flex;
 	flex-direction: column;
 	position: absolute;
@@ -66,9 +68,17 @@ button:hover {
 	width: 200px;
 	max-height: 90vh;
 	overflow-y: auto;
+	transform-origin: top left;
+	transition: opacity 0.2s, transform 0.2s;
 }
 
-.menu .menu-content {
-	display: none;
+.menu-content.v-enter-from, .menu-content.v-leave-to {
+	opacity: 0;
+	transform: scale(0.9);
+}
+
+.menu-content.v-enter-to, .menu-content.v-leave-from {
+	opacity: 1;
+	transform: scale(1);
 }
 </style>

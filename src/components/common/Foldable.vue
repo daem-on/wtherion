@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import PanelContent from './PanelContent.vue';
 
 const open = ref(false);
 </script>
@@ -11,9 +10,9 @@ const open = ref(false);
 			<slot name="title"></slot>
 			{{ open ? "⯅" : "⯆" }}
 		</h2>
-		<PanelContent class="content" :class="{ open }">
+		<div v-if="open">
 			<slot></slot>
-		</PanelContent>
+		</div>
 	</div>
 </template>
 
@@ -27,13 +26,5 @@ const open = ref(false);
 h2 {
 	cursor: pointer;
 	padding: 8px;
-}
-
-.foldable .content {
-	padding: 8px;
-}
-
-.foldable .content:not(.open) {
-	display: none;
 }
 </style>

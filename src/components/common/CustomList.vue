@@ -22,7 +22,7 @@ const select = (option: string) => {
 </script>
 
 <template>
-	<MenuScaffold class="custom-list" ref="menuScaffoldRef">
+	<MenuScaffold class="custom-list" ref="menuScaffoldRef" :closeOnClick="false">
 		<template #label="{ toggle }">
 			<input type="text" v-model="model" @click="toggle()" @keydown="onKeydown" :placeholder="placeholder" />
 		</template>

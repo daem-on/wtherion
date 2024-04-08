@@ -6,6 +6,8 @@ const open = ref(false);
 
 const menuRef = ref<HTMLElement | null>(null);
 
+defineProps({ closeOnClick: { type: Boolean, default: true } });
+
 watch(open, value => {
 	if (value) openMenu.value = menuRef.value;
 });
@@ -21,7 +23,7 @@ defineExpose({ open });
 	<div class="menu" :class="{ open }" ref="menuRef">
 		<slot name="label" :toggle="() => open = !open"></slot>
 		<Transition>
-			<div class="menu-content" v-if="open" @click="open = false">
+			<div class="menu-content" v-if="open"  @[closeOnClick&&`click`]="open = false">
 				<slot></slot>
 			</div>
 		</Transition>

@@ -4,7 +4,9 @@
   "main": "main.js",
   "type": "module",
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "dev": "vite",
+    "build": "vite build"
   },
   "repository": "https://github.com/daem-on/wtherion.git",
   "author": "daem-on <daem_on@icloud.com>",

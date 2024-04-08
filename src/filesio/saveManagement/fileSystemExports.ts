@@ -1,11 +1,12 @@
 import { showErrorWindow } from "../../errorHandling";
-import { asBlob } from "../../export/exportTH2";
 import { acceptTypeDefs, pickSaveFile, supportsFilesystem, writeOrDownloadBlob } from "./fileSystemUtils";
 import { ExportHandler } from "./saveManagement";
 
 let exportFileHandle: FileSystemFileHandle;
 
 async function exportTH2(clearHandle = false) {
+	const { asBlob } = await import("../../export/exportTH2");
+	
 	if (clearHandle) exportFileHandle = null;
 
 	if (supportsFilesystem && !exportFileHandle) {

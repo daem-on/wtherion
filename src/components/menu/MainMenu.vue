@@ -10,9 +10,9 @@ import Foldable from "../common/Foldable.vue";
 <template>
 	<div class="main-menu">
 		<MenuScaffold>
-			<template #label>
+			<template #label="{ toggle }">
 				<!-- <svg class="burgerButton" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve"><line stroke-width="12" x1="0" y1="9.5" x2="100" y2="9.5"/><line stroke-width="12" x1="0" y1="50.5" x2="100" y2="50.5"/><line stroke-width="12" x1="0" y1="90.5" x2="100" y2="90.5"/></svg> -->
-				Main
+				<button class="top-button" @click="toggle()">Main</button>
 			</template>
 			<ul class="sub-menu">
 				<MenuButton @click="handlers.clearDocument()">{{ $t(`menu.new`) }}</MenuButton>
@@ -64,7 +64,10 @@ import Foldable from "../common/Foldable.vue";
 				<MenuButton @click="handlers.about()" title="About">{{ $t(`menu.about`) }}</MenuButton>
 			</ul>
 		</MenuScaffold>
-		<MenuScaffold :label="$t(`edit`)">
+		<MenuScaffold>
+			<template #label="{ toggle }">
+				<button class="top-button" @click="toggle()">{{ $t(`edit`) }}</button>
+			</template>
 			<ul class="sub-menu">
 				<MenuButton @click="editTH2.changeStationsNamespace()">{{ $t(`menu.changeNamespace`) }}</MenuButton>
 				<li class="space"></li>
@@ -78,7 +81,10 @@ import Foldable from "../common/Foldable.vue";
 				</div>
 			</ul>
 		</MenuScaffold>
-		<MenuScaffold :label="$t(`menu.scraps`)">
+		<MenuScaffold>
+			<template #label="{ toggle }">
+				<button class="top-button" @click="toggle()">{{ $t(`menu.scraps`) }}</button>
+			</template>
 			<ul class="sub-menu">
 				<MenuButton @click="handlers.layerPanel()" title="Scrap Panel">{{ $t(`menu.scrapPanel`) }}</MenuButton>
 				<MenuButton @click="editTH2.showScrapOptionsPanel()">{{ $t(`menu.editScrap`) }}</MenuButton>
@@ -110,5 +116,31 @@ import Foldable from "../common/Foldable.vue";
 
 h3 {
 	margin: 8px 0;
+}
+
+button.top-button {
+	border: none;
+	background: none;
+	color: inherit;
+	padding: 4px 8px;
+	margin: 4px;
+	border-radius: 4px;
+}
+
+button.top-button:hover {
+	background-color: var(--hover-color);
+}
+
+.sub-menu {
+	display: flex;
+	flex-direction: column;
+	background-color: var(--background-color);
+	color: var(--text-color);
+	border: var(--border-color) solid 1px;
+	border-radius: 4px;
+	padding: 8px;
+	width: 200px;
+	max-height: 90vh;
+	overflow-y: auto;
 }
 </style>

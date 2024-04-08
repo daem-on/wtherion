@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { openMenu } from '../../menuSync';
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
+import MenuScaffold from './MenuScaffold.vue';
 
 const model = defineModel<string>();
 
@@ -10,38 +10,29 @@ defineProps<{
 	placeholder?: string;
 }>();
 
-const open = ref(false);
+const menuScaffoldRef = ref<InstanceType<typeof MenuScaffold> | null>(null);
 
 const onKeydown = (e: KeyboardEvent) => {
-	if (e.key === "Enter" || e.key === "Escape") open.value = false;
+	if (e.key === "Enter" || e.key === "Escape") menuScaffoldRef.value.open = false;
 };
 
 const select = (option: string) => {
 	model.value = option;
 };
-
-const menuRef = ref<HTMLElement | null>(null);
-
-watch(open, value => {
-	if (value) openMenu.value = menuRef.value;
-});
-
-watch(openMenu, value => {
-	if (value !== menuRef.value) open.value = false;
-}, { immediate: true });
-
 </script>
 
 <template>
-	<div class="custom-list" :class="{ open }" ref="menuRef">
-		<input type="text" v-model="model" @click="open = !open" @keydown="onKeydown" :placeholder="placeholder" />
+	<MenuScaffold class="custom-list" ref="menuScaffoldRef">
+		<template #label="{ toggle }">
+			<input type="text" v-model="model" @click="toggle()" @keydown="onKeydown" :placeholder="placeholder" />
+		</template>
 		<div class="select-options">
 			<div v-for="option in options" :key="option" @click="select(option)">
 				<img v-if="imageRoot" :src="`${imageRoot}/${option || 'empty'}.svg`" class="crop-svg" />
 				<p>{{ option || '(none)' }}</p>
 			</div>
 		</div>
-	</div>
+	</MenuScaffold>
 </template>
 
 <style scoped>
@@ -68,25 +59,20 @@ watch(openMenu, value => {
 	background-color: var(--card-color);
 }
 
-.custom-list.open .select-options {
+.custom-list .select-options {
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr;
 	gap: 8px;
 	padding: 8px;
 	position: absolute;
 	background-color: var(--background-color);
-	border-radius: 2px;
+	border-radius: 4px;
 	border: var(--border-color) 1px solid;
-	box-shadow: #0000006b 0px 3px 8px;
 	top: 100%;
 	left: 0;
 	z-index: 99;
 	max-height: 50vh;
 	overflow-y: auto;
-}
-
-.custom-list .select-options {
-	display: none;
 }
 
 @media (prefers-color-scheme: dark) {

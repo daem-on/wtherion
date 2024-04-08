@@ -35,7 +35,7 @@ function fileUploadImage(event) {
 </script>
 
 <template>
-	<ul class="sub-menu">
+	<ul class="sub-sub-menu">
 		<MenuButton>
 			<span>{{ $t("menu.json") }}</span>
 			<input type="file" @change="fileUploadJSON" accept=".json" />

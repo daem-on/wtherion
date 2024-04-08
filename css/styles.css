@@ -69,6 +69,7 @@ input[type=number], input[type=text] {
 input[type=checkbox] {
 	min-width: 16px;
 	cursor: pointer;
+	accent-color: #35a36e;
 }
 
 pre {

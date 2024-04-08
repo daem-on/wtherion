@@ -177,5 +177,9 @@
 	"draw.always": "Always",
 	"draw.never": "Never",
 	"enableCustomRender": "Enable custom rendering (may decrease performance)",
-	"lineSubtype": "Line subtype"
+	"lineSubtype": "Line subtype",
+	"keybinds.title": "Keybind editor",
+	"keybinds.action": "Action",
+	"keybinds.key": "Bound keys",
+	"keybinds.pressKey": "Press a key or combination..."
 }

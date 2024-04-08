@@ -25,6 +25,7 @@ import Foldable from "../common/Foldable.vue";
 				</div>
 				<li class="space"></li>
 				<MenuButton @click="handlers.historyPanel()">{{ $t(`menu.historyPanel`) }}</MenuButton>
+				<MenuButton @click="handlers.openKeybindEditor()">{{ $t(`keybinds.title`) }}</MenuButton>
 				<li class="space"></li>
 				<Foldable>
 					<template #title>{{ $t("menu.import") }}</template>

@@ -64,6 +64,8 @@ button:hover {
 	border-radius: 4px;
 	padding: 8px;
 	width: 200px;
+	max-height: 90vh;
+	overflow-y: auto;
 }
 
 .menu .menu-content {

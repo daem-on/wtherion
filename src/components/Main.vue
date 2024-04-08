@@ -50,22 +50,18 @@ main {
 
 	color: var(--text-color);
 	background-color: var(--background-color);
+	color-scheme: light dark;
 }
 
 .sidebar {
 	max-width: 300px;
 	min-width: 250px;
 	width: 20vw;
-	color-scheme: light dark;
 }
 
 main .canvas {
 	flex: 1;
 	position: relative;
-}
-
-.floating-ui {
-	color-scheme: light dark;
 }
 
 .show-sidebar {

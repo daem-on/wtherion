@@ -1,4 +1,4 @@
-import { Component, computed, ref } from "vue";
+import { Component, computed, markRaw, ref } from "vue";
 
 export function notice(msg, type) {
 	const $fader = jQuery('<div class="modal fader admin">');
@@ -127,6 +127,7 @@ const activeDialogs = ref(new Map<string, { component: DialogComponent<any>, dat
 export const activeDialogList = computed(() => Array.from(activeDialogs.value.values()));
 
 export function addDialog<T>(component: DialogComponent<T>, data: DialogData<T>): void {
+	component = markRaw(component);
 	activeDialogs.value.set(data.id, { component, data });
 }
 

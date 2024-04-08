@@ -17,6 +17,7 @@ import { getVersionNumber } from "./filesio/configManagement";
 import * as configEditor from "./configEditor";
 import { openSearchDialog } from "./search";
 import { showValidationWindow } from "./validate";
+import KeybindEditorDialog from "./components/dialogs/KeybindEditorDialog.vue";
 
 export function setup() {
 	setupNavigationLogic();
@@ -200,6 +201,10 @@ export const handlers = {
 	searchDialog: openSearchDialog,
 
 	validate: showValidationWindow,
+
+	openKeybindEditor: function() {
+		modal.addDialog(KeybindEditorDialog, { id: "keybindEditor", content: undefined, title: "keybinds.title" });
+	},
 };
 
 export function showCommitButton(show: boolean) {

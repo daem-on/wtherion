@@ -8,7 +8,7 @@ body, html {
 body {
 	font-family: 'Poppins', sans-serif;
 	--primary-color: #3AAB75;
-	--hover-color: #3aab7434;
+	--hover-color: #6ac99b46;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -138,6 +138,19 @@ select::-ms-expand {
 
 button {
 	cursor:pointer;
+}
+
+@media not (prefers-color-scheme: dark) {
+	button {
+		background-color: var(--background-color);
+		color: var(--text-color);
+		border: 1px solid var(--border-color);
+		border-radius: 4px;
+	}
+
+	button:hover {
+		background-color: var(--hover-color);
+	}
 }
 
 .search-ui {

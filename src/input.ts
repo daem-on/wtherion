@@ -7,6 +7,7 @@ import { resetZoom } from "./view";
 import { redo, undo } from "./undo";
 import { deleteSelection } from "./selection";
 import editTH2 from "./editTH2";
+import { reactive } from "vue";
 
 export function setup() {
 	setupKeyboard();
@@ -24,7 +25,7 @@ const keys = [
 type Key = typeof keys[number];
 export type KeySpec = `${'ctrl-' | ''}${'shift-' | ''}${Key}${'-up' | ''}`;
 
-const currentBinds = new Map<KeySpec, Set<string>>();
+export const currentBinds = reactive(new Map<KeySpec, Set<string>>());
 const actionCallbacks = new Map<string, () => void>();
 
 export function registerAction(name: string, callback: () => void, defaultBind: KeySpec) {
@@ -33,6 +34,10 @@ export function registerAction(name: string, callback: () => void, defaultBind: 
 		currentBinds.set(defaultBind, new Set());
 	}
 	currentBinds.get(defaultBind).add(name);
+}
+
+export function getActionList(): string[] {
+	return Array.from(actionCallbacks.keys());
 }
 
 function loadCustomKeybinds() {
@@ -54,7 +59,7 @@ function keySpecIsValid(input: string): input is KeySpec {
 	return true;
 }
 
-function getSpec(event: KeyboardEvent, up: boolean): KeySpec {
+export function getKeySpec(event: KeyboardEvent, up: boolean): KeySpec {
 	let spec = "";
 	if (event.ctrlKey || event.metaKey) spec += "ctrl-";
 	if (event.shiftKey) spec += "shift-";
@@ -67,7 +72,7 @@ function setupKeyboard() {
 	function handleKeyEvent(event: KeyboardEvent, up: boolean) {
 		if (userIsTyping(event)) return;
 		if (event.repeat) return;
-		const spec = getSpec(event, up);
+		const spec = getKeySpec(event, up);
 		if (currentBinds.has(spec)) {
 			const actions = currentBinds.get(spec);
 			for (const action of actions) {

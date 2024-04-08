@@ -2,7 +2,7 @@ import LineSettings from "../objectSettings/model/LineSettings";
 import getSettings from "../objectSettings/model/getSettings";
 import { addText, toGlobal, addWhitespace } from "./exportTH2";
 
-export type paperExportedPath = {
+export type PathExportResult = {
 	closed: boolean;
 	segments: segment[];
 };
@@ -14,7 +14,7 @@ function isCurved(segment: segment): segment is curvedSegment {
 	return segment.length >= 3;
 }
 
-export function processLine(item: paperExportedPath, settings?: LineSettings) {
+export function processLine(item: PathExportResult, settings?: LineSettings) {
 	const segments = item.segments;
 	if (!segments || segments.length < 2)
 		return;

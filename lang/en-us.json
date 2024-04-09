@@ -181,5 +181,7 @@
 	"keybinds.title": "Keybind editor",
 	"keybinds.action": "Action",
 	"keybinds.key": "Bound keys",
-	"keybinds.pressKey": "Press a key or combination..."
+	"keybinds.pressKey": "Press a key or combination...",
+	"scraps.rename.prompt": "Enter the new name",
+	"rename": "Rename"
 }

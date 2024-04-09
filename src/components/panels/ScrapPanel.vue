@@ -5,13 +5,13 @@ import { Raw, markRaw, onUnmounted, ref } from 'vue';
 import { addNewLayer, deleteLayer, isActiveLayer, setActiveLayer } from "../../layer";
 import MenuButton from "../common/MenuButton.vue";
 
-const layers = ref<{ name: string, raw: Raw<paper.Layer> }[]>([]);
+const layers = ref<{ name: string, active: boolean, raw: Raw<paper.Layer> }[]>([]);
 
 function handleLayerChange() {
 	layers.value.length = 0;
 	for (const layer of paper.project?.layers ?? []) {
 		if (layer.data.isGuideLayer) continue;
-		layers.value.push({ name: layer.name, raw: markRaw(layer) });
+		layers.value.push({ name: layer.name, active: isActiveLayer(layer), raw: markRaw(layer) });
 	}
 }
 handleLayerChange();
@@ -30,7 +30,15 @@ function setVisibility(visible: boolean, layer: paper.Layer) {
 function deleteCurrentLayer(message: string) {
 	if (!confirm(message)) return;
 	const layer = paper.project.activeLayer;
-	deleteLayer(layer);
+	deleteLayer(layer.data.id);
+	triggers.emit("LayersChanged");
+}
+
+function renameCurrentLayer(message: string) {
+	const layer = paper.project.activeLayer;
+	const name = prompt(message, layer.name);
+	if (!name) return;
+	layer.name = name;
 	triggers.emit("LayersChanged");
 }
 </script>
@@ -39,7 +47,6 @@ function deleteCurrentLayer(message: string) {
 	<div class="scrap-panel">
 		<div class="header">
 			<h2>{{ $t("scraps") }}</h2>
-			<button @click="deleteCurrentLayer($t(`scraps.delete.confirm`))">{{ $t("delete") }}</button>
 			<button @click="addNewLayer()">{{ $t("scraps.add") }}</button>
 		</div>
 		<ul class="scrap-list">
@@ -47,11 +54,15 @@ function deleteCurrentLayer(message: string) {
 				v-for="entry in layers"
 				:key="entry.name"
 				@click="setActiveLayer(entry.raw)"
-				:class="{ active: isActiveLayer(entry.raw) }"
+				:class="{ active: entry.active }"
 				class="scrap-entry">
 				
 				<input type="checkbox" :checked="entry.raw.visible" @change="setVisibility(!entry.raw.visible, entry.raw)">
-				{{ entry.name }}
+				<span class="scrap-name">{{ entry.name }}</span>
+				<div class="layer-actions" v-if="entry.active">
+					<button @click.stop="deleteCurrentLayer($t(`scraps.delete.confirm`))">{{ $t("delete") }}</button>
+					<button @click.stop="renameCurrentLayer($t(`scraps.rename.prompt`))">{{ $t("rename") }}</button>
+				</div>
 			</MenuButton>
 		</ul>
 	</div>
@@ -91,5 +102,20 @@ h2 {
 .scrap-entry {
 	display: flex;
 	align-items: center;
+	gap: 4px;
+	overflow-x: hidden;
+}
+
+.scrap-name {
+	word-wrap: break-word;
+	min-width: 0;
+}
+
+.layer-actions {
+	flex-grow: 1;
+	display: flex;
+	justify-content: flex-end;
+	gap: 4px;
+	flex-wrap: wrap;
 }
 </style>

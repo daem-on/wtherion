@@ -6,9 +6,7 @@ import * as selection from "./selection";
 import { triggers } from "./triggers";
 
 export function setup() {
-	const defaultLayer = addNewLayer('Default scrap');
-	defaultLayer.data.isDefaultLayer = true;
-	defaultLayer.data.id = getUniqueLayerID();
+	const defaultLayer = addNewLayer('Scrap 1');
 	
 	ensureGuideLayer();
 	
@@ -17,12 +15,12 @@ export function setup() {
 }
 
 
-export function isLayer(item) {
+export function isLayer(item: paper.Item): item is paper.Layer {
 	return item.className === "Layer";
 }
 
 
-export function isActiveLayer(layer) {
+export function isActiveLayer(layer: paper.Layer) {
 	return paper.project.activeLayer.data.id === layer.data.id;
 }
 
@@ -49,6 +47,15 @@ export function ensureGuideLayer() {
 	}
 }
 
+function getUniqueLayerName() {
+	let i = 1;
+	let name = `Scrap ${i}`;
+	while (paper.project.layers.find(layer => layer.name === name)) {
+		i++;
+		name = `Scrap ${i}`;
+	}
+	return name;
+}
 
 export function addNewLayer(layerName: string = null, setActive = true, elementsToAdd: paper.Item[] = null) {
 	const newLayer = new paper.Layer();
@@ -56,11 +63,7 @@ export function addNewLayer(layerName: string = null, setActive = true, elements
 	newLayer.data.id = getUniqueLayerID();
 	newLayer.data.therionData = ScrapSettings.defaultSettings();
 	
-	if (layerName) {
-		newLayer.name = layerName;
-	} else {
-		newLayer.name = `Scrap ${newLayer.data.id}`;
-	}
+	newLayer.name = layerName ?? getUniqueLayerName();
 	
 	if (setActive) {
 		setActiveLayer(newLayer);
@@ -79,16 +82,20 @@ export function addNewLayer(layerName: string = null, setActive = true, elements
 	return newLayer;
 }
 
+function backupSingletonData(layer: paper.Layer) {
+	const xthSettings = layer.data.therionData?.xthSettings;
+	if (!xthSettings) return;
+	paper.project.layers.find(l => l !== layer).data.therionData.xthSettings = xthSettings;
+}
 
-export function deleteLayer(id) {
+export function deleteLayer(id: number) {
+	if (paper.project.layers.length === 1) return;
 	const layer = getLayerByID(id);
-	if (layer) {
-		layer.remove();
-	}
-	const defaultLayer = getDefaultLayer();
-	if (defaultLayer) {
-		defaultLayer.activate();
-	}
+	if (!layer) return;
+	backupSingletonData(layer);
+	layer.remove();
+	activateDefaultLayer();
+	triggers.emit("LayerRemoved");
 }
 
 
@@ -117,25 +124,13 @@ export function setActiveLayer(activeLayer: paper.Layer) {
 }
 
 
-export function getLayerByID(id): paper.Layer | undefined {
-	for (let i=0; i<paper.project.layers.length; i++) {
-		const layer = paper.project.layers[i];
-		if (layer.data.id === id) {
-			return layer;
-		}
-	}
-	return undefined;
+export function getLayerByID(id: number): paper.Layer | undefined {
+	return paper.project.layers.find(layer => layer.data.id === id);
 }
 
 
-export function getDefaultLayer() {
-	for (let i=0; i<paper.project.layers.length; i++) {
-		const layer = paper.project.layers[i];
-		if (layer.data && layer.data.isDefaultLayer) {
-			return layer;
-		}
-	}
-	return null;
+export function getDefaultLayer(): paper.Layer {
+	return paper.project.layers.find(layer => !layer.data?.isGuideLayer);
 }
 	
 
@@ -145,27 +140,13 @@ export function activateDefaultLayer() {
 }
 
 
-export function getGuideLayer() {
-	for (let i=0; i<paper.project.layers.length; i++) {
-		const layer = paper.project.layers[i];
-		if (layer.name === "pg.internalGuideLayer") {
-			return layer;
-		}
-	}
-	return false;
+export function getGuideLayer(): paper.Layer {
+	return paper.project.layers.find(layer => layer.data.isGuideLayer);
 }
 
 
 export function getAllUserLayers() {
-	const layers = [];
-	for (let i=0; i<paper.project.layers.length; i++) {
-		const layer = paper.project.layers[i];
-		if (layer.data && layer.data.isGuideLayer) {
-			continue;
-		}
-		layers.push(layer);
-	}
-	return layers;
+	return paper.project.layers.filter(layer => !layer.data?.isGuideLayer);
 }
 
 
@@ -182,7 +163,7 @@ export function changeLayerOrderByIDArray(order) {
 }
 
 
-export function reinitLayers(activeLayerID) {
+export function reinitLayers(activeLayerID: number) {
 	for (let i=0; i<paper.project.layers.length; i++) {
 		const layer = paper.project.layers[i];
 		if (layer.data.id === activeLayerID) {

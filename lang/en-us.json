@@ -199,5 +199,6 @@
 	"keybinds.key": "Bound keys",
 	"keybinds.pressKey": "Press a key or combination...",
 	"scraps.rename.prompt": "Enter the new name",
-	"rename": "Rename"
+	"rename": "Rename",
+	"showSidebar": "Show/hide sidebar"
 }

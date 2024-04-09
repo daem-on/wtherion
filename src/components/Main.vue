@@ -3,9 +3,6 @@ import Toolbar from "./Toolbar.vue";
 import Sidebar from "./Sidebar.vue";
 import { onMounted, ref, watch } from "vue";
 import pg from "../init";
-import leftPanelOpenUrl from "../../assets/ui/left_panel_open.svg";
-import leftPanelCloseUrl from "../../assets/ui/left_panel_close.svg";
-import ToolButton from "./common/ToolButton.vue";
 import DialogContainer from "./dialogs/DialogContainer.vue";
 import { cancelAll, drop } from "../filesio/dropfiles";
 import ContextMenu from "./ContextMenu.vue";
@@ -27,10 +24,7 @@ watch(showSidebar, () => {
 		<Sidebar v-if="showSidebar" />
 		<div class="canvas" id="fileDropzone">
 			<div class="floating-ui">
-				<Toolbar />
-				<ToolButton class="show-sidebar" @click="showSidebar = !showSidebar">
-					<img :src="showSidebar ? leftPanelCloseUrl : leftPanelOpenUrl" />
-				</ToolButton>
+				<Toolbar :showSidebar @toggleSidebar="showSidebar = !showSidebar" />
 				<ContextMenu />
 			</div>
 			<canvas
@@ -64,23 +58,5 @@ main {
 main .canvas {
 	flex: 1;
 	position: relative;
-}
-
-.show-sidebar {
-	position: absolute;
-	bottom: 4px;
-	left: 4px;
-	z-index: 10;
-}
-
-.show-sidebar img {
-	width: 32px;
-	height: 32px;
-}
-
-@media (prefers-color-scheme: dark) {
-	img, canvas {
-		filter: invert(1);
-	}
 }
 </style>

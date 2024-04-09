@@ -6,6 +6,8 @@ import ToolButton from "./common/ToolButton.vue";
 import compareUrl from "../../assets/ui/compare.svg";
 import { setCustomRender } from "../render";
 import ToolMenu from "./ToolMenu.vue";
+import leftPanelOpenUrl from "../../assets/ui/left_panel_open.svg";
+import leftPanelCloseUrl from "../../assets/ui/left_panel_close.svg";
 
 const toolList = computed(() => {
 	if (!toolsRef.value) return [];
@@ -17,6 +19,10 @@ const enableCustomRender = ref(true);
 watch(() => enableCustomRender.value, value => {
 	setCustomRender(value);
 });
+
+const emit = defineEmits(["toggleSidebar"]);
+
+defineProps<{ showSidebar: boolean }>();
 </script>
 
 <template>
@@ -46,6 +52,12 @@ watch(() => enableCustomRender.value, value => {
 		<hr>
 
 		<ToolMenu v-if="activeToolRef" />
+
+		<div class="spacer"></div>
+
+		<ToolButton class="show-sidebar" @click="emit(`toggleSidebar`)" :title="$t(`showSidebar`)">
+			<img :src="showSidebar ? leftPanelCloseUrl : leftPanelOpenUrl" width="28" height="28" />
+		</ToolButton>
 	</div>
 </template>
 
@@ -62,7 +74,7 @@ watch(() => enableCustomRender.value, value => {
 	background-color: var(--background-color);
 	border-radius: 4px;
 	z-index: 20;
-	max-height: calc(100vh - 30px);
+	height: 100vh;
 	overflow-y: auto;
 	overflow-x: hidden;
 	scrollbar-width: thin;
@@ -76,6 +88,10 @@ watch(() => enableCustomRender.value, value => {
 
 .tool.ducked {
 	outline: 1px solid var(--primary-color);
+}
+
+.spacer {
+	flex: 1;
 }
 
 hr {

@@ -18,6 +18,7 @@ import * as configEditor from "./configEditor";
 import { openSearchDialog } from "./search";
 import { showValidationWindow } from "./validate";
 import KeybindEditorDialog from "./components/dialogs/KeybindEditorDialog.vue";
+import { ref } from "vue";
 
 export function setup() {
 	setupNavigationLogic();
@@ -250,35 +251,10 @@ export function clearToolEntries() {
 	jQuery('#toolSubMenu').empty().parent().addClass('empty');
 }
 
+export const contextMenuPosition = ref<{ x: number; y: number } | null>(null);
 
 export function showContextMenu(event) {
-
-	// check for selected items, so the right context menu can be opened
-	if(selection.getSelectedItems().length > 0) {
-		if(jQuery('#appNavContextMenu').length > 0) {
-			return;
-		}
-		// create, append and position context menu for object context
-		jQuery('body').append("<nav class='appNav' id='appNavContextMenu'></nav>");
-		
-		const $menu = jQuery('#toolSubMenu')
-			.clone(true)
-			.appendTo('#appNavContextMenu')
-			.show();
-		
-		let menuPosY = event.pageY;
-		const diff = (jQuery(document).height() - event.pageY) - $menu.outerHeight();
-		if(diff < 0) {
-			menuPosY += diff - 10; 
-		}
-		$menu.css({ 'position': 'absolute', 'top': menuPosY, 'left': event.pageX });
-		
-		jQuery('#menuInputBlocker').show();
-		
-	} else {
-		//todo: create context menu for document context
-	}
-
+	contextMenuPosition.value = { x: event.clientX, y: event.clientY };
 }
 
 function hideMenus() {

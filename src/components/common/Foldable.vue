@@ -6,7 +6,7 @@ const open = ref(false);
 
 <template>
 	<div class="foldable">
-		<h2 @click="open = !open; $event.stopPropagation()">
+		<h2 @click.stop="open = !open">
 			<slot name="title"></slot>
 			{{ open ? "⯅" : "⯆" }}
 		</h2>

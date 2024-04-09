@@ -15,7 +15,6 @@ import * as undo from "../undo";
 import * as selection from "../selection";
 import { defineTool } from "../tools";
 import { ToolAction } from "../toolMenu";
-import editTH2 from "../editTH2";
 import selectAllUrl from "../../assets/ui/select_all.svg";
 import linearScaleUrl from "../../assets/ui/linear_scale.svg";
 import callSplitUrl from "../../assets/ui/call_split.svg";
@@ -26,35 +25,35 @@ const actions: ToolAction[] = [
 		name: "selectAll",
 		callback: () => selection.selectAllSegments(),
 		defaultKey: "ctrl-a",
+		category: "selection",
 		icon: selectAllUrl,
+		label: "selectAll"
 	},
 	{
 		name: "invertSelection",
 		callback: () => selection.invertSegmentSelection(),
 		defaultKey: "ctrl-i",
-	},
-	{
-		name: "selectNone",
-		label: "Deselect all",
-		callback: () => selection.clearSelection(),
 		category: "selection",
 	},
 	{
+		name: "selectNone",
+		callback: () => selection.clearSelection(),
+		category: "selection",
+		label: "deselectAll"
+	},
+	{
 		name: "switchHandles",
-		label: "Toggle handles",
 		callback: () => selection.switchSelectedHandles(),
 		category: "segment",
 		icon: linearScaleUrl,
 	},
 	{
 		name: "smoothHandles",
-		label: "Reset handles to smooth",
 		callback: () => selection.smoothHandles(),
 		category: "segment",
 	},
 	{
 		name: "removeSegments",
-		label: "Remove segments",
 		callback: () => selection.removeSelectedSegments(),
 		category: "segment",
 		icon: removeSelection,
@@ -62,16 +61,9 @@ const actions: ToolAction[] = [
 	},
 	{
 		name: "splitPath",
-		label: "Split path",
 		callback: () => selection.splitPathAtSelectedSegments(),
 		category: "segment",
 		icon: callSplitUrl,
-	},
-	{
-		name: "test5",
-		label: "Merge lines",
-		callback: () => editTH2.mergeLines(),
-		category: "test",
 	},
 ];
 

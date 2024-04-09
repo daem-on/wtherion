@@ -37,26 +37,27 @@ const actions: ToolAction[] = [
 		callback: () => selection.selectAllItems(),
 		defaultKey: "ctrl-a",
 		category: "edit",
+		label: "selectAll",
 		icon: selectAllUrl
 	},
 	{
 		name: "invertSelection",
 		callback: () => selection.invertItemSelection(),
 		defaultKey: "ctrl-i",
-		category: "edit"
+		category: "selection"
 	},
 	{
 		name: "groupSelection",
 		callback: () => group.groupSelection(),
 		defaultKey: "ctrl-g",
-		category: "edit",
+		category: "selection",
 		icon: linkUrl
 	},
 	{
 		name: "ungroupSelection",
 		callback: () => group.ungroupSelection(),
 		defaultKey: "ctrl-shift-g",
-		category: "edit",
+		category: "selection",
 	},
 	{
 		name: "copySelection",
@@ -83,6 +84,7 @@ const actions: ToolAction[] = [
 		name: "deselectAll",
 		callback: () => selection.clearSelection(),
 		category: "selection",
+		label: "deselectAll",
 	},
 	{
 		name: "lineToArea",
@@ -97,14 +99,14 @@ const actions: ToolAction[] = [
 	{
 		name: "toggleItemsLocked",
 		callback: () => editTH2.toggleItemsLocked(),
-		category: "areas",
+		category: "selection",
 		defaultKey: "ctrl-l",
 		icon: lockUrl
 	},
 	{
 		name: "unlockSelection",
 		callback: () => editTH2.unlockSelection(),
-		category: "areas",
+		category: "selection",
 		defaultKey: "ctrl-shift-l",
 		icon: lockOpenUrl
 	},

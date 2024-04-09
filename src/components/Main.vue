@@ -8,6 +8,7 @@ import leftPanelCloseUrl from "../../assets/ui/left_panel_close.svg";
 import ToolButton from "./common/ToolButton.vue";
 import DialogContainer from "./dialogs/DialogContainer.vue";
 import { cancelAll, drop } from "../filesio/dropfiles";
+import ContextMenu from "./ContextMenu.vue";
 
 onMounted(() => {
 	pg.init();
@@ -30,6 +31,7 @@ watch(showSidebar, () => {
 				<ToolButton class="show-sidebar" @click="showSidebar = !showSidebar">
 					<img :src="showSidebar ? leftPanelCloseUrl : leftPanelOpenUrl" />
 				</ToolButton>
+				<ContextMenu />
 			</div>
 			<canvas
 				id="paperCanvas"

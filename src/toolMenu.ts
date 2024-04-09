@@ -20,7 +20,7 @@ export function compileToolMenu(list?: ToolAction[]): ToolMenuEntry[] {
 	for (const action of list) {
 		const category = action.category || "Other";
 		if (!categories.has(category)) {
-			categories.set(category, { actions: [] });
+			categories.set(category, { name: category, actions: [] });
 		}
 		categories.get(category).actions.push(action);
 	}

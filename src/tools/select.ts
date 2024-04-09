@@ -381,7 +381,7 @@ export const select = defineTool({
 		on("mouseup", event => {
 			if (event.event.button > 0) return; // only first mouse button
 			
-			if (mode === 'rectSelection' && selectionRect) {
+			finalize: if (mode === 'rectSelection' && selectionRect) {
 				selection.processRectangularSelection(event, selectionRect);
 				selectionRect.remove();
 				
@@ -397,6 +397,8 @@ export const select = defineTool({
 				undo.snapshot('moveSelection');
 				
 			} else if (mode === 'scale') {
+				if (!itemGroup) break finalize;
+
 				// this means the original setting is lost, but whatever
 				itemGroup.strokeScaling = true;
 				itemGroup.applyMatrix = true;

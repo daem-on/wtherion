@@ -28,12 +28,14 @@ export type KeySpec = `${'ctrl-' | ''}${'shift-' | ''}${Key}${'-up' | ''}`;
 export const currentBinds = reactive(new Map<KeySpec, Set<string>>());
 const actionCallbacks = new Map<string, () => void>();
 
-export function registerAction(name: string, callback: () => void, defaultBind: KeySpec) {
+export function registerAction(name: string, callback: () => void, defaultBind?: KeySpec) {
 	actionCallbacks.set(name, callback);
-	if (!currentBinds.has(defaultBind)) {
-		currentBinds.set(defaultBind, new Set());
+	if (defaultBind) {
+		if (!currentBinds.has(defaultBind)) {
+			currentBinds.set(defaultBind, new Set());
+		}
+		currentBinds.get(defaultBind).add(name);
 	}
-	currentBinds.get(defaultBind).add(name);
 }
 
 export function getActionList(): string[] {
@@ -113,13 +115,8 @@ function setupKeyboard() {
 
 	registerAction("global.blur", blurCurrent, "escape");
 
-	registerAction("global.delete", deleteSelection, "delete");
-
 	registerAction("th2.lineToArea", () => editTH2.lineToArea(), "ctrl-h");
 	registerAction("th2.areaToLine", () => editTH2.areaToLine(), "ctrl-shift-h");
-
-	registerAction("th2.toggleLocked", () => editTH2.toggleItemsLocked(), "ctrl-l");
-	registerAction("th2.unlock", () => editTH2.unlockSelection(), "ctrl-shift-l");
 }
 
 export function textIsSelected() {

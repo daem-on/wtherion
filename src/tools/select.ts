@@ -19,113 +19,132 @@ import paper from "paper";
 import LineSettings from "../../src/objectSettings/model/LineSettings";
 import { defineTool } from "../tools";
 import { triggers } from "../triggers";
+import { ToolAction } from "../toolMenu";
+import editTH2 from "../editTH2";
+import { bringSelectionToFront, sendSelectionToBack } from "../order";
+import selectAllUrl from "../../assets/ui/select_all.svg";
+import contentCopyUrl from "../../assets/ui/content_copy.svg";
+import contentPasteUrl from "../../assets/ui/content_paste.svg";
+import linkUrl from "../../assets/ui/link.svg";
+import mergeUrl from "../../assets/ui/merge.svg";
+import removeSelectionUrl from "../../assets/ui/remove_selection.svg";
+import lockUrl from "../../assets/ui/lock.svg";
+import lockOpenUrl from "../../assets/ui/lock_open.svg";
 
-const menuEntries = {
-	editTitle: {
-		type : 'title',
-		text : "%edit%"
+const actions: ToolAction[] = [
+	{
+		name: "selectAll",
+		callback: () => selection.selectAllItems(),
+		defaultKey: "ctrl-a",
+		category: "edit",
+		icon: selectAllUrl
 	},
-	copySelection: {
-		type: 'button',
-		label: "%copy%",
-		click: 'pg.edit.copySelectionToClipboard'
+	{
+		name: "invertSelection",
+		callback: () => selection.invertItemSelection(),
+		defaultKey: "ctrl-i",
+		category: "edit"
 	},
-	pasteSelection: {
-		type: 'button',
-		label: "%paste%",
-		click: 'pg.edit.pasteObjectsFromClipboard'
+	{
+		name: "groupSelection",
+		callback: () => group.groupSelection(),
+		defaultKey: "ctrl-g",
+		category: "edit",
+		icon: linkUrl
 	},
-	deleteSelection: {
-		type: 'button',
-		label: "%delete%",
-		click: 'pg.selection.deleteSelection'
+	{
+		name: "ungroupSelection",
+		callback: () => group.ungroupSelection(),
+		defaultKey: "ctrl-shift-g",
+		category: "edit",
 	},
-	selectionTitle: {
-		type : 'title',
-		text : "%select%"
+	{
+		name: "copySelection",
+		callback: () => edit.copySelectionToClipboard(),
+		defaultKey: "ctrl-c",
+		category: "edit",
+		icon: contentCopyUrl
 	},
-	selectAll: {
-		type: 'button',
-		label: "%selectAll%",
-		click: 'pg.selection.selectAllItems'
+	{
+		name: "pasteSelection",
+		callback: () => edit.pasteObjectsFromClipboard(),
+		defaultKey: "ctrl-v",
+		category: "edit",
+		icon: contentPasteUrl
 	},
-	selectNone: {
-		type: 'button',
-		label: "%deselectAll%",
-		click: 'pg.selection.clearSelection'
+	{
+		name: "delete",
+		callback: () => selection.deleteSelection(),
+		category: "edit",
+		defaultKey: "delete",
+		icon: removeSelectionUrl
 	},
-	invertSelection: {
-		type: 'button',
-		label: "%invertSelection%",
-		click: 'pg.selection.invertItemSelection'
+	{
+		name: "deselectAll",
+		callback: () => selection.clearSelection(),
+		category: "selection",
 	},
-	areasTitle: {
-		type: "title",
-		text: "%area%"
+	{
+		name: "lineToArea",
+		callback: () => editTH2.lineToArea(),
+		category: "areas",
 	},
-	lineToArea: {
-		type: "button",
-		label: "%lineToArea%",
-		click: "pg.editTH2.lineToArea"
+	{
+		name: "areaToLine",
+		callback: () => editTH2.areaToLine(),
+		category: "areas",
 	},
-	areaToLine: {
-		type: "button",
-		label: "%areaToLine%",
-		click: "pg.editTH2.areaToLine"
+	{
+		name: "toggleItemsLocked",
+		callback: () => editTH2.toggleItemsLocked(),
+		category: "areas",
+		defaultKey: "ctrl-l",
+		icon: lockUrl
 	},
-	lockArea: {
-		type: "button",
-		label: "%toggleItemsLocked%",
-		click: "pg.editTH2.toggleItemsLocked"
+	{
+		name: "unlockSelection",
+		callback: () => editTH2.unlockSelection(),
+		category: "areas",
+		defaultKey: "ctrl-shift-l",
+		icon: lockOpenUrl
 	},
-	orderTitle: {
-		type : 'title',
-		text : '%order%'
+	{
+		name: "bringToFront",
+		callback: () => bringSelectionToFront(),
+		category: "order",
 	},
-	bringToFront: {
-		type: 'button',
-		label: '%bringToFront%',
-		click: 'pg.order.bringSelectionToFront'
+	{
+		name: "sendToBack",
+		callback: () => sendSelectionToBack(),
+		category: "order",
 	},
-	sendToBack: {
-		type: 'button',
-		label: '%sendToBack%',
-		click: 'pg.order.sendSelectionToBack'
+	{
+		name: "mergeLines",
+		callback: () => editTH2.mergeLines(),
+		category: "lines",
+		icon: mergeUrl
 	},
-	linesTitle: {
-		type: 'title',
-		text: '%linesTitle%',
+	{
+		name: "smoothLine",
+		callback: () => editTH2.smooth(),
+		category: "lines",
 	},
-	mergeLines: {
-		type: 'button',
-		label: '%mergeLines%',
-		click: 'pg.editTH2.mergeLines'
+	{
+		name: "simplifyLine",
+		callback: () => editTH2.simplify(),
+		category: "lines",
 	},
-	smoothLine: {
-		type: 'button',
-		label: '%smoothLine%',
-		click: 'pg.editTH2.smooth'
+	{
+		name: "randomizeRotation",
+		callback: () => editTH2.randomizeRotation(),
+		category: "points"
 	},
-	simplifyLine: {
-		type: 'button',
-		label: '%simplifyLine%',
-		click: 'pg.editTH2.simplify'
-	},
-	pointsTitle: {
-		type: 'title',
-		text: '%pointsTitle%',
-	},
-	randomizeRotation: {
-		type: "button",
-		label: "%randomizeRotation%",
-		click: "pg.editTH2.randomizeRotation"
-	},
-	changeNamespace: {
-		type: "button",
-		label: "%edit.changeNamespace%",
-		click: "pg.editTH2.changeStationsNamespace"
+	{
+		name: "changeNamespace",
+		callback: () => editTH2.changeStationsNamespace(),
+		category: "points"
 	}
-};
+];
 
 const hitOptions = {
 	segments: true,
@@ -140,14 +159,7 @@ export const select = defineTool({
 	definition: {
 		id: 'select',
 		name: 'tools.itemSelect',
-		actions: {
-			selectAll: 'ctrl-a',
-			invertSelection: 'ctrl-i',
-			groupSelection: 'ctrl-g',
-			ungroupSelection: 'ctrl-shift-g',
-			copySelection: 'ctrl-c',
-			pasteSelection: 'ctrl-v'
-		},
+		actions,
 	},
 	setup(on) {
 		let boundsPath: paper.Path;
@@ -179,7 +191,6 @@ export const select = defineTool({
 			// setup floating tool options panel in the editor
 			//pg.toolOptionPanel.setup(options, components, function(){ });
 			
-			menu.setupToolEntries(menuEntries);
 			triggers.onAny(['DeleteItems', 'Undo', 'Redo', 'Grouped', 'Ungrouped', 'SelectionChanged'], triggerHandler);
 
 			hitOptions.tolerance = 8 / paper.view.zoom;
@@ -437,29 +448,6 @@ export const select = defineTool({
 				removeBoundsPath();
 			} else {
 				setSelectionBounds();
-			}
-		});
-
-		on("action", action => {
-			switch (action) {
-				case 'selectAll':
-					selection.selectAllItems();
-					break;
-				case 'invertSelection':
-					selection.invertItemSelection();
-					break;
-				case 'groupSelection':
-					group.groupSelection();
-					break;
-				case 'ungroupSelection':
-					group.ungroupSelection();
-					break;
-				case 'copySelection':
-					edit.copySelectionToClipboard();
-					break;
-				case 'pasteSelection':
-					edit.pasteObjectsFromClipboard();
-					break;
 			}
 		});
 

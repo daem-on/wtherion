@@ -411,7 +411,7 @@ export function smoothHandles() {
 	switchSelectedHandles("smooth");
 }
 
-export function switchSelectedHandles(mode) {
+export function switchSelectedHandles(mode?: "linear" | "smooth") {
 	const items = getSelectedItems() as paper.Path[];
 	for(let i=0; i<items.length; i++) {
 		const segments = items[i].segments;

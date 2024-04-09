@@ -7,8 +7,9 @@ import { point } from "./tools/point";
 import { viewgrab } from "./tools/viewgrab";
 import { viewzoom } from "./tools/viewzoom";
 import { inspect } from "./tools/inspect";
-import { Component, Ref, computed, ref, watch } from "vue";
-import { KeySpec, registerAction } from "./input";
+import { Component, computed, ref, watch } from "vue";
+import { registerAction } from "./input";
+import { ToolAction, ToolMenuEntry, compileToolMenu } from "./toolMenu";
 
 const createToolRegistry = <Id extends string>(initializers: { [K in Id]: WtToolInitializer<K> }) => initializers;
 
@@ -40,7 +41,6 @@ type ToolEventMap = {
 	"wheel": WheelEvent,
 	"activate": void,
 	"deactivate": void,
-	"action": string,
 };
 
 type EventHandler<T extends keyof ToolEventMap> = (event: ToolEventMap[T]) => void
@@ -52,6 +52,7 @@ type WtTool<Id extends string = ToolId> = {
 	definition: ToolDefinition<Id>,
 	uiState?: ToolUiState,
 	emit: EventEmitter,
+	menu: ToolMenuEntry[],
 };
 
 type WtToolInitializer<Id extends string> = () => WtTool<Id>;
@@ -71,11 +72,11 @@ export function defineTool<Id extends string>(settings: {
 		settings.setup(addEvent, tool);
 
 		if (settings.definition.actions) {
-			for (const action in settings.definition.actions) {
-				const key = settings.definition.actions[action];
+			for (const action of settings.definition.actions) {
+				const key = action.defaultKey;
 				const id = settings.definition.id;
-				const name = `${id}.${action}`;
-				registerAction(name, createActionCallback(id, action), key);
+				const name = `${id}.${action.name}`;
+				registerAction(name, createActionCallback(id, action.callback), key);
 			}
 		}
 		return {
@@ -83,15 +84,16 @@ export function defineTool<Id extends string>(settings: {
 			emit: (eventName, event) => tool.emit(eventName, event as any),
 			uiState: settings.uiState,
 			definition: settings.definition,
+			menu: compileToolMenu(settings.definition.actions),
 		};
 	};
 }
 
-function createActionCallback(toolId: string, action: string) {
+function createActionCallback(toolId: string, callback: () => void) {
 	return () => {
 		const active = activeTool.value;
 		if (active?.definition.id === toolId) {
-			active.emit("action", action);
+			callback();
 		}
 	};
 }
@@ -151,9 +153,7 @@ export type ToolDefinition<Id extends string> = {
 	id: Id;
 	name: string;
 	type?: "hidden";
-	actions?: {
-		[name: string]: KeySpec;
-	},
+	actions?: ToolAction[],
 	panel?: Component,
 }
 

@@ -21,14 +21,18 @@ export const showBezierPanel = ref(true);
 
 type TypedHitResult<T extends paper.Item> = paper.HitResult & {item: T}
 
+let onFinish: undefined | (() => void);
+
 export const bezier = defineTool({
 	definition: {
 		id: 'bezier',
 		name: 'tools.bezier',
 		panel: markRaw(BezierPanel),
-		actions: {
-			finish: "enter",
-		}
+		actions: [{
+			name: "finish",	
+			callback: () => onFinish?.(),
+			defaultKey: "enter",
+		}]
 	},
 	uiState: {
 		options: bezierOptions.value
@@ -76,6 +80,7 @@ export const bezier = defineTool({
 			dirty = false;
 			path = null;
 		}
+		onFinish = finish;
 
 		function snapshotIfDirty() {
 			if (dirty) {
@@ -209,10 +214,6 @@ export const bezier = defineTool({
 			if (event.event.button > 0) return;  // only first mouse button
 			
 			if (path && path.closed) finish();
-		});
-
-		on("action", action => {
-			if (action === "finish") finish();
 		});
 
 		on("deactivate", () => {

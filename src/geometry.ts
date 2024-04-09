@@ -1,6 +1,6 @@
 // functions relating to modifying paths, segments and points
 
-export function switchHandle(seg, mode) {
+export function switchHandle(seg: paper.Segment, mode?: "linear" | "smooth") {
 	// simplest first, when we have a mode and its linear
 	if (mode === 'linear') {
 		seg.clearHandles();
@@ -37,7 +37,7 @@ export function switchHandle(seg, mode) {
 		const offset = (seg.next.point.subtract(seg.point)).normalize(shorterDist);
 
 		// then rotate that handle vector by the tangentAngle
-		const rotOffset = offset.rotate(-tangAngle, 0);
+		const rotOffset = offset.rotate(-tangAngle, 0 as any);
 
 		// and apply the whole thing to the handles
 		seg.handleOut = rotOffset;

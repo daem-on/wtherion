@@ -5,6 +5,7 @@ import { toolsRef } from "../tools";
 import ToolButton from "./common/ToolButton.vue";
 import compareUrl from "../../assets/ui/compare.svg";
 import { setCustomRender } from "../render";
+import ToolMenu from "./ToolMenu.vue";
 
 const toolList = computed(() => {
 	if (!toolsRef.value) return [];
@@ -39,8 +40,12 @@ watch(() => enableCustomRender.value, value => {
 			@click="enableCustomRender = !enableCustomRender"
 			:title="$t('enableCustomRender')"
 			:class="{ active: enableCustomRender }">
-			<img :src="compareUrl" width="32" height="32">
+			<img :src="compareUrl" width="28" height="28">
 		</ToolButton>
+
+		<hr>
+
+		<ToolMenu v-if="activeToolRef" />
 	</div>
 </template>
 
@@ -60,6 +65,7 @@ watch(() => enableCustomRender.value, value => {
 	max-height: calc(100vh - 30px);
 	overflow-y: auto;
 	overflow-x: hidden;
+	scrollbar-width: thin;
 }
 
 @media (prefers-color-scheme: dark) {

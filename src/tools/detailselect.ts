@@ -14,70 +14,72 @@ import * as menu from "../menu";
 import * as undo from "../undo";
 import * as selection from "../selection";
 import { defineTool } from "../tools";
+import { ToolAction } from "../toolMenu";
+import editTH2 from "../editTH2";
+import selectAllUrl from "../../assets/ui/select_all.svg";
+import linearScaleUrl from "../../assets/ui/linear_scale.svg";
+import callSplitUrl from "../../assets/ui/call_split.svg";
+import removeSelection from "../../assets/ui/remove_selection.svg";
 
-const menuEntries = {
-	selectionTitle: {
-		type : 'title',
-		text :'Selection'
+const actions: ToolAction[] = [
+	{
+		name: "selectAll",
+		callback: () => selection.selectAllSegments(),
+		defaultKey: "ctrl-a",
+		icon: selectAllUrl,
 	},
-	selectAll: {
-		type: 'button',
-		label: 'Select all',
-		click: 'pg.selection.selectAllSegments'
+	{
+		name: "invertSelection",
+		callback: () => selection.invertSegmentSelection(),
+		defaultKey: "ctrl-i",
 	},
-	selectNone: {
-		type: 'button',
-		label: 'Deselect all',
-		click: 'pg.selection.clearSelection'
+	{
+		name: "selectNone",
+		label: "Deselect all",
+		callback: () => selection.clearSelection(),
+		category: "selection",
 	},
-	invertSelection: {
-		type: 'button',
-		label: 'Invert selection',
-		click: 'pg.selection.invertSegmentSelection'
+	{
+		name: "switchHandles",
+		label: "Toggle handles",
+		callback: () => selection.switchSelectedHandles(),
+		category: "segment",
+		icon: linearScaleUrl,
 	},
-	segmentTitle: {
-		type : 'title',
-		text :'Segment'
+	{
+		name: "smoothHandles",
+		label: "Reset handles to smooth",
+		callback: () => selection.smoothHandles(),
+		category: "segment",
 	},
-	switchHandles: {
-		type: 'button',
-		label: 'Toggle handles',
-		click: 'pg.selection.switchSelectedHandles'
+	{
+		name: "removeSegments",
+		label: "Remove segments",
+		callback: () => selection.removeSelectedSegments(),
+		category: "segment",
+		icon: removeSelection,
+		defaultKey: "delete",
 	},
-	smoothHandles: {
-		type: 'button',
-		label: 'Reset handles to smooth',
-		click: 'pg.selection.smoothHandles'
+	{
+		name: "splitPath",
+		label: "Split path",
+		callback: () => selection.splitPathAtSelectedSegments(),
+		category: "segment",
+		icon: callSplitUrl,
 	},
-	removeSegments: {
-		type: 'button',
-		label: 'Remove segments',
-		click: 'pg.selection.removeSelectedSegments'
+	{
+		name: "test5",
+		label: "Merge lines",
+		callback: () => editTH2.mergeLines(),
+		category: "test",
 	},
-	splitPath: {
-		type: 'button',
-		label: 'Split path',
-		click: 'pg.selection.splitPathAtSelectedSegments'
-	},
-	testTitle: {
-		type : 'title',
-		text :'Lines'
-	},
-	test5: {
-		type: 'button',
-		label: 'Merge lines',
-		click: 'pg.editTH2.mergeLines'
-	},
-};
+];
 
 export const detailselect = defineTool({
 	definition: {
-		id: 'detailselect',
-		name: 'tools.detailSelect',
-		actions: {
-			selectAll: 'ctrl-a',
-			invertSelection: 'ctrl-i'
-		}
+		id: "detailselect",
+		name: "tools.detailSelect",
+		actions
 	},
 	setup(on) {
 		const hitOptions = {
@@ -98,13 +100,7 @@ export const detailselect = defineTool({
 		let lastEvent = null;
 		let selectionDragged = false;
 
-		on("activate", () => {		
-			
-			// setup floating tool options panel in the editor
-			//toolOptionPanel.setup(options, components, function(){ });
-			
-			menu.setupToolEntries(menuEntries);
-		});
+		on("activate", () => {});
 
 		on("mousedown", event => {
 			if (event.event.button > 0) return; // only first mouse button
@@ -141,9 +137,9 @@ export const detailselect = defineTool({
 				return;
 			}
 				
-			if ((hitResult.type === 'fill' || doubleClicked) && itemIsPath(hitResult.item)) {
+			if ((hitResult.type === "fill" || doubleClicked) && itemIsPath(hitResult.item)) {
 
-				hitType = 'fill';
+				hitType = "fill";
 				if (hitResult.item.selected) {
 					if (event.modifiers.shift) {
 						hitResult.item.fullySelected = false;
@@ -166,8 +162,8 @@ export const detailselect = defineTool({
 					}
 				}
 
-			} else if (hitResult.type === 'segment') {
-				hitType = 'point';
+			} else if (hitResult.type === "segment") {
+				hitType = "point";
 
 				// // we could use this but not right now
 				// if(hitResult.segment.selected) {
@@ -191,9 +187,9 @@ export const detailselect = defineTool({
 
 
 			} else if (
-				hitResult.type === 'stroke' || 
-				hitResult.type === 'curve') {
-				hitType = 'curve';
+				hitResult.type === "stroke" || 
+				hitResult.type === "curve") {
+				hitType = "curve";
 
 				const curve = hitResult.location.curve;
 				if (event.modifiers.shift) {
@@ -207,8 +203,8 @@ export const detailselect = defineTool({
 				// if(event.modifiers.option) pg.selection.cloneSelection();
 
 			} else if (
-				hitResult.type === 'handle-in' || 
-				hitResult.type === 'handle-out') {
+				hitResult.type === "handle-in" || 
+				hitResult.type === "handle-out") {
 				hitType = hitResult.type;
 
 				if (!event.modifiers.shift) {
@@ -246,9 +242,9 @@ export const detailselect = defineTool({
 					const item = selectedItems[i] as
 						paper.Path & {origPos?: paper.Point};
 
-					if (hitType === 'fill' || !("segments" in item)) {
+					if (hitType === "fill" || !("segments" in item)) {
 						
-						// if the item has a compound path as a parent, don't move its
+						// if the item has a compound path as a parent, don"t move its
 						// own item, as it would lead to double movement
 						if (item.parent && compoundPath.isCompoundPath(item.parent)) {
 							continue;
@@ -280,9 +276,9 @@ export const detailselect = defineTool({
 							}
 
 							if (seg.selected && (
-								hitType === 'point' || 
-								hitType === 'stroke' || 
-								hitType === 'curve')){
+								hitType === "point" || 
+								hitType === "stroke" || 
+								hitType === "curve")){
 
 								if (event.modifiers.shift) {
 									seg.point = seg.origPoint.add(
@@ -294,9 +290,9 @@ export const detailselect = defineTool({
 								}
 
 							} else if (seg.handleOut.selected && 
-								hitType === 'handle-out'){
+								hitType === "handle-out"){
 								//if option is pressed or handles have been split, 
-								//they're no longer parallel and move independently
+								//they"re no longer parallel and move independently
 								if (event.modifiers.option ||
 									!seg.handleOut.isCollinear(seg.handleIn)) {
 									seg.handleOut = seg.handleOut.add(event.delta);
@@ -307,10 +303,10 @@ export const detailselect = defineTool({
 								}
 
 							} else if (seg.handleIn.selected && 
-								hitType === 'handle-in') {
+								hitType === "handle-in") {
 
 								//if option is pressed or handles have been split, 
-								//they're no longer parallel and move independently
+								//they"re no longer parallel and move independently
 								if (event.modifiers.option ||
 									!seg.handleOut.isCollinear(seg.handleIn)) {
 									seg.handleIn = seg.handleIn.add(event.delta);
@@ -331,13 +327,13 @@ export const detailselect = defineTool({
 			if (event.event.button > 0) return; // only first mouse button
 		
 			if (doRectSelection && selectionRect) {
-				selection.processRectangularSelection(event, selectionRect, 'detail');
+				selection.processRectangularSelection(event, selectionRect, "detail");
 				selectionRect.remove();
 				
 			} else {
 				
 				if (selectionDragged) {
-					undo.snapshot('moveSelection');
+					undo.snapshot("moveSelection");
 					selectionDragged = false;
 				}
 				
@@ -366,17 +362,6 @@ export const detailselect = defineTool({
 			updateWindow();
 			drawGuides();
 		});
-
-		on("action", action => {
-			switch (action) {
-				case "selectAll":
-					selection.selectAllSegments();
-					break;
-				case "invertSelection":
-					selection.invertSegmentSelection();
-					break;
-			}
-		});
 		
 		on("deactivate", () => {
 			hover.clearHoveredItem();
@@ -388,5 +373,5 @@ export const detailselect = defineTool({
 });
 
 function itemIsPath(item: paper.Item): item is paper.Path {
-	return item.className === 'Path';
+	return item.className === "Path";
 } 

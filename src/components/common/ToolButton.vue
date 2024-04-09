@@ -12,16 +12,21 @@ button.tool {
 	display: inline-block;
 	background-color: var(--background-color);
 	text-align: center;
-	padding: 2px;
+	width: 36px;
+	height: 36px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	line-height: 0;
 	cursor: pointer;
 	border-radius: 4px;
 	overflow: hidden;
 	border: none;
+	flex-shrink: 0;
 }
 
 button.tool:hover,
 button.tool.active {
-	background-color: var(--card-color);
+	background-color: var(--hover-color);
 }
 </style>

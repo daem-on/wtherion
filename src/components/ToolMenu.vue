@@ -1,0 +1,27 @@
+<script setup lang="ts">
+import { computed } from 'vue';
+import { activeToolRef } from '../tools';
+import ToolButton from './common/ToolButton.vue';
+
+const buttonsWithIcon = computed(() => {
+	return activeToolRef.value.menu.flatMap(subMenu => subMenu.actions.filter(i => i.icon));
+});
+
+const buttonsWithoutIcon = computed(() => {
+	return activeToolRef.value.menu.flatMap(subMenu => subMenu.actions.filter(i => !i.icon));
+});
+
+</script>
+
+<template>
+	<ToolButton
+		v-for="item of buttonsWithIcon"
+		:title="item.name"
+		@click="item.callback()">
+
+		<img :src="item.icon"  width="28" height="28" />
+	</ToolButton>
+</template>
+
+<style scoped>
+</style>

@@ -211,9 +211,9 @@ export const select = defineTool({
 						rotGroupPivot = selection.getSelectedItems()[0].position;
 					rotItems = selection.getSelectedItems();
 					
-					jQuery.each(rotItems, function(i, item) {
+					for (let i = 0; i < rotItems.length; i++) {
 						prevRot[i] = event.point.subtract(rotGroupPivot).angle;
-					});
+					}
 										
 				} else {
 					if (hitResult.item.layer !== paper.project.activeLayer) break hit;
@@ -320,12 +320,12 @@ export const select = defineTool({
 
 				itemGroup.scale(sx, sy, pivot);
 				
-				jQuery.each(boundsScaleHandles, function(index, handle) {
+				boundsScaleHandles.forEach((handle, index) => {
 					handle.position = itemGroup.bounds[getRectCornerNameByIndex(index)];
 					handle.bringToFront();
 				});
 				
-				jQuery.each(boundsRotHandles, function(index, handle) {
+				boundsRotHandles.forEach((handle, index) => {
 					if (handle) {
 						handle.position = itemGroup.bounds[getRectCornerNameByIndex(index)].add(handle.data.offset);
 						handle.bringToFront();
@@ -335,7 +335,7 @@ export const select = defineTool({
 			} else if (mode === 'rotate') {
 				let rotAngle = (event.point.subtract(rotGroupPivot)).angle;
 				
-				jQuery.each(rotItems, function(i, item) {
+				rotItems.forEach((item, i) => {
 					
 					if (!item.data.origRot) {
 						item.data.origRot = item.rotation;
@@ -390,10 +390,10 @@ export const select = defineTool({
 				// resetting the items origin point for the next usage
 				const selectedItems = selection.getSelectedItems();
 
-				jQuery.each(selectedItems, function(index, item) {
+				for (const item of selectedItems) {
 					// remove the orig pos again
 					item.data.origPos = null;			
-				});
+				}
 				undo.snapshot('moveSelection');
 				
 			} else if (mode === 'scale') {
@@ -424,9 +424,9 @@ export const select = defineTool({
 				undo.snapshot('scaleSelection');
 				
 			} else if (mode === 'rotate') {
-				jQuery.each(rotItems, function(i, item) {
+				for (const item of rotItems) {
 					item.applyMatrix = true;
-				});
+				}
 				undo.snapshot('rotateSelection');
 			}
 			
@@ -498,13 +498,13 @@ export const select = defineTool({
 			}
 
 			let rect: paper.Rectangle;
-			jQuery.each(items, function(index, item) {
+			for (const item of items) {
 				if (rect) {
 					rect = rect.unite(item.bounds);
 				} else {
 					rect = item.bounds;
 				}
-			});
+			}
 			
 			if (!boundsPath) {
 				boundsPath = new paper.Path.Rectangle(rect);
@@ -521,7 +521,7 @@ export const select = defineTool({
 			boundsPath.fullySelected = true;
 			boundsPath.parent = layer.getGuideLayer() || null;
 			
-			jQuery.each(boundsPath.segments, function(index: number, segment) {
+			boundsPath.segments.forEach((segment, index) => {
 				let size = 4;
 				
 				if (index%2 === 0) {
@@ -580,13 +580,13 @@ function preProcessSelection() {
 	// compound path selected, deselect the child and select the compound path
 	// instead. (otherwise the compound path breaks because of scale-grouping)
 	const items = selection.getSelectedItems();
-	jQuery.each(items, function(index, item) {
+	for (const item of items) {
 		if (compoundPath.isCompoundPathChild(item)) {
 			const cp = compoundPath.getItemsCompoundPath(item);
 			selection.setItemSelection(item, false);
 			selection.setItemSelection(cp, true);
 		}
-	});
+	}
 }
 
 

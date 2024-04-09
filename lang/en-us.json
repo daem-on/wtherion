@@ -32,6 +32,7 @@
 	"detailselect.menu.smoothHandles": "Reset handles to smooth",
 	"detailselect.menu.removeSegments": "Remove segments",
 	"detailselect.menu.splitPath": "Split path",
+	"menu.changeNamespace": "Change stations' namespace",
 	"segment": "Segment",
 	"selection": "Selection",
 	"areas": "Areas",

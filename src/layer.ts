@@ -137,6 +137,7 @@ export function getDefaultLayer(): paper.Layer {
 export function activateDefaultLayer() {
 	const defaultLayer = getDefaultLayer();
 	defaultLayer.activate();
+	triggers.emit("LayersChanged");
 }
 
 

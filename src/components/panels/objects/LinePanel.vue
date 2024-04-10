@@ -7,7 +7,7 @@ import { computed, watch } from 'vue';
 import BooleanInput from '../../common/BooleanInput.vue';
 import PanelSection from '../../common/PanelSection.vue';
 import editTH2 from '../../../editTH2';
-import LineSettings from 'src/objectSettings/model/LineSettings';
+import LineSettings from '../../../objectSettings/model/LineSettings';
 import subtypeList from "../../../res/subtype-list.json";
 import { wallTypes } from "../../../res/wallTypes";
 

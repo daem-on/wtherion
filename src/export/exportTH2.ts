@@ -60,7 +60,7 @@ function run() {
 	
 	for (const layer of data) {
 		if (layer[0] !== "Layer") continue;
-		if (layer[1].data && layer[1].data.isGuideLayer) continue;
+		if (layer[1].data && (layer[1].data.isGuideLayer || layer[1].data.xviLayer)) continue;
 		processLayer(layer[1]);
 	}	
 		

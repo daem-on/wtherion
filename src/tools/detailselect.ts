@@ -18,7 +18,7 @@ import { ToolAction } from "../toolMenu";
 import selectAllUrl from "../../assets/ui/select_all.svg";
 import linearScaleUrl from "../../assets/ui/linear_scale.svg";
 import callSplitUrl from "../../assets/ui/call_split.svg";
-import removeSelection from "../../assets/ui/remove_selection.svg";
+import deleteUrl from "../../assets/ui/delete.svg";
 
 const actions: ToolAction[] = [
 	{
@@ -56,7 +56,7 @@ const actions: ToolAction[] = [
 		name: "removeSegments",
 		callback: () => selection.removeSelectedSegments(),
 		category: "segment",
-		icon: removeSelection,
+		icon: deleteUrl,
 		defaultKey: "delete",
 	},
 	{

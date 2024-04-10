@@ -27,7 +27,7 @@ import contentCopyUrl from "../../assets/ui/content_copy.svg";
 import contentPasteUrl from "../../assets/ui/content_paste.svg";
 import linkUrl from "../../assets/ui/link.svg";
 import mergeUrl from "../../assets/ui/merge.svg";
-import removeSelectionUrl from "../../assets/ui/remove_selection.svg";
+import deleteUrl from "../../assets/ui/delete.svg";
 import lockUrl from "../../assets/ui/lock.svg";
 import lockOpenUrl from "../../assets/ui/lock_open.svg";
 
@@ -78,7 +78,7 @@ const actions: ToolAction[] = [
 		callback: () => selection.deleteSelection(),
 		category: "edit",
 		defaultKey: "delete",
-		icon: removeSelectionUrl
+		icon: deleteUrl,
 	},
 	{
 		name: "deselectAll",

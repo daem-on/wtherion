@@ -17,7 +17,7 @@ const classNamesMatch = computed(() => {
 });
 
 const firstSettingsClass = computed(() => {
-	return first.value ? getSettings(first.value).className : undefined;
+	return first.value ? getSettings(first.value)?.className : undefined;
 });
 
 const isLine = computed(() => {

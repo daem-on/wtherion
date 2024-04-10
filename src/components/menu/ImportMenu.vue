@@ -22,8 +22,9 @@ function fileUploadTH2(event) {
 	});
 };
 function fileUploadXVI(event) {
+	const filename = (event.target as HTMLInputElement).files[0].name;
 	processFileInput('text', event.target, function(data) {
-		importXVI(data, (event.target as HTMLInputElement).files[0].name);
+		importXVI(data, filename);
 	});
 };
 

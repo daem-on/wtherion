@@ -16,8 +16,6 @@ let state: ProcessingState = 0;
 
 function createLayer(name?: string): paper.Layer {
 	const l = addNewLayer(name ?? "therion.xviLayer");
-	// l.locked = true;
-	l.data.isGuideLayer = true;
 	l.data.xviLayer = true;
 	return l;
 }
@@ -29,14 +27,14 @@ export function importFiles(files: File[], list: PositionList): void {
 		if (file.name.endsWith(".xvi")) {
 			const reader = new FileReader();
 			reader.readAsText(file);
-			reader.onload = function () {
+			reader.onload = () => {
 				const position = new paper.Point(list[index][1], list[index][2]);
 				importXVI(reader.result as string, file.name, position);
 			};
 		} else {
 			const reader = new FileReader();
 			reader.readAsDataURL(file);
-			reader.onload = function () {
+			reader.onload = () => {
 				importAndAddImage(reader.result);
 			};
 		}

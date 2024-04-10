@@ -1,6 +1,8 @@
 import toolOptionPanel, { componentList } from "./toolOptionPanel";
 import { updateLayerList } from "./layerPanel";
 import * as wtConf from "./filesio/configManagement";
+import { addDialog } from "./modal";
+import ConfigDialog from "./components/dialogs/ConfigDialog.vue";
 
 const optionsCache = {
 	detailSelectGuides: false,
@@ -54,6 +56,8 @@ const components: componentList<typeof optionsCache> = {
 };
 
 export function show() {
+	addDialog(ConfigDialog, { content: undefined, title: "configTitle", id: "configDialog" });
+	return;
 	wtConf.loadConfig();
 
 	for (const key in optionsCache) {

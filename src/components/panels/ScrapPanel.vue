@@ -5,13 +5,25 @@ import { Raw, markRaw, onUnmounted, ref } from 'vue';
 import { addNewLayer, deleteLayer, isActiveLayer, setActiveLayer } from "../../layer";
 import MenuButton from "../common/MenuButton.vue";
 
-const layers = ref<{ name: string, active: boolean, raw: Raw<paper.Layer> }[]>([]);
+type LayerEntry = {
+	name: string,
+	active: boolean,
+	raw: Raw<paper.Layer>,
+	xvi: boolean,
+}
+
+const layers = ref<LayerEntry[]>([]);
 
 function handleLayerChange() {
 	layers.value.length = 0;
 	for (const layer of paper.project?.layers ?? []) {
 		if (layer.data.isGuideLayer) continue;
-		layers.value.push({ name: layer.name, active: isActiveLayer(layer), raw: markRaw(layer) });
+		layers.value.push({
+			name: layer.name,
+			active: isActiveLayer(layer),
+			raw: markRaw(layer),
+			xvi: layer.data.xviLayer ?? false,
+		});
 	}
 }
 handleLayerChange();
@@ -54,7 +66,7 @@ function renameCurrentLayer(message: string) {
 				v-for="entry in layers"
 				:key="entry.name"
 				@click="setActiveLayer(entry.raw)"
-				:class="{ active: entry.active }"
+				:class="{ active: entry.active, xvi: entry.xvi }"
 				class="scrap-entry">
 				
 				<input type="checkbox" :checked="entry.raw.visible" @change="setVisibility(!entry.raw.visible, entry.raw)">
@@ -97,6 +109,10 @@ h2 {
 	outline: 2px solid;
 	outline-offset: -2px;
 	outline-color: var(--primary-color);
+}
+
+.xvi {
+	font-style: italic;
 }
 
 .scrap-entry {

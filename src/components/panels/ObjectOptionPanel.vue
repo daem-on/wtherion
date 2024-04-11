@@ -10,6 +10,7 @@ import PointObjectPanel from './objects/PointObjectPanel.vue';
 import MultipleLinePanel from './objects/MultipleLinePanel.vue';
 import MultiplePointPanel from './objects/MultiplePointPanel.vue';
 import ScrapOptionPanel from './ScrapOptionPanel.vue';
+import RasterPanel from './objects/RasterPanel.vue';
 
 const first = computed<PaperItemType | undefined>(() => selectedObjects.value[0]);
 
@@ -31,6 +32,10 @@ const isPoint = computed(() => {
 
 const isArea = computed(() => {
 	return firstSettingsClass.value === "AreaSettings";
+});
+
+const isRaster = computed(() => {
+	return first.value.className === "Raster";
 });
 
 const activeToolId = computed(() => {
@@ -77,6 +82,9 @@ const isSingleSegment = computed(() => {
 				</template>
 				<template v-else-if="isPoint">
 					<PointObjectPanel :selection="(first as paper.Shape)" />
+				</template>
+				<template v-else-if="isRaster">
+					<RasterPanel :selection="(first as any as paper.Raster)" />
 				</template>
 			</template>
 		</template>

@@ -206,5 +206,6 @@
 	"subtype.hasSubtype": "This segment's subtype is {subtype}, defined at #{index}.",
 	"subtype.default": "This segment is the default subtype, no definitions before it.",
 	"subtype.followedBy": "This subtype continues until #{index} where it changes to {subtype}.",
-	"subtype.last": "The rest of this line is the same subtype as this."
+	"subtype.last": "The rest of this line is the same subtype as this.",
+	"opacity": "Opacity"
 }

@@ -1,9 +1,10 @@
 import * as pgDocument from "../../document";
-import { floater } from "../../modal";
+import { DialogData, addDialog, floater } from "../../modal";
 import { handler as localStorageSaves } from "./localStorageSaves";
 import { handler as fileSystemExports } from "./fileSystemExports";
 import { handler as fileSystemSaves } from "./fileSystemSaves";
 import * as wtConfig from "../configManagement";
+import MultipleFileSelectDialog from "../../components/dialogs/MultipleFileSelectDialog.vue";
 
 export interface SaveHandler {
 	save: (saveAs: boolean, json: string) => void;
@@ -54,34 +55,49 @@ export function exportTH2(exportAs = false) {
 	getExportHandler().export(exportAs);
 }
 
-export function showMultipleFileSelect(filenames: string[]): Promise<File[]> {
+export type MultipleFileSelectDialogData = DialogData<{
+	filenames: string[];
+	callback: (files: Map<string, File>) => void;
+}>;
+
+export function showMultipleFileSelect(filenames: string[]): Promise<Map<string, File>> {
 	return new Promise((resolve, reject) => {
-		jQuery("#fileSelectWindow").remove();
-		const content = jQuery(document.createElement("div"));
-		const selectedFiles: Record<string, File> = {};
 
-		for (const filename of filenames) {
-			const label = jQuery(`<label>${filename}</label>`);
-			const extension = filename.substring(filename.lastIndexOf("."));
-			const fileInput: JQuery<HTMLInputElement> =
-				jQuery(`<input type="file" accept="${extension}">`);
-			fileInput.on("change", () => {
-				const files = fileInput[0].files;
-				if (files.length > 0) {
-					selectedFiles[filename] = files[0];
-				}
-			});
-			const div = jQuery(`<div></div>`);
-			div.append(label, fileInput);
-			content.append(div);
-		}
-
-		const ok = jQuery(`<button>%ok%</button>`);
-		ok.on("click", () => {
-			resolve(Object.values(selectedFiles));
-			jQuery("#fileSelectWindow").remove();
+		addDialog(MultipleFileSelectDialog, {
+			content: {
+				filenames,
+				callback: files => resolve(files),
+			},
+			id: "multipleFileSelectDialog",
+			title: "import.embeddedTitle",
 		});
-		content.append(ok);
-		floater("fileSelectWindow", "%import.embeddedTitle%", content, 400, 200);
+
+		// jQuery("#fileSelectWindow").remove();
+		// const content = jQuery(document.createElement("div"));
+		// const selectedFiles: Record<string, File> = {};
+
+		// for (const filename of filenames) {
+		// 	const label = jQuery(`<label>${filename}</label>`);
+		// 	const extension = filename.substring(filename.lastIndexOf("."));
+		// 	const fileInput: JQuery<HTMLInputElement> =
+		// 		jQuery(`<input type="file" accept="${extension}">`);
+		// 	fileInput.on("change", () => {
+		// 		const files = fileInput[0].files;
+		// 		if (files.length > 0) {
+		// 			selectedFiles[filename] = files[0];
+		// 		}
+		// 	});
+		// 	const div = jQuery(`<div></div>`);
+		// 	div.append(label, fileInput);
+		// 	content.append(div);
+		// }
+
+		// const ok = jQuery(`<button>%ok%</button>`);
+		// ok.on("click", () => {
+		// 	resolve(Object.values(selectedFiles));
+		// 	jQuery("#fileSelectWindow").remove();
+		// });
+		// content.append(ok);
+		// floater("fileSelectWindow", "%import.embeddedTitle%", content, 400, 200);
 	});
 }

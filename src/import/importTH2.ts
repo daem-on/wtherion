@@ -330,7 +330,7 @@ async function loadEmbedded() {
 	const defaultLayer = getDefaultLayer();
 	if (defaultLayer) defaultLayer.data.therionData.xthSettings = _xthSettings;
 	
-	const list: PositionList = [];
+	const positions: PositionList = [];
 	for (const line of _xthSettings) {
 		if (line.startsWith("##XTHERION## xth_me_image_insert")) {
 			const params = line.slice(33).split(" ");
@@ -338,10 +338,21 @@ async function loadEmbedded() {
 			const y = -Number.parseFloat(params[3].slice(1));
 			const name = / {*([^{}]+)}* 0 {}/.exec(line)[1];
 
-			list.push([name, x, y]);
+			positions.push([name, x, y]);
 		}
 	}
-	if (list.length === 0) return;
-	const files = await showMultipleFileSelect(list.map(e => e[0]));
-	importFiles(files, list);
+	if (positions.length === 0) return;
+	const files = await showMultipleFileSelect(positions.map(e => e[0]));
+	
+	importFiles(
+		Array.from(files.entries(), ([name, file]) => {
+			const pos = positions.find(e => e[0] === name);
+			return {
+				name,
+				file,
+				x: pos?.[1] ?? 0,
+				y: pos?.[2] ?? 0
+			};
+		})
+	);
 }

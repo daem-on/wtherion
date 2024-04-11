@@ -22,18 +22,18 @@ function createLayer(name?: string): paper.Layer {
 
 export type PositionList = [name: string, x: number, y: number][];
 
-export function importFiles(files: File[], list: PositionList): void {
-	for	(const [index, file] of files.entries()) {
+export function importFiles(files: { file: File, name: string, x: number, y: number }[]): void {
+	for	(const file of files) {
 		if (file.name.endsWith(".xvi")) {
 			const reader = new FileReader();
-			reader.readAsText(file);
+			reader.readAsText(file.file);
 			reader.onload = () => {
-				const position = new paper.Point(list[index][1], list[index][2]);
+				const position = new paper.Point(file.x, file.y);
 				importXVI(reader.result as string, file.name, position);
 			};
 		} else {
 			const reader = new FileReader();
-			reader.readAsDataURL(file);
+			reader.readAsDataURL(file.file);
 			reader.onload = () => {
 				importAndAddImage(reader.result);
 			};

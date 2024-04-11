@@ -1,4 +1,5 @@
-import { floater } from "../../modal";
+import LoadDialog from "../../components/dialogs/LoadDialog.vue";
+import { addDialog, floater } from "../../modal";
 import { SaveHandler, setWindowTitle } from "./saveManagement";
 
 let saveFileName: string;
@@ -13,6 +14,16 @@ function save(clearName = false, json: string) {
 }
 
 function showLoadSelect(callback: (key: string) => void) {
+	addDialog(LoadDialog, {
+		content: {
+			filenames: Object.keys(localStorage).filter(key => key.startsWith("wt.saves.")),
+			callback: callback
+		},
+		id: "loadWindow",
+		title: "load.title",
+	});
+
+	return;
 	jQuery("#loadWindow").remove();
 	const content = jQuery(document.createElement("ul"));
 	
@@ -37,7 +48,7 @@ function setSaveFileName(name: string | undefined) {
 	setWindowTitle(name);
 }
 
-function loadFromStorage(name: string) {
+export function loadFromStorage(name: string) {
 	jQuery("#loadWindow").remove();
 	const fileName = name.substring(9);
 	setWindowTitle(fileName);
@@ -45,10 +56,9 @@ function loadFromStorage(name: string) {
 	return localStorage.getItem(name);
 }
 
-function deleteFromStorage(name: string) {
+export function deleteFromStorage(name: string) {
 	if (confirm(`%save.delete1% ${name.substring(9)} %save.delete2%`)) {
 		localStorage.removeItem(name);
-		open();
 	}
 }
 

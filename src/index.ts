@@ -15,3 +15,8 @@ addEventListener("error", (e) => {
 	showErrorWindow(e.error);
 	console.error(e.error);
 });
+
+addEventListener("unhandledrejection", (e) => {
+	showErrorWindow(e.reason);
+	console.error(e.reason);
+});

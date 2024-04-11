@@ -42,5 +42,6 @@ textarea {
 h2 {
 	margin: 8px 0;
 	font-weight: bold;
+	word-wrap: break-word;
 }
 </style>

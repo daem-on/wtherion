@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { loadConfig, exists, get, assign } from '../../filesio/configManagement';
 import BooleanInput from '../common/BooleanInput.vue';
 import IntInput from '../common/IntInput.vue';
 import PanelSection from '../common/PanelSection.vue';
 import { removeDialog } from '../../modal';
+import editTH2 from '../../editTH2';
 
 const options = ref({
 	detailSelectGuides: false,
@@ -20,6 +21,7 @@ const options = ref({
 function save() {
 	assign(options.value);
 	removeDialog("configDialog");
+	editTH2.redrawAll();
 }
 
 loadConfig();
@@ -62,6 +64,6 @@ for (const key in options.value) {
 			<BooleanInput v-model="options.enableAsyncClipboard" ></BooleanInput>
 		</PanelSection>
 
-		<button @click="save">{{ $t(`save`) }}</button>
+		<button @click="save">{{ $t(`menu.save`) }}</button>
 	</div>
 </template>

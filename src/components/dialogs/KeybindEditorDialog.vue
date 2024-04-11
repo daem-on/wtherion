@@ -130,6 +130,7 @@ tr:not(:last-child) {
 	align-items: center;
 	gap: 4px;
 	flex-wrap: wrap;
+	min-height: 42px;
 }
 
 .nowrap {
@@ -156,10 +157,10 @@ tr:not(:last-child) {
 }
 
 .add-binding {
-	display: none;
+	visibility: hidden;
 }
 
 td.binding-list:hover .add-binding {
-	display: inline-block;
+	visibility: visible;
 }
 </style>

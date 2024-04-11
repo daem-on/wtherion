@@ -1,8 +1,6 @@
 {
 	"special objects": [
-		"dimensions",
-		"station",
-		"section"
+		"station"
 	],
 
 	"labels": [
@@ -43,7 +41,7 @@
 		"disc-stalactite",
 		"disc-stalagmite",
 		"disc-pillars",
-		"discstalactites",
+		"disc-stalactites",
 		"disc-stalagmites",
 		"disk",
 		"flowstone",
@@ -61,7 +59,7 @@
 		"popcorn",
 		"raft-cone",
 		"rimstone-dam",
-		"rimstonepool",
+		"rimstone-pool",
 		"scallop",
 		"soda-straw",
 		"stalactite-stalagmite",
@@ -80,7 +78,7 @@
 		"gate",
 		"masonry",
 		"nameplate",
-		"noequipment",
+		"no-equipment",
 		"no-wheelchair",
 		"rope-ladder",
 		"rope",
@@ -95,7 +93,7 @@
 		"clay-choke",
 		"continuation",
 		"entrance",
-		"flowstonechoke",
+		"flowstone-choke",
 		"low-end",
 		"narrow-end"
 	],
@@ -112,13 +110,11 @@
 		"dig",
 		"electric-light",
 		"ex-voto",
-		"extra",
 		"gradient",
 		"human-bones",
 		"ice-pillar",
 		"ice-stalactite",
 		"ice-stalagmite",
-		"map-connection",
 		"paleo-material",
 		"photo",
 		"root",
@@ -126,7 +122,6 @@
 		"sink",
 		"spring",
 		"tree-trunk",
-		"u",
 		"vegetable-debris",
 		"water-drip",
 		"water-flow"

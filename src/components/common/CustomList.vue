@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import MenuScaffold from './MenuScaffold.vue';
 
 const model = defineModel<string>();
+type CategoryMap = Map<string | null, string[]>;
 
-defineProps<{
-	options: string[];
+const props = defineProps<{
 	imageRoot?: string;
 	placeholder?: string;
+	options?: string[];
+	categories?: CategoryMap;
 }>();
 
 const menuScaffoldRef = ref<InstanceType<typeof MenuScaffold> | null>(null);
@@ -19,6 +21,19 @@ const onKeydown = (e: KeyboardEvent) => {
 const select = (option: string) => {
 	model.value = option;
 };
+
+const categories = computed<CategoryMap | undefined>(() => {
+	if (props.options) {
+		return new Map([ [null, props.options] ]);
+	} else {
+		return props.categories;
+	}
+});
+
+function getImageUrl(imageRoot: string, category: string | null, option: string) {
+	const categoryPath = category ? `${category}/` : "";
+	return `${imageRoot}/${categoryPath}${option || "empty"}.svg`;
+}
 </script>
 
 <template>
@@ -26,10 +41,15 @@ const select = (option: string) => {
 		<template #label="{ toggle }">
 			<input type="text" v-model="model" @click="toggle()" @keydown="onKeydown" :placeholder="placeholder" />
 		</template>
-		<div class="select-options">
-			<div v-for="option in options" :key="option" @click="select(option)">
-				<img v-if="imageRoot" :src="`${imageRoot}/${option || 'empty'}.svg`" class="crop-svg" />
-				<p>{{ option || '(none)' }}</p>
+		<div class="select-categories">
+			<div v-for="[category, options] in categories" :key="category" class="category">
+				<h3 v-if="category">{{ category }}</h3>
+				<div class="select-options">
+					<div v-for="option in options" :key="option" @click="select(option)">
+						<img v-if="imageRoot" :src="getImageUrl(imageRoot, category, option)" />
+						<p>{{ option || `(${$t('none')})` }}</p>
+					</div>
+				</div>
 			</div>
 		</div>
 	</MenuScaffold>
@@ -44,24 +64,9 @@ const select = (option: string) => {
 	user-select: none;
 }
 
-.select-options div {
-	font-size: 0.85em;
-	padding: 1px 3px;
-	border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
-	cursor: default;
+.select-categories {
 	display: flex;
-    flex-direction: column;
-    align-items: center;
-	border-radius: 4px;
-}
-
-.select-options div:hover {
-	background-color: var(--card-color);
-}
-
-.custom-list .select-options {
-	display: grid;
-	grid-template-columns: 1fr 1fr 1fr 1fr;
+	flex-direction: column;
 	gap: 8px;
 	padding: 8px;
 	position: absolute;
@@ -75,9 +80,47 @@ const select = (option: string) => {
 	overflow-y: auto;
 }
 
+h3 {
+	font-size: 1em;
+	margin-bottom: 8px;
+}
+
+.category:not(:last-child) {
+	border-bottom: var(--border-color) 1px solid;
+	padding-bottom: 8px;
+}
+
+.select-options div {
+	font-size: 0.85em;
+	padding: 1px 3px;
+	border-color: transparent transparent var(--border-color) transparent;
+	cursor: default;
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+	text-align: center;
+	border-radius: 4px;
+}
+
+.select-options div:hover {
+	background-color: var(--card-color);
+}
+
+.select-options {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	gap: 8px;
+}
+
 @media (prefers-color-scheme: dark) {
 	img {
 		filter: invert(1);
 	}
+}
+
+img {
+	max-width: 100px;
+    max-height: 100px;
+    min-height: 50px;
 }
 </style>

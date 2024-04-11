@@ -3,7 +3,7 @@ import CustomList from '../../common/CustomList.vue';
 import PanelFoldable from '../../common/PanelFoldable.vue';
 import PanelContent from '../../common/PanelContent.vue';
 import getSettings from '../../../objectSettings/model/getSettings';
-import { pointTypes } from '../../../objectSettings/pointSymbolList';
+import symbolList from "../../../res/symbol-list.json";
 import { computed, watch } from 'vue';
 import BooleanInput from '../../common/BooleanInput.vue';
 import PanelSection from '../../common/PanelSection.vue';
@@ -26,12 +26,14 @@ const canHaveText = computed(() => {
 watch(settings, () => {
 	editTH2.drawPoint(props.selection);
 }, { deep: true });
+
+const symbolCategories = new Map<string, string[]>(Object.entries(symbolList));
 </script>
 
 <template>
 	<PanelContent>
 		<PanelSection :label="$t(`type`)">
-			<CustomList v-model="settings.type" :options="pointTypes" />
+			<CustomList v-model="settings.type" :categories="symbolCategories" imageRoot="assets/rendered/point" />
 		</PanelSection>
 		<PanelSection :label="$t(`invisible`)">
 			<BooleanInput v-model="settings.invisible" />

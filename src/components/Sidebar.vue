@@ -4,6 +4,7 @@ import { activeToolRef } from '../tools';
 import ObjectOptionPanel from './panels/ObjectOptionPanel.vue';
 import MainMenu from './menu/MainMenu.vue';
 import ScrapPanel from './panels/ScrapPanel.vue';
+import ScrapOptionPanel from './panels/ScrapOptionPanel.vue';
 
 const activeToolPanel = computed<Component | undefined>(() => {
 	return activeToolRef.value?.definition.panel;
@@ -20,6 +21,7 @@ const activeToolPanel = computed<Component | undefined>(() => {
 				<ObjectOptionPanel />
 			</div>
 			<div class="spacer"></div>
+			<ScrapOptionPanel />
 			<div class="panel">
 				<ScrapPanel />
 			</div>

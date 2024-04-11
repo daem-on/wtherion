@@ -1,24 +1,23 @@
 // function related to the main menu
 
-import * as importerXvi from "../src/import/importXVI";
-import importerTh2 from "../src/import/importTH2";
-import * as saves from "./filesio/saveManagement/saveManagement";
-import * as github from "./filesio/saveManagement/github";
-import * as pgDocument from "./document";
-import * as layerPanel from "./layerPanel";
-import * as helper from "./helper";
-import * as selection from "./selection";
-import * as exporter from "./export";
-import * as importer from "./import";
-import * as undo from "./undo";
-import * as view from "./view";
-import * as modal from "./modal";
-import { getVersionNumber } from "./filesio/configManagement";
-import * as configEditor from "./configEditor";
-import { openSearchDialog } from "./search";
-import { showValidationWindow } from "./validate";
-import KeybindEditorDialog from "./components/dialogs/KeybindEditorDialog.vue";
 import { ref } from "vue";
+import importerTh2 from "../src/import/importTH2";
+import * as importerXvi from "../src/import/importXVI";
+import AboutDialog from "./components/dialogs/AboutDialog.vue";
+import KeybindEditorDialog from "./components/dialogs/KeybindEditorDialog.vue";
+import * as configEditor from "./configEditor";
+import * as pgDocument from "./document";
+import * as exporter from "./export";
+import * as github from "./filesio/saveManagement/github";
+import * as saves from "./filesio/saveManagement/saveManagement";
+import * as helper from "./helper";
+import * as importer from "./import";
+import * as layerPanel from "./layerPanel";
+import * as modal from "./modal";
+import { openSearchDialog } from "./search";
+import * as undo from "./undo";
+import { showValidationWindow } from "./validate";
+import * as view from "./view";
 
 export function setup() {
 	setupNavigationLogic();
@@ -276,20 +275,6 @@ export function hideContextMenu() {
 	
 
 function showAboutModal() {
-	const builtAt = jQuery(`meta[name="built-at"]`).attr('content');
-	const html = `
-		<img src="assets/logo-cropped.png" width=600>
-		<p style="margin: 0.5em;">
-			<b style="font-weight: bold">wtherion</b>
-			version ${getVersionNumber()}
-			build ${builtAt}
-			%translationCredits%
-			Created by Csongor Zih, based on
-			<a href="https://github.com/w00dn/papergrapher" target="_blank">papergrapher</a>, created by Rolf Fleischmann.
-			Powered by <a href="http://paperjs.org/" target="_blank">Paper.js</a>. Published under the MIT license.
-		</p>
-	`;
-	modal.floater('appInfoWindow', 'About', html, 600, 100);
-	jQuery("#appInfoWindow").css("padding", 0);
+	modal.addDialog(AboutDialog, { id: "aboutDialog", content: undefined, title: "menu.about" });
 }
 

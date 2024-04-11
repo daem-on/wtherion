@@ -132,9 +132,7 @@ export function booleanDivide(items, replaceWithResult) {
 
 
 export function applyReplaceWithResult(items, group) {
-	jQuery.each(items, function(index, item) {
-		item.remove();
-	});
+	for (const item of items) item.remove();
 	getActiveLayer().addChild(group);
 	
 	snapshot('booleanOperation');

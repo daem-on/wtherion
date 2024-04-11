@@ -7,10 +7,10 @@ import { clearSelection } from "./selection";
 import { getActiveLayer, getGuideLayer } from "./layer";
 
 let exportRect;
-let canvas;
+let canvas: HTMLCanvasElement;
 
 export function setup() {
-	canvas = document.getElementById("paperCanvas");
+	canvas = document.getElementById("paperCanvas") as any;
 }
 
 
@@ -43,24 +43,27 @@ export function exportAndPromptImage() {
 		guideLayer.remove();
 		paper.view.update();
 		
-		if(exportRect) {
+		if (exportRect) {
 			resetZoom();
 			resetPan();
 			paper.view.update();
-			const offsetX = parseInt(canvas.width)*0.5 + exportRect.x;
-			const offsetY = parseInt(canvas.height)*0.5 + exportRect.y;
+			const offsetX = canvas.width*0.5 + exportRect.x;
+			const offsetY = canvas.height*0.5 + exportRect.y;
 			
 			const fileNameNoExtension = fileName.split(".png")[0];
 			const ctx = canvas.getContext("2d");
 			const imgData = ctx.getImageData(offsetX, offsetY, exportRect.width, exportRect.height);
 
-			const $tempCanvas = jQuery<HTMLCanvasElement>('<canvas width="'+exportRect.width+'" height="'+exportRect.height+'" style="position: absolute; z-index: -5;">');
-			
-			jQuery('body').append($tempCanvas);
+			const tempCanvas = document.createElement("canvas");
+			tempCanvas.width = exportRect.width;
+			tempCanvas.height = exportRect.height;
+			tempCanvas.style.position = "absolute";
+			tempCanvas.style.zIndex = "-5";
+			document.body.appendChild(tempCanvas);
 
-			const context = $tempCanvas[0].getContext("2d");
+			const context = tempCanvas.getContext("2d");
 			context.putImageData(imgData,0,0);
-			$tempCanvas[0].toBlob(function(blob) {
+			tempCanvas.toBlob(blob => {
 				saveAs(blob, fileNameNoExtension+'.png');
 					
 				// restore guide layer (with all items) after export
@@ -71,11 +74,11 @@ export function exportAndPromptImage() {
 			});
 
 			
-			$tempCanvas.remove();
+			tempCanvas.remove();
 			
 		} else {
 			const fileNameNoExtension = fileName.split(".png")[0];
-			canvas.toBlob(function(blob) {
+			canvas.toBlob(blob => {
 				saveAs(blob, fileNameNoExtension+'.png');
 				
 				// restore guide layer (with all items) after export
@@ -85,8 +88,6 @@ export function exportAndPromptImage() {
 				activeLayer.activate();
 			});
 		}
-		
-		
 	}
 }
 

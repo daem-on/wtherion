@@ -1,6 +1,5 @@
 import { defineTool, setLocalOptions } from "../tools";
 import editTH2 from "../editTH2";
-import toolOptionPanel from "../toolOptionPanel";
 import * as undo from "../undo";
 import getSettings from "../objectSettings/model/getSettings";
 import PointSettings from "../objectSettings/model/PointSettings";
@@ -69,5 +68,4 @@ function increaseStationNumber() {
 		options.stationName = increment(options.stationName);
 	}
 	setLocalOptions(options);
-	toolOptionPanel.update(options);
 }

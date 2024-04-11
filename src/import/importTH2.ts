@@ -6,7 +6,6 @@ import { importFiles, PositionList } from "./importXVI";
 import ScrapSettings from "../objectSettings/model/ScrapSettings";
 import { activateDefaultLayer, addNewLayer, getDefaultLayer } from "../layer";
 import { showMultipleFileSelect } from "../filesio/saveManagement/saveManagement";
-import { updateLayerList } from "../layerPanel";
 import * as undo from "../undo";
 import editTH2 from "../editTH2";
 import paper from "paper";
@@ -105,7 +104,6 @@ export default function(source: string) {
 	applyAreas();
 	loadEmbedded();
 	activateDefaultLayer();
-	updateLayerList();
 	undo.clear();
 	undo.setup();
 }

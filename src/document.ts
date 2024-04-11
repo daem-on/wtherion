@@ -15,22 +15,10 @@ let clipboard = [];
 
 export function setup() {
 	paper.view.center = new paper.Point(0,0);
-	center = paper.view.center;
-	
-	// call DocumentUpdate at a reduced rate (every tenth frame)
-	// var int = 10;
-	// paper.view.onFrame = function() {
-	// 	if(int > 0) {
-	// 		int--;
-	// 	} else {
-	// 		jQuery(document).trigger('DocumentUpdate');
-	// 		int = 10;
-	// 	}
-	// };
-	
+	center = paper.view.center;	
 	
 	window.onbeforeunload = function() {
-		if(undo.getStates().length > 1) {
+		if (undo.getStates().length > 1) {
 			return 'Unsaved changes will be lost. Leave anyway?';
 		}
 	};
@@ -88,7 +76,7 @@ export function loadJSONDocument(jsonString) {
 	layer.reinitLayers(activeLayerID);
 
 	const exportRect = guides.getExportRectGuide();
-	if(exportRect) {
+	if (exportRect) {
 		pgExport.setExportRect(new paper.Rectangle(exportRect.data.exportRectBounds));
 	}
 	editTH2.redrawAll();

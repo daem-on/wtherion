@@ -1,4 +1,3 @@
-import { floater } from "./modal";
 import paper from "paper";
 import AreaSettings from "./objectSettings/model/AreaSettings";
 import getSettings from "./objectSettings/model/getSettings";
@@ -7,7 +6,6 @@ import PointSettings from "./objectSettings/model/PointSettings";
 import ScrapSettings from "./objectSettings/model/ScrapSettings";
 import { clearSelection, focusItem } from "./selection";
 import { setActiveLayer } from "./layer";
-import editTH2 from "./editTH2";
 
 function isExportableChild(item: paper.Item) {
 	return item.className === "Path"
@@ -89,7 +87,6 @@ export function showValidationWindow() {
 				$item.on("click", () => {
 					clearSelection();
 					setActiveLayer(item[1] as paper.Layer);
-					editTH2.showScrapOptionsPanel();
 				});
 			} else {
 				$item.on("click", () => { focusItem(item[1]); });
@@ -98,5 +95,5 @@ export function showValidationWindow() {
 		}
 	}
 
-	floater("validationResult", "%edit.validationResult%", $content);
+	// TODO
 }

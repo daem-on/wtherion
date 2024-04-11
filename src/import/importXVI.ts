@@ -1,4 +1,3 @@
-import { updateLayerList } from "../layerPanel";
 import { importAndAddImage } from "../import";
 import { activateDefaultLayer, addNewLayer } from "../layer";
 import paper from "paper";
@@ -78,7 +77,6 @@ export function importXVI(source: string, name?: string, moveTo?: paper.Point) {
 		}
 	}
 	new paper.Group([...layer.children]);
-	updateLayerList();
 	if (moveTo != null && firstStation != null) {
 		const [x, y] = firstStation;
 		const point = new paper.Point(Number.parseFloat(x), -Number.parseFloat(y));

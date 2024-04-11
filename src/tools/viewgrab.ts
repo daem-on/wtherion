@@ -62,14 +62,11 @@ export const viewgrab = defineTool({
 		
 		const setCursor = function(cursorString?: string) {
 			if (cursorString === currentCursor) return;
-			const $body = jQuery('body');
-			$body.removeClass('grab');
-			$body.removeClass('grabbing');
-			
+
+			const body = document.body;
+			body.style.cursor = cursorString;
+
 			currentCursor = cursorString;
-			if (cursorString && cursorString.length > 0) {
-				$body.addClass(cursorString);
-			}
 		};
 	},
 });

@@ -81,16 +81,6 @@ import Foldable from "../common/Foldable.vue";
 				</div>
 			</ul>
 		</MenuScaffold>
-		<MenuScaffold>
-			<template #label="{ toggle }">
-				<button class="top-button" @click="toggle()">{{ $t(`menu.scraps`) }}</button>
-			</template>
-			<ul class="sub-menu">
-				<MenuButton @click="handlers.layerPanel()" title="Scrap Panel">{{ $t(`menu.scrapPanel`) }}</MenuButton>
-				<MenuButton @click="editTH2.showScrapOptionsPanel()">{{ $t(`menu.editScrap`) }}</MenuButton>
-				<MenuButton @click="handlers.xviMode()">{{ $t(`menu.xviEdit`) }}</MenuButton>
-			</ul>
-		</MenuScaffold>
 	</div>
 </template>
 

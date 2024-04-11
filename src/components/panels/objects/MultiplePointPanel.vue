@@ -3,12 +3,12 @@ import { computed, ref, watch } from 'vue';
 import PointSettings from '../../../objectSettings/model/PointSettings';
 import getSettings from '../../../objectSettings/model/getSettings';
 import editTH2 from '../../../editTH2';
-import { pointTypes } from '../../../objectSettings/pointSymbolList';
 import NullableBooleanInput from '../../common/NullableBooleanInput.vue';
 import PanelContent from '../../common/PanelContent.vue';
 import PanelSection from '../../common/PanelSection.vue';
 import CustomList from '../../common/CustomList.vue';
 import BooleanInput from '../../common/BooleanInput.vue';
+import symbolList from "../../../res/symbol-list.json";
 
 const props = defineProps<{
 	selection: paper.Shape[]
@@ -21,6 +21,8 @@ type Options = {
 };
 
 const stringOptions = ["type", "scale"];
+
+const symbolCategories = new Map<string, string[]>(Object.entries(symbolList));
 
 function createDefaultOptions(from: PointSettings[]): Options {
 	const first = from[0];
@@ -61,7 +63,7 @@ function modifyObject() {
 <template>
 	<PanelContent>
 		<PanelSection :label="$t(`type`)">
-			<CustomList v-model="optionsCache.type" :options="pointTypes" :placeholder="$t(`mixed`)" />
+			<CustomList v-model="optionsCache.type" :categories="symbolCategories" imageRoot="assets/rendered/point" />
 		</PanelSection>
 		<PanelSection :label="$t(`scale`)">
 			<select v-model="optionsCache.scale">

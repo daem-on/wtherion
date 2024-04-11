@@ -1,6 +1,5 @@
 import jQuery from "jquery";
 import * as layer from "./layer";
-import * as layerPanel from "./layerPanel";
 import * as pgExport from "./export.js";
 import * as menu from "./menu";
 import * as modal from "./modal.js";
@@ -16,7 +15,6 @@ import editTH2 from "./editTH2";
 import * as group from "./group";
 import * as item from "./item";
 import * as compoundPath from "./compoundPath.js";
-import toolOptionPanel from "./toolOptionPanel";
 import * as math from "./math.js";
 import * as geometry from "./geometry.js";
 import * as view from "./view";
@@ -36,7 +34,6 @@ import { setupCustomRenderer } from "./render";
 
 export default {
 	layer: layer,
-	layerPanel: layerPanel,
 	export: pgExport,
 	menu: menu,
 	modal: modal,
@@ -52,7 +49,6 @@ export default {
 	group: group,
 	item: item,
 	compoundPath: compoundPath,
-	toolOptionPanel: toolOptionPanel,
 	math: math,
 	geometry: geometry,
 	view: view,
@@ -74,7 +70,6 @@ export default {
 		this.statusbar.setup();
 		this.input.setup();
 		this.undo.setup();
-		this.layerPanel.setup();
 		historyPanel.setup();
 		launchQueue.setup();
 		setupCustomRenderer();

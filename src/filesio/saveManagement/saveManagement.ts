@@ -1,5 +1,5 @@
 import * as pgDocument from "../../document";
-import { DialogData, addDialog, floater } from "../../modal";
+import { DialogData, addDialog } from "../../modal";
 import { handler as localStorageSaves } from "./localStorageSaves";
 import { handler as fileSystemExports } from "./fileSystemExports";
 import { handler as fileSystemSaves } from "./fileSystemSaves";
@@ -71,33 +71,5 @@ export function showMultipleFileSelect(filenames: string[]): Promise<Map<string,
 			id: "multipleFileSelectDialog",
 			title: "import.embeddedTitle",
 		});
-
-		// jQuery("#fileSelectWindow").remove();
-		// const content = jQuery(document.createElement("div"));
-		// const selectedFiles: Record<string, File> = {};
-
-		// for (const filename of filenames) {
-		// 	const label = jQuery(`<label>${filename}</label>`);
-		// 	const extension = filename.substring(filename.lastIndexOf("."));
-		// 	const fileInput: JQuery<HTMLInputElement> =
-		// 		jQuery(`<input type="file" accept="${extension}">`);
-		// 	fileInput.on("change", () => {
-		// 		const files = fileInput[0].files;
-		// 		if (files.length > 0) {
-		// 			selectedFiles[filename] = files[0];
-		// 		}
-		// 	});
-		// 	const div = jQuery(`<div></div>`);
-		// 	div.append(label, fileInput);
-		// 	content.append(div);
-		// }
-
-		// const ok = jQuery(`<button>%ok%</button>`);
-		// ok.on("click", () => {
-		// 	resolve(Object.values(selectedFiles));
-		// 	jQuery("#fileSelectWindow").remove();
-		// });
-		// content.append(ok);
-		// floater("fileSelectWindow", "%import.embeddedTitle%", content, 400, 200);
 	});
 }

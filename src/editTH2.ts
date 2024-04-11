@@ -7,7 +7,6 @@ import { getSelectedItems } from "./selection";
 
 import colorDefs from "./res/color-defs.json";
 import * as config from "./filesio/configManagement";
-import * as scrapOptions from "./scrapOptions";
 import { snapshot } from "./undo";
 
 import paper from "paper";
@@ -42,8 +41,7 @@ export function overrideColors(object: Record<string, Record<string, string>>) {
 	if ("areaColors" in object)
 		Object.assign(areaColors, generateColors(object.areaColors));
 	if ("background" in object)
-		jQuery("#paperCanvas")
-			.css("background-color", object.background["fill"]);
+		document.getElementById("paperCanvas").style.backgroundColor = object.background["fill"];
 }
 
 export default {
@@ -298,9 +296,5 @@ export default {
 			if (isPathItem(item)) item.simplify();
 	
 		snapshot("simplifyLine");
-	},
-
-	showScrapOptionsPanel: function() {
-		scrapOptions.show();
 	},
 };

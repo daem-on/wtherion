@@ -64,7 +64,7 @@ const isSingleSegment = computed(() => {
 			<template v-if="activeToolId === `detailselect`">
 				<template v-if="isSingleSegment">
 					<template v-if="first.data.therionData.type === `wall`">
-						<SubtypePanel :selection="first" />
+						<SubtypePanel :selection="(first as paper.Path)" :selectedSegment="selectedSegments[0]" />
 					</template>
 				</template>
 			</template>

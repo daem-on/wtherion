@@ -201,5 +201,10 @@
 	"scraps.rename.prompt": "Enter the new name",
 	"rename": "Rename",
 	"showSidebar": "Show/hide sidebar",
-	"scrap.stationNames": "Station names"
+	"scrap.stationNames": "Station names",
+	"defineSubtype": "Define subtype",
+	"subtype.hasSubtype": "This segment's subtype is {subtype}, defined at #{index}.",
+	"subtype.default": "This segment is the default subtype, no definitions before it.",
+	"subtype.followedBy": "This subtype continues until #{index} where it changes to {subtype}.",
+	"subtype.last": "The rest of this line is the same subtype as this."
 }

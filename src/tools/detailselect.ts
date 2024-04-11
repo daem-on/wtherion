@@ -351,7 +351,7 @@ export const detailselect = defineTool({
 			doRectSelection = false;
 			selectionRect = null;
 			
-			updateWindow();
+			updateWindow(true);
 			drawGuides();
 		});
 		

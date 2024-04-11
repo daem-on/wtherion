@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import getSettings, { PaperItemType } from '../../objectSettings/model/getSettings';
-import { selectedObjects } from '../../objectSettings/objectOptionPanel';
+import { selectedObjects, selectedSegments } from '../../objectSettings/objectOptionPanel';
 import LinePanel from './objects/LinePanel.vue';
 import { activeToolRef } from '../../tools';
 import SubtypePanel from './objects/SubtypePanel.vue';
@@ -37,10 +37,7 @@ const activeToolId = computed(() => {
 });
 
 const isSingleSegment = computed(() => {
-	return isLine.value && (first.value as paper.Path)
-		.segments
-		.filter(seg => seg.selected)
-		.length === 1;
+	return selectedSegments.value.length === 1;
 });
 </script>
 

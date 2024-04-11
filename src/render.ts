@@ -1,7 +1,7 @@
 import paper from "paper";
 
 export enum CustomRenderStyle {
-	Spiky, Triangle, Notched
+	Spiky, Triangle, Notched, Contour
 }
 
 let enableCustomRender = true;
@@ -53,6 +53,17 @@ function drawNotchedLine(path: paper.Path, context: CanvasRenderingContext2D, re
 	context.stroke();
 }
 
+function drawLineWithContour(path: paper.Path, context: CanvasRenderingContext2D, reverse: boolean) {
+	const length = reverse ? -10 : 10;
+	if (!path.length) return;
+	const middle = path.getLocationAt(path.length / 2).point;
+	const target = path.getNormalAt(path.length / 2).multiply(length).add(middle);
+	context.beginPath();
+	context.moveTo(middle.x, middle.y);
+	context.lineTo(target.x, target.y);
+	context.stroke();
+}
+
 export function setupCustomRenderer() {
 	const originalUpdate = paper.view.update;
 	paper.view.update = function() {
@@ -87,6 +98,9 @@ export function setupCustomRenderer() {
 					break;
 				case CustomRenderStyle.Notched:
 					drawNotchedLine(item as paper.Path, context, item.data.therionData.reverse);
+					break;
+				case CustomRenderStyle.Contour:
+					drawLineWithContour(item as paper.Path, context, item.data.therionData.reverse);
 					break;
 			}
 		}

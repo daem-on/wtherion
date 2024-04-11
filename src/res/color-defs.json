@@ -7,7 +7,9 @@
 		"border": "rgb(69,180,171)",
 		"pit": "rgb(175,35,156)",
 		"wall": "#001d7a",
-		"slope": "rgb(223,197,47)"
+		"slope": "rgb(223,197,47)",
+		"floor-meander": "#69cedb",
+		"ceiling-meander": "#69cedb"
 	},
 	"pointColors": {
 		"default": "#418a29",

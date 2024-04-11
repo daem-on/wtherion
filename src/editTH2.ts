@@ -79,17 +79,28 @@ export default {
 		l.strokeScaling = true;
 		l.fillColor = null;
 
-		if (settings.type === "wall")
-			l.strokeWidth = 2;
-		else if (settings.type === "rock-edge")
-			l.strokeWidth = 0.8;
-		else
-			l.strokeWidth = 1;
-		
+		switch (settings.type) {
+			case "wall":
+				l.strokeWidth = 2;
+				break;
+			case "rock-edge":
+				l.strokeWidth = 0.8;
+				break;
+			case "floor-meander":
+			case "ceiling-meander":
+				l.strokeWidth = 10;
+				break;
+			default:
+				l.strokeWidth = 1;
+			break;
+		}
+
 		this.setColorFromList(l, typeColors, settings.type);
 
 		if (settings.subtype === "presumed")
 			l.dashArray = [3, 6];
+		else if (settings.type === "ceiling-meander")
+			l.dashArray = [10, 5];
 		else l.dashArray = null;
 		l.strokeColor.alpha = settings.invisible ? 0.3 : 1;
 
@@ -101,6 +112,8 @@ export default {
 				l.data.customRenderStyle = CustomRenderStyle.Triangle;
 			} else if (settings.type === "slope") {
 				l.data.customRenderStyle = CustomRenderStyle.Notched;
+			} else if (settings.type === "contour") {
+				l.data.customRenderStyle = CustomRenderStyle.Contour;
 			}
 		}
 	},

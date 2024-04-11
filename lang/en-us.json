@@ -200,5 +200,6 @@
 	"keybinds.pressKey": "Press a key or combination...",
 	"scraps.rename.prompt": "Enter the new name",
 	"rename": "Rename",
-	"showSidebar": "Show/hide sidebar"
+	"showSidebar": "Show/hide sidebar",
+	"scrap.stationNames": "Station names"
 }

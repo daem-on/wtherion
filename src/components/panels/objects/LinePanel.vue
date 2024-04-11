@@ -79,7 +79,7 @@ watch(settings, () => {
 				</select>
 			</PanelSection>
 			<PanelSection :label="$t(`otherSettings`)" column>
-				<textarea v-model="settings.otherSettings" />
+				<textarea rows="2" v-model="settings.otherSettings" />
 			</PanelSection>
 		</PanelFoldable>
 	</PanelContent>
@@ -90,5 +90,6 @@ textarea {
 	min-width: 100%;
     max-width: 100%;
 	font-family: monospace;
+	height: auto;
 }
 </style>

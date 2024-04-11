@@ -9,6 +9,7 @@ import AreaPanel from './objects/AreaPanel.vue';
 import PointObjectPanel from './objects/PointObjectPanel.vue';
 import MultipleLinePanel from './objects/MultipleLinePanel.vue';
 import MultiplePointPanel from './objects/MultiplePointPanel.vue';
+import ScrapOptionPanel from './ScrapOptionPanel.vue';
 
 const first = computed<PaperItemType | undefined>(() => selectedObjects.value[0]);
 
@@ -44,7 +45,7 @@ const isSingleSegment = computed(() => {
 <template>
 	<div class="object-option-panel">
 		<template v-if="selectedObjects.length === 0">
-			No objects selected
+			<ScrapOptionPanel />
 		</template>
 		<template v-else-if="selectedObjects.length > 1">
 			<template v-if="classNamesMatch && activeToolId === `select`">

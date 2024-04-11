@@ -55,8 +55,17 @@ watch(settings, () => {
 				<input type="text" v-model="settings.lineSettings.id" />
 			</PanelSection>
 			<PanelSection :label="$t(`otherSettings`)" column>
-				<textarea v-model="settings.lineSettings.otherSettings"></textarea>
+				<textarea rows="2" v-model="settings.lineSettings.otherSettings"></textarea>
 			</PanelSection>
 		</PanelFoldable>
 	</PanelContent>
 </template>
+
+<style scoped>
+textarea {
+	min-width: 100%;
+	max-width: 100%;
+	font-family: monospace;
+	height: auto;
+}
+</style>

@@ -25,6 +25,7 @@ import * as order from "./order.js";
 import * as dropfiles from "./filesio/dropfiles";
 import * as launchQueue from "./filesio/launchQueue";
 import * as historyPanel from "./historyPanel";
+import * as i18n from "./i18n";
 
 import paper from "paper";
 import {setup as configSetup} from "./filesio/configManagement";
@@ -72,6 +73,7 @@ export default {
 		this.undo.setup();
 		historyPanel.setup();
 		launchQueue.setup();
+		i18n.setup();
 		setupCustomRenderer();
 	},
 };

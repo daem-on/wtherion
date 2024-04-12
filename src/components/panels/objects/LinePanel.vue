@@ -31,7 +31,7 @@ watch(settings, () => {
 		<PanelSection :label="$t(`type`)">
 			<CustomList v-model="settings.type" :options="wallTypes" :imageRoot="`assets/rendered`" />
 		</PanelSection>
-		<PanelSection :label="$t(`subtype`)" v-if="canHaveSubtype">
+		<PanelSection :label="$t(`subtype.name`)" v-if="canHaveSubtype">
 			<CustomList v-model="settings.subtype" v-if="settings.type === `wall`" :options="subtypeList.wall" :imageRoot="`assets/rendered/subtype`" />
 			<CustomList v-model="settings.subtype" v-if="settings.type === `border`" :options="subtypeList.border" />
 			<CustomList v-model="settings.subtype" v-if="settings.type === `water-flow`" :options="subtypeList[`water-flow`]" :imageRoot="`assets/rendered/subtype`" />
@@ -48,7 +48,7 @@ watch(settings, () => {
 		<PanelSection :label="$t(`size`)" v-if="settings.type === `slope`">
 			<input type="text" v-model="settings.size" />
 		</PanelSection>
-		<PanelSection :label="$t(`outline`)">
+		<PanelSection :label="$t(`outline.name`)">
 			<select v-model="settings.outline">
 				<option :value="0">{{ $t(`default`) }}</option>
 				<option :value="1">{{ $t(`outline.in`) }}</option>
@@ -64,14 +64,14 @@ watch(settings, () => {
 			<PanelSection :label="$t(`id`)">
 				<input type="text" v-model="settings.id" />
 			</PanelSection>
-			<PanelSection :label="$t(`clip`)">
+			<PanelSection :label="$t(`clip.name`)">
 				<select v-model="settings.clip">
 					<option :value="0">{{ $t(`default`) }}</option>
 					<option :value="1">{{ $t(`clip.on`) }} ✂</option>
 					<option :value="2">{{ $t(`clip.off`) }}</option>
 				</select>
 			</PanelSection>
-			<PanelSection :label="$t(`place`)">
+			<PanelSection :label="$t(`place.name`)">
 				<select v-model="settings.place">
 					<option :value="0">{{ $t(`default`) }} ⦿</option>
 					<option :value="1">{{ $t(`bottom`) }} ▼</option>

@@ -12,7 +12,7 @@ import Foldable from "../common/Foldable.vue";
 		<MenuScaffold>
 			<template #label="{ toggle }">
 				<!-- <svg class="burgerButton" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve"><line stroke-width="12" x1="0" y1="9.5" x2="100" y2="9.5"/><line stroke-width="12" x1="0" y1="50.5" x2="100" y2="50.5"/><line stroke-width="12" x1="0" y1="90.5" x2="100" y2="90.5"/></svg> -->
-				<button class="top-button" @click="toggle()">Main</button>
+				<button class="top-button" @click="toggle()">{{ $t("menu.main") }}</button>
 			</template>
 			<ul class="sub-menu">
 				<MenuButton @click="handlers.clearDocument()">{{ $t(`menu.new`) }}</MenuButton>
@@ -50,9 +50,9 @@ import Foldable from "../common/Foldable.vue";
 					<template #title>{{ $t(`menu.view`) }}</template>
 					<ul class="sub-sub-menu">
 						<MenuButton @click="handlers.panToScrap()">{{ $t(`menu.center`) }}</MenuButton>
-						<MenuButton @click="handlers.zoomIn()" title="Ctrl-ScrollUp">{{ $t(`menu.zoomIn`) }}</MenuButton>
-						<MenuButton @click="handlers.zoomOut()" title="Ctrl-ScrollDown">{{ $t(`menu.zoomOut`) }}</MenuButton>
-						<MenuButton @click="handlers.resetZoom()" title="Ctrl-1">{{ $t(`menu.resetZoom`) }}</MenuButton>
+						<MenuButton @click="handlers.zoomIn()">{{ $t(`menu.zoomIn`) }}</MenuButton>
+						<MenuButton @click="handlers.zoomOut()">{{ $t(`menu.zoomOut`) }}</MenuButton>
+						<MenuButton @click="handlers.resetZoom()">{{ $t(`menu.resetZoom`) }}</MenuButton>
 						<MenuButton @click="handlers.resetPan()">{{ $t(`menu.resetPan`) }}</MenuButton>
 					</ul>
 				</Foldable>
@@ -61,12 +61,12 @@ import Foldable from "../common/Foldable.vue";
 				<li class="space"></li>
 				<MenuButton @click="handlers.showConfigEditor()">{{ $t(`menu.showConfigEditor`) }}</MenuButton>
 				<li class="space"></li>
-				<MenuButton @click="handlers.about()" title="About">{{ $t(`menu.about`) }}</MenuButton>
+				<MenuButton @click="handlers.about()">{{ $t(`menu.about`) }}</MenuButton>
 			</ul>
 		</MenuScaffold>
 		<MenuScaffold>
 			<template #label="{ toggle }">
-				<button class="top-button" @click="toggle()">{{ $t(`edit`) }}</button>
+				<button class="top-button" @click="toggle()">{{ $t(`menu.edit`) }}</button>
 			</template>
 			<ul class="sub-menu">
 				<MenuButton @click="editTH2.changeStationsNamespace()">{{ $t(`menu.changeNamespace`) }}</MenuButton>

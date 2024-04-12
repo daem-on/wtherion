@@ -77,7 +77,7 @@ const canHaveSubtype = computed(() => {
 		<PanelSection :label="$t(`type`)">
 			<CustomList v-model="optionsCache.type" :options="wallTypes" :placeholder="$t(`mixed`)" :imageRoot="`assets/rendered`" />
 		</PanelSection>
-		<PanelSection :label="$t(`subtype`)" v-if="canHaveSubtype">
+		<PanelSection :label="$t(`subtype.name`)" v-if="canHaveSubtype">
 			<CustomList v-model="optionsCache.subtype" :options="subtypeList[optionsCache.type]" :imageRoot="`assets/rendered/subtype`" :placeholder="$t(`mixed`)" />
 		</PanelSection>
 		<PanelSection :label="$t(`reverse`)">

@@ -58,7 +58,7 @@ function renameCurrentLayer(message: string) {
 <template>
 	<div class="scrap-panel">
 		<div class="header">
-			<h2>{{ $t("scraps") }}</h2>
+			<h2>{{ $t("scraps.title") }}</h2>
 			<button @click="addNewLayer()">{{ $t("scraps.add") }}</button>
 		</div>
 		<ul class="scrap-list">
@@ -72,8 +72,8 @@ function renameCurrentLayer(message: string) {
 				<input type="checkbox" :checked="entry.raw.visible" @change="setVisibility(!entry.raw.visible, entry.raw)">
 				<span class="scrap-name">{{ entry.name }}</span>
 				<div class="layer-actions" v-if="entry.active">
-					<button @click.stop="deleteCurrentLayer($t(`scraps.delete.confirm`))">{{ $t("delete") }}</button>
-					<button @click.stop="renameCurrentLayer($t(`scraps.rename.prompt`))">{{ $t("rename") }}</button>
+					<button @click.stop="deleteCurrentLayer($t(`scraps.deleteConfirm`))">{{ $t("delete") }}</button>
+					<button @click.stop="renameCurrentLayer($t(`scraps.renamePrompt`))">{{ $t("rename") }}</button>
 				</div>
 			</MenuButton>
 		</ul>

@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import { loadConfig, exists, get, assign } from '../../filesio/configManagement';
 import BooleanInput from '../common/BooleanInput.vue';
 import IntInput from '../common/IntInput.vue';
 import PanelSection from '../common/PanelSection.vue';
 import { removeDialog } from '../../modal';
 import editTH2 from '../../editTH2';
+import { i18n } from '../../i18n';
 
 const options = ref({
 	detailSelectGuides: false,
@@ -16,12 +17,14 @@ const options = ref({
 	colorInactive: false,
 	saveHandler: "localStorage",
 	enableAsyncClipboard: false,
+	language: i18n.global.locale,
 });
 
 function save() {
 	assign(options.value);
 	removeDialog("configDialog");
 	editTH2.redrawAll();
+	i18n.global.locale = options.value.language;
 }
 
 loadConfig();
@@ -45,7 +48,7 @@ for (const key in options.value) {
 		<PanelSection :label="$t(`config.lockLayerNames`)">
 			<BooleanInput v-model="options.lockLayerNames" ></BooleanInput>
 		</PanelSection>
-		<PanelSection :label="$t(`config.githubToken`)">
+		<PanelSection :label="$t(`config.githubToken.name`)">
 			<input type="text" v-model="options.githubToken" />
 		</PanelSection>
 		<PanelSection :label="$t(`config.inspectTolerance`)">
@@ -54,7 +57,7 @@ for (const key in options.value) {
 		<PanelSection :label="$t(`config.colorInactive`)">
 			<BooleanInput v-model="options.colorInactive" ></BooleanInput>
 		</PanelSection>
-		<PanelSection :label="$t(`config.saveHandler`)">
+		<PanelSection :label="$t(`config.saveHandler.name`)">
 			<select v-model="options.saveHandler">
 				<option value="localStorage">{{ $t(`config.saveHandler.localStorage`) }}</option>
 				<option value="fileSystem">{{ $t(`config.saveHandler.fileSystem`) }}</option>
@@ -62,6 +65,11 @@ for (const key in options.value) {
 		</PanelSection>
 		<PanelSection :label="$t(`config.asyncClipboard`)">
 			<BooleanInput v-model="options.enableAsyncClipboard" ></BooleanInput>
+		</PanelSection>
+		<PanelSection :label="$t(`config.language`)">
+			<select v-model="options.language">
+				<option v-for="locale in $i18n.availableLocales" :key="`locale-${locale}`" :value="locale">{{ locale }}</option>
+			</select>
 		</PanelSection>
 
 		<button @click="save">{{ $t(`menu.save`) }}</button>

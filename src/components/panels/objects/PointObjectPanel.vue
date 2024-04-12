@@ -54,9 +54,9 @@ const symbolCategories = new Map<string, string[]>(Object.entries(symbolList));
 			<PanelSection :label="$t(`id`)">
 				<input type="text" v-model="settings.id" />
 			</PanelSection>
-			<PanelSection :label="$t(`clip`)">
+			<PanelSection :label="$t(`clip.name`)">
 				<select v-model="settings.clip">
-					<option :value="0">{{ $t("clip.default") }}</option>
+					<option :value="0">{{ $t("default") }}</option>
 					<option :value="1">{{ $t("clip.on") }}</option>
 					<option :value="2">{{ $t("clip.off") }}</option>
 				</select>
@@ -70,7 +70,7 @@ const symbolCategories = new Map<string, string[]>(Object.entries(symbolList));
 					<option value="xl">XL</option>
 				</select>
 			</PanelSection>
-			<PanelSection :label="$t(`place`)">
+			<PanelSection :label="$t(`place.name`)">
 				<select v-model="settings.place">
 					<option :value="2">{{ $t("top") }}</option>
 					<option :value="1">{{ $t("bottom") }}</option>

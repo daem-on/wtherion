@@ -16,7 +16,7 @@ const options = bezierOptions;
 		<PanelSection :label="$t(`type`)">
 			<CustomList v-model="options.type" :options="wallTypes" :imageRoot="`assets/rendered`" />
 		</PanelSection>
-		<PanelSection :label="$t(`subtype`)" v-if="[`wall`, `border`, `water-flow`].includes(options.type)">
+		<PanelSection :label="$t(`subtype.name`)" v-if="[`wall`, `border`, `water-flow`].includes(options.type)">
 			<CustomList v-model="options.subtype" :options="subtypeList.wall" :imageRoot="`assets/rendered/subtype`" />
 		</PanelSection>
 		<PanelSection :label="$t(`size`)" v-if="options.type === `slope`">

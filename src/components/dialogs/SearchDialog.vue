@@ -37,13 +37,13 @@ function previous() {
 	<div>
 		<form @submit.prevent="startSearch">
 			<input type="text" v-model="searchQuery" placeholder="RegEx" />
-			<button @click="startSearch">Search</button>
+			<button @click="startSearch">{{ $t(`search.search`) }}</button>
 		</form>
 		<div v-if="searchResults.length > 0">
 			<div>{{ currentIndex + 1 }}/{{ searchResults.length }}</div>
 			<button @click="previous">&lt;</button>
 			<button @click="next">&gt;</button>
 		</div>
-		<button @click="removeDialog(data.id)">Close</button>
+		<button @click="removeDialog(data.id)">{{ $t(`search.close`) }}</button>
 	</div>
 </template>

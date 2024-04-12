@@ -44,10 +44,6 @@ watch(showSidebar, () => {
 main {
 	display: flex;
 	height: 100vh;
-
-	color: var(--text-color);
-	background-color: var(--background-color);
-	color-scheme: light dark;
 }
 
 .sidebar {

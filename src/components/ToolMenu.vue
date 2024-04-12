@@ -19,4 +19,9 @@ const buttonsWithIcon = computed(() => {
 </template>
 
 <style scoped>
+@media (prefers-color-scheme: dark) {
+	img {
+		filter: invert(1);
+	}
+}
 </style>

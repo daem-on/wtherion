@@ -9,6 +9,10 @@ body {
 	font-family: 'Poppins', sans-serif;
 	--primary-color: #3AAB75;
 	--hover-color: #6ac99b46;
+
+	color: var(--text-color);
+	background-color: var(--background-color);
+	color-scheme: light dark;
 }
 
 @media (prefers-color-scheme: dark) {

@@ -36,7 +36,7 @@ const actions: ToolAction[] = [
 		name: "selectAll",
 		callback: () => selection.selectAllItems(),
 		defaultKey: "ctrl-a",
-		category: "edit",
+		category: "menu.edit",
 		label: "selectAll",
 		icon: selectAllUrl
 	},
@@ -63,20 +63,20 @@ const actions: ToolAction[] = [
 		name: "copySelection",
 		callback: () => edit.copySelectionToClipboard(),
 		defaultKey: "ctrl-c",
-		category: "edit",
+		category: "menu.edit",
 		icon: contentCopyUrl
 	},
 	{
 		name: "pasteSelection",
 		callback: () => edit.pasteObjectsFromClipboard(),
 		defaultKey: "ctrl-v",
-		category: "edit",
+		category: "menu.edit",
 		icon: contentPasteUrl
 	},
 	{
 		name: "delete",
 		callback: () => selection.deleteSelection(),
-		category: "edit",
+		category: "menu.edit",
 		defaultKey: "delete",
 		icon: deleteUrl,
 	},

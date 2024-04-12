@@ -4,6 +4,8 @@ import { triggers } from '../../triggers';
 import { Raw, markRaw, onUnmounted, ref } from 'vue';
 import { addNewLayer, deleteLayer, isActiveLayer, setActiveLayer } from "../../layer";
 import MenuButton from "../common/MenuButton.vue";
+import PopoutScaffold from "../common/PopoutScaffold.vue";
+import Card from "../common/Card.vue";
 
 type LayerEntry = {
 	name: string,
@@ -62,20 +64,27 @@ function renameCurrentLayer(message: string) {
 			<button @click="addNewLayer()">{{ $t("scraps.add") }}</button>
 		</div>
 		<ul class="scrap-list">
-			<MenuButton
+			<PopoutScaffold
 				v-for="entry in layers"
-				:key="entry.name"
-				@click="setActiveLayer(entry.raw)"
-				:class="{ active: entry.active, xvi: entry.xvi }"
-				class="scrap-entry">
-				
-				<input type="checkbox" :checked="entry.raw.visible" @change="setVisibility(!entry.raw.visible, entry.raw)">
-				<span class="scrap-name">{{ entry.name }}</span>
-				<div class="layer-actions" v-if="entry.active">
-					<button @click.stop="deleteCurrentLayer($t(`scraps.deleteConfirm`))">{{ $t("delete") }}</button>
-					<button @click.stop="renameCurrentLayer($t(`scraps.renamePrompt`))">{{ $t("rename") }}</button>
-				</div>
-			</MenuButton>
+				:key="entry.name">
+				<template #source="{ openBelow, open }">
+					<MenuButton
+						@click.left="setActiveLayer(entry.raw)"
+						@contextmenu.stop.prevent="open"
+						:class="{ active: entry.active, xvi: entry.xvi }"
+						class="scrap-entry">
+						
+						<input type="checkbox" :checked="entry.raw.visible" @change="setVisibility(!entry.raw.visible, entry.raw)">
+						<span class="scrap-name">{{ entry.name }}</span>
+						<div class="spacer"></div>
+						<button @click="openBelow($event.target as HTMLElement)">•••</button>
+					</MenuButton>
+				</template>
+				<Card column>
+					<MenuButton @click.stop="deleteCurrentLayer($t(`scraps.deleteConfirm`))">{{ $t("delete") }}</MenuButton>
+					<MenuButton @click.stop="renameCurrentLayer($t(`scraps.renamePrompt`))">{{ $t("rename") }}</MenuButton>
+				</Card>
+			</PopoutScaffold>
 		</ul>
 	</div>
 </template>
@@ -128,10 +137,15 @@ h2 {
 }
 
 .layer-actions {
-	flex-grow: 1;
 	display: flex;
-	justify-content: flex-end;
 	gap: 4px;
-	flex-wrap: wrap;
+	background-color: var(--background-color);
+	border: 1px solid var(--border-color);
+	border-radius: 4px;
+	padding: 4px;
+}
+
+.spacer {
+	flex: 1;
 }
 </style>

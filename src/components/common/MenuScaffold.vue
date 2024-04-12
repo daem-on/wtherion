@@ -1,56 +1,36 @@
 <script setup lang="ts">
-import { openMenu } from '../../menuSync';
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
+import PopoutScaffold from './PopoutScaffold.vue';
 
-const open = ref(false);
+const popoutRef = ref<InstanceType<typeof PopoutScaffold> | null>(null);
 
-const menuRef = ref<HTMLElement | null>(null);
+function close() {
+	popoutRef.value?.close();
+}
+
+function toggleBelow(event: MouseEvent) {
+	if (popoutRef.value?.position) {
+		close();
+	} else {
+		popoutRef.value?.openBelow(event.target as HTMLElement);
+	}
+}
 
 defineProps({ closeOnClick: { type: Boolean, default: true } });
 
-watch(open, value => {
-	if (value) openMenu.value = menuRef.value;
-});
-
-watch(openMenu, value => {
-	if (value !== menuRef.value) open.value = false;
-}, { immediate: true });
-
-defineExpose({ open });
+defineExpose({ close });
 </script>
 
 <template>
-	<div class="menu" :class="{ open }" ref="menuRef">
-		<slot name="label" :toggle="() => open = !open"></slot>
-		<Transition>
-			<div class="menu-content" v-if="open"  @[closeOnClick&&`click`]="open = false">
-				<slot></slot>
-			</div>
-		</Transition>
-	</div>
+	<PopoutScaffold ref="popoutRef">
+		<template #source="{ openBelow }">
+			<slot name="label" :openBelow :toggleBelow></slot>
+		</template>
+		<div class="menu-content" @[closeOnClick&&`click`]="close()">
+			<slot></slot>
+		</div>
+	</PopoutScaffold>
 </template>
 
 <style scoped>
-.menu {
-	position: relative;
-}
-
-.menu .menu-content {
-	position: absolute;
-	top: 100%;
-	left: 0;
-	z-index: 199;
-	transform-origin: top left;
-	transition: opacity 0.15s, transform 0.15s;
-}
-
-.menu-content.v-enter-from, .menu-content.v-leave-to {
-	opacity: 0;
-	transform: scale(0.9);
-}
-
-.menu-content.v-enter-to, .menu-content.v-leave-from {
-	opacity: 1;
-	transform: scale(1);
-}
 </style>

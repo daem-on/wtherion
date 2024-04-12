@@ -111,12 +111,6 @@ export function clearToolEntries() {
 	jQuery('#toolSubMenu').empty().parent().addClass('empty');
 }
 
-export const contextMenuPosition = ref<{ x: number; y: number } | null>(null);
-
-export function showContextMenu(event) {
-	contextMenuPosition.value = { x: event.clientX, y: event.clientY };
-}
-
 function showAboutModal() {
 	modal.addDialog(AboutDialog, { id: "aboutDialog", content: undefined, title: "menu.about" });
 }

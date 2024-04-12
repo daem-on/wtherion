@@ -139,11 +139,6 @@ function blurCurrent() {
 // mouse stuff
 
 const setupMouse = function() {
-	window.addEventListener("contextmenu", e => {
-		e.preventDefault();
-		menu.showContextMenu(e);
-	});
-
 	// special case for viewzoom, which cannot be handled by the keybinds
 	window.addEventListener("wheel", event => {
 		if (event.ctrlKey) {

@@ -5,7 +5,7 @@ import { onMounted, ref, watch } from "vue";
 import pg from "../init";
 import DialogContainer from "./dialogs/DialogContainer.vue";
 import { cancelAll, drop } from "../filesio/dropfiles";
-import ContextMenu from "./ContextMenu.vue";
+import ContextMenu from "./CanvasContextMenu.vue";
 
 onMounted(() => {
 	pg.init();
@@ -25,16 +25,17 @@ watch(showSidebar, () => {
 		<div class="canvas" id="fileDropzone">
 			<div class="floating-ui">
 				<Toolbar :showSidebar @toggleSidebar="showSidebar = !showSidebar" />
-				<ContextMenu />
 			</div>
-			<canvas
-				id="paperCanvas"
-				data-paper-resize="true"
-				data-paper-hidpi="off"
-				@dragenter="cancelAll($event);"
-				@dragover="cancelAll($event);"
-				@drop="cancelAll($event); drop($event);"
-			></canvas>
+			<ContextMenu>
+				<canvas
+					id="paperCanvas"
+					data-paper-resize="true"
+					data-paper-hidpi="off"
+					@dragenter="cancelAll($event);"
+					@dragover="cancelAll($event);"
+					@drop="cancelAll($event); drop($event);"
+				></canvas>
+			</ContextMenu>
 		</div>
 	</main>
 </template>

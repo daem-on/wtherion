@@ -15,7 +15,7 @@ const props = defineProps<{
 const menuScaffoldRef = ref<InstanceType<typeof MenuScaffold> | null>(null);
 
 const onKeydown = (e: KeyboardEvent) => {
-	if (e.key === "Enter" || e.key === "Escape") menuScaffoldRef.value.open = false;
+	if (e.key === "Enter" || e.key === "Escape") menuScaffoldRef.value.close();
 };
 
 const select = (option: string) => {
@@ -37,9 +37,12 @@ function getImageUrl(imageRoot: string, category: string | null, option: string)
 </script>
 
 <template>
-	<MenuScaffold class="custom-list" ref="menuScaffoldRef" :closeOnClick="false">
-		<template #label="{ toggle }">
-			<input type="text" v-model="model" @click="toggle()" @keydown="onKeydown" :placeholder="placeholder" />
+	<MenuScaffold class="custom-list" ref="menuScaffoldRef">
+		<template #label="{ openBelow }">
+			<div class="input-container">
+				<input type="text" v-model="model" @keydown="onKeydown" :placeholder="placeholder" />
+				<button @click="openBelow($event.target as HTMLElement)">⯆</button>
+			</div>
 		</template>
 		<div class="select-categories">
 			<div v-for="[category, options] in categories" :key="category" class="category">
@@ -122,5 +125,20 @@ img {
 	max-width: 100px;
     max-height: 100px;
     min-height: 50px;
+}
+
+.input-container {
+	display: flex;
+	align-items: stretch;
+}
+
+.input-container input {
+	border-radius: 4px 0 0 4px;
+}
+
+.input-container button {
+	line-height: inherit;
+	border-radius: 0 4px 4px 0;
+	border-left: none;
 }
 </style>

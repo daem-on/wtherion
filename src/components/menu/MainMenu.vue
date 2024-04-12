@@ -10,9 +10,9 @@ import Foldable from "../common/Foldable.vue";
 <template>
 	<div class="main-menu">
 		<MenuScaffold>
-			<template #label="{ toggle }">
+			<template #label="{ openBelow }">
 				<!-- <svg class="burgerButton" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xml:space="preserve"><line stroke-width="12" x1="0" y1="9.5" x2="100" y2="9.5"/><line stroke-width="12" x1="0" y1="50.5" x2="100" y2="50.5"/><line stroke-width="12" x1="0" y1="90.5" x2="100" y2="90.5"/></svg> -->
-				<button class="top-button" @click="toggle()">{{ $t("menu.main") }}</button>
+				<button class="top-button" @click="openBelow($event.target as HTMLElement)">{{ $t("menu.main") }}</button>
 			</template>
 			<ul class="sub-menu">
 				<MenuButton @click="handlers.clearDocument()">{{ $t(`menu.new`) }}</MenuButton>
@@ -65,8 +65,8 @@ import Foldable from "../common/Foldable.vue";
 			</ul>
 		</MenuScaffold>
 		<MenuScaffold>
-			<template #label="{ toggle }">
-				<button class="top-button" @click="toggle()">{{ $t(`menu.edit`) }}</button>
+			<template #label="{ openBelow }">
+				<button class="top-button" @click="openBelow($event.target as HTMLElement)">{{ $t(`menu.edit`) }}</button>
 			</template>
 			<ul class="sub-menu">
 				<MenuButton @click="editTH2.changeStationsNamespace()">{{ $t(`menu.changeNamespace`) }}</MenuButton>
@@ -112,9 +112,9 @@ button.top-button {
 	border: none;
 	background: none;
 	color: inherit;
-	padding: 4px 8px;
-	margin: 4px;
-	border-radius: 4px;
+	padding: 8px 12px;
+	border-radius: 0;
+	/* TODO: maybe redesign this */
 }
 
 button.top-button:hover {

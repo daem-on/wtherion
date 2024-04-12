@@ -61,22 +61,22 @@ function fileUploadImage(event) {
 </template>
 
 <style scoped>
-li {
+button {
 	display: grid;
 	grid-template-columns: 1fr;
 	padding: 0;
 }
 
-li span, li input {
+button span, button input {
 	grid-column-start: 1;
 	grid-row-start: 1;
 }
 
-li span {
+button span {
 	padding: 8px;
 }
 
-li input {
+button input {
 	width: 100%;
 	height: 100%;
 	opacity: 0;

@@ -34,14 +34,16 @@ function getImageUrl(imageRoot: string, category: string | null, option: string)
 	const categoryPath = category ? `${category}/` : "";
 	return `${imageRoot}/${categoryPath}${option || "empty"}.svg`;
 }
+
+const containerRef = ref<HTMLElement | null>(null);
 </script>
 
 <template>
-	<MenuScaffold class="custom-list" ref="menuScaffoldRef">
+	<MenuScaffold ref="menuScaffoldRef">
 		<template #label="{ openBelow }">
-			<div class="input-container">
+			<div class="custom-list input-container" ref="containerRef">
 				<input type="text" v-model="model" @keydown="onKeydown" :placeholder="placeholder" />
-				<button @click="openBelow($event.target as HTMLElement)">⯆</button>
+				<button @click="openBelow(containerRef)">⯆</button>
 			</div>
 		</template>
 		<div class="select-categories">

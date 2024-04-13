@@ -8,18 +8,14 @@ import BooleanInput from '../../common/BooleanInput.vue';
 import PanelSection from '../../common/PanelSection.vue';
 import editTH2 from '../../../editTH2';
 import LineSettings from '../../../objectSettings/model/LineSettings';
-import subtypeList from "../../../res/subtype-list.json";
 import { wallTypes } from "../../../res/wallTypes";
+import LineSubtypeSection from '../fragments/LineSubtypeSection.vue';
 
 const props = defineProps<{
 	selection: paper.Path
 }>();
 
 const settings = computed(() => getSettings(props.selection) as LineSettings);
-
-const canHaveSubtype = computed(() => {
-	return ["wall", "border", "water-flow"].includes(settings.value.type);
-});
 
 watch(settings, () => {
 	editTH2.drawLine(props.selection);
@@ -31,11 +27,7 @@ watch(settings, () => {
 		<PanelSection :label="$t(`type`)">
 			<CustomList v-model="settings.type" :options="wallTypes" :imageRoot="`assets/rendered`" />
 		</PanelSection>
-		<PanelSection :label="$t(`subtype.name`)" v-if="canHaveSubtype">
-			<CustomList v-model="settings.subtype" v-if="settings.type === `wall`" :options="subtypeList.wall" :imageRoot="`assets/rendered/subtype`" />
-			<CustomList v-model="settings.subtype" v-if="settings.type === `border`" :options="subtypeList.border" />
-			<CustomList v-model="settings.subtype" v-if="settings.type === `water-flow`" :options="subtypeList[`water-flow`]" :imageRoot="`assets/rendered/subtype`" />
-		</PanelSection>
+		<LineSubtypeSection :type="settings.type" v-model="settings.subtype" />
 		<PanelSection :label="$t(`text`)" v-if="settings.type === `label`">
 			<input type="text" v-model="settings.text" />
 		</PanelSection>

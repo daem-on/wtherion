@@ -21,7 +21,7 @@ const toolMenuContent = computed(() => {
 		<template #default="{ close }">
 			<Card shadow scroll class="context-menu">
 				<template v-if="toolMenuContent">
-					<Foldable v-for="subMenu in toolMenuContent" :key="subMenu.name">
+					<Foldable v-for="subMenu in toolMenuContent" :key="subMenu.name" fullWidth noMargin noBorder>
 						<template #title>
 							{{ $t(subMenu.name) }}
 						</template>
@@ -52,12 +52,6 @@ const toolMenuContent = computed(() => {
 
 div.card.context-menu {
 	padding: 0;
-}
-
-.foldable {
-	margin: 0;
-	border: none;
-	border-radius: 0;
 }
 
 .foldable:not(:last-child) {

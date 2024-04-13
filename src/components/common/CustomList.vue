@@ -6,7 +6,7 @@ const model = defineModel<string>();
 type CategoryMap = Map<string | null, string[]>;
 
 const props = defineProps<{
-	imageRoot?: string;
+	imageRoot: string;
 	placeholder?: string;
 	options?: string[];
 	categories?: CategoryMap;
@@ -36,14 +36,30 @@ function getImageUrl(imageRoot: string, category: string | null, option: string)
 }
 
 const containerRef = ref<HTMLElement | null>(null);
+
+const currentExists = computed(() => {
+	if (props.options)
+		return props.options.includes(model.value);
+	else
+		return Array.from(categories.value?.values() ?? []).flat().includes(model.value);
+});
+
+const currentCategory = computed(() => {
+	if (props.options) return null;
+	for (const [category, options] of categories.value ?? []) {
+		if (options.includes(model.value)) return category;
+	}
+});
 </script>
 
 <template>
 	<MenuScaffold ref="menuScaffoldRef">
 		<template #label="{ openBelow }">
 			<div class="custom-list input-container" ref="containerRef">
+				<div class="current-image" @click="openBelow(containerRef)">
+					<img v-if="currentExists" :src="getImageUrl(imageRoot, currentCategory, model)" />
+				</div>
 				<input type="text" v-model="model" @keydown="onKeydown" :placeholder="placeholder" />
-				<button @click="openBelow(containerRef)">⯆</button>
 			</div>
 		</template>
 		<div class="select-categories">
@@ -51,7 +67,7 @@ const containerRef = ref<HTMLElement | null>(null);
 				<h3 v-if="category">{{ category }}</h3>
 				<div class="select-options">
 					<div v-for="option in options" :key="option" @click="select(option)">
-						<img v-if="imageRoot" :src="getImageUrl(imageRoot, category, option)" />
+						<img :src="getImageUrl(imageRoot, category, option)" />
 						<p>{{ option || `(${$t('none')})` }}</p>
 					</div>
 				</div>
@@ -65,8 +81,6 @@ const containerRef = ref<HTMLElement | null>(null);
 	position: relative;
 	max-width: 50ch;
     min-width: 5ch;
-	width: fit-content;
-	user-select: none;
 }
 
 .select-categories {
@@ -123,7 +137,7 @@ h3 {
 	}
 }
 
-img {
+.select-options img {
 	max-width: 100px;
     max-height: 100px;
     min-height: 50px;
@@ -131,16 +145,33 @@ img {
 
 .input-container {
 	display: flex;
+	flex-direction: column;
 	align-items: stretch;
 }
 
-.input-container input {
-	border-radius: 4px 0 0 4px;
+.current-image {
+	border-radius: 4px 4px 0 0;
+	border: var(--border-color) 1px solid;
+	border-bottom: none;
+	background-color: var(--background-color);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 50px;
+	padding: 4px;
+	cursor: pointer;
 }
 
-.input-container button {
-	line-height: inherit;
-	border-radius: 0 4px 4px 0;
-	border-left: none;
+.current-image:hover {
+	background-color: var(--card-color);
+}
+
+.current-image img {
+	max-width: 100px;
+	height: 100%;
+}
+
+.input-container input {
+	border-radius: 0 0 4px 4px;
 }
 </style>

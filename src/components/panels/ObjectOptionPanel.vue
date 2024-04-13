@@ -11,6 +11,7 @@ import MultipleLinePanel from './objects/MultipleLinePanel.vue';
 import MultiplePointPanel from './objects/MultiplePointPanel.vue';
 import ScrapOptionPanel from './ScrapOptionPanel.vue';
 import RasterPanel from './objects/RasterPanel.vue';
+import PanelContent from '../common/PanelContent.vue';
 
 const first = computed<PaperItemType | undefined>(() => selectedObjects.value[0]);
 
@@ -62,7 +63,9 @@ const isSingleSegment = computed(() => {
 				</template>
 			</template>
 			<template v-else>
-				Mixed selection
+				<PanelContent>
+					Mixed selection
+				</PanelContent>
 			</template>
 		</template>
 		<template v-else>

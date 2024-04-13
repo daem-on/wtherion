@@ -8,6 +8,7 @@ import { computed, watch } from 'vue';
 import BooleanInput from '../../common/BooleanInput.vue';
 import PanelSection from '../../common/PanelSection.vue';
 import editTH2 from '../../../editTH2';
+import PointSubtypeSection from '../fragments/PointSubtypeSection.vue';
 
 const props = defineProps<{
 	selection: paper.Shape
@@ -35,6 +36,7 @@ const symbolCategories = new Map<string, string[]>(Object.entries(symbolList));
 		<PanelSection :label="$t(`type`)">
 			<CustomList v-model="settings.type" :categories="symbolCategories" imageRoot="assets/rendered/point" />
 		</PanelSection>
+		<PointSubtypeSection :type="settings.type" v-model="settings.subtype" />
 		<PanelSection :label="$t(`invisible`)">
 			<BooleanInput v-model="settings.invisible" />
 		</PanelSection>

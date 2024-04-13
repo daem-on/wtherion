@@ -17,10 +17,10 @@ const showObjectOptionPanel = computed(() => {
 	<div class="sidebar">
 		<div class="sidebar-content">
 			<MainMenu />
-			<div class="panel with-padding">
+			<div class="panel">
 				<component :is="activeToolPanel" />
 			</div>
-			<div class="panel with-padding" v-if="showObjectOptionPanel">
+			<div class="panel" v-if="showObjectOptionPanel">
 				<ObjectOptionPanel />
 			</div>
 			<div class="spacer"></div>

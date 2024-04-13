@@ -10,6 +10,7 @@ import PointPanel from "../components/panels/tools/PointPanel.vue";
 export const pointOptions = ref({
 	id: "point",
 	type: "station",
+	subtype: "",
 	stationName: "",
 });
 
@@ -46,6 +47,7 @@ export const point = defineTool({
 					settings.name = options.stationName;
 					increaseStationNumber();
 				}
+				settings.subtype = options.subtype;
 			}
 			editTH2.drawPoint(point);
 			undo.snapshot("point");

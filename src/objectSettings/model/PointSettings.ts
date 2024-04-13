@@ -4,10 +4,11 @@ import { Clip, Place } from "./LineSettings";
 export default class PointSettings {
 
 	static readonly stringSettings: ReadonlyArray<string> = 
-		["type", "scale", "name", "text", "value", "id"];
+		["type", "subtype", "scale", "name", "text", "value", "id"];
 
 	readonly className = "PointSettings";
 	type: string;
+	subtype: string;
 	otherSettings: string;
 	name: string;
 	clip: Clip;
@@ -22,6 +23,7 @@ export default class PointSettings {
 	static defaultSettings(): PointSettings {
 		const ls = new PointSettings();
 		ls.type = "station";
+		ls.subtype = "";
 		ls.otherSettings = "";
 		ls.name = "";
 		ls.clip = Clip.Default;

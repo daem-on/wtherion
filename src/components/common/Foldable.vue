@@ -2,10 +2,16 @@
 import { ref } from 'vue';
 
 const open = ref(false);
+
+defineProps<{
+	fullWidth?: boolean;
+	noMargin?: boolean;
+	noBorder?: boolean;
+}>();
 </script>
 
 <template>
-	<div class="foldable">
+	<div class="foldable" :class="{ fullWidth, noMargin, noBorder }">
 		<h2 @click.stop="open = !open">
 			<slot name="title"></slot>
 			{{ open ? "⯅" : "⯆" }}
@@ -26,5 +32,20 @@ const open = ref(false);
 h2 {
 	cursor: pointer;
 	padding: 8px;
+}
+
+.fullWidth {
+	width: 100%;
+	border-radius: 0;
+	border-left: none;
+	border-right: none;
+}
+
+.noMargin {
+	margin: 0;
+}
+
+.noBorder {
+	border: none;
 }
 </style>

@@ -1,7 +1,6 @@
 // select tool
 // adapted from resources on http://paperjs.org and 
 // https://github.com/memononen/stylii
-import { drawGuides, clearGuideNumbers, hideGuideNumbers } from "../../src/detailSelectGuides";
 import { updateWindow } from "../../src/objectSettings/objectOptionPanel";
 import paper from "paper";
 import * as hover from "../hover";
@@ -208,7 +207,6 @@ export const detailselect = defineTool({
 			}
 			
 			statusbar.update();
-			hideGuideNumbers();
 		});
 		
 		on("mousemove", event => {
@@ -352,13 +350,11 @@ export const detailselect = defineTool({
 			selectionRect = null;
 			
 			updateWindow(true);
-			drawGuides();
 		});
 		
 		on("deactivate", () => {
 			hover.clearHoveredItem();
 			menu.clearToolEntries();
-			clearGuideNumbers();
 		});
 	},
 	

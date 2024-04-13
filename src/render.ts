@@ -1,7 +1,7 @@
 import paper from "paper";
 
 export enum CustomRenderStyle {
-	Spiky, Triangle, Notched, Contour
+	Spiky, Triangle, Notched, Contour, SegmentDetails
 }
 
 let enableCustomRender = true;
@@ -64,6 +64,24 @@ function drawLineWithContour(path: paper.Path, context: CanvasRenderingContext2D
 	context.stroke();
 }
 
+function drawSegmentDetails(path: paper.Path, context: CanvasRenderingContext2D) {
+	if (!path.selected || !path.segments.length) return;
+	context.font = "12px Poppins, sans-serif";
+	context.fillStyle = "black";
+	context.strokeStyle = "#ffffffee";
+	context.lineWidth = 2;
+	const subtypes: Record<number, string> | undefined = path.data.therionData.subtypes;
+	for (let i = 0; i < path.segments.length; i++) {
+		const segment = path.segments[i];
+		const x = segment.point.x + 2;
+		const y = segment.point.y - 2;
+		const text = subtypes?.[i] || i.toString();
+		context.strokeText(text, x, y);
+		context.fillText(text, x, y);
+	}
+	context.strokeStyle = "black";
+}
+
 export function setupCustomRenderer() {
 	const originalUpdate = paper.view.update;
 	paper.view.update = function() {
@@ -101,6 +119,9 @@ export function setupCustomRenderer() {
 					break;
 				case CustomRenderStyle.Contour:
 					drawLineWithContour(item as paper.Path, context, item.data.therionData.reverse);
+					break;
+				case CustomRenderStyle.SegmentDetails:
+					drawSegmentDetails(item as paper.Path, context);
 					break;
 			}
 		}

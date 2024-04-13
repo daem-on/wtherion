@@ -7,6 +7,7 @@ import { computed } from "vue";
 import LineSettings from "../../../objectSettings/model/LineSettings";
 import subtypes from "../../../res/subtype-list.json";
 import BooleanInput from "../../common/BooleanInput.vue";
+import editTH2 from "../../../editTH2";
 
 const props = defineProps<{
 	selection: paper.Path,
@@ -15,14 +16,17 @@ const props = defineProps<{
 
 const settings = computed(() => getSettings(props.selection) as LineSettings);
 
+function drawLine() {
+	editTH2.drawLine(props.selection, settings.value);
+}
+
 const subtype = computed({
 	get: () => settings.value.subtypes[props.selectedSegment.index],
-	set: (value: string) => settings.value.subtypes[props.selectedSegment.index] = value,
-});
-
-const segmentSettings = computed({
-	get: () => settings.value.segmentSettings[props.selectedSegment.index],
-	set: (value: string) => settings.value.segmentSettings[props.selectedSegment.index] = value,
+	set: (value: string | undefined) => {
+		if (!value) delete settings.value.subtypes[props.selectedSegment.index];
+		else settings.value.subtypes[props.selectedSegment.index] = value;
+		drawLine();
+	},
 });
 
 const enableSubtype = computed({
@@ -30,6 +34,7 @@ const enableSubtype = computed({
 	set: (value: boolean) => {
 		if (!value) subtype.value = undefined;
 		else subtype.value = "bedrock";
+		drawLine();
 	}
 });
 
@@ -41,7 +46,7 @@ const nextSubtype = computed<Entry>(() => {
 	return subtypeEntries.value.find(({ index }) => index > props.selectedSegment.index);
 });
 
-const lastSubtype = computed<Entry>(() => {
+const prevSubtype = computed<Entry>(() => {
 	for (let i = subtypeEntries.value.length - 1; i >= 0; i--) {
 		if (subtypeEntries.value[i].index < props.selectedSegment.index)
 			return subtypeEntries.value[i];
@@ -53,8 +58,8 @@ const lastSubtype = computed<Entry>(() => {
 <template>
 	<PanelContent>
 		<p>
-			<template v-if="lastSubtype">
-				{{ $t(`subtype.hasSubtype`, lastSubtype) }}
+			<template v-if="prevSubtype">
+				{{ $t(`subtype.hasSubtype`, prevSubtype) }}
 			</template>
 			<template v-else>
 				{{ $t(`subtype.default`) }}
@@ -75,18 +80,6 @@ const lastSubtype = computed<Entry>(() => {
 			<PanelSection :label="$t(`type`)">
 				<CustomList v-model="subtype" :options="subtypes.wall.slice(1)" :imageRoot="`assets/rendered/subtype`" />
 			</PanelSection>
-			<PanelSection :label="$t(`otherSettings`)" column>
-				<textarea rows="2" v-model="segmentSettings"></textarea>
-			</PanelSection>
 		</template>
 	</PanelContent>
 </template>
-
-<style scoped>
-textarea {
-	min-width: 100%;
-	max-width: 100%;
-	font-family: monospace;
-	height: auto;
-}
-</style>

@@ -9,7 +9,6 @@ import editTH2 from '../../editTH2';
 import { i18n } from '../../i18n';
 
 const options = ref({
-	detailSelectGuides: false,
 	showSegmentOptionPanel: false,
 	lockLayerNames: false,
 	githubToken: "",
@@ -39,9 +38,6 @@ for (const key in options.value) {
 
 <template>
 	<div>
-		<PanelSection :label="$t(`config.detailSelectGuides`)">
-			<BooleanInput v-model="options.detailSelectGuides" ></BooleanInput>
-		</PanelSection>
 		<PanelSection :label="$t(`config.showSegmentOptionPanel`)">
 			<BooleanInput v-model="options.showSegmentOptionPanel" ></BooleanInput>
 		</PanelSection>

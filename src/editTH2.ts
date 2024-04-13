@@ -114,6 +114,9 @@ export default {
 				l.data.customRenderStyle = CustomRenderStyle.Contour;
 			}
 		}
+		if (settings.subtypes && Object.values(settings.subtypes).length) {
+			l.data.customRenderStyle = CustomRenderStyle.SegmentDetails;
+		}
 	},
 	
 	drawObject: function(object: PaperItemType) {

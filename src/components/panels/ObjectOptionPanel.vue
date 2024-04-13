@@ -12,6 +12,7 @@ import MultiplePointPanel from './objects/MultiplePointPanel.vue';
 import ScrapOptionPanel from './ScrapOptionPanel.vue';
 import RasterPanel from './objects/RasterPanel.vue';
 import PanelContent from '../common/PanelContent.vue';
+import SegmentPanel from './objects/SegmentPanel.vue';
 
 const first = computed<PaperItemType | undefined>(() => selectedObjects.value[0]);
 
@@ -74,6 +75,7 @@ const isSingleSegment = computed(() => {
 					<template v-if="first.data.therionData.type === `wall`">
 						<SubtypePanel :selection="(first as paper.Path)" :selectedSegment="selectedSegments[0]" />
 					</template>
+					<SegmentPanel :selection="(first as paper.Path)" :selectedSegment="selectedSegments[0]" />
 				</template>
 			</template>
 			<template v-else-if="activeToolId === `select`">

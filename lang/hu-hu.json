@@ -9,8 +9,8 @@
 	"areas": "területek",
 	"areaType": "Terület típusa",
 	"bottom": "alsó",
-	"clearDocument": "A nem mentett módosítások elvesznek. Folytatod?",
-	"clearSettings": "Minden adatot törölsz? (mentések, beállítások)",
+	"clearDocument": "A nem mentett módosítások elvesznek. Folytatja?",
+	"clearSettings": "Minden adatot töröl? (mentések, beállítások)",
 	"clip": {
 		"name": "Levágás",
 		"off": "Ne legyen levágva",
@@ -174,8 +174,7 @@
 	"rename": "Átnevezés",
 	"reverse": "Fordított irány",
 	"save": {
-		"delete1": "Véglegesen törlöd ezt:",
-		"delete2": "?",
+		"deletePrompt": "Véglegesen törli ezt: {filename}?",
 		"deleteTooltip": "Mentés törlése",
 		"githubCommitPrompt": "Kommit megjegyzés:",
 		"githubLoadPrompt": "A betöltendő fájl URL-je:",

@@ -14,6 +14,9 @@ import { openSearchDialog } from "./search";
 import * as undo from "./undo";
 import { showValidationWindow } from "./validate";
 import * as view from "./view";
+import { i18n } from "./i18n";
+
+const t = i18n.global.t;
 
 export function setup() {
 }
@@ -43,14 +46,14 @@ export const handlers = {
 	exportTH2: saves.exportTH2,
 			
 	importImageFromURL: function() {
-		const url = prompt("%import.imageURL% (jpg, png, gif)", "http://");
+		const url = prompt(`${t("import.imageURL")} (jpg, png, gif)`, "http://");
 		if (url) {
 			importer.importAndAddExternalImage(url);
 		}
 	},
 	
 	importSVGFromURL: function() {
-		const url = prompt("%import.svgURL%", "http://");
+		const url = prompt(t("import.svgURL"), "http://");
 		if (url) {
 			importer.importAndAddSVG(url);
 		}
@@ -69,13 +72,13 @@ export const handlers = {
 	},
 
 	resetSettings: function() {
-		if (confirm('%clearSettings%')) {
+		if (confirm(t("clearSettings"))) {
 			localStorage.clear();
 		}
 	},
 
 	clearDocument: function() {
-		if (confirm('%clearDocument%')) {
+		if (confirm(t("clearDocument"))) {
 			pgDocument.clear();
 			saves.clearSaveFileName();
 		}

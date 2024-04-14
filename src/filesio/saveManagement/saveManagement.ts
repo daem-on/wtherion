@@ -5,6 +5,7 @@ import { handler as fileSystemExports } from "./fileSystemExports";
 import { handler as fileSystemSaves } from "./fileSystemSaves";
 import * as wtConfig from "../configManagement";
 import MultipleFileSelectDialog from "../../components/dialogs/MultipleFileSelectDialog.vue";
+import { i18n } from "../../i18n";
 
 export interface SaveHandler {
 	save: (saveAs: boolean, json: string) => void;
@@ -17,7 +18,7 @@ export interface ExportHandler {
 }
 
 export function setWindowTitle(name: string) {
-	document.title = name || "%save.untitled%";
+	document.title = name || i18n.global.t("save.untitled");
 }
 
 function getSaveHandler() {
@@ -48,7 +49,7 @@ export async function open() {
 
 export function clearSaveFileName() {
 	getSaveHandler().clearSaveFile();
-	document.title = "%save.untitled%";
+	document.title = i18n.global.t("save.untitled");
 }
 
 export function exportTH2(exportAs = false) {

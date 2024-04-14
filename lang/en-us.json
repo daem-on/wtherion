@@ -174,8 +174,7 @@
 	"rename": "Rename",
 	"reverse": "Reverse",
 	"save": {
-		"delete1": "Delete",
-		"delete2": "permanently?",
+		"deletePrompt": "Delete {filename} permanently?",
 		"deleteTooltip": "Delete save file",
 		"githubCommitPrompt": "Enter the commit message",
 		"githubLoadPrompt": "Enter the URL of the file to load",

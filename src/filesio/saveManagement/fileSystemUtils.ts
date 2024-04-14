@@ -1,8 +1,10 @@
 /// <reference types="wicg-file-system-access" />
 
 import { saveAs } from "file-saver";
+import { i18n } from "../../i18n";
 
 export const supportsFilesystem = window.showSaveFilePicker && window.showOpenFilePicker;
+const t = i18n.global.t;
 
 export const acceptTypeDefs = {
 	"th2": {
@@ -28,7 +30,7 @@ export async function pickSaveFile(types: FilePickerAcceptType[]): Promise<FileS
 			return undefined;
 		}
 	} else {
-		alert("%save.notSupported%");
+		alert(t("save.notSupported"));
 	}
 }
 
@@ -51,6 +53,6 @@ export async function openSingleFile(types: FilePickerAcceptType[]): Promise<[Fi
 			return undefined;
 		}
 	} else {
-		alert("%save.notSupported%");
+		alert(t("save.notSupported"));
 	}
 }

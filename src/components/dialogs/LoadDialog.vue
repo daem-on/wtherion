@@ -17,8 +17,8 @@ function close() {
 }
 
 function deleteFile(filename: string) {
-	deleteFromStorage(filename);
-	filenames.value = filenames.value.filter((f) => f !== filename);
+	if (deleteFromStorage(filename))
+		filenames.value = filenames.value.filter((f) => f !== filename);
 }
 </script>
 <template>

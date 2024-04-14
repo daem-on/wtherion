@@ -13,6 +13,7 @@ import paper from "paper";
 import { updateWindow } from "./objectSettings/objectOptionPanel";
 import { reactive } from "vue";
 import { CustomRenderStyle } from "./render";
+import { i18n } from "./i18n";
 
 const typeColors
 	= generateColors(colorDefs.typeColors);
@@ -239,7 +240,7 @@ export default {
 	},
 
 	changeStationsNamespace: function(addToEmpty = false) {
-		const newNamespace = prompt("%edit.namespacePrompt%");
+		const newNamespace = prompt(i18n.global.t("edit.namespacePrompt"));
 		if (!newNamespace) return;
 
 		for (const item of paper.project.getItems({ recursive: true })) {

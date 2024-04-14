@@ -1,12 +1,15 @@
 import LoadDialog from "../../components/dialogs/LoadDialog.vue";
+import { i18n } from "../../i18n";
 import { addDialog } from "../../modal";
 import { SaveHandler, setWindowTitle } from "./saveManagement";
+
+const t = i18n.global.t;
 
 let saveFileName: string;
 
 function save(clearName = false, json: string) {
 	if (!saveFileName || clearName) {
-		setSaveFileName(prompt("%save.saveFileName%"));
+		setSaveFileName(prompt(t("save.saveFileName")));
 		if (saveFileName == null) return;
 	}
 
@@ -38,10 +41,12 @@ export function loadFromStorage(name: string) {
 	return localStorage.getItem(name);
 }
 
-export function deleteFromStorage(name: string) {
-	if (confirm(`%save.delete1% ${name.substring(9)} %save.delete2%`)) {
+export function deleteFromStorage(name: string): boolean {
+	if (confirm(t("save.deletePrompt", { filename: name.substring(9) }))) {
 		localStorage.removeItem(name);
+		return true;
 	}
+	return false;
 }
 
 export const handler: SaveHandler = {

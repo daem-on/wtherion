@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DialogData } from 'src/modal';
+import { DialogData } from '../../modal';
 import { headRef, moveHeadTo, statesRef, undo, redo } from '../../undo';
 import MenuButton from '../common/MenuButton.vue';
 

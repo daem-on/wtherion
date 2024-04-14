@@ -1,11 +1,16 @@
 import getSettings from "../objectSettings/model/getSettings";
 import paper from "paper";
 import * as selection from "../selection";
-import * as sb from "../statusbar";
 import * as menu from "../menu";
 import * as hover from "../hover";
 import * as config from "../filesio/configManagement";
 import { defineTool } from "../tools";
+import { i18n } from "../i18n";
+import { ref } from "vue";
+
+const t = i18n.global.t;
+
+export const tooltip = ref<string | null>(null);
 
 function objectToString(object: any) {
 	if (object?.data?.therionData?.className === "XVIStation") {
@@ -19,18 +24,18 @@ function objectToString(object: any) {
 
 	switch (s.className) {
 		case "LineSettings":
-			const subtype = s.subtype ? ":"+s.subtype : "";
-			text += "%inspect.line%";
-			text += ` ${s.type + subtype}`;
-			text += s.invisible ? " invisible" : "";
+			const subtype = s.subtype ? `:${s.subtype}` : "";
+			text += t("inspect.line");
+			text += ` - ${s.type + subtype}`;
+			text += s.invisible ? ` ${t("invisible")}` : "";
 			break;
 		case "AreaSettings":
-			text += `%inspect.area% ${s.type}`;
-			text += ` %inspect.withLine% ${s.lineSettings.type}`;
+			text += `${t("inspect.area")} - ${s.type}`;
+			text += ` ${t("inspect.withLine")} ${s.lineSettings.type}`;
 			break;
 		case "PointSettings":
-			text += "%inspect.point%";
-			text += " ";
+			text += t("inspect.point");
+			text += " - ";
 			if (s.type === "station") text += `${s.type} ${s.name}`;
 			else text += `${s.type}`;
 	}
@@ -67,22 +72,22 @@ export const inspect = defineTool({
 				for (const hit of hovered) {
 					const s = objectToString(hit.item);
 					if (s) {
-						sb.showCustom(s);
+						tooltip.value = s;
 						return;
 					}
 				}
-				sb.showCustom("%inspect.unrecognized%");
+				tooltip.value = t("inspect.unrecognized");
 			} else {
 				const x = event.point.x.toFixed(1);
 				const y = event.point.y.toFixed(1);
-				sb.showCustom(`%inspect.position%: ${x}, ${y}`);
+				tooltip.value = `${t("inspect.position")}: ${x}, ${y}`;
 			}
 		});
 
 		on("deactivate", () => {
 			hover.clearHoveredItem();
 			menu.clearToolEntries();
-			sb.showCustom("");
+			tooltip.value = null;
 		});
 	},
 });

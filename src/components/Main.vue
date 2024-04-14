@@ -6,6 +6,7 @@ import pg from "../init";
 import DialogContainer from "./dialogs/DialogContainer.vue";
 import { cancelAll, drop } from "../filesio/dropfiles";
 import ContextMenu from "./CanvasContextMenu.vue";
+import Tooltip from "./Tooltip.vue";
 
 onMounted(() => {
 	pg.init();
@@ -21,6 +22,7 @@ watch(showSidebar, () => {
 <template>
 	<main>
 		<DialogContainer />
+		<Tooltip />
 		<Sidebar v-if="showSidebar" />
 		<div class="canvas" id="fileDropzone">
 			<div class="floating-ui">

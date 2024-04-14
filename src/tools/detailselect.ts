@@ -7,7 +7,6 @@ import * as hover from "../hover";
 import * as guides from "../guides";
 import * as compoundPath from "../compoundPath";
 import * as math from "../math";
-import * as statusbar from "../statusbar";
 import * as items from "../item";
 import * as menu from "../menu";
 import * as undo from "../undo";
@@ -205,8 +204,6 @@ export const detailselect = defineTool({
 				hitResult.segment.handleIn.selected = true;
 				hitResult.segment.handleOut.selected = true;
 			}
-			
-			statusbar.update();
 		});
 		
 		on("mousemove", event => {

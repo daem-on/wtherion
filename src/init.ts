@@ -4,7 +4,6 @@ import * as pgExport from "./export.js";
 import * as menu from "./menu";
 import * as modal from "./modal.js";
 import * as tools from "./tools";
-import * as statusbar from "./statusbar.js";
 import * as input from "./input";
 import * as undo from "./undo";
 import * as selection from "./selection";
@@ -39,7 +38,6 @@ export default {
 	menu: menu,
 	modal: modal,
 	tools: tools,
-	statusbar: statusbar,
 	input: input,
 	undo: undo,
 	selection: selection,
@@ -68,7 +66,6 @@ export default {
 		this.export.setup();
 		this.menu.setup();
 		this.tools.setup();
-		this.statusbar.setup();
 		this.input.setup();
 		this.undo.setup();
 		historyPanel.setup();

@@ -4,7 +4,6 @@ import * as compoundPath from "./compoundPath";
 import * as geometry from "./geometry";
 import * as hover from "./hover";
 import * as math from "./math";
-import * as statusbar from "./statusbar";
 import * as pgDocument from "./document";
 import * as groups from "./group";
 import * as items from "./item";
@@ -85,7 +84,6 @@ export function selectItemSegments(item, state) {
 export function clearSelection() {
 	paper.project.deselectAll();
 	
-	statusbar.update();
 	hover.clearHoveredItem();
 	triggers.emit("SelectionChanged");
 }
@@ -314,7 +312,6 @@ export function setItemSelection(item: paper.Item, state: boolean) {
 			}
 		}
 	}
-	statusbar.update();
 	
 	triggers.emit("SelectionChanged");
 	
@@ -552,7 +549,6 @@ export function handleRectangularSelectionItems(item: paper.Item, event: paper.E
 				return false;
 			}
 		}
-		statusbar.update();
 
 	} else if(items.isBoundsItem(item)) {
 		if(checkBoundsItem(rect, item, event)) {

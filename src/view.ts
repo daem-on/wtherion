@@ -1,5 +1,4 @@
 import paper from "paper";
-import * as statusbar from "./statusbar";
 import * as layer from "./layer";
 import * as pgDocument from "./document";
 
@@ -10,13 +9,11 @@ export function zoomBy(factor: number) {
 	} else if(paper.view.zoom >= 1000) {
 		paper.view.zoom = 1000;
 	}
-	statusbar.update();
 }
 
 
 export function resetZoom() {
 	paper.view.zoom = 1;
-	statusbar.update();
 }
 
 

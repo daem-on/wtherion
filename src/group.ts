@@ -1,6 +1,5 @@
 import * as selection from "./selection";
 import * as undo from "./undo";
-import * as statusbar from "./statusbar";
 import { getRootItem, isGroupItem } from "./item";
 import { triggers } from "./triggers";
 
@@ -24,7 +23,6 @@ export function groupSelection() {
 export function ungroupSelection() {
 	const items = selection.getSelectedItems();
 	ungroupItems(items);
-	statusbar.update();
 }
 
 

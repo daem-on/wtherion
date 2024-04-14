@@ -351,7 +351,6 @@ export const detailselect = defineTool({
 		
 		on("deactivate", () => {
 			hover.clearHoveredItem();
-			menu.clearToolEntries();
 		});
 	},
 	

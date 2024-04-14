@@ -86,7 +86,6 @@ export const inspect = defineTool({
 
 		on("deactivate", () => {
 			hover.clearHoveredItem();
-			menu.clearToolEntries();
 			tooltip.value = null;
 		});
 	},

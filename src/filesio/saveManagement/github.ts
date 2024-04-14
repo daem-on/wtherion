@@ -2,7 +2,6 @@ import * as pgDocument from "../../document";
 import * as wtConfig from "../configManagement";
 // import { Octokit } from "@octokit/rest";
 import importTH2 from "../../import/importTH2";
-import { showCommitButton } from "../../menu";
 
 const Octokit = {} as any;
 
@@ -75,7 +74,7 @@ async function loadFromGitHub(path: string) {
 
 		gitHubDetails.sha = data.sha;
 		gitHubDetails.path = path;
-		showCommitButton(true);
+		// TODO
 	} else {
 		console.error("Error loading file");
 		return;
@@ -124,6 +123,6 @@ export async function saveJSONToGitHub() {
 
 	if (result.status === 200) {
 		gitHubDetails.sha = result.data.content.sha;
-		showCommitButton(true);
+		// TODO
 	}
 }

@@ -106,14 +106,6 @@ export const handlers = {
 	},
 };
 
-export function showCommitButton(show: boolean) {
-	jQuery("#commitButton").toggleClass("hidden", !show);
-}
-
-export function clearToolEntries() {
-	jQuery('#toolSubMenu').empty().parent().addClass('empty');
-}
-
 function showAboutModal() {
 	modal.addDialog(AboutDialog, { id: "aboutDialog", content: undefined, title: "menu.about" });
 }

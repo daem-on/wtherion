@@ -456,7 +456,6 @@ export const select = defineTool({
 		on("deactivate", () => {
 			hover.clearHoveredItem();
 			removeBoundsPath();
-			menu.clearToolEntries();
 			triggers.offAny(['DeleteItems', 'Undo', 'Redo', 'Grouped', 'Ungrouped', 'SelectionChanged'], triggerHandler);
 		});
 

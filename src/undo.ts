@@ -4,6 +4,7 @@ import paper from "paper";
 import * as layer from "./layer";
 import { triggers } from "./triggers";
 import { Ref, computed, ref } from "vue";
+import { markRaw } from "vue";
 
 type UndoState = {
 	type: string,
@@ -30,7 +31,7 @@ export function setup() {
 }
 
 export async function snapshot(type: string) {
-	const data = paper.project.exportJSON({ asString: false}) as any;
+	const data = markRaw(paper.project.exportJSON({ asString: false}) as any);
 	const state: UndoState = {
 		type: type,
 		hash: await getDigest(JSON.stringify(data)),

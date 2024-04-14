@@ -4,17 +4,19 @@ import PanelFoldable from '../../common/PanelFoldable.vue';
 import PanelContent from '../../common/PanelContent.vue';
 import getSettings from '../../../objectSettings/model/getSettings';
 import symbolList from "../../../res/symbol-list.json";
-import { computed, watch } from 'vue';
+import { computed, onUnmounted, ref, watch } from 'vue';
 import BooleanInput from '../../common/BooleanInput.vue';
 import PanelSection from '../../common/PanelSection.vue';
 import editTH2 from '../../../editTH2';
 import PointSubtypeSection from '../fragments/PointSubtypeSection.vue';
+import { snapshot } from '../../../undo';
 
 const props = defineProps<{
 	selection: paper.Shape
 }>();
 
 const settings = computed(() => getSettings(props.selection));
+const dirty = ref(false);
 
 const canHaveValue = computed(() => {
 	return ["height", "passage-height", "altitude", "dimensions"].includes(settings.value.type);
@@ -26,9 +28,14 @@ const canHaveText = computed(() => {
 
 watch(settings, () => {
 	editTH2.drawPoint(props.selection);
+	dirty.value = true;
 }, { deep: true });
 
 const symbolCategories = new Map<string, string[]>(Object.entries(symbolList));
+
+onUnmounted(() => {
+	if (dirty.value) snapshot("editPoint");
+});
 </script>
 
 <template>

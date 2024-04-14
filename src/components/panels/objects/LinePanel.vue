@@ -3,23 +3,30 @@ import CustomList from '../../common/CustomList.vue';
 import PanelFoldable from '../../common/PanelFoldable.vue';
 import PanelContent from '../../common/PanelContent.vue';
 import getSettings from '../../../objectSettings/model/getSettings';
-import { computed, watch } from 'vue';
+import { computed, onUnmounted, ref, watch } from 'vue';
 import BooleanInput from '../../common/BooleanInput.vue';
 import PanelSection from '../../common/PanelSection.vue';
 import editTH2 from '../../../editTH2';
 import LineSettings from '../../../objectSettings/model/LineSettings';
 import { wallTypes } from "../../../res/wallTypes";
 import LineSubtypeSection from '../fragments/LineSubtypeSection.vue';
+import { snapshot } from '../../../undo';
 
 const props = defineProps<{
 	selection: paper.Path
 }>();
 
 const settings = computed(() => getSettings(props.selection) as LineSettings);
+const dirty = ref(false);
 
 watch(settings, () => {
 	editTH2.drawLine(props.selection);
+	dirty.value = true;
 }, { deep: true });
+
+onUnmounted(() => {
+	if (dirty.value) snapshot("editLine");
+});
 </script>
 
 <template>

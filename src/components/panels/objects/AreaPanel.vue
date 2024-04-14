@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, watch } from 'vue';
+import { computed, onUnmounted, ref, watch } from 'vue';
 import CustomList from '../../common/CustomList.vue';
 import PanelContent from '../../common/PanelContent.vue';
 import getSettings from '../../../objectSettings/model/getSettings';
@@ -11,16 +11,23 @@ import { wallTypes } from "../../../res/wallTypes";
 import areaList from "../../../res/area-list.json";
 import PanelFoldable from '../../common/PanelFoldable.vue';
 import LineSubtypeSection from '../fragments/LineSubtypeSection.vue';
+import { snapshot } from '../../../undo';
 
 const props = defineProps<{
 	selection: paper.Path
 }>();
 
 const settings = computed(() => getSettings(props.selection) as AreaSettings);
+const dirty = ref(false);
 
 watch(settings, () => {
 	editTH2.drawArea(props.selection);
+	dirty.value = true;
 }, { deep: true });
+
+onUnmounted(() => {
+	if (dirty.value) snapshot("editArea");
+});
 </script>
 
 <template>

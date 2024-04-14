@@ -44,8 +44,6 @@ const toolMenuContent = computed(() => {
 
 <style scoped>
 .context-menu {
-	position: fixed;
-	z-index: 299;
 	min-width: 200px;
 	max-height: 80vh;
 }

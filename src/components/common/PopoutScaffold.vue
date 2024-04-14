@@ -22,10 +22,19 @@ defineExpose({ position, close, open, openBelow });
 
 defineProps<{ omitBlocker?: true }>();
 
+function fitInBounds(p: Position, e: HTMLElement): void {
+	if (p.y + e.clientHeight > window.innerHeight || p.x + e.clientWidth > window.innerWidth) {
+		const x = Math.min(p.x, window.innerWidth - e.clientWidth);
+		const y = Math.min(p.y, window.innerHeight - e.clientHeight);
+		position.value = { x, y };
+	}
+}
+
 const elementRef = ref<HTMLElement | null>(null);
 
 watch(elementRef, value => {
 	if (value) {
+		fitInBounds(position.value!, value);
 		value.animate([
 			{ opacity: 0, transform: "scale(0.9)" },
 			{ opacity: 1, transform: "scale(1)" },

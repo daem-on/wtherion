@@ -9,5 +9,10 @@ export default defineConfig({
 	],
 	define: {
 		__BUILD_DATE__: JSON.stringify(new Date().toISOString())
+	},
+	resolve: {
+		alias: {
+			"paper": "paper/dist/paper-core"
+		}
 	}
 });

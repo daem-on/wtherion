@@ -94,7 +94,7 @@ export const handlers = {
 	loadFromGitHub: github.showGitHubLoadModal,
 
 	historyPanel: () => {
-		modal.addDialog(HistoryDialog, { id: "historyDialog", content: undefined, title: "menu.historyPanel" });
+		modal.addDialog(HistoryDialog, { id: "historyDialog", content: undefined, title: "menu.historyPanel", style: { "justify-self": "flex-end" } });
 	},
 
 	searchDialog: openSearchDialog,

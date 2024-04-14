@@ -71,6 +71,7 @@ export function showValidationWindow() {
 	addDialog(ValidationDialog, {
 		content: validateProject(),
 		id: "validationDialog",
-		title: "edit.validationResult"
+		title: "edit.validationResult",
+		style: { "align-self": "flex-end" }
 	});
 }

@@ -4,13 +4,13 @@ import { activeDialogList, removeDialog } from '../../modal';
 
 <template>
 	<div class="dialog-container">
-		<div class="dialog-window" v-for="entry of activeDialogList">
+		<div class="dialog-window" v-for="entry of activeDialogList" :style="entry.data.style">
 			<div class="dialog-header">
 				<h2>{{ $t(entry.data.title) }}</h2>
 				<button @click="removeDialog(entry.data.id)">⨉</button>
 			</div>
 			<div class="dialog-content">
-				<component v-for="entry of activeDialogList" :is="entry.component" :data="entry.data" />
+				<component :is="entry.component" :data="entry.data" />
 			</div>
 		</div>
 	</div>

@@ -59,12 +59,19 @@ export const viewgrab = defineTool({
 				setCursor();
 			}
 		});
+
+		on("deactivate", () => {
+			setCursor();
+		});
 		
 		const setCursor = function(cursorString?: string) {
 			if (cursorString === currentCursor) return;
 
 			const body = document.body;
-			body.style.cursor = cursorString;
+			if (cursorString)
+				body.style.cursor = cursorString;
+			else
+				body.style.removeProperty('cursor');
 
 			currentCursor = cursorString;
 		};

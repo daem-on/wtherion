@@ -12,7 +12,7 @@ defineProps<{
 
 <template>
 	<div class="foldable" :class="{ fullWidth, noMargin, noBorder }">
-		<h2 @click.stop="open = !open">
+		<h2 @click.stop="open = !open" tabindex="0">
 			<slot name="title"></slot>
 			{{ open ? "⯅" : "⯆" }}
 		</h2>

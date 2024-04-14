@@ -1,11 +1,9 @@
 import { openSearchDialog } from "./search";
 import { save, exportTH2 } from "./filesio/saveManagement/saveManagement";
-import * as menu from "./menu";
 import * as config from "./filesio/configManagement";
-import { getActiveTool, switchToolById, unduckTool } from "./tools";
+import { activeToolRef, getActiveTool, switchToolById, unduckTool } from "./tools";
 import { resetZoom } from "./view";
 import { redo, undo } from "./undo";
-import { deleteSelection } from "./selection";
 import editTH2 from "./editTH2";
 import { reactive } from "vue";
 
@@ -72,6 +70,10 @@ export function getKeySpec(event: KeyboardEvent, up: boolean): KeySpec {
 
 function setupKeyboard() {
 	function handleKeyEvent(event: KeyboardEvent, up: boolean) {
+		if (event.key === "Escape") {
+			blurCurrent();
+			return;
+		}
 		if (userIsTyping(event)) return;
 		if (event.repeat) return;
 		const spec = getKeySpec(event, up);
@@ -98,8 +100,8 @@ function setupKeyboard() {
 	registerAction("global.tool.bezier", () => switchToolById("bezier"), "p");
 	registerAction("global.tool.point", () => switchToolById("point"), "k");
 
-	registerAction("global.tool.viewgrab", () => switchToolById("viewgrab", { duck: true }), " ");
-	registerAction("global.tool.viewgrab.up", () => unduckTool(), " -up");
+	registerAction("global.tool.viewgrab", viewgrabDown, " ");
+	registerAction("global.tool.viewgrab.up", viewgrabUp, " -up");
 
 	registerAction("global.tool.inspect", () => switchToolById("inspect", { duck: true }), "m");
 	registerAction("global.tool.inspect.up", () => unduckTool(), "m-up");
@@ -112,8 +114,6 @@ function setupKeyboard() {
 	registerAction("global.search", openSearchDialog, "ctrl-f");
 	registerAction("global.save", save, "ctrl-s");
 	registerAction("global.export", exportTH2, "ctrl-e");
-
-	registerAction("global.blur", blurCurrent, "escape");
 
 	registerAction("th2.lineToArea", () => editTH2.lineToArea(), "ctrl-h");
 	registerAction("th2.areaToLine", () => editTH2.areaToLine(), "ctrl-shift-h");
@@ -129,6 +129,22 @@ export function textIsSelected() {
 
 export function userIsTyping(event: KeyboardEvent) {
 	return event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement;
+}
+
+function viewgrabDown() {
+	if (document.activeElement instanceof HTMLButtonElement
+		|| document.activeElement instanceof HTMLAnchorElement
+		|| document.activeElement instanceof HTMLHeadingElement) {
+		document.activeElement.click();
+		return;
+	}
+	switchToolById("viewgrab", { duck: true });
+}
+
+function viewgrabUp() {
+	if (activeToolRef.value.definition.id === "viewgrab") {
+		unduckTool();
+	}
 }
 
 function blurCurrent() {

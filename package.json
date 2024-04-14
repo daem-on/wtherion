@@ -15,8 +15,6 @@
   "dependencies": {
     "@octokit/rest": "^19.0.4",
     "file-saver": "^2.0.5",
-    "jquery": "^3.6.0",
-    "jquery-ui": "^1.13.0",
     "paper": "^0.12.15",
     "vue": "^3.4.21",
     "vue-i18n": "^9.11.0"
@@ -24,8 +22,6 @@
   "devDependencies": {
     "@playwright/test": "^1.25.1",
     "@types/file-saver": "^2.0.7",
-    "@types/jquery": "^3.5.9",
-    "@types/jqueryui": "^1.12.16",
     "@types/paper": "^0.12.3",
     "@types/wicg-file-system-access": "^2023.10.5",
     "@typescript-eslint/eslint-plugin": "^5.12.0",

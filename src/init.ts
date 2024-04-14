@@ -1,4 +1,3 @@
-import jQuery from "jquery";
 import * as layer from "./layer";
 import * as pgExport from "./export.js";
 import * as menu from "./menu";
@@ -58,7 +57,6 @@ export default {
 	
 	init: function() {
 		paper.setup('paperCanvas');
-		jQuery.ajaxSetup({ cache: false });
 
 		configSetup();
 		this.layer.setup();

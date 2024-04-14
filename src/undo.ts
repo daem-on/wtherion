@@ -32,11 +32,9 @@ export function setup() {
 
 export async function snapshot(type: string) {
 	const data = markRaw(paper.project.exportJSON({ asString: false}) as any);
-	const state: UndoState = {
-		type: type,
-		hash: await getDigest(JSON.stringify(data)),
-		data
-	};
+	const hash = await getDigest(JSON.stringify(data));
+
+	if (head.value >= 0 && states.value[head.value].hash === hash) return;
 	
 	// remove all states after the current head
 	if (head.value < states.value.length-1) {
@@ -44,7 +42,7 @@ export async function snapshot(type: string) {
 	}
 	
 	// add the new states
-	states.value.push(state);
+	states.value.push({ type, hash, data });
 	
 	// limit states to maxUndos by shifing states (kills first state)
 	if (states.value.length > maxUndos) {

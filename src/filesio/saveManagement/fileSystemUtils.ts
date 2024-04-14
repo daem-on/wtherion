@@ -1,3 +1,5 @@
+/// <reference types="wicg-file-system-access" />
+
 import { saveAs } from "file-saver";
 
 export const supportsFilesystem = window.showSaveFilePicker && window.showOpenFilePicker;

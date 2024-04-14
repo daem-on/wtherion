@@ -195,7 +195,9 @@
 		"add": "Add",
 		"deleteConfirm": "Delete this scrap and all its children?",
 		"renamePrompt": "Enter the new name",
-		"title": "Scraps"
+		"title": "Scraps",
+		"moveUp": "Move up",
+		"moveDown": "Move down"
 	},
 	"scrapSettingsTitle": "Scrap settings",
 	"search": {

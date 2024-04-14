@@ -171,3 +171,13 @@ export function reinitLayers(activeLayerID: number) {
 	}
 	triggers.emit("LayersChanged");
 }
+
+export function moveLayer(layer: paper.Layer, delta: number) {
+	const index = paper.project.layers.indexOf(layer);
+	const newIndex = index + delta;
+	if (newIndex < 0 || newIndex >= paper.project.layers.length) return;
+	const prevActive = paper.project.activeLayer;
+	paper.project.insertLayer(newIndex, layer);
+	prevActive.activate();
+	triggers.emit("LayersChanged");
+}

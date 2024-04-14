@@ -195,7 +195,9 @@
 		"add": "Új",
 		"deleteConfirm": "Biztosan törli ezt a scrap-et az összes tartalmával?",
 		"renamePrompt": "Új név megadása",
-		"title": "Scrap-ek"
+		"title": "Scrap-ek",
+		"moveDown": "Mozgatás le",
+		"moveUp": "Mozgazás fel"
 	},
 	"scrapSettingsTitle": "Scrap beállításai",
 	"search": {

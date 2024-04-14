@@ -2,7 +2,7 @@
 import paper from "paper";
 import { triggers } from '../../triggers';
 import { Raw, markRaw, onUnmounted, ref } from 'vue';
-import { addNewLayer, deleteLayer, isActiveLayer, setActiveLayer } from "../../layer";
+import { addNewLayer, deleteLayer, isActiveLayer, moveLayer, setActiveLayer } from "../../layer";
 import MenuButton from "../common/MenuButton.vue";
 import PopoutScaffold from "../common/PopoutScaffold.vue";
 import Card from "../common/Card.vue";
@@ -18,7 +18,8 @@ const layers = ref<LayerEntry[]>([]);
 
 function handleLayerChange() {
 	layers.value.length = 0;
-	for (const layer of paper.project?.layers ?? []) {
+	const layersArray = Array.from(paper.project?.layers ?? []);
+	for (const layer of layersArray.reverse()) {
 		if (layer.data.isGuideLayer) continue;
 		layers.value.push({
 			name: layer.name,
@@ -81,8 +82,10 @@ function renameCurrentLayer(message: string) {
 					</MenuButton>
 				</template>
 				<Card column>
-					<MenuButton @click.stop="deleteCurrentLayer($t(`scraps.deleteConfirm`))">{{ $t("delete") }}</MenuButton>
-					<MenuButton @click.stop="renameCurrentLayer($t(`scraps.renamePrompt`))">{{ $t("rename") }}</MenuButton>
+					<MenuButton @click="deleteCurrentLayer($t(`scraps.deleteConfirm`))">{{ $t("delete") }}</MenuButton>
+					<MenuButton @click="renameCurrentLayer($t(`scraps.renamePrompt`))">{{ $t("rename") }}</MenuButton>
+					<MenuButton @click="moveLayer(entry.raw, +1)">{{ $t(`scraps.moveUp`) }}</MenuButton>
+					<MenuButton @click="moveLayer(entry.raw, -1)">{{ $t(`scraps.moveDown`) }}</MenuButton>
 				</Card>
 			</PopoutScaffold>
 		</ul>

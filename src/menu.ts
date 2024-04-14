@@ -15,6 +15,7 @@ import * as undo from "./undo";
 import { showValidationWindow } from "./validate";
 import * as view from "./view";
 import { i18n } from "./i18n";
+import HistoryDialog from "./components/dialogs/HistoryDialog.vue";
 
 const t = i18n.global.t;
 
@@ -92,9 +93,8 @@ export const handlers = {
 
 	loadFromGitHub: github.showGitHubLoadModal,
 
-	historyPanel: function() {
-		jQuery("#historyPanel").toggleClass("hidden");
-		jQuery(document).trigger("HistoryChanged");
+	historyPanel: () => {
+		modal.addDialog(HistoryDialog, { id: "historyDialog", content: undefined, title: "menu.historyPanel" });
 	},
 
 	searchDialog: openSearchDialog,

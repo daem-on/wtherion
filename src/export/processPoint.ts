@@ -11,7 +11,7 @@ export function processPoint(item: any) {
 
 	{
 		const s = settings;
-		for (const setting of PointSettings.stringSettings.slice(2)) {
+		for (const setting of PointSettings.exportStringSettings) {
 			if (s[setting]) {
 				let out: string = s[setting];
 				if (out.includes(" ")) out = `"${out}"`;

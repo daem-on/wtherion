@@ -25,9 +25,15 @@ Beta (Netlify)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/7d513287-111e-415b-af20-f10deabcc01d/deploy-status)](https://app.netlify.com/sites/roaring-gelato-4ea2f4/deploys)
 
 ## Design
-Documentation of the code and design decisions will be added once most functionality is finished.
+This app uses Paper.js to handle all the objects and display them on the canvas,
+but the editor UI uses Vue, and it is all written in TypeScript.
 
-Since this app is based on a vector graphics editor, there is still some functionality that doesn't need to exist in this cave drawing app but remains from the original version.
+It's only intended to be a replacement for the map editing components of
+XTherion (what used to be ThEdit), and not a complete GUI/IDE solution
+for Therion.
+
+Some features may still be missing from XTherion, and some (like areas having
+multiple borders) are not planned to ever be implemented.
 
 ## Development and building
-Use `yarn` and `yarn serve` to run for development. Use `yarn build` or look at the GitHub action for building.
+Use `yarn` and `yarn dev` to run for development. Use `yarn build` or look at the GitHub action for building.

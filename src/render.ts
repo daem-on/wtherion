@@ -1,7 +1,7 @@
 import paper from "paper";
 
 export enum CustomRenderStyle {
-	Spiky, Triangle, Notched, Contour, SegmentDetails
+	Spiky, Triangle, Notched, Contour, SegmentDetails, Symbol
 }
 
 let enableCustomRender = true;
@@ -82,6 +82,13 @@ function drawSegmentDetails(path: paper.Path, context: CanvasRenderingContext2D)
 	context.strokeStyle = "black";
 }
 
+function drawSymbol(item: paper.Item, context: CanvasRenderingContext2D) {
+	if (!item.data.symbol) return;
+	context.moveTo(item.bounds.topLeft.x, item.bounds.topLeft.y);
+	const path = new Path2D(item.data.symbol);
+	context.fill(path);
+}
+
 export function setupCustomRenderer() {
 	const originalUpdate = paper.view.update;
 	paper.view.update = function() {
@@ -122,6 +129,9 @@ export function setupCustomRenderer() {
 					break;
 				case CustomRenderStyle.SegmentDetails:
 					drawSegmentDetails(item as paper.Path, context);
+					break;
+				case CustomRenderStyle.Symbol:
+					drawSymbol(item, context);
 					break;
 			}
 		}

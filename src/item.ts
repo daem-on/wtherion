@@ -1,9 +1,9 @@
 import paper from "paper";
 
 export function isBoundsItem(item) {
-	if( item.className === 'PointText' || 
+	if (item.className === 'PointText' || 
 		item.className === 'Shape' ||
-		item.className === 'PlacedSymbol' ||
+		item.className === 'SymbolItem' ||
 		item.className === 'Raster') {
 		return true;
 		
@@ -44,7 +44,7 @@ export function isPGTextItem(item) {
 
 
 export function setPivot(item, point) {
-	if(isBoundsItem(item)) {
+	if (isBoundsItem(item)) {
 		item.pivot = item.globalToLocal(point);
 	} else {
 		item.pivot = point;
@@ -66,7 +66,7 @@ export function setPositionInView(item, pos) {
 }
 
 export function getRootItem(item: paper.Item): paper.Item {
-	if(item.parent.className === 'Layer') {
+	if (item.parent.className === 'Layer') {
 		return item;
 	} else {
 		return getRootItem(item.parent);

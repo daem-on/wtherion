@@ -49,7 +49,7 @@ export function processLayer(layer: paper.Layer) {
 				processCompoundPath(item[1]);
 				exportedChildren++;
 				break;
-			case "Shape":
+			case "SymbolItem":
 				processPoint(item[1]);
 				exportedChildren++;
 				break;

@@ -60,7 +60,7 @@ const isSingleSegment = computed(() => {
 					<MultipleLinePanel :selection="(selectedObjects as paper.Path[])" />
 				</template>
 				<template v-else-if="isPoint">
-					<MultiplePointPanel :selection="(selectedObjects as paper.Shape[])" />
+					<MultiplePointPanel :selection="(selectedObjects as paper.SymbolItem[])" />
 				</template>
 			</template>
 			<template v-else>
@@ -86,7 +86,7 @@ const isSingleSegment = computed(() => {
 					<AreaPanel :selection="(first as paper.Path)" />
 				</template>
 				<template v-else-if="isPoint">
-					<PointObjectPanel :selection="(first as paper.Shape)" />
+					<PointObjectPanel :selection="(first as paper.SymbolItem)" />
 				</template>
 				<template v-else-if="isRaster">
 					<RasterPanel :selection="(first as any as paper.Raster)" />

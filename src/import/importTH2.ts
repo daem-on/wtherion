@@ -292,7 +292,7 @@ function createPoint(line: string) {
 	editTH2.drawPoint(point);
 }
 
-function savePointSettings(point: paper.Shape, options: Record<string, string>) {
+function savePointSettings(point: paper.SymbolItem, options: Record<string, string>) {
 	const o = options;
 	const s = getSettings(point) as PointSettings;
 

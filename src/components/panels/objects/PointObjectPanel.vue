@@ -12,7 +12,7 @@ import PointSubtypeSection from '../fragments/PointSubtypeSection.vue';
 import { snapshot } from '../../../undo';
 
 const props = defineProps<{
-	selection: paper.Shape
+	selection: paper.SymbolItem
 }>();
 
 const settings = computed(() => getSettings(props.selection));

@@ -11,7 +11,7 @@ import BooleanInput from '../../common/BooleanInput.vue';
 import symbolList from "../../../res/symbol-list.json";
 
 const props = defineProps<{
-	selection: paper.Shape[]
+	selection: paper.SymbolItem[]
 }>();
 
 type Options = {
@@ -63,7 +63,7 @@ function modifyObject() {
 <template>
 	<PanelContent>
 		<PanelSection :label="$t(`type`)">
-			<CustomList v-model="optionsCache.type" :categories="symbolCategories" imageRoot="assets/rendered/point" />
+			<CustomList v-model="optionsCache.type" :categories="symbolCategories" imageRoot="assets/rendered/point" :placeholder="$t(`mixed`)" />
 		</PanelSection>
 		<PanelSection :label="$t(`scale`)">
 			<select v-model="optionsCache.scale">

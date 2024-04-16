@@ -6,6 +6,7 @@ import PointSettings from "./objectSettings/model/PointSettings";
 import { getSelectedItems } from "./selection";
 
 import colorDefs from "./res/color-defs.json";
+import symbolList from "./res/symbol-list.json";
 import * as config from "./filesio/configManagement";
 import { snapshot } from "./undo";
 
@@ -21,6 +22,10 @@ const pointColors
 	= generateColors(colorDefs.pointColors);
 const areaColors
 	= generateColors(colorDefs.areaColors);
+
+const flatSymbolList = Object.values(symbolList).flat();
+
+const symbolDefs = new Map<string, paper.SymbolDefinition>();
 
 function generateColors(from: Record<string, string>) {
 	const r: Record<string, paper.Color> = {};
@@ -63,14 +68,9 @@ export default {
 		this.setColorFromList(a, areaColors, settings.type, true);
 	},
 
-	drawPoint: function(p: paper.Shape) {
-		const settings = getSettings(p) as PointSettings;
-		const isStation = settings.type === "station";
-
-		p.radius = settings.type === "station" ? 3 : 5;
-		this.setColorFromList(p, pointColors, settings.type, true);
-		// p.strokeColor = pointColors.default;
-		// p.strokeWidth = 2;
+	drawPoint: function(p: paper.SymbolItem) {
+		const settings = getSettings(p);
+		p.definition = this.getSymbol(settings.type);
 	},
 	
 	drawLine: function(l: paper.Path, lineSettings?: LineSettings) {
@@ -132,7 +132,7 @@ export default {
 				this.drawLine(object as paper.Path);
 				break;
 			case "PointSettings":
-				this.drawPoint(object as paper.Shape);
+				this.drawPoint(object as paper.SymbolItem);
 				break;
 		}
 	},
@@ -183,15 +183,30 @@ export default {
 		if (!("therionData" in item.data))
 			item.data.therionData = {};
 	},
+
+	getSymbol(name: string): paper.SymbolDefinition {
+		if (symbolDefs.has(name)) return symbolDefs.get(name);
+		const group = new paper.Group();
+		const symbol = new paper.SymbolDefinition(group);
+		symbolDefs.set(name, symbol);
+		if (flatSymbolList.includes(name)) {
+			const category = Object.entries(symbolList).find(([_, list]) => list.includes(name))?.[0];
+			fetch(`/assets/rendered/point/${category}/${name}.svg`)
+				.then(response => response.text())
+				.then(svg => {
+					const imported = group.importSVG(svg, { applyMatrix: false });
+					imported.scale(40);
+				});
+		}
+		return symbol;
+	},
 	
-	createPoint: function(pos: paper.Point = new paper.Point(0, 0)) {
-		const circle = new paper.Shape.Circle({
-			center: pos,
-		});
-		circle.data.fixedScale = true;
-		circle.data.onlyRotateHandle = true;
-		circle.data.therionData = PointSettings.defaultSettings();
-		return circle;
+	createPoint: function(pos: paper.Point = new paper.Point(0, 0)): paper.SymbolItem {
+		const item = new paper.SymbolItem(this.getSymbol(""), pos);
+		item.data.fixedScale = true;
+		item.data.onlyRotateHandle = true;
+		item.data.therionData = PointSettings.defaultSettings();
+		return item;
 	},
 
 	lineToArea: function() {
@@ -259,8 +274,8 @@ export default {
 	randomizeRotation: function() {
 		const selection: paper.Item[] = getSelectedItems();
 		for (const item of selection) {
-			if (item.className === "Shape") {
-				const s = getSettings(item as paper.Shape);
+			if (item.className === "SymbolItem") {
+				const s = getSettings(item as paper.SymbolItem);
 				if (s.className === "PointSettings") {
 					item.rotation = Math.floor(Math.random() * 360);
 					s.rotation = item.rotation;

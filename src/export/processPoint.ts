@@ -1,12 +1,12 @@
-import getSettings from "../objectSettings/model/getSettings";
 import PointSettings from "../objectSettings/model/PointSettings";
 import { SymbolItemExportData } from "./models";
-import { toGlobal, addText } from "./processProject";
+import { toGlobal } from "./processProject";
 import { Matrix } from "paper";
+import getSettingsInExport from "./util";
 
-export function processPoint(item: SymbolItemExportData) {
+export function processPoint(item: SymbolItemExportData): string {
 	const shape = item;
-	const settings = getSettings(item as any as paper.SymbolItem);
+	const settings = getSettingsInExport(item);
 	const position = toGlobal(shape.matrix.slice(4, 6));
 	let options = "";
 	options += settings.type;
@@ -39,5 +39,5 @@ export function processPoint(item: SymbolItemExportData) {
 			options += " " + s.otherSettings.replace(/\n/g, " ");
 	}
 
-	addText("point", position, options);
+	return `point ${position} ${options}`;
 }

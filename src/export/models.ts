@@ -5,6 +5,7 @@ export type CurvedSegment = [center: number[], handleIn: number[], handleOut: nu
 export type Segment = CornerSegment | CurvedSegment;
 
 export type PathExportData = {
+	data: any;
 	closed: boolean;
 	segments: Segment[];
 };

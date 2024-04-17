@@ -3,5 +3,6 @@ import { processProject } from './processProject';
 
 self.onmessage = ({ data }: { data: ProjectExportResult }) => {
 	const result = processProject(data);
-	self.postMessage(result);
+	const text = result.join("\n");
+	self.postMessage(text);
 };

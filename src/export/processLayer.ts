@@ -1,16 +1,17 @@
-import getSettings from "../objectSettings/model/getSettings";
 import ScrapSettings from "../objectSettings/model/ScrapSettings";
 import { processPoint } from "./processPoint";
 import { processArea } from "./processArea";
 import { processLine, processCompoundPath } from "./processLine";
-import { addText, addWhitespace, makeBackup, restoreBackup } from "./processProject";
 import { LayerExportData } from "./models";
+import getSettingsInExport, { pushWithWhitespace } from "./util";
 
-export function processLayer(layer: LayerExportData) {
+export function processLayer(layer: LayerExportData): string[] {
 	if (!layer.children || layer.children.length === 0)
-		return;
+		return [];
+	
+	const state: string[] = [];
 
-	const settings = getSettings(layer as any as paper.Layer);
+	const settings = getSettingsInExport(layer);
 
 	let optionsString = "";
 	{
@@ -32,32 +33,32 @@ export function processLayer(layer: LayerExportData) {
 		optionsString = o.join(" ");
 	}
 
-	makeBackup();
 	let exportedChildren = 0;
-	addText("scrap", layer.name.replace(/ /g, "_"), optionsString);
-	addWhitespace(1);
+	const scrapLine = `scrap ${layer.name.replace(/ /g, "_")} ${optionsString}`;
+	state.push(scrapLine);
 	for (const item of layer.children) {
 		switch (item[0]) {
 			case "Path":
-				const s = getSettings(item[1] as any as paper.Path);
+				const s = getSettingsInExport(item[1]);
 				if (s.className === "LineSettings")
-					processLine(item[1]);
+					pushWithWhitespace(state, 1, ...processLine(item[1]));
 				else if (s.className === "AreaSettings")
-					processArea(item[1]);
+					pushWithWhitespace(state, 1, ...processArea(item[1]));
 				exportedChildren++;
 				break;
 			case "CompoundPath":
-				processCompoundPath(item[1]);
+				pushWithWhitespace(state, 1, ...processCompoundPath(item[1]));
 				exportedChildren++;
 				break;
 			case "SymbolItem":
-				processPoint(item[1]);
+				pushWithWhitespace(state, 1, processPoint(item[1]));
 				exportedChildren++;
 				break;
 		}
 	}
-	addWhitespace(-1);
-	addText("endscrap");
+	state.push("endscrap");
 	if (exportedChildren === 0)
-		restoreBackup();
+		return [];
+
+	return state;
 }

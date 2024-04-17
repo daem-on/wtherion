@@ -26,6 +26,7 @@ const areaColors
 const flatSymbolList = Object.values(symbolList).flat();
 
 const symbolDefs = new Map<string, paper.SymbolDefinition>();
+let simpleDef: paper.SymbolDefinition | undefined;
 
 function generateColors(from: Record<string, string>) {
 	const r: Record<string, paper.Color> = {};
@@ -184,8 +185,7 @@ export default {
 			item.data.therionData = {};
 	},
 
-	getSymbol(name: string): paper.SymbolDefinition {
-		if (symbolDefs.has(name)) return symbolDefs.get(name);
+	defineSymbol(name: string): void {
 		const group = new paper.Group();
 		const symbol = new paper.SymbolDefinition(group);
 		symbolDefs.set(name, symbol);
@@ -198,7 +198,22 @@ export default {
 					imported.scale(40);
 				});
 		}
-		return symbol;
+	},
+
+	defineSimple(): void {
+		const circle = new paper.Path.Circle({ radius: 5, insert: false });
+		circle.fillColor = new paper.Color("black");
+		simpleDef = new paper.SymbolDefinition(circle);
+	},
+
+	getSymbol(name: string): paper.SymbolDefinition {
+		if (!config.get("drawSymbols")) {
+			if (!simpleDef) this.defineSimple();
+			return simpleDef;
+		} else {
+			if (!symbolDefs.has(name)) this.defineSymbol(name);
+			return symbolDefs.get(name);
+		}
 	},
 	
 	createPoint: function(pos: paper.Point = new paper.Point(0, 0)): paper.SymbolItem {

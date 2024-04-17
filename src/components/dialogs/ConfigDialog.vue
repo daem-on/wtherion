@@ -17,6 +17,7 @@ const options = ref({
 	saveHandler: "localStorage",
 	enableAsyncClipboard: false,
 	language: i18n.global.locale,
+	drawSymbols: false,
 });
 
 function save() {
@@ -52,6 +53,9 @@ for (const key in options.value) {
 		</PanelSection>
 		<PanelSection :label="$t(`config.colorInactive`)">
 			<BooleanInput v-model="options.colorInactive" ></BooleanInput>
+		</PanelSection>
+		<PanelSection :label="$t('config.drawSymbols')">
+			<BooleanInput v-model="options.drawSymbols" ></BooleanInput>
 		</PanelSection>
 		<PanelSection :label="$t(`config.saveHandler.name`)">
 			<select v-model="options.saveHandler">

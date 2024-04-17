@@ -32,7 +32,8 @@
 			"localStorage": "Böngésző tárolója",
 			"name": "Tárhely"
 		},
-		"showSegmentOptionPanel": "Minden szegmensnél beállítások panel"
+		"showSegmentOptionPanel": "Minden szegmensnél beállítások panel",
+		"drawSymbols": "Pontok megjelenítése teljes szimbólumként"
 	},
 	"configTitle": "Konfiguráció",
 	"copy": "Másolás",

@@ -32,7 +32,8 @@
 			"localStorage": "Local storage",
 			"name": "Save handler"
 		},
-		"showSegmentOptionPanel": "Generic segment option panel"
+		"showSegmentOptionPanel": "Generic segment option panel",
+		"drawSymbols": "Draw points as full symbols"
 	},
 	"configTitle": "Configuration",
 	"copy": "Copy",

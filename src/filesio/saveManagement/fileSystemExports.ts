@@ -5,7 +5,7 @@ import { ExportHandler } from "./saveManagement";
 let exportFileHandle: FileSystemFileHandle;
 
 async function exportTH2(clearHandle = false) {
-	const { asBlob } = await import("../../export/exportTH2");
+	const { asBlob } = await import("../../export/runner");
 	
 	if (clearHandle) exportFileHandle = null;
 
@@ -15,7 +15,7 @@ async function exportTH2(clearHandle = false) {
 	}
 	
 	try {
-		const blob = asBlob();
+		const blob = await asBlob();
 		await writeOrDownloadBlob(blob, exportFileHandle, "export.th2");
 	} catch (e) {
 		showErrorWindow(e);

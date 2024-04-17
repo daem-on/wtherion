@@ -1,4 +1,5 @@
-import { assertValid } from "../../validate";
+import type { AssertFunction } from "../../validate";
+
 export enum Place { Default, Bottom, Top }
 enum Outline { Default, In, Out, None }
 export enum Clip { Default, On, Off }
@@ -42,7 +43,7 @@ export default class LineSettings {
 		return ls;
 	}
 
-	static validate(s: LineSettings) {
+	static validate(s: LineSettings, assertValid: AssertFunction) {
 		for (const setting of this.stringSettings) {
 			assertValid(!(s[setting] == null), `Missing ${setting}`, s);
 		}

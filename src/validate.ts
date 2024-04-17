@@ -9,7 +9,7 @@ import ValidationDialog from "./components/dialogs/ValidationDialog.vue";
 
 function isExportableChild(item: paper.Item) {
 	return item.className === "Path"
-	|| item.className === "Shape"
+	|| item.className === "SymbolItem"
 	|| item.className === "CompoundPath";
 }
 
@@ -20,6 +20,8 @@ class ValidationError extends Error {
 		super(message);
 	}
 }
+
+export type AssertFunction = (value: boolean, message: string, settings: AnySettings) => void;
 
 export function assertValid(value: boolean, message: string, settings: AnySettings) {
 	if (!value) throw new ValidationError(message, settings);
@@ -35,7 +37,7 @@ function* validateProject(): ValidationResult {
 		if (!layer.children.some(isExportableChild)) continue;
 
 		try {
-			ScrapSettings.validate(getSettings(layer));
+			ScrapSettings.validate(getSettings(layer), assertValid);
 		} catch (e) {
 			if (e instanceof ValidationError) yield [e, layer];
 			else throw e;
@@ -49,13 +51,13 @@ function* validateProject(): ValidationResult {
 				try {
 					switch (itemSettings.className) {
 						case "LineSettings":
-							LineSettings.validate(itemSettings);
+							LineSettings.validate(itemSettings, assertValid);
 							break;
 						case "PointSettings":
-							PointSettings.validate(itemSettings);
+							PointSettings.validate(itemSettings, assertValid);
 							break;
 						case "AreaSettings":
-							AreaSettings.validate(itemSettings);
+							AreaSettings.validate(itemSettings, assertValid);
 							break;		
 					}
 				} catch (e) {

@@ -1,4 +1,4 @@
-import { assertValid } from "../../validate";
+import type { AssertFunction } from "../../validate";
 import { Clip, Place } from "./LineSettings";
 
 export default class PointSettings {
@@ -39,7 +39,7 @@ export default class PointSettings {
 		return ls;
 	}
 
-	static validate(s: PointSettings) {
+	static validate(s: PointSettings, assertValid: AssertFunction) {
 		for (const setting of this.stringSettings) {
 			assertValid(!(s[setting] == null), `Missing ${setting}`, s);
 		}

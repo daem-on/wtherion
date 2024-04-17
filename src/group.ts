@@ -2,6 +2,7 @@ import * as selection from "./selection";
 import * as undo from "./undo";
 import { getRootItem, isGroupItem } from "./item";
 import { triggers } from "./triggers";
+import paper from "paper";
 
 // function related to groups and grouping
 

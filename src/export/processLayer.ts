@@ -3,13 +3,14 @@ import ScrapSettings from "../objectSettings/model/ScrapSettings";
 import { processPoint } from "./processPoint";
 import { processArea } from "./processArea";
 import { processLine, processCompoundPath } from "./processLine";
-import { addText, addWhitespace, makeBackup, restoreBackup } from "./exportTH2";
+import { addText, addWhitespace, makeBackup, restoreBackup } from "./processProject";
+import { LayerExportData } from "./models";
 
-export function processLayer(layer: paper.Layer) {
+export function processLayer(layer: LayerExportData) {
 	if (!layer.children || layer.children.length === 0)
 		return;
 
-	const settings = getSettings(layer);
+	const settings = getSettings(layer as any as paper.Layer);
 
 	let optionsString = "";
 	{
@@ -38,7 +39,7 @@ export function processLayer(layer: paper.Layer) {
 	for (const item of layer.children) {
 		switch (item[0]) {
 			case "Path":
-				const s = getSettings(item[1]);
+				const s = getSettings(item[1] as any as paper.Path);
 				if (s.className === "LineSettings")
 					processLine(item[1]);
 				else if (s.className === "AreaSettings")

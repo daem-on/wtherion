@@ -1,20 +1,13 @@
 import LineSettings from "../objectSettings/model/LineSettings";
 import getSettings from "../objectSettings/model/getSettings";
-import { addText, toGlobal, addWhitespace } from "./exportTH2";
+import { addText, toGlobal, addWhitespace } from "./processProject";
+import { CompoundPathExportData, CurvedSegment, PathExportData, Segment } from "./models";
 
-export type PathExportResult = {
-	closed: boolean;
-	segments: segment[];
-};
-
-type cornerSegment = [x: number, y: number];
-type curvedSegment = [center: number[], handleIn: number[], handleOut: number[]];
-type segment = cornerSegment | curvedSegment;
-function isCurved(segment: segment): segment is curvedSegment {
+function isCurved(segment: Segment): segment is CurvedSegment {
 	return segment.length >= 3;
 }
 
-export function processLine(item: PathExportResult, settings?: LineSettings) {
+export function processLine(item: PathExportData, settings?: LineSettings) {
 	const segments = item.segments;
 	if (!segments || segments.length < 2)
 		return;
@@ -90,7 +83,8 @@ export function processLine(item: PathExportResult, settings?: LineSettings) {
 	addWhitespace(-1);
 	addText("endline");
 }
-export function processCompoundPath(item) {
+
+export function processCompoundPath(item: CompoundPathExportData) {
 	for (const child of item.children)
 		processLine(child);
 }

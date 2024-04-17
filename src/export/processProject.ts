@@ -1,5 +1,5 @@
-import paper from "paper";
 import { processLayer } from "./processLayer";
+import { LayerExportResult, ProjectExportResult } from "./models";
 	
 export function toGlobal(global: number[], local = [0, 0]) {
 	const x = Math.round((global[0]+local[0])*100)/100;
@@ -25,44 +25,27 @@ export function restoreBackup() {
 	backupText = null;
 }
 
-export function runWorker() {
-	const worker = new Worker(new URL('./worker', import.meta.url));
-	worker.postMessage({question: "asdfasd"});
-	worker.onmessage = data => {console.log(data);};
-}
-	
-export function asBlob() {
-	return new Blob([run()], {type: "text/th2"});
-}
-	
-function run() {
+export function processProject(data: ProjectExportResult): string {
 	exportText = "";
-	
-	//prepare items
-	for (const item of paper.project.getItems({className:"Shape"})) {
-		if (item.className === "Shape" && item.data && item.data.therionData) {
-			let rot = item.rotation % 360;
-		
-			if (rot < 0) rot += 360;
-			item.data.therionData.rotation = rot;
-		}
-	}
-		
-	const data = paper.project.exportJSON({asString: false, precision: 2}) as any;
 
 	exportText += "encoding utf-8\n";
-	const settingsLayer = data.find(l => l[1].data.therionData.xthSettings);
+
+	const layers: LayerExportResult[] = (data[0][0] === "dictionary")
+		? data[1] as any
+		: data as any;
+
+	const settingsLayer = layers.find(l => l[1].data?.therionData?.xthSettings);
 	if (settingsLayer) {
 		for (const line of settingsLayer[1].data.therionData.xthSettings) {
 			exportText += line + "\n";
 		}
 	}
 	
-	for (const layer of data) {
+	for (const layer of layers) {
 		if (layer[0] !== "Layer") continue;
 		if (layer[1].data && (layer[1].data.isGuideLayer || layer[1].data.xviLayer)) continue;
 		processLayer(layer[1]);
-	}	
+	}
 		
 	return exportText;
 }

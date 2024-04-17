@@ -1,4 +1,4 @@
-import { assertValid } from "../../validate";
+import type { AssertFunction } from "../../validate";
 
 export default class ScrapSettings {
 	
@@ -24,7 +24,7 @@ export default class ScrapSettings {
 		return s;
 	}
 
-	static validate(s: ScrapSettings) {
+	static validate(s: ScrapSettings, assertValid: AssertFunction) {
 		for (const setting of this.stringSettings) {
 			assertValid(!(s[setting] == null), `Missing ${setting}`, s);
 		}

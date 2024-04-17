@@ -1,4 +1,4 @@
-import { assertValid } from "../../validate";
+import type { AssertFunction } from "../../validate";
 import LineSettings from "./LineSettings";
 
 export default class AreaSettings {
@@ -14,8 +14,8 @@ export default class AreaSettings {
 		return as;
 	}
 
-	static validate(s: AreaSettings) {
-		LineSettings.validate(s.lineSettings);
+	static validate(s: AreaSettings, assertValid: AssertFunction) {
+		LineSettings.validate(s.lineSettings, assertValid);
 		assertValid(!(s.type == null), `Missing type`, s);
 		assertValid(!(s.invisible == null), `Missing invisible`, s);
 	}

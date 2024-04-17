@@ -1,7 +1,7 @@
-self.onmessage = ({ data: { question } }) => {
-	self.setTimeout(() => {
-		self.postMessage({
-			answer: 42,
-		});
-	}, 3000);
+import type { ProjectExportResult } from './models';
+import { processProject } from './processProject';
+
+self.onmessage = ({ data }: { data: ProjectExportResult }) => {
+	const result = processProject(data);
+	self.postMessage(result);
 };

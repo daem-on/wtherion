@@ -1,13 +1,19 @@
 import getSettings from "../objectSettings/model/getSettings";
 import PointSettings from "../objectSettings/model/PointSettings";
-import { toGlobal, addText } from "./exportTH2";
+import { SymbolItemExportData } from "./models";
+import { toGlobal, addText } from "./processProject";
+import { Matrix } from "paper";
 
-export function processPoint(item: any) {
+export function processPoint(item: SymbolItemExportData) {
 	const shape = item;
-	const settings = getSettings(item) as PointSettings;
+	const settings = getSettings(item as any as paper.SymbolItem);
 	const position = toGlobal(shape.matrix.slice(4, 6));
 	let options = "";
 	options += settings.type;
+
+	const matrix = new Matrix(shape.matrix);
+	let rotation = matrix.rotation % 360;
+	if (rotation < 0) rotation += 360;
 
 	{
 		const s = settings;
@@ -27,8 +33,8 @@ export function processPoint(item: any) {
 			options += " -place " + ["", "bottom", "top"][s.place];
 		if (s.scale !== "m")
 			options += " -scale " + s.scale;
-		if (s.rotation !== 0)
-			options += " -orientation " + s.rotation;
+		if (rotation !== 0)
+			options += " -orientation " + rotation;
 		if (s.otherSettings)
 			options += " " + s.otherSettings.replace(/\n/g, " ");
 	}

@@ -1,13 +1,14 @@
 import getSettings from "../objectSettings/model/getSettings";
 import AreaSettings from "../objectSettings/model/AreaSettings";
-import { addText, addWhitespace } from "./exportTH2";
-import { PathExportResult, processLine } from "./processLine";
+import { addText, addWhitespace } from "./processProject";
+import { processLine } from "./processLine";
+import { PathExportData } from "./models";
 
 function generateId() {
 	return Math.round(Math.random() * 10000).toString();
 }
 
-export function processArea(item: PathExportResult) {
+export function processArea(item: PathExportData) {
 	const areaSettings = getSettings(item as any) as AreaSettings;
 	const lineSettings = areaSettings.lineSettings;
 

@@ -9,11 +9,11 @@ app.use(i18n);
 app.mount("#vue-app");
 
 addEventListener("error", (e) => {
-	showErrorWindow(e.error);
-	console.error(e.error);
+	showErrorWindow(e);
+	console.error(e);
 });
 
 addEventListener("unhandledrejection", (e) => {
-	showErrorWindow(e.reason);
+	showErrorWindow(new ErrorEvent("Unhandled Rejection", { message: e.reason }));
 	console.error(e.reason);
 });

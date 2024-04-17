@@ -19,6 +19,10 @@ export function runWorker(data: any) {
 			resolve(response.data);
 			worker.terminate();
 		};
-		worker.onerror = reject;
+		worker.onerror = error => {
+			reject(error);
+			error.preventDefault();
+			worker.terminate();
+		};
 	});
 }

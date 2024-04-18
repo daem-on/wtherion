@@ -1,8 +1,14 @@
 import PointSettings from "../objectSettings/model/PointSettings";
-import { SymbolItemExportData } from "./models";
+import { Matrix, SymbolItemExportData } from "./models";
 import { toGlobal } from "./processProject";
-import { Matrix } from "paper";
 import getSettingsInExport from "./util";
+
+function matrixToRotation(matrix: Matrix): number {
+	let angle = Math.atan2(matrix[1], matrix[0]);
+	angle = angle * 180 / Math.PI;
+	if (angle < 0) angle += 360;
+	return angle;
+}
 
 export function processPoint(item: SymbolItemExportData): string {
 	const shape = item;
@@ -11,9 +17,7 @@ export function processPoint(item: SymbolItemExportData): string {
 	let options = "";
 	options += settings.type;
 
-	const matrix = new Matrix(shape.matrix);
-	let rotation = matrix.rotation % 360;
-	if (rotation < 0) rotation += 360;
+	const rotation = matrixToRotation(shape.matrix);
 
 	{
 		const s = settings;

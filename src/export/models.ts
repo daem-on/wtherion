@@ -11,10 +11,12 @@ export type PathExportData = {
 };
 export type PathExportResult = ["Path", PathExportData];
 
+export type Matrix = [number, number, number, number, number, number];
+
 export type SymbolItemExportData = {
 	data: any;
 	symbol: [string];
-	matrix: [number, number, number, number, number, number];
+	matrix: Matrix;
 };
 export type SymbolItemExportResult = ["SymbolItem", SymbolItemExportData];
 

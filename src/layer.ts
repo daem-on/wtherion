@@ -1,7 +1,5 @@
 import paper from "paper";
-import editTH2 from "./editTH2";
 import ScrapSettings from "./objectSettings/model/ScrapSettings";
-import * as selection from "./selection";
 import { triggers } from "./triggers";
 
 export function setup() {
@@ -76,7 +74,6 @@ export function addNewLayer(layerName: string = null, setActive = true, elements
 		guideLayer.bringToFront();
 	}
 	triggers.emit("LayerAdded");
-	selection.clearSelection();
 	return newLayer;
 }
 
@@ -102,11 +99,6 @@ export function addItemsToLayer(items, layer) {
 }
 
 
-export function addSelectedItemsToActiveLayer() {
-	addItemsToLayer(selection.getSelectedItems(), paper.project.activeLayer);
-}
-
-
 export function getActiveLayer() {
 	return paper.project.activeLayer;
 }
@@ -114,10 +106,8 @@ export function getActiveLayer() {
 
 export function setActiveLayer(activeLayer: paper.Layer) {
 	if (paper.project.activeLayer === activeLayer) return;
-	selection.clearSelection();
 	activeLayer.activate();
 	triggers.emit("LayersChanged");
-	editTH2.updateInactiveScraps();
 }
 
 

@@ -1,5 +1,5 @@
 import defaultConfig from "../res/default-config.json";
-import { overrideColors } from "../editTH2";
+import { overrideColors } from "../objectDefs.ts";
 import versionConfig from "../../versionconfig.json";
 let config: Record<string, any> = {};
 

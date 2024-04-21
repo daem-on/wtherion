@@ -1,11 +1,12 @@
 import paper from "paper";
-import AreaSettings from "./objectSettings/model/AreaSettings";
-import getSettings from "./objectSettings/model/getSettings";
-import LineSettings from "./objectSettings/model/LineSettings";
-import PointSettings from "./objectSettings/model/PointSettings";
-import ScrapSettings from "./objectSettings/model/ScrapSettings";
-import { addDialog } from "./modal";
-import ValidationDialog from "./components/dialogs/ValidationDialog.vue";
+import AreaSettings from "../objectSettings/model/AreaSettings.ts";
+import getSettings from "../objectSettings/model/getSettings.ts";
+import LineSettings from "../objectSettings/model/LineSettings.ts";
+import PointSettings from "../objectSettings/model/PointSettings.ts";
+import ScrapSettings from "../objectSettings/model/ScrapSettings.ts";
+import { addDialog } from "../modal.ts";
+import ValidationDialog from "../components/dialogs/ValidationDialog.vue";
+import { AnySettings } from "./assertTypes.ts";
 
 function isExportableChild(item: paper.Item) {
 	return item.className === "Path"
@@ -13,15 +14,11 @@ function isExportableChild(item: paper.Item) {
 	|| item.className === "CompoundPath";
 }
 
-type AnySettings = AreaSettings | LineSettings | PointSettings | ScrapSettings;
-
 class ValidationError extends Error {
 	constructor(message: string, public settings: AnySettings) {
 		super(message);
 	}
 }
-
-export type AssertFunction = (value: boolean, message: string, settings: AnySettings) => void;
 
 export function assertValid(value: boolean, message: string, settings: AnySettings) {
 	if (!value) throw new ValidationError(message, settings);

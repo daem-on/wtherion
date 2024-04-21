@@ -5,8 +5,8 @@ import BooleanInput from '../common/BooleanInput.vue';
 import IntInput from '../common/IntInput.vue';
 import PanelSection from '../common/PanelSection.vue';
 import { removeDialog } from '../../modal';
-import editTH2 from '../../editTH2';
 import { i18n } from '../../i18n';
+import { redrawAll } from '../../objectDefs';
 
 const options = ref({
 	showSegmentOptionPanel: false,
@@ -23,7 +23,7 @@ const options = ref({
 function save() {
 	assign(options.value);
 	removeDialog("configDialog");
-	editTH2.redrawAll();
+	redrawAll();
 	i18n.global.locale = options.value.language;
 }
 

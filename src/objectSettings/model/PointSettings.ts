@@ -1,4 +1,4 @@
-import type { AssertFunction } from "../../validate";
+import type { AssertFunction } from "../../validation/assertTypes.ts";
 import { Clip, Place } from "./LineSettings";
 
 export default class PointSettings {

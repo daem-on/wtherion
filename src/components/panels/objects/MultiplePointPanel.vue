@@ -2,13 +2,13 @@
 import { computed, ref, watch } from 'vue';
 import PointSettings from '../../../objectSettings/model/PointSettings';
 import getSettings from '../../../objectSettings/model/getSettings';
-import editTH2 from '../../../editTH2';
 import NullableBooleanInput from '../../common/NullableBooleanInput.vue';
 import PanelContent from '../../common/PanelContent.vue';
 import PanelSection from '../../common/PanelSection.vue';
 import CustomList from '../../common/CustomList.vue';
 import BooleanInput from '../../common/BooleanInput.vue';
 import symbolList from "../../../res/symbol-list.json";
+import { drawPoint } from '../../../objectDefs';
 
 const props = defineProps<{
 	selection: paper.SymbolItem[]
@@ -56,7 +56,7 @@ function modifyObject() {
 		for (const point of pointSettingsArray.value)
 			point.invisible = options.invisible;
 	}
-	for (const point of props.selection) editTH2.drawPoint(point);
+	for (const point of props.selection) drawPoint(point);
 }
 </script>
 

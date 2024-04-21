@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ValidationResult } from '../../validate';
+import { ValidationResult } from '../../validation/validate.ts';
 import { DialogData } from '../../modal';
 import { clearSelection, focusItem } from '../../selection';
 import { setActiveLayer } from '../../layer';

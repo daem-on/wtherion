@@ -4,11 +4,11 @@ import paper from "paper";
 import * as pgExport from "./export";
 import * as guides from "./guides";
 import * as hover from "./hover";
-import editTH2 from "./editTH2";
 import * as layer from "./layer";
 import * as selection from "./selection";
 import * as tools from "./tools";
 import * as undo from "./undo";
+import { redrawAll } from "./objectDefs";
 
 let center: paper.Point;
 let clipboard = [];
@@ -79,7 +79,7 @@ export function loadJSONDocument(jsonString) {
 	if (exportRect) {
 		pgExport.setExportRect(new paper.Rectangle(exportRect.data.exportRectBounds));
 	}
-	editTH2.redrawAll();
+	redrawAll();
 	undo.clear();
 	undo.snapshot('loadJSONDocument');
 }

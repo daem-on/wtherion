@@ -1,7 +1,7 @@
 import * as pgDocument from "../../document";
 import * as wtConfig from "../configManagement";
 // import { Octokit } from "@octokit/rest";
-import importTH2 from "../../import/importTH2";
+import { importTH2 } from "../../import/importWrapper.ts";
 
 const Octokit = {} as any;
 

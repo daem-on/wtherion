@@ -1,5 +1,5 @@
 import { loadJSONDocument } from "../document";
-import importTH2 from "../import/importTH2";
+import { importTH2 } from "../import/importWrapper.ts";
 
 export function setup() {
 	if ("launchQueue" in window) {	

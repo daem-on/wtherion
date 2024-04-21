@@ -2,7 +2,6 @@
 import { computed, ref, watch } from 'vue';
 import LineSettings from '../../../objectSettings/model/LineSettings';
 import getSettings from '../../../objectSettings/model/getSettings';
-import editTH2 from '../../../editTH2';
 import subtypeList from "../../../res/subtype-list.json";
 import NullableBooleanInput from '../../common/NullableBooleanInput.vue';
 import PanelContent from '../../common/PanelContent.vue';
@@ -10,6 +9,7 @@ import PanelSection from '../../common/PanelSection.vue';
 import CustomList from '../../common/CustomList.vue';
 import BooleanInput from '../../common/BooleanInput.vue';
 import { wallTypes } from '../../../res/wallTypes';
+import { drawLine } from '../../../objectDefs';
 
 const props = defineProps<{
 	selection: paper.Path[]
@@ -63,7 +63,7 @@ function modifyObject() {
 		for (const line of lineSettingsArray.value)
 			line.invisible = options.invisible;
 	}
-	for (const line of props.selection) editTH2.drawLine(line);
+	for (const line of props.selection) drawLine(line);
 }
 
 const canHaveSubtype = computed(() => {

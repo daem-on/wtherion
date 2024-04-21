@@ -6,10 +6,10 @@ import { markRaw, ref } from "vue";
 import LineSettings from "../../src/objectSettings/model/LineSettings";
 import getSettings from "../../src/objectSettings/model/getSettings";
 import BezierPanel from "../components/panels/tools/BezierPanel.vue";
-import editTH2 from "../editTH2";
 import { clearSelection } from "../selection";
 import { defineTool } from "../tools";
 import * as undo from "../undo";
+import { createPath, drawLine } from "../objectDefs";
 
 export const bezierOptions = ref({
 	type: "wall",
@@ -60,7 +60,7 @@ export const bezier = defineTool({
 		};
 
 		function createNewPath() {
-			path = editTH2.createPath();
+			path = createPath();
 
 			const settings = getSettings(path) as LineSettings;
 			const options = bezierOptions.value;
@@ -69,7 +69,7 @@ export const bezier = defineTool({
 				settings.subtype = options.subtype;
 			if (options.type === "slope")
 				settings.size = options.size;
-			editTH2.drawLine(path);
+			drawLine(path);
 			
 			showBezierPanel.value = false;
 		}

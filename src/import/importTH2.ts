@@ -1,18 +1,14 @@
-import LineSettings from "../objectSettings/model/LineSettings";
 import getSettings from "../objectSettings/model/getSettings";
+import LineSettings from "../objectSettings/model/LineSettings";
 import AreaSettings from "../objectSettings/model/AreaSettings";
 import PointSettings from "../objectSettings/model/PointSettings";
-import { importFiles, PositionList } from "./importXVI";
 import ScrapSettings from "../objectSettings/model/ScrapSettings";
-import { activateDefaultLayer, addNewLayer, getDefaultLayer } from "../layer";
-import { showMultipleFileSelect } from "../filesio/saveManagement/saveManagement";
-import * as undo from "../undo";
-import editTH2 from "../editTH2";
+import { activateDefaultLayer, addNewLayer } from "../layer";
+import { createPath, createPoint as createTH2Point, drawArea, drawLine, drawPoint } from "../objectDefs.ts";
 import paper from "paper";
 
-const toPoint = function(global: string[], global2: string[] = undefined) {
-	if (global2)
-	return new paper.Point([
+function toPoint(global: string[], global2: string[] = undefined) {
+	if (global2) return new paper.Point([
 		-(Number.parseFloat(global2[0])-Number.parseFloat(global[0])),
 		+(Number.parseFloat(global2[1])-Number.parseFloat(global[1]))
 	]);
@@ -20,7 +16,7 @@ const toPoint = function(global: string[], global2: string[] = undefined) {
 		Number.parseFloat(global[0]),
 		-Number.parseFloat(global[1])
 	]);
-};
+}
 
 function trimEnclosing(text: string): string {
 	text = text.trim();
@@ -34,7 +30,7 @@ function trimEnclosing(text: string): string {
 	return text;
 }
 
-const getOptions = function(source: string) {
+function getOptions(source: string) {
 	const options: Record<string, string> = {};
 
 	const re = /-([a-z-]+) ((?:(?! -[a-z]).)+)[ \n]/g;
@@ -44,7 +40,7 @@ const getOptions = function(source: string) {
 		options[match[1]] = value;
 	}
 	return options;
-};
+}
 
 const _xthSettings: string[] = [];
 
@@ -61,7 +57,7 @@ let _areadef = false;
 const _linesWithIds: Record<string, paper.Path> = {};
 const _areas: {type: string, ids: string[]}[] = [];
 
-export default function(source: string) {
+export function createProject(source: string, loadEmbedded: (settings: string[]) => void): void {
 	_xthSettings.length = 0;
 	for (let line of source.split("\n")) {
 		line = line.trim();
@@ -102,10 +98,8 @@ export default function(source: string) {
 		}
 	}
 	applyAreas();
-	loadEmbedded();
+	loadEmbedded(_xthSettings);
 	activateDefaultLayer();
-	undo.clear();
-	undo.setup();
 }
 
 function addSegment(line: string) {
@@ -187,7 +181,7 @@ function endLine() {
 	const lineSettings = getSettings(_currentPath) as LineSettings;
 	lineSettings.subtypes = _subtypes;
 	lineSettings.segmentSettings = _segmentOptions;
-	editTH2.drawLine(_currentPath);
+	drawLine(_currentPath);
 }
 				
 function addSubtype(line: string) {
@@ -204,7 +198,7 @@ function addSegmentOption(line: string) {
 				
 function createLine(line: string) {
 	const split = line.split(" ");
-	_currentPath = editTH2.createPath();
+	_currentPath = createPath();
 	_currentSegments = [];
 	_parsedOptions = {};
 	_linedef = true;
@@ -252,7 +246,7 @@ function applyAreas() {
 				line.data.therionData = AreaSettings.defaultSettings();
 				line.data.therionData.lineSettings = oldSettings;
 				line.data.therionData.type = area.type;
-				editTH2.drawArea(line);
+				drawArea(line);
 			}
 		}
 	}
@@ -281,7 +275,7 @@ function createScrap(line: string) {
 }
 				
 function createPoint(line: string) {
-	const point = editTH2.createPoint();
+	const point = createTH2Point();
 	const split = line.split(" ");
 	const options = getOptions(split.slice(4).join(" "));
 	options.type = split[3];
@@ -289,7 +283,7 @@ function createPoint(line: string) {
 		point.rotation = Number.parseFloat(options.orient || options.orientation);
 	point.position = new paper.Point(toPoint(split.slice(1, 3)));
 	savePointSettings(point, options);
-	editTH2.drawPoint(point);
+	drawPoint(point);
 }
 
 function savePointSettings(point: paper.SymbolItem, options: Record<string, string>) {
@@ -323,34 +317,4 @@ function savePointSettings(point: paper.SymbolItem, options: Record<string, stri
 			s.otherSettings += `-${key} ${o[key]}\n`;
 		}
 	}
-}
-async function loadEmbedded() {
-	const defaultLayer = getDefaultLayer();
-	if (defaultLayer) defaultLayer.data.therionData.xthSettings = _xthSettings;
-	
-	const positions: PositionList = [];
-	for (const line of _xthSettings) {
-		if (line.startsWith("##XTHERION## xth_me_image_insert")) {
-			const params = line.slice(33).split(" ");
-			const x = Number.parseFloat(params[0].slice(1));
-			const y = -Number.parseFloat(params[3].slice(1));
-			const name = / {*([^{}]+)}* 0 {}/.exec(line)[1];
-
-			positions.push([name, x, y]);
-		}
-	}
-	if (positions.length === 0) return;
-	const files = await showMultipleFileSelect(positions.map(e => e[0]));
-	
-	importFiles(
-		Array.from(files.entries(), ([name, file]) => {
-			const pos = positions.find(e => e[0] === name);
-			return {
-				name,
-				file,
-				x: pos?.[1] ?? 0,
-				y: pos?.[2] ?? 0
-			};
-		})
-	);
 }

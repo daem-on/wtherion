@@ -5,11 +5,11 @@ import paper from "paper";
 import { markRaw, ref } from "vue";
 import { defineTool } from "../../src/tools";
 import DrawPanel from "../components/panels/tools/DrawPanel.vue";
-import editTH2 from "../editTH2";
 import * as math from "../math";
 import LineSettings from "../objectSettings/model/LineSettings";
 import { default as getSettings } from "../objectSettings/model/getSettings";
 import * as undo from "../undo";
+import { createPath, drawLine } from "../objectDefs";
 
 export const drawOptions = ref({
 	id: "draw",
@@ -53,7 +53,7 @@ export const draw = defineTool({
 		
 			for (let i=0; i < lineCount; i++) {
 				let path = paths[i];
-				path = editTH2.createPath();
+				path = createPath();
 				
 				const settings = getSettings(path) as LineSettings;
 				settings.type = options.type;
@@ -61,7 +61,7 @@ export const draw = defineTool({
 					settings.subtype = options.subtype;
 				if (options.type === "slope")
 					settings.size = options.size;
-				editTH2.drawLine(path);
+				drawLine(path);
 				
 				paths.push(path);
 			}

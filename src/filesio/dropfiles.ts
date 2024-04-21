@@ -1,4 +1,4 @@
-import importTH2 from "../import/importTH2";
+import { importTH2 } from "../import/importWrapper.ts";
 import { loadJSONDocument } from "../document";
 
 export function cancelAll(event: Event) {

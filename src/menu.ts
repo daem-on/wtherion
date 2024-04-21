@@ -12,7 +12,7 @@ import * as importer from "./import";
 import * as modal from "./modal";
 import { openSearchDialog } from "./search";
 import * as undo from "./undo";
-import { showValidationWindow } from "./validate";
+import { showValidationWindow } from "./validation/validate.ts";
 import * as view from "./view";
 import { i18n } from "./i18n";
 import HistoryDialog from "./components/dialogs/HistoryDialog.vue";

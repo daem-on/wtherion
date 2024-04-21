@@ -7,7 +7,7 @@ import { computed } from "vue";
 import LineSettings from "../../../objectSettings/model/LineSettings";
 import subtypes from "../../../res/subtype-list.json";
 import BooleanInput from "../../common/BooleanInput.vue";
-import editTH2 from "../../../editTH2";
+import { drawLine } from "../../../objectDefs";
 
 const props = defineProps<{
 	selection: paper.Path,
@@ -16,8 +16,8 @@ const props = defineProps<{
 
 const settings = computed(() => getSettings(props.selection) as LineSettings);
 
-function drawLine() {
-	editTH2.drawLine(props.selection, settings.value);
+function draw() {
+	drawLine(props.selection, settings.value);
 }
 
 const subtype = computed({
@@ -25,7 +25,7 @@ const subtype = computed({
 	set: (value: string | undefined) => {
 		if (!value) delete settings.value.subtypes[props.selectedSegment.index];
 		else settings.value.subtypes[props.selectedSegment.index] = value;
-		drawLine();
+		draw();
 	},
 });
 
@@ -34,7 +34,7 @@ const enableSubtype = computed({
 	set: (value: boolean) => {
 		if (!value) subtype.value = undefined;
 		else subtype.value = "bedrock";
-		drawLine();
+		draw();
 	}
 });
 

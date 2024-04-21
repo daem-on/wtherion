@@ -5,13 +5,13 @@ import PanelContent from '../../common/PanelContent.vue';
 import getSettings from '../../../objectSettings/model/getSettings';
 import BooleanInput from '../../common/BooleanInput.vue';
 import PanelSection from '../../common/PanelSection.vue';
-import editTH2 from '../../../editTH2';
 import AreaSettings from '../../../objectSettings/model/AreaSettings';
 import { wallTypes } from "../../../res/wallTypes";
 import areaList from "../../../res/area-list.json";
 import PanelFoldable from '../../common/PanelFoldable.vue';
 import LineSubtypeSection from '../fragments/LineSubtypeSection.vue';
 import { snapshot } from '../../../undo';
+import { drawArea } from '../../../objectDefs';
 
 const props = defineProps<{
 	selection: paper.Path
@@ -21,7 +21,7 @@ const settings = computed(() => getSettings(props.selection) as AreaSettings);
 const dirty = ref(false);
 
 watch(settings, () => {
-	editTH2.drawArea(props.selection);
+	drawArea(props.selection);
 	dirty.value = true;
 }, { deep: true });
 

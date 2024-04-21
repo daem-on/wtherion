@@ -588,4 +588,4 @@ export function checkBoundsItem(selectionRect, item, event) {
 	itemBounds.remove();
 }
 
-
+triggers.onAny(["LayerAdded", "LayersChanged"], () => clearSelection());

@@ -1,11 +1,11 @@
 import { defineTool, setLocalOptions } from "../tools";
-import editTH2 from "../editTH2";
 import * as undo from "../undo";
 import getSettings from "../objectSettings/model/getSettings";
 import PointSettings from "../objectSettings/model/PointSettings";
 import paper from "paper";
 import { markRaw, ref } from "vue";
 import PointPanel from "../components/panels/tools/PointPanel.vue";
+import { createPoint, drawPoint } from "../objectDefs";
 
 export const pointOptions = ref({
 	id: "point",
@@ -27,7 +27,7 @@ export const point = defineTool({
 		on("mousedown", event => {
 			if (event.event.button > 0) return;
 		
-			const point = editTH2.createPoint(event.point);
+			const point = createPoint(event.point);
 			const settings = getSettings(point) as PointSettings;
 
 			const xviPoint = paper.project.hitTest(event.point, {
@@ -49,7 +49,7 @@ export const point = defineTool({
 				}
 				settings.subtype = options.subtype;
 			}
-			editTH2.drawPoint(point);
+			drawPoint(point);
 			undo.snapshot("point");
 		});
 	},

@@ -1,4 +1,4 @@
-import type { AssertFunction } from "../../validate";
+import type { AssertFunction } from "../../validation/assertTypes.ts";
 
 export enum Place { Default, Bottom, Top }
 enum Outline { Default, In, Out, None }

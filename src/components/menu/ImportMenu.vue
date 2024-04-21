@@ -2,7 +2,7 @@
 import { processFileInput } from "../../helper";
 import { importAndAddImage, importAndAddSVG } from "../../import";
 import { loadJSONDocument } from "../../document";
-import importTH2 from "../../import/importTH2";
+import { importTH2 } from "../../import/importWrapper.ts";
 import { importXVI } from "../../import/importXVI";
 import MenuButton from "../common/MenuButton.vue";
 

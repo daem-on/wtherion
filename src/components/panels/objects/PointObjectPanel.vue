@@ -7,9 +7,9 @@ import symbolList from "../../../res/symbol-list.json";
 import { computed, onUnmounted, ref, watch } from 'vue';
 import BooleanInput from '../../common/BooleanInput.vue';
 import PanelSection from '../../common/PanelSection.vue';
-import editTH2 from '../../../editTH2';
 import PointSubtypeSection from '../fragments/PointSubtypeSection.vue';
 import { snapshot } from '../../../undo';
+import { drawPoint } from '../../../objectDefs';
 
 const props = defineProps<{
 	selection: paper.SymbolItem
@@ -27,7 +27,7 @@ const canHaveText = computed(() => {
 });
 
 watch(settings, () => {
-	editTH2.drawPoint(props.selection);
+	drawPoint(props.selection);
 	dirty.value = true;
 }, { deep: true });
 

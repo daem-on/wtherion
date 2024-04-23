@@ -3,9 +3,9 @@ import { processPoint } from "./processPoint";
 import { processArea } from "./processArea";
 import { processLine, processCompoundPath } from "./processLine";
 import { LayerExportData } from "./models";
-import getSettingsInExport, { pushWithWhitespace } from "./util";
+import { getSettingsInExport, ExportFormatter } from "./util";
 
-export function processLayer(layer: LayerExportData): string[] {
+export function processLayer(layer: LayerExportData, format: ExportFormatter): string[] {
 	if (!layer.children || layer.children.length === 0)
 		return [];
 	
@@ -18,14 +18,14 @@ export function processLayer(layer: LayerExportData): string[] {
 		const s = settings;
 		const o = [];
 
-		if (s.scale !== "") {
-			const val = s.scale.includes(" ") ? `[${s.scale}]` : s.scale;
-			o.push(`-scale ${val}`);
-		}
-
 		for (const setting of ScrapSettings.stringSettings.slice(1)) {
 			if (s[setting])
 				o.push(`-${setting} ${s[setting]}`);
+		}
+
+		if (s.scale !== "") {
+			const val = s.scale.includes(" ") ? `[${s.scale}]` : s.scale;
+			o.push(`-scale ${val}`);
 		}
 		
 		if (s.otherSettings !== "")
@@ -33,32 +33,35 @@ export function processLayer(layer: LayerExportData): string[] {
 		optionsString = o.join(" ");
 	}
 
-	let exportedChildren = 0;
 	const scrapLine = `scrap ${layer.name.replace(/ /g, "_")} ${optionsString}`;
 	state.push(scrapLine);
+
 	for (const item of layer.children) {
 		switch (item[0]) {
 			case "Path":
 				const s = getSettingsInExport(item[1]);
-				if (s.className === "LineSettings")
-					pushWithWhitespace(state, 1, ...processLine(item[1]));
-				else if (s.className === "AreaSettings")
-					pushWithWhitespace(state, 1, ...processArea(item[1]));
-				exportedChildren++;
+				if (s.className === "LineSettings") {
+					format.pushDivider(state, 1);
+					format.pushIndented(state, ...processLine(item[1], format));
+				} else if (s.className === "AreaSettings") {
+					format.pushDivider(state, 1);
+					format.pushIndented(state, ...processArea(item[1], format));
+				}
 				break;
 			case "CompoundPath":
-				pushWithWhitespace(state, 1, ...processCompoundPath(item[1]));
-				exportedChildren++;
+				format.pushDivider(state, 1);
+				format.pushIndented(state, ...processCompoundPath(item[1], format));
 				break;
 			case "SymbolItem":
-				pushWithWhitespace(state, 1, processPoint(item[1]));
-				exportedChildren++;
+				format.pushDivider(state, 1);
+				format.pushIndented(state, processPoint(item[1], format));
 				break;
 		}
 	}
+
+	if (state.length === 1) return [];
+	format.pushDivider(state, 1);
 	state.push("endscrap");
-	if (exportedChildren === 0)
-		return [];
 
 	return state;
 }

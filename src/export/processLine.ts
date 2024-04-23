@@ -1,13 +1,13 @@
 import LineSettings from "../objectSettings/model/LineSettings";
 import { toGlobal } from "./processProject";
 import { CompoundPathExportData, CurvedSegment, PathExportData, Segment } from "./models";
-import getSettingsInExport, { pushWithWhitespace } from "./util";
+import { getSettingsInExport, ExportFormatter } from "./util";
 
 function isCurved(segment: Segment): segment is CurvedSegment {
 	return segment.length >= 3;
 }
 
-export function processLine(item: PathExportData, settings?: LineSettings): string[] {
+export function processLine(item: PathExportData, format: ExportFormatter, settings?: LineSettings): string[] {
 	const segments = item.segments;
 	if (!segments || segments.length < 2)
 		return [];
@@ -23,6 +23,8 @@ export function processLine(item: PathExportData, settings?: LineSettings): stri
 		const s = lineSettings;
 		const o = [];
 		o.push(s.type);
+		if (item.closed)
+			o.push("-close on");
 		if (s.id !== "")
 			o.push("-id " + s.id);
 		if (s.subtype !== "")
@@ -49,43 +51,43 @@ export function processLine(item: PathExportData, settings?: LineSettings): stri
 
 	state.push("line " + optionsString);
 
-	if (item.closed)
-		pushWithWhitespace(state, 1, "close on");
+	const toGlobalF = (global: number[], local = [0, 0]) => toGlobal(global, local, format);
+	const addStartCurve = item.closed && !format.skipStartCurve;
 
 	for (let i = 0; i < segments.length; i++) {
 		const line = [];
 		const current = segments.at(i % segments.length);
 		const prev = segments.at(i - 1);
 
-		if (i !== 0 || item.closed) {
+		if (i !== 0 || addStartCurve) {
 			if (isCurved(prev)) {
 				if (isCurved(current))
-					line.push(toGlobal(prev[0], prev[2]), toGlobal(current[0], current[1]));
+					line.push(toGlobalF(prev[0], prev[2]), toGlobalF(current[0], current[1]));
 				else
-					line.push(toGlobal(prev[0], prev[2]), toGlobal(current));
+					line.push(toGlobalF(prev[0], prev[2]), toGlobalF(current));
 			} else if (isCurved(current))
-				line.push(toGlobal(prev), toGlobal(current[0], current[1]));
+				line.push(toGlobalF(prev), toGlobalF(current[0], current[1]));
 		}
 
-		line.push(isCurved(current) ? toGlobal(current[0]) : toGlobal(current));
+		line.push(isCurved(current) ? toGlobalF(current[0]) : toGlobalF(current));
 
-		pushWithWhitespace(state, 1, line.join(" "));
+		format.pushGroup(state, line.join(" "));
 		if (i in subtypes) {
-			pushWithWhitespace(state, 1, "subtype " + subtypes[i]);
+			format.pushGroup(state, "subtype " + subtypes[i]);
 		}
 		if (i in segmentSettings)
 			for (const line of segmentSettings[i].split(";"))
-				pushWithWhitespace(state, 1, line);
+				format.pushGroup(state, line);
 	}
 
 	if (lineSettings.size !== undefined
 		&& lineSettings.size !== 0)
-		pushWithWhitespace(state, 1, "size " + lineSettings.size);
+		format.pushGroup(state, "size " + lineSettings.size);
 	state.push("endline");
 
 	return state;
 }
 
-export function processCompoundPath(item: CompoundPathExportData): string[] {
-	return item.children.flatMap(child => processLine(child, getSettingsInExport(child) as LineSettings));
+export function processCompoundPath(item: CompoundPathExportData, format: ExportFormatter): string[] {
+	return item.children.flatMap(child => processLine(child, format, getSettingsInExport(child) as LineSettings));
 }

@@ -1,13 +1,14 @@
 import { LayerExportResult, ProjectExportResult } from "./models";
 import { processLayer } from "./processLayer";
+import { defaultExportFormatter, ExportFormatter } from "./util";
 	
-export function toGlobal(global: number[], local = [0, 0]) {
-	const x = Math.round((global[0]+local[0])*100)/100;
-	const y = -Math.round((global[1]+local[1])*100)/100;
+export function toGlobal(global: number[], local: number[], format: ExportFormatter) {
+	const x = format.formatNumber((global[0]+local[0]));
+	const y = format.formatNumber(-(global[1]+local[1]));
 	return `${x} ${y}`;
 }
 
-export function processProject(data: ProjectExportResult): string[] {
+export function processProject(data: ProjectExportResult, format: ExportFormatter = defaultExportFormatter): string[] {
 	const state: string[] = [];
 	state.push("encoding utf-8");
 
@@ -25,7 +26,8 @@ export function processProject(data: ProjectExportResult): string[] {
 	for (const layer of layers) {
 		if (layer[0] !== "Layer") continue;
 		if (layer[1].data && (layer[1].data.isGuideLayer || layer[1].data.xviLayer)) continue;
-		state.push(...processLayer(layer[1]));
+		state.push(...processLayer(layer[1], format));
+		format.pushDivider(state, 3);
 	}
 
 	return state;

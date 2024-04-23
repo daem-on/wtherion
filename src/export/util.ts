@@ -12,15 +12,46 @@ type SettingType<T> =
 
 type ExportDataUnion = PathExportData | SymbolItemExportData | LayerExportData;
 
-export default function getSettingsInExport<T extends ExportDataUnion>(item: T): SettingType<T> {
+export function getSettingsInExport<T extends ExportDataUnion>(item: T): SettingType<T> {
 	return item.data.therionData as SettingType<T>;
 }
 
-const WHITESPACE = "\t";
-
-export function pushWithWhitespace(arr: string[], amount: number, ...str: string[]) {
-	if (amount === 0)
-		arr.push(...str);
-	else
-		arr.push(...str.map(line => WHITESPACE.repeat(amount) + line));
+export interface ExportFormatter {
+	pushIndented(arr: string[], ...str: string[]): void;
+	pushGroup(arr: string[], ...str: string[]): void;
+	pushDivider(arr: string[], amount: number): void;
+	formatNumber(num: number): string;
+	skipStartCurve: boolean;
 }
+
+export const defaultExportFormatter: ExportFormatter = {
+	pushIndented(arr, ...str) {
+		arr.push(...str.map(line => "\t" + line));
+	},
+	pushGroup(arr, ...str) {
+		arr.push(...str.map(line => "\t" + line));
+	},
+	pushDivider() {},
+	formatNumber(num) {
+		if (num % 1 === 0) return num.toFixed(0);
+		return num.toFixed(2);
+	},
+	skipStartCurve: false,
+};
+
+export const xTherionFormatter: ExportFormatter = {
+	pushIndented(arr, ...str) {
+		arr.push(...str);
+	},
+	pushGroup(arr, ...str) {
+		arr.push(...str.map(line => "  " + line));
+	},
+	pushDivider(arr, amount) {
+		for (let i = 0; i < amount; i++) arr.push("");
+	},
+	formatNumber(num) {
+		if (num % 1 === 0) return num.toFixed(1);
+		return num.toFixed(2);
+	},
+	skipStartCurve: true,
+};

@@ -52,19 +52,19 @@ export function processLine(item: PathExportData, settings?: LineSettings): stri
 	if (item.closed)
 		pushWithWhitespace(state, 1, "close on");
 
-	for (let i = 0; i < segments.length + (item.closed ? 1 : 0); i++) {
+	for (let i = 0; i < segments.length; i++) {
 		const line = [];
 		const current = segments.at(i % segments.length);
-		const last = segments.at(i - 1);
+		const prev = segments.at(i - 1);
 
 		if (i !== 0 || item.closed) {
-			if (isCurved(last)) {
+			if (isCurved(prev)) {
 				if (isCurved(current))
-					line.push(toGlobal(last[0], last[2]), toGlobal(current[0], current[1]));
+					line.push(toGlobal(prev[0], prev[2]), toGlobal(current[0], current[1]));
 				else
-					line.push(toGlobal(last[0], last[2]), toGlobal(current));
+					line.push(toGlobal(prev[0], prev[2]), toGlobal(current));
 			} else if (isCurved(current))
-				line.push(toGlobal(last), toGlobal(current[0], current[1]));
+				line.push(toGlobal(prev), toGlobal(current[0], current[1]));
 		}
 
 		line.push(isCurved(current) ? toGlobal(current[0]) : toGlobal(current));

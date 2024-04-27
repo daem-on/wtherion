@@ -6,6 +6,7 @@ import { resetZoom } from "./view";
 import { redo, undo } from "./undo";
 import editTH2 from "./editTH2";
 import { reactive } from "vue";
+import paper from "paper";
 
 export function setup() {
 	setupKeyboard();
@@ -17,7 +18,7 @@ const keys = [
 	'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
 	'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
 	'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
-	'enter', 'backspace', 'delete', 'escape', ' ', 'control'
+	'enter', 'backspace', 'delete', 'escape', 'space', 'control'
 ] as const;
 
 type Key = typeof keys[number];
@@ -63,7 +64,8 @@ export function getKeySpec(event: KeyboardEvent, up: boolean): KeySpec {
 	let spec = "";
 	if (event.ctrlKey || event.metaKey) spec += "ctrl-";
 	if (event.shiftKey) spec += "shift-";
-	spec += event.key.toLowerCase();
+	const key = event.key === " " ? "space" : event.key.toLowerCase();
+	spec += key;
 	if (up) spec += "-up";
 	return spec as KeySpec;
 }
@@ -100,8 +102,8 @@ function setupKeyboard() {
 	registerAction("global.tool.bezier", () => switchToolById("bezier"), "p");
 	registerAction("global.tool.point", () => switchToolById("point"), "k");
 
-	registerAction("global.tool.viewgrab", viewgrabDown, " ");
-	registerAction("global.tool.viewgrab.up", viewgrabUp, " -up");
+	registerAction("global.tool.viewgrab", viewgrabDown, "space");
+	registerAction("global.tool.viewgrab.up", viewgrabUp, "space-up");
 
 	registerAction("global.tool.inspect", () => switchToolById("inspect", { duck: true }), "m");
 	registerAction("global.tool.inspect.up", () => unduckTool(), "m-up");
@@ -165,6 +167,8 @@ const setupMouse = function() {
 		}
 		getActiveTool().emit("wheel", event);
 	}, { passive: false });
+
+	paper.view.onMouseDown = () => blurCurrent();
 };
 
 function unduckViewzoom() {

@@ -1,10 +1,11 @@
+import paper from "paper";
 // functions related to math
 
 	
-export function checkPointsClose(startPos, eventPoint, threshold) {
+export function checkPointsClose(startPos: paper.Point, eventPoint: paper.Point, threshold: number): boolean {
 	const xOff = Math.abs(startPos.x - eventPoint.x);
 	const yOff = Math.abs(startPos.y - eventPoint.y);
-	if(xOff < threshold && yOff < threshold) {
+	if (xOff < threshold && yOff < threshold) {
 		return true;
 	}
 	return false;	
@@ -22,7 +23,7 @@ export function getRandomBoolean() {
 
 
 // Thanks Mikko Mononen! https://github.com/memononen/stylii
-export function snapDeltaToAngle(delta, snapAngle) {
+export function snapDeltaToAngle(delta: paper.Point, snapAngle: number) {
 	let angle = Math.atan2(delta.y, delta.x);
 	angle = Math.round(angle/snapAngle) * snapAngle;
 	const dirx = Math.cos(angle);

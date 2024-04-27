@@ -65,6 +65,29 @@ const actions: ToolAction[] = [
 	},
 ];
 
+const hitOptions: HitOptions = {
+	segments: true,
+	stroke: true,
+	curves: true,
+	handles: true,
+	fill: true,
+	guides: false,
+	tolerance: 0,
+	match: hit => {
+		if (hit.item.layer !== paper.project.activeLayer) return false;
+		if (hit.item.className !== "Path") return false;
+		return true;
+	},
+};
+
+const snapHitOptions: HitOptions = {
+	stroke: false,
+	curves: true,
+	guides: false,
+	class: paper.Path,
+	tolerance: 0,
+};
+
 export const detailselect = defineTool({
 	definition: {
 		id: "detailselect",
@@ -72,23 +95,15 @@ export const detailselect = defineTool({
 		actions
 	},
 	setup(on) {
-		const hitOptions = {
-			segments: true,
-			stroke: true,
-			curves: true,
-			handles: true,
-			fill: true,
-			guide: false,
-			tolerance: 3 / paper.view.zoom
-		};
-		
 		let doRectSelection = false;
-		let selectionRect;
+		let selectionRect: paper.Path.Rectangle;
 		
-		let hitType;
+		let hitType: string;
 		
 		let lastEvent = null;
 		let selectionDragged = false;
+
+		const origPositions = new Map<paper.Item | paper.Segment, paper.Point>();
 
 		on("activate", () => {});
 
@@ -113,8 +128,9 @@ export const detailselect = defineTool({
 			
 			hitType = null;
 			hover.clearHoveredItem();
+			hitOptions.tolerance = 6 / paper.view.zoom;
 			const hitResult = paper.project.hitTest(event.point, hitOptions);
-			if (!hitResult || (hitResult.item.layer !== paper.project.activeLayer)) {
+			if (!hitResult) {
 				if (!event.modifiers.shift) {
 					selection.clearSelection();
 				}
@@ -226,8 +242,7 @@ export const detailselect = defineTool({
 				const dragVector = (event.point.subtract(event.downPoint));
 				
 				for (let i=0; i < selectedItems.length; i++) {
-					const item = selectedItems[i] as
-						paper.Path & {origPos?: paper.Point};
+					const item = selectedItems[i] as paper.Path;
 
 					if (hitType === "fill" || !("segments" in item)) {
 						
@@ -239,12 +254,13 @@ export const detailselect = defineTool({
 						
 						// add the position of the item before the drag started
 						// for later use in the snap calculation
-						if (!item.origPos) {
-							item.origPos = item.position;
+						if (!origPositions.has(item)) {
+							origPositions.set(item, item.position.clone());
 						}
+						const origPos = origPositions.get(item);
 
 						if (event.modifiers.shift) {
-							item.position = item.origPos.add(
+							item.position = origPos.add(
 								math.snapDeltaToAngle(dragVector, Math.PI*2/8)
 							);
 
@@ -254,26 +270,31 @@ export const detailselect = defineTool({
 
 					} else {
 						for (let j=0; j < item.segments.length; j++) {
-							const seg = item.segments[j] as
-								paper.Segment & {origPoint?: paper.Point};
+							const seg = item.segments[j];
 							// add the point of the segment before the drag started
 							// for later use in the snap calculation
-							if (!seg.origPoint) {
-								seg.origPoint = seg.point.clone();
+							if (!origPositions.has(seg)) {
+								origPositions.set(seg, seg.point.clone());
 							}
+							const origPoint = origPositions.get(seg);
 
 							if (seg.selected && (
 								hitType === "point" || 
 								hitType === "stroke" || 
 								hitType === "curve")){
 
-								if (event.modifiers.shift) {
-									seg.point = seg.origPoint.add(
-										math.snapDeltaToAngle(dragVector, Math.PI*2/8)
-									);
-
-								} else {
+								if (hitType !== "point" || event.modifiers.shift) {
 									seg.point = seg.point.add(event.delta);
+								} else {
+									const newPoint = origPoint.add(dragVector);
+									snapHitOptions.tolerance = 10 / paper.view.zoom;
+									snapHitOptions.match = hit => hit.item !== item;
+									const snapTarget = paper.project.hitTest(newPoint, snapHitOptions);
+									if (snapTarget) {
+										seg.point = snapTarget.point;
+									} else {
+										seg.point = newPoint;
+									}
 								}
 
 							} else if (seg.handleOut.selected && 
@@ -328,18 +349,13 @@ export const detailselect = defineTool({
 				const selectedItems = selection.getSelectedItems();
 
 				for (let i=0; i < selectedItems.length; i++) {
-					const item = selectedItems[i] as
-						paper.Path & {origPos?: paper.Point};
+					const item = selectedItems[i] as paper.Path;
 					// for the item
-					item.origPos = null;
+					origPositions.delete(item);
 					// and for all segments of the item
-					if (item.segments) {
-						for (let j=0; j < item.segments.length; j++) {
-							const seg = item.segments[j] as 
-								paper.Segment & {origPoint?: paper.Point};
-								seg.origPoint = null;
-						}
-					}
+					if (item.segments)
+						for (const seg of item.segments)
+							origPositions.delete(seg);
 				}
 			}
 			
@@ -358,4 +374,4 @@ export const detailselect = defineTool({
 
 function itemIsPath(item: paper.Item): item is paper.Path {
 	return item.className === "Path";
-} 
+}

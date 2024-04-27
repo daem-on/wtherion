@@ -11,7 +11,10 @@ export function updateWindow(watchSegments = false) {
 
 	if (watchSegments && selected.length) {
 		const first = selected[0];
-		if (first.className !== "Path") return;
+		if (first.className !== "Path") {
+			selectedSegments.value = [];
+			return;
+		}
 		selectedSegments.value = (first as paper.Path).segments.filter(segment => segment.selected);
 	}
 }

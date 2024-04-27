@@ -51,11 +51,11 @@ export const bezier = defineTool({
 		let type: string;
 		let hoveredItem: TypedHitResult<paper.Path> = null;
 		
-		const hitOptions = {
+		const hitOptions: HitOptions = {
 			segments: true,
 			stroke: true,
 			curves: true,
-			guide: false,
+			guides: false,
 			tolerance: 5 / paper.view.zoom
 		};
 

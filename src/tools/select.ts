@@ -148,12 +148,12 @@ const actions: ToolAction[] = [
 	}
 ];
 
-const hitOptions = {
+const hitOptions: HitOptions = {
 	segments: true,
 	stroke: true,
 	curves: true,
 	fill: true,
-	guide: false,
+	guides: false,
 	tolerance: 0
 };
 

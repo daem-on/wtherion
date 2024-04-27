@@ -51,13 +51,13 @@ export const inspect = defineTool({
 	setup(on) {
 		const tolerance = config.get("inspectTolerance") ?? 8;
 				
-		const hitOptions = {
+		const hitOptions: HitOptions = {
 			segments: true,
 			stroke: true,
 			curves: true,
 			handles: true,
 			fill: true,
-			guide: false,
+			guides: false,
 			tolerance: tolerance / paper.view.zoom
 		};
 

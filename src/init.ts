@@ -23,6 +23,7 @@ import * as order from "./order.js";
 import * as dropfiles from "./filesio/dropfiles";
 import * as launchQueue from "./filesio/launchQueue";
 import * as i18n from "./i18n";
+import * as pgDocument from "./document";
 
 import paper from "paper";
 import {setup as configSetup} from "./filesio/configManagement";
@@ -67,6 +68,7 @@ export default {
 		this.undo.setup();
 		launchQueue.setup();
 		i18n.setup();
+		pgDocument.setup();
 		setupCustomRenderer();
 	},
 };

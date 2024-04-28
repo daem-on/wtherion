@@ -22,11 +22,20 @@ export const showBezierPanel = ref(true);
 type TypedHitResult<T extends paper.Item> = paper.HitResult & {item: T}
 
 let onFinish: undefined | (() => void);
+		
+const hitOptions: HitOptions = {
+	segments: true,
+	stroke: true,
+	curves: true,
+	guides: false,
+	tolerance: 0,
+	match: hitResult => hitResult.item.selected,
+};
 
 export const bezier = defineTool({
 	definition: {
-		id: 'bezier',
-		name: 'tools.bezier',
+		id: "bezier",
+		name: "tools.bezier",
 		panel: markRaw(BezierPanel),
 		actions: [{
 			name: "finish",	
@@ -47,18 +56,8 @@ export const bezier = defineTool({
 
 		let currentSegment: paper.Segment;
 
-		let dirty = false;
 		let mode: "continue" | "close" | "remove" | "add";
 		let type: string;
-		let hoveredItem: TypedHitResult<paper.Path> = null;
-		
-		const hitOptions: HitOptions = {
-			segments: true,
-			stroke: true,
-			curves: true,
-			guides: false,
-			tolerance: 5 / paper.view.zoom
-		};
 
 		function createNewPath() {
 			path = createPath();
@@ -77,18 +76,10 @@ export const bezier = defineTool({
 
 		function finish() {
 			clearSelection();
-			undo.snapshot('bezier');
-			dirty = false;
+			undo.snapshot("bezierFinish");
 			path = null;
 		}
 		onFinish = finish;
-
-		function snapshotIfDirty() {
-			if (dirty) {
-				undo.snapshot("bezier");
-				dirty = false;
-			}
-		}
 		
 		on("mousedown", event => {
 			if (event.event.button > 0) return;  // only first mouse button
@@ -98,23 +89,22 @@ export const bezier = defineTool({
 				if (selectedSegment) selectedSegment.selected = false;
 			}
 			mode = type = currentSegment = null;
+
+			hitOptions.tolerance = 5 / paper.view.zoom;
+			const hitResult = paper.project.hitTest(event.point, hitOptions) as TypedHitResult<paper.Path>;
 			
 			if (!path) {
-				if (!hoveredItem) {
+				if (!hitResult) {
 					clearSelection();
 					createNewPath();
-					dirty = true;
 					
 				} else {
-					path = hoveredItem.item;
-					if (!hoveredItem.item.closed
-						&& findHandle(path, event.point)) {
-						mode = 'continue';
-						currentSegment = hoveredItem.segment;
-						if (hoveredItem.item.lastSegment !== hoveredItem.segment) {
-							path.reverse();
-						}
-						
+					path = hitResult.item;
+					if (!hitResult.item.closed && findHandle(path, event.point) && isEndingSegment(hitResult.segment)) {
+						mode = "continue";
+						currentSegment = hitResult.segment;
+						if (hitResult.segment.isFirst()) path.reverse();
+						currentSegment.selected = true;
 					} 
 				}
 				
@@ -122,89 +112,66 @@ export const bezier = defineTool({
 			
 			if (path) {
 				const result = findHandle(path, event.point);
-				if (result && mode !== 'continue') {
+				if (result && mode !== "continue") {
 					currentSegment = result.segment;
 					type = result.type;
-					if (result.type === 'point') {
-						if (result.segment.index === 0 && 
-							path.segments.length > 1 &&
-							!path.closed) {
-							mode = 'close';
+					if (result.type === "point") {
+						if (result.segment.index === 0 && path.segments.length > 1 && !path.closed) {
+							mode = "close";
 							path.closed = true;
 							unselectSegment();
 							path.firstSegment.selected = true;
-							
-						} else {
-							mode = 'remove';
-							result.segment.remove();
-							
+							undo.snapshot("bezierClose");
 						}
-						dirty = true;
+					} else if (result.type === "handleIn" || result.type === "handleOut") {
+						mode = "continue";
 					}
 				}
 
 				
 				if (!currentSegment) {
-					if (hoveredItem) {
-						if (hoveredItem.type === 'segment' && 
-							!hoveredItem.item.closed) {
+					if (hitResult) {
+						if (hitResult.type === "segment" && !hitResult.item.closed && isEndingSegment(hitResult.segment)) {
 						
 							// joining two paths
-							const hoverPath = hoveredItem.item;
+							const hoverPath = hitResult.item;
 							// check if the connection point is the first segment
 							// reverse path if it is not because join() 
 							// always connects to first segment)
-							if (hoverPath.firstSegment !== hoveredItem.segment) {
-								if (hoverPath.lastSegment === hoveredItem.segment) {
-									hoverPath.reverse();
-								} else return;
-							}
+							if (!hitResult.segment.isFirst()) hoverPath.reverse();
 							path.join(hoverPath);
 							path = null;
 							unselectSegment();
-							dirty = true;
+							undo.snapshot("bezierJoin");
 
-						} else if (hoveredItem.type === 'curve' || 
-							hoveredItem.type === 'stroke') {
-						
-							mode = 'add';
+						} else if (hitResult.type === "curve" || hitResult.type === "stroke") {
+							mode = "add";
 							// inserting segment on curve/stroke
 							unselectSegment();
-							const location = hoveredItem.location;
+							const location = hitResult.location;
 							currentSegment = path.insert(location.index + 1, event.point);
 							currentSegment.selected = true;
+							undo.snapshot("bezierAddSegment");
 						}
 
 					} else {
-						mode = 'add';
+						mode = "add";
 						// add a new segment to the path
 						unselectSegment();
 						currentSegment = path.add(event.point) as paper.Segment;
 						currentSegment.selected = true;
-						
 					}
-				} else {
-					currentSegment.selected = true;
 				}
-				
-				if (mode === "add" || mode === "continue") dirty = true;
 			}
 
 		});
 		
-		on("mousemove", event => {
-			const hitResult = paper.project.hitTest(event.point, hitOptions) as TypedHitResult<paper.Path>;
-			
-			if (hitResult?.item?.selected) hoveredItem = hitResult;
-			else hoveredItem = null;
-		});
-		
 		on("mousedrag", event => {
 			if (event.event.button > 0) return;  // only first mouse button
-			if (!currentSegment) return;
+			if (!currentSegment || !mode) return;
 			
 			let delta = event.delta.clone();
-			if (type === 'handleOut' || mode === 'add') {
+			if (type === "handleOut" || mode === "add") {
 				delta = delta.multiply(-1);
 			}
 			currentSegment.handleIn = currentSegment.handleIn.add(delta);
@@ -214,25 +181,28 @@ export const bezier = defineTool({
 		on("mouseup", event => {
 			if (event.event.button > 0) return;  // only first mouse button
 			
-			if (path && path.closed) finish();
+			if (mode === "continue") {
+				undo.snapshot("bezierContinue");
+			}
+			else if (path && path.closed) finish();
+			mode = null;
 		});
 
 		on("deactivate", () => {
-			snapshotIfDirty();
 			path = null;
 		});
 	},
 });
 	
 const findHandle = function(path: paper.Path, point: paper.Point) {
-	const types = ['point', 'handleIn', 'handleOut'];
+	const types = ["point", "handleIn", "handleOut"];
 	const tolerance = 6/paper.view.zoom;
 	for (let i = 0, l = path.segments.length; i < l; i++) {
 		const segment = path.segments[i];
 		if (segment.selected) {
 			for (let j = 0; j < 3; j++) {
 				const type = types[j];
-				const segmentPoint = type === 'point'
+				const segmentPoint = type === "point"
 						? segment.point
 						: segment.point.add(segment[type]);
 				const distance = (point.subtract(segmentPoint)).length;
@@ -248,3 +218,7 @@ const findHandle = function(path: paper.Path, point: paper.Point) {
 	}
 	return null;
 };
+
+function isEndingSegment(segment: paper.Segment) {
+	return segment.isLast() || segment.isFirst();
+}

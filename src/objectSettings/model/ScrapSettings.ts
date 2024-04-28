@@ -2,8 +2,11 @@ import type { AssertFunction } from "../../validation/assertTypes.ts";
 
 export default class ScrapSettings {
 	
-	static readonly stringSettings: ReadonlyArray<string> = 
-		["scale", "projection", "author", "copyright"];
+	static readonly rawStringeSettings: ReadonlyArray<string> = 
+		["author", "copyright"];
+	static readonly bracketSettings: ReadonlyArray<string> = 
+		["scale", "projection"];
+	static readonly stringSettings = [...ScrapSettings.rawStringeSettings, ...ScrapSettings.bracketSettings];
 
 	readonly className = "ScrapSettings";
 	projection: string;

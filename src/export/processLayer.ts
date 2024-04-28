@@ -5,6 +5,12 @@ import { processLine, processCompoundPath } from "./processLine";
 import { LayerExportData } from "./models";
 import { getSettingsInExport, ExportFormatter } from "./util";
 
+function wrapIfNeeded(value: string, brackets: boolean): string {
+	if (!value.includes(" ")) return value;
+	if (brackets) return `[${value}]`;
+	return `"${value}"`;
+}
+
 export function processLayer(layer: LayerExportData, format: ExportFormatter): string[] {
 	if (!layer.children || layer.children.length === 0)
 		return [];
@@ -18,16 +24,18 @@ export function processLayer(layer: LayerExportData, format: ExportFormatter): s
 		const s = settings;
 		const o = [];
 
-		for (const setting of ScrapSettings.stringSettings.slice(1)) {
+		for (const setting of ScrapSettings.bracketSettings) {
+			if (s[setting])
+				o.push(`-${setting} ${wrapIfNeeded(s[setting], true)}`);
+		}
+		for (const setting of ScrapSettings.rawStringeSettings) {
 			if (s[setting])
 				o.push(`-${setting} ${s[setting]}`);
 		}
-
-		if (s.scale !== "") {
-			const val = s.scale.includes(" ") ? `[${s.scale}]` : s.scale;
-			o.push(`-scale ${val}`);
-		}
 		
+		if (s.stationNames !== "")
+			o.push(`-station-names ${s.stationNames}`);
+
 		if (s.otherSettings !== "")
 			o.push(s.otherSettings.replace(/\n/g, " "));
 		optionsString = o.join(" ");

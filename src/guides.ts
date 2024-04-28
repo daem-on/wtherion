@@ -3,9 +3,7 @@
 import { removePaperItemsByDataTags, removePaperItemsByTags } from "./helper";
 import paper from "paper";
 import { getGuideLayer } from "./layer";
-
-export const COLOR_GUIDE_PRIMARY = new paper.Color('#59c99c');
-export const COLOR_GUIDE_SECONDARY = new paper.Color('#aaaaaa');
+import { COLOR_GUIDE_PRIMARY, COLOR_GUIDE_SECONDARY } from "./colors";
 
 export function hoverItem(hitResult) {
 	const segments = hitResult.item.segments;

@@ -15,7 +15,7 @@ const scrap = currentScrap;
 		</template>
 		<PanelContent v-if="scrap" class="content">
 			<PanelSection :label="$t(`scrap.projection`)">
-				<CustomList v-model="scrap.settings.projection" :options="['plan', '[elevation 0]', 'extended', 'none']" :imageRoot="`assets/projection`" />
+				<CustomList v-model="scrap.settings.projection" :options="['plan', 'elevation 0', 'extended', 'none']" :imageRoot="`assets/projection`" />
 			</PanelSection>
 			<PanelSection :label="$t(`scale`)">
 				<input type="text" v-model="scrap.settings.scale" />

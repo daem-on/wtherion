@@ -8,6 +8,11 @@
 	},
 	"areas": "Areas",
 	"areaType": "Area type",
+	"bezier": {
+		"menu": {
+			"finish": "Finish"
+		}
+	},
 	"bottom": "bottom",
 	"clearDocument": "Clear the document permanently?",
 	"clearSettings": "Clear all data stored locally? (projects, settings)",

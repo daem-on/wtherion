@@ -32,6 +32,7 @@ export const bezier = defineTool({
 			name: "finish",	
 			callback: () => onFinish?.(),
 			defaultKey: "enter",
+			category: "lines",
 		}]
 	},
 	uiState: {

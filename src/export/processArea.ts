@@ -4,7 +4,7 @@ import { PathExportData } from "./models";
 import { ExportFormatter, getSettingsInExport } from "./util";
 
 function generateId(): string {
-	return new Crypto().randomUUID();
+	return crypto.randomUUID();
 }
 
 export function processArea(item: PathExportData, format: ExportFormatter): string[] {
@@ -13,9 +13,10 @@ export function processArea(item: PathExportData, format: ExportFormatter): stri
 
 	if (lineSettings.id === "")
 		lineSettings.id = generateId();
-	processLine(item, format, lineSettings);
+	const linesResult = processLine(item, format, lineSettings);
 
 	return [
+		...linesResult,
 		`area ${areaSettings.type}`,
 		`\t${lineSettings.id}`,
 		"endarea"

@@ -1,6 +1,7 @@
 import paper from "paper";
 import ScrapSettings from "./objectSettings/model/ScrapSettings";
 import { triggers } from "./triggers";
+import { COLOR_GUIDE_PRIMARY } from "./guides";
 
 export function setup() {
 	const defaultLayer = addNewLayer('Scrap 1');
@@ -68,6 +69,8 @@ export function addNewLayer(layerName: string = null, setActive = true, elements
 	if (elementsToAdd) {
 		newLayer.addChildren(elementsToAdd);
 	}
+	
+	newLayer.selectedColor = COLOR_GUIDE_PRIMARY;
 	
 	const guideLayer = getGuideLayer();
 	if (guideLayer) {

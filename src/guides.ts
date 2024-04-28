@@ -4,8 +4,8 @@ import { removePaperItemsByDataTags, removePaperItemsByTags } from "./helper";
 import paper from "paper";
 import { getGuideLayer } from "./layer";
 
-const guideBlue = new paper.Color('#009dec');
-const guideGrey = new paper.Color('#aaaaaa');
+export const COLOR_GUIDE_PRIMARY = new paper.Color('#59c99c');
+export const COLOR_GUIDE_SECONDARY = new paper.Color('#aaaaaa');
 
 export function hoverItem(hitResult) {
 	const segments = hitResult.item.segments;
@@ -15,7 +15,7 @@ export function hoverItem(hitResult) {
 		clone.closed = true;
 	}
 	clone.parent = getGuideLayer() || null;
-	clone.strokeColor = guideBlue;
+	clone.strokeColor = COLOR_GUIDE_PRIMARY;
 	clone.fillColor = null;
 	clone.data.isHelperItem = true;
 	clone.bringToFront();
@@ -29,7 +29,7 @@ export function hoverBounds(item) {
 	rect.matrix = item.matrix;
 	setDefaultGuideStyle(rect);
 	rect.parent = getGuideLayer() || null;
-	rect.strokeColor = guideBlue;
+	rect.strokeColor = COLOR_GUIDE_PRIMARY;
 	rect.fillColor = null;
 	rect.data.isHelperItem = true;
 	rect.bringToFront();
@@ -45,7 +45,7 @@ export function rectSelect(event, color?) {
 	const rect = new paper.Path.Rectangle(start, end);
 	const zoom = 1.0/paper.view.zoom;
 	setDefaultGuideStyle(rect);
-	if(!color) color = guideGrey;
+	if(!color) color = COLOR_GUIDE_SECONDARY;
 	rect.parent = getGuideLayer() || null;
 	rect.strokeColor = color;
 	rect.data.isRectSelect = true;
@@ -59,7 +59,7 @@ export function line(from, to, color) {
 	const line = new paper.Path.Line(from, to);
 	const zoom = 1/paper.view.zoom;
 	setDefaultGuideStyle(line);
-	if (!color) color = guideGrey;
+	if (!color) color = COLOR_GUIDE_SECONDARY;
 	line.parent = getGuideLayer() || null;
 	line.strokeColor = color;
 	line.strokeColor = color;
@@ -73,7 +73,7 @@ export function crossPivot(center, color) {
 	const zoom = 1/paper.view.zoom;
 	const star = new paper.Path.Star(center, 4, 4*zoom, 0.5*zoom);
 	setDefaultGuideStyle(star);
-	if(!color) color = guideBlue;
+	if(!color) color = COLOR_GUIDE_PRIMARY;
 	star.parent = getGuideLayer() || null;
 	star.fillColor = color;
 	star.strokeColor = color;
@@ -89,7 +89,7 @@ export function rotPivot(center, color) {
 	const zoom = 1/paper.view.zoom;
 	const path = new paper.Path.Circle(center, 3*zoom);
 	setDefaultGuideStyle(path);
-	if(!color) color = guideBlue;
+	if(!color) color = COLOR_GUIDE_PRIMARY;
 	path.parent = getGuideLayer() || null;
 	path.fillColor = color;
 	path.data.isHelperItem = true;
@@ -100,7 +100,7 @@ export function rotPivot(center, color) {
 
 export function label(pos, content, color) {
 	const text = new paper.PointText(pos);
-	if(!color) color = guideGrey;
+	if(!color) color = COLOR_GUIDE_SECONDARY;
 	text.parent = getGuideLayer() || null;
 	text.fillColor = color;
 	text.content = content;
@@ -117,9 +117,9 @@ export function setDefaultGuideStyle(item) {
 
 export function getGuideColor(colorName) {
 	if(colorName === 'blue') {
-		return guideBlue;
+		return COLOR_GUIDE_PRIMARY;
 	} else if(colorName === 'grey') {
-		return guideGrey;
+		return COLOR_GUIDE_SECONDARY;
 	}
 }
 

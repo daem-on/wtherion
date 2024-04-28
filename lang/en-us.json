@@ -38,7 +38,8 @@
 			"name": "Save handler"
 		},
 		"showSegmentOptionPanel": "Generic segment option panel",
-		"drawSymbols": "Draw points as full symbols"
+		"drawSymbols": "Draw points as full symbols",
+		"undoBufferSize": "Max number of undos"
 	},
 	"configTitle": "Configuration",
 	"copy": "Copy",

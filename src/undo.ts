@@ -1,19 +1,21 @@
 // undo functionality
 // slightly modifed from https://github.com/memononen/stylii
 import paper from "paper";
-import * as layer from "./layer";
-import { triggers } from "./triggers";
 import { Ref, computed, ref } from "vue";
-import { markRaw } from "vue";
+import * as layer from "./layer";
+import { updateWindow } from "./objectSettings/objectOptionPanel";
+import { triggers } from "./triggers";
+import { compressToUint8Array, decompressFromUint8Array } from "lz-string";
+import { get } from "./filesio/configManagement";
 
 type UndoState = {
 	type: string,
-	data: any,
+	data: Uint8Array,
 	hash: string,
 }
 const states: Ref<UndoState[]> = ref([]);
 const head = ref(-1);
-const maxUndos = 80;
+export const undoBufferSize = ref(40);
 
 export const statesRef = computed(() => states.value);
 export const headRef = computed(() => head.value);
@@ -22,30 +24,33 @@ async function getDigest(source: string): Promise<string> {
 	const buffer = new TextEncoder().encode(source);
 	const digest = await crypto.subtle.digest("SHA-256", buffer);
 	const hashArray = Array.from(new Uint8Array(digest));
-	const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+	const hashHex = hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
 	return hashHex;
 }
 
 export function setup() {
-	snapshot('init');
+	undoBufferSize.value = get("undoBufferSize") ?? 40;
+	snapshot("init");
 }
 
 export async function snapshot(type: string) {
-	const data = markRaw(paper.project.exportJSON({ asString: false}) as any);
-	const hash = await getDigest(JSON.stringify(data));
+	const text = paper.project.exportJSON();
+	const hash = await getDigest(text);
 
 	if (head.value >= 0 && states.value[head.value].hash === hash) return;
+
+	const data = compressToUint8Array(text);
 	
 	// remove all states after the current head
-	if (head.value < states.value.length-1) {
-		states.value = states.value.slice(0, head.value+1);
+	if (head.value + 1 < states.value.length) {
+		states.value.length = head.value + 1;
 	}
 	
 	// add the new states
 	states.value.push({ type, hash, data });
 	
 	// limit states to maxUndos by shifing states (kills first state)
-	if (states.value.length > maxUndos) {
+	if (states.value.length > undoBufferSize.value) {
 		states.value.shift();
 	}
 	
@@ -84,8 +89,10 @@ function restore(entry: UndoState) {
 	const activeLayerID = paper.project.activeLayer.data.id;
 	paper.project.clear();
 	paper.view.update();
-	paper.project.importJSON(entry.data);
+	const text = decompressFromUint8Array(entry.data);
+	paper.project.importJSON(text);
 	layer.reinitLayers(activeLayerID);
+	updateWindow(true);
 }
 
 export function clear() {

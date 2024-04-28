@@ -7,6 +7,7 @@ import PanelSection from '../common/PanelSection.vue';
 import { removeDialog } from '../../modal';
 import { i18n } from '../../i18n';
 import { redrawAll } from '../../objectDefs';
+import { undoBufferSize } from '../../undo';
 
 const options = ref({
 	showSegmentOptionPanel: false,
@@ -18,6 +19,7 @@ const options = ref({
 	enableAsyncClipboard: false,
 	language: i18n.global.locale,
 	drawSymbols: false,
+	undoBufferSize: undoBufferSize.value,
 });
 
 function save() {
@@ -25,6 +27,7 @@ function save() {
 	removeDialog("configDialog");
 	redrawAll();
 	i18n.global.locale = options.value.language;
+	undoBufferSize.value = options.value.undoBufferSize;
 }
 
 loadConfig();
@@ -65,6 +68,9 @@ for (const key in options.value) {
 		</PanelSection>
 		<PanelSection :label="$t(`config.asyncClipboard`)">
 			<BooleanInput v-model="options.enableAsyncClipboard" ></BooleanInput>
+		</PanelSection>
+		<PanelSection :label="$t(`config.undoBufferSize`)">
+			<IntInput v-model="options.undoBufferSize" ></IntInput>
 		</PanelSection>
 		<PanelSection :label="$t(`config.language`)">
 			<select v-model="options.language">

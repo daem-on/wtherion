@@ -7,8 +7,6 @@ import * as hover from "../hover";
 import * as guides from "../guides";
 import * as compoundPath from "../compoundPath";
 import * as math from "../math";
-import * as items from "../item";
-import * as menu from "../menu";
 import * as undo from "../undo";
 import * as selection from "../selection";
 import { defineTool } from "../tools";
@@ -98,7 +96,7 @@ export const detailselect = defineTool({
 		let doRectSelection = false;
 		let selectionRect: paper.Path.Rectangle;
 		
-		let hitType: string;
+		let hitType: "fill" | "point" | "curve" | "handle-in" | "handle-out" | null = null;
 		
 		let lastEvent = null;
 		let selectionDragged = false;
@@ -137,11 +135,6 @@ export const detailselect = defineTool({
 				doRectSelection = true;
 				return;
 			}
-			
-			// dont allow detail-selection of PGTextItem
-			if (hitResult && items.isPGTextItem(items.getRootItem(hitResult.item))) {
-				return;
-			}
 				
 			if ((hitResult.type === "fill" || doubleClicked) && itemIsPath(hitResult.item)) {
 
@@ -154,7 +147,6 @@ export const detailselect = defineTool({
 						hitResult.item.selected = false;
 						hitResult.item.fullySelected = true;
 					}
-					// if(event.modifiers.option) pg.selection.cloneSelection();
 
 				} else {
 					if (event.modifiers.shift) {
@@ -162,36 +154,17 @@ export const detailselect = defineTool({
 					} else {
 						paper.project.deselectAll();
 						hitResult.item.fullySelected = true;
-
-
-						// if(event.modifiers.option) pg.selection.cloneSelection();
 					}
 				}
 
 			} else if (hitResult.type === "segment") {
 				hitType = "point";
-
-				// // we could use this but not right now
-				// if(hitResult.segment.selected) {
-				// 	// selected points with no handles get handles if selected again
-				// 	hitResult.segment.selected = true;
-				// 	if(event.modifiers.shift) {
-				// 		hitResult.segment.selected = false;
-				// 	}
-
-				// } else
-				{
-					if (event.modifiers.shift) {
-						hitResult.segment.selected = true;
-					} else {
-						paper.project.deselectAll();
-						hitResult.segment.selected = true;
-					}
+				if (event.modifiers.shift) {
+					hitResult.segment.selected = true;
+				} else {
+					paper.project.deselectAll();
+					hitResult.segment.selected = true;
 				}
-				
-				// if(event.modifiers.option) pg.selection.cloneSelection();
-
-
 			} else if (
 				hitResult.type === "stroke" || 
 				hitResult.type === "curve") {
@@ -205,9 +178,6 @@ export const detailselect = defineTool({
 					paper.project.deselectAll();
 					curve.selected = true;
 				}
-
-				// if(event.modifiers.option) pg.selection.cloneSelection();
-
 			} else if (
 				hitResult.type === "handle-in" || 
 				hitResult.type === "handle-out") {
@@ -269,8 +239,7 @@ export const detailselect = defineTool({
 						}
 
 					} else {
-						for (let j=0; j < item.segments.length; j++) {
-							const seg = item.segments[j];
+						for (const seg of item.segments) {
 							// add the point of the segment before the drag started
 							// for later use in the snap calculation
 							if (!origPositions.has(seg)) {
@@ -278,10 +247,7 @@ export const detailselect = defineTool({
 							}
 							const origPoint = origPositions.get(seg);
 
-							if (seg.selected && (
-								hitType === "point" || 
-								hitType === "stroke" || 
-								hitType === "curve")){
+							if (seg.selected && (hitType === "point" || hitType === "curve")) {
 
 								if (hitType !== "point" || event.modifiers.shift) {
 									seg.point = seg.point.add(event.delta);

@@ -240,7 +240,7 @@
 	"selection": "Selection",
 	"showSidebar": "Show/hide sidebar",
 	"size": "Size",
-	"stationName": "Station reference",
+	"stationName": "Station name",
 	"subtype": {
 		"default": "This segment is the default subtype, no definitions before it.",
 		"followedBy": "This subtype continues until #{index} where it changes to {subtype}.",

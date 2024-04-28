@@ -181,8 +181,8 @@ export const bezier = defineTool({
 		on("mouseup", event => {
 			if (event.event.button > 0) return;  // only first mouse button
 			
-			if (mode === "continue") {
-				undo.snapshot("bezierContinue");
+			if (mode === "add") {
+				undo.snapshot("bezierAdd");
 			}
 			else if (path && path.closed) finish();
 			mode = null;

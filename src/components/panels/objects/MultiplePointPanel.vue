@@ -9,6 +9,7 @@ import CustomList from '../../common/CustomList.vue';
 import BooleanInput from '../../common/BooleanInput.vue';
 import symbolList from "../../../res/symbol-list.json";
 import { drawPoint } from '../../../objectDefs';
+import { snapshot } from '../../../undo';
 
 const props = defineProps<{
 	selection: paper.SymbolItem[]
@@ -57,6 +58,7 @@ function modifyObject() {
 			point.invisible = options.invisible;
 	}
 	for (const point of props.selection) drawPoint(point);
+	snapshot("editMultiplePoint");
 }
 </script>
 

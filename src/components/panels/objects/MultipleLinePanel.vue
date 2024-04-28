@@ -10,6 +10,7 @@ import CustomList from '../../common/CustomList.vue';
 import BooleanInput from '../../common/BooleanInput.vue';
 import { wallTypes } from '../../../res/wallTypes';
 import { drawLine } from '../../../objectDefs';
+import { snapshot } from '../../../undo';
 
 const props = defineProps<{
 	selection: paper.Path[]
@@ -64,6 +65,7 @@ function modifyObject() {
 			line.invisible = options.invisible;
 	}
 	for (const line of props.selection) drawLine(line);
+	snapshot("editMultipleLine");
 }
 
 const canHaveSubtype = computed(() => {

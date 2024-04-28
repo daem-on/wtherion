@@ -61,6 +61,7 @@ export const bezier = defineTool({
 
 		function createNewPath() {
 			path = createPath();
+			markTarget(path);
 
 			const settings = getSettings(path) as LineSettings;
 			const options = bezierOptions.value;
@@ -76,6 +77,7 @@ export const bezier = defineTool({
 
 		function finish() {
 			clearSelection();
+			unmarkTarget(path);
 			undo.snapshot("bezierFinish");
 			path = null;
 		}
@@ -100,6 +102,7 @@ export const bezier = defineTool({
 					
 				} else {
 					path = hitResult.item;
+					markTarget(path);
 					if (!hitResult.item.closed && findHandle(path, event.point) && isEndingSegment(hitResult.segment)) {
 						mode = "continue";
 						currentSegment = hitResult.segment;
@@ -140,6 +143,7 @@ export const bezier = defineTool({
 							// always connects to first segment)
 							if (!hitResult.segment.isFirst()) hoverPath.reverse();
 							path.join(hoverPath);
+							unmarkTarget(path);
 							path = null;
 							unselectSegment();
 							undo.snapshot("bezierJoin");
@@ -181,15 +185,23 @@ export const bezier = defineTool({
 		on("mouseup", event => {
 			if (event.event.button > 0) return;  // only first mouse button
 			
-			if (mode === "add") {
-				undo.snapshot("bezierAdd");
-			}
+			if (mode === "add") undo.snapshot("bezierAdd");
 			else if (path && path.closed) finish();
 			mode = null;
 		});
 
 		on("deactivate", () => {
+			for (const item of getMarkedItems())
+				unmarkTarget(item as paper.Path);
 			path = null;
+		});
+
+		on("restore", () => {
+			const paths = getMarkedItems();
+			if (paths.length) {
+				path = paths[0] as paper.Path;
+				path.selected = true;
+			}
 		});
 	},
 });
@@ -221,4 +233,19 @@ const findHandle = function(path: paper.Path, point: paper.Point) {
 
 function isEndingSegment(segment: paper.Segment) {
 	return segment.isLast() || segment.isFirst();
+}
+
+function markTarget(path: paper.Path) {
+	path.data.bezierTarget = true;
+}
+
+function unmarkTarget(path: paper.Path) {
+	delete path.data.bezierTarget;
+}
+
+function getMarkedItems(): paper.Path[] {
+	return paper.project.getItems({
+		match: item => item.data?.bezierTarget,
+		recursive: true,
+	}) as paper.Path[];
 }

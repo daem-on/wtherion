@@ -7,6 +7,7 @@ import { updateWindow } from "./objectSettings/objectOptionPanel";
 import { triggers } from "./triggers";
 import { compressToUint8Array, decompressFromUint8Array } from "lz-string";
 import { get } from "./filesio/configManagement";
+import { activeToolRef } from "./tools";
 
 type UndoState = {
 	type: string,
@@ -93,6 +94,7 @@ function restore(entry: UndoState) {
 	paper.project.importJSON(text);
 	layer.reinitLayers(activeLayerID);
 	updateWindow(true);
+	activeToolRef.value.emit("restore", undefined);
 }
 
 export function clear() {

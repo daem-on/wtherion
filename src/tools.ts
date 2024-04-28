@@ -41,6 +41,7 @@ type ToolEventMap = {
 	"wheel": WheelEvent,
 	"activate": void,
 	"deactivate": void,
+	"restore": void,
 };
 
 type EventHandler<T extends keyof ToolEventMap> = (event: ToolEventMap[T]) => void

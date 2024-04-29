@@ -1,9 +1,9 @@
-import type { ProjectExportResult } from './models';
 import { processProject } from './processProject';
-import { defaultExportFormatter } from './util';
+import type { ExportWorkerData } from './runner';
+import { getFormatter } from './util';
 
-self.onmessage = ({ data }: { data: ProjectExportResult }) => {
-	const result = processProject(data, defaultExportFormatter);
+self.onmessage = ({ data }: { data: ExportWorkerData }) => {
+	const result = processProject(data.result, getFormatter(data.format));
 	const text = result.join("\n");
 	self.postMessage(text);
 };

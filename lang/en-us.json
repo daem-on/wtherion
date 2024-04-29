@@ -39,7 +39,12 @@
 		},
 		"showSegmentOptionPanel": "Generic segment option panel",
 		"drawSymbols": "Draw points as full symbols",
-		"undoBufferSize": "Max number of undos"
+		"undoBufferSize": "Max number of undos",
+		"exportFormat": {
+			"name": "Export format",
+			"default": "Default",
+			"xtherion": "XTherion compatibility"
+		}
 	},
 	"configTitle": "Configuration",
 	"copy": "Copy",

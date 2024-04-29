@@ -20,6 +20,7 @@ const options = ref({
 	language: i18n.global.locale,
 	drawSymbols: false,
 	undoBufferSize: undoBufferSize.value,
+	exportFormat: "default",
 });
 
 function save() {
@@ -71,6 +72,12 @@ for (const key in options.value) {
 		</PanelSection>
 		<PanelSection :label="$t(`config.undoBufferSize`)">
 			<IntInput v-model="options.undoBufferSize" ></IntInput>
+		</PanelSection>
+		<PanelSection :label="$t(`config.exportFormat.name`)">
+			<select v-model="options.exportFormat">
+				<option value="default">{{ $t(`config.exportFormat.default`) }}</option>
+				<option value="xtherion">{{ $t(`config.exportFormat.xtherion`) }}</option>
+			</select>
 		</PanelSection>
 		<PanelSection :label="$t(`config.language`)">
 			<select v-model="options.language">

@@ -55,3 +55,8 @@ export const xTherionFormatter: ExportFormatter = {
 	},
 	skipStartCurve: true,
 };
+
+export function getFormatter(name: string | undefined) {
+	if (name === "xtherion") return xTherionFormatter;
+	return defaultExportFormatter;
+}

@@ -132,7 +132,7 @@ export function drawLine(l: paper.Path, lineSettings?: LineSettings) {
 
     l.data.customRenderStyle = undefined;
     if (!settings.invisible) {
-        if (settings.type === "pit") {
+        if (settings.type === "pit" || settings.type === "floor-step") {
             l.data.customRenderStyle = CustomRenderStyle.Spiky;
         } else if (settings.type === "overhang" || settings.subtype === "pit") {
             l.data.customRenderStyle = CustomRenderStyle.Triangle;

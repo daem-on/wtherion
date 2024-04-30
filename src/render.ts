@@ -11,7 +11,7 @@ export function setCustomRender(enable: boolean) {
 }
 
 function drawSpikyLine(path: paper.Path, context: CanvasRenderingContext2D, reverse: boolean) {
-	const length = reverse ? -10 : 10;
+	const length = reverse ? -8 : 8;
 	context.beginPath();
 	for (let o = 0; o < path.length; o += 20) {
 		const pos = path.getLocationAt(o).point;
@@ -54,7 +54,7 @@ function drawNotchedLine(path: paper.Path, context: CanvasRenderingContext2D, re
 }
 
 function drawLineWithContour(path: paper.Path, context: CanvasRenderingContext2D, reverse: boolean) {
-	const length = reverse ? -10 : 10;
+	const length = reverse ? -8 : 8;
 	if (!path.length) return;
 	const middle = path.getLocationAt(path.length / 2).point;
 	const target = path.getNormalAt(path.length / 2).multiply(length).add(middle);
@@ -98,6 +98,7 @@ export function setupCustomRenderer() {
 	};
 
 	const context = paper.view.element.getContext("2d");
+	context.lineWidth = 1;
 	let itemsToDraw: paper.Item[] = [];
 
 	paper.view.on("frame", event => {

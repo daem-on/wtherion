@@ -175,7 +175,13 @@ function endLine() {
 				
 	saveLineSettings();
 				
-	if (_closeLine) _currentPath.closed = true;
+	if (_closeLine) {
+		_currentPath.closed = true;
+		if (_currentPath.lastSegment.point.equals(_currentPath.firstSegment.point)) {
+			_currentPath.firstSegment.handleIn = _currentPath.lastSegment.handleIn;
+			_currentPath.removeSegment(_currentPath.lastSegment.index);
+		}
+	}
 	_linedef = false;
 				
 	const lineSettings = getSettings(_currentPath) as LineSettings;

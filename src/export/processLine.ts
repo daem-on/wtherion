@@ -53,8 +53,9 @@ export function processLine(item: PathExportData, format: ExportFormatter, setti
 
 	const toGlobalF = (global: number[], local = [0, 0]) => toGlobal(global, local, format);
 	const addStartCurve = item.closed && !format.skipStartCurve;
+	const outputSegments = item.closed ? segments.length + 1 : segments.length;
 
-	for (let i = 0; i < segments.length; i++) {
+	for (let i = 0; i < outputSegments; i++) {
 		const line = [];
 		const current = segments.at(i % segments.length);
 		const prev = segments.at(i - 1);

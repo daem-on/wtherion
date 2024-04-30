@@ -10,15 +10,52 @@ import paper from "paper";
 
 const typeColors
     = generateColors(colorDefs.typeColors);
-const pointColors
-    = generateColors(colorDefs.pointColors);
+const categoryColors
+    = generateColors(colorDefs.pointColors.categories);
 const areaColors
     = generateColors(colorDefs.areaColors);
 
-const flatSymbolList = Object.values(symbolList).flat();
+// we don't want to construct symbols at init, only when needed
+type LazySymbolDef = () => paper.SymbolDefinition;
+function lazy<T>(fn: () => T): () => T {
+    let value: T | undefined;
+    return () => {
+        if (value === undefined) value = fn();
+        return value;
+    };
+}
 
-const symbolDefs = new Map<string, paper.SymbolDefinition>();
-let simpleDef: paper.SymbolDefinition | undefined;
+const fullSymbolDefs = new Map<string, LazySymbolDef>();
+const simpleSymbolDefs = new Map<string, LazySymbolDef>();
+
+for (const category in symbolList) {
+    for (const name of symbolList[category]) {
+        fullSymbolDefs.set(name, lazy(() => defineFullSymbol(category, name)));
+    }
+}
+
+const defaultSymbol: LazySymbolDef = lazy(() => defineCircleSymbol(new paper.Color(colorDefs.pointColors.default)));
+
+const categorySybols: Map<string, LazySymbolDef> = new Map(
+    Object.keys(categoryColors)
+        .map<[string, LazySymbolDef]>(category => [
+            category,
+            lazy(() => defineCircleSymbol(categoryColors[category]))
+        ])
+);
+
+for (const category in symbolList) {
+    for (const name of symbolList[category]) {
+        const def = categorySybols.get(category) ?? defaultSymbol;
+        simpleSymbolDefs.set(name, def);
+    }
+}
+
+simpleSymbolDefs.set("station", () => {
+    const triangle = new paper.Path.RegularPolygon({ sides: 3, radius: 5, insert: false });
+    triangle.fillColor = new paper.Color(colorDefs.pointColors.station);
+    return new paper.SymbolDefinition(triangle);
+});
 
 function generateColors(from: Record<string, string>) {
     const r: Record<string, paper.Color> = {};
@@ -35,8 +72,7 @@ function generateColors(from: Record<string, string>) {
 export function overrideColors(object: Record<string, Record<string, string>>) {
     if ("lineColors" in object)
         Object.assign(typeColors, generateColors(object.lineColors));
-    if ("pointColors" in object)
-        Object.assign(pointColors, generateColors(object.pointColors));
+    // TODO point colors
     if ("areaColors" in object)
         Object.assign(areaColors, generateColors(object.areaColors));
     if ("background" in object)
@@ -157,35 +193,30 @@ export function setupData(item) {
         item.data.therionData = {};
 }
 
-export function defineSymbol(name: string): void {
+function defineFullSymbol(category: string, name: string): paper.SymbolDefinition {
     const group = new paper.Group();
     const symbol = new paper.SymbolDefinition(group);
-    symbolDefs.set(name, symbol);
-    if (flatSymbolList.includes(name)) {
-        const category = Object.entries(symbolList).find(([_, list]) => list.includes(name))?.[0];
-        fetch(`/assets/rendered/point/${category}/${name}.svg`)
-            .then(response => response.text())
-            .then(svg => {
-                const imported = group.importSVG(svg, { applyMatrix: false });
-                imported.scale(40);
-            });
-    }
+    fetch(`/assets/rendered/point/${category}/${name}.svg`)
+        .then(response => response.text())
+        .then(svg => {
+            const imported = group.importSVG(svg, { applyMatrix: false });
+            imported.scale(40);
+        });
+    return symbol;
 }
 
-export function defineSimple(): void {
+function defineCircleSymbol(color: paper.Color): paper.SymbolDefinition {
     const circle = new paper.Path.Circle({ radius: 5, insert: false });
-    circle.fillColor = new paper.Color("black");
-    simpleDef = new paper.SymbolDefinition(circle);
+    circle.fillColor = color;
+    return new paper.SymbolDefinition(circle);
 }
 
 export function getSymbol(name: string): paper.SymbolDefinition {
-    if (!config.get("drawSymbols")) {
-        if (!simpleDef) defineSimple();
-        return simpleDef;
-    } else {
-        if (!symbolDefs.has(name)) defineSymbol(name);
-        return symbolDefs.get(name);
-    }
+    const shouldDrawFull = config.get("drawSymbols");
+    const set = shouldDrawFull ? fullSymbolDefs : simpleSymbolDefs;
+
+    if (set.has(name)) return set.get(name)();
+    return defaultSymbol();
 }
 
 export function createPoint(pos: paper.Point = new paper.Point(0, 0)): paper.SymbolItem {

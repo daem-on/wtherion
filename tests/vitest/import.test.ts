@@ -73,3 +73,32 @@ test("import scrap with 1 line", () => {
 	expect(line.segments.length).toBe(2);
 	expect(settings.type).toBe("wall");
 });
+
+test("import closed line", () => {
+	const data = `
+		scrap scrap1
+			line wall -close on
+				-580.0 92.0
+				-582.0 97.0 -580.0 122.0 -566.0 125.0
+				-552.0 128.0 -528.0 133.0 -524.0 126.0
+				-520.0 119.0 -523.0 94.0 -524.0 90.0
+				-525.0 86.0 -578.0 87.0 -580.0 92.0
+			endline
+		endscrap
+	`;
+	createProject(data, () => { });
+	const layers = getProjectLayers();
+	expect(layers.length).toBe(1);
+	const scrap = getWrappedItem(layers[0], "Layer");
+	expect(scrap.children.length).toBe(1);
+
+	const line = getWrappedItem(scrap.children[0], "Path");
+	expect(line.closed).toBe(true);
+	expect(line.segments.length).toBe(4);
+	expect(line.segments).toEqual([
+		[[-580, -92], [2, 5], [-2, -5]],
+		[[-566, -125], [-14, 3], [14, -3]],
+		[[-524, -126], [-4, -7], [4, 7]],
+		[[-524, -90], [1, -4], [-1, 4]]
+	]);
+});

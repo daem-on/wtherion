@@ -9,6 +9,8 @@ import * as selection from "./selection";
 import * as tools from "./tools";
 import * as undo from "./undo";
 import { redrawAll } from "./objectDefs";
+import editTH2 from "./editTH2";
+import { reactiveMap } from "./objectSettings/reactiveMap";
 
 let center: paper.Point;
 let clipboard = [];
@@ -64,21 +66,25 @@ export function getAllSelectableItems() {
 	});
 }
 
+export function deserializeJSON(jsonString: string): any {
+	return JSON.parse(jsonString, (key, value) => {
+		if (key === "therionData") {
+			return reactiveMap(value);
+		}
+		return value;
+	});
+}
 
-export function loadJSONDocument(jsonString) {
+export function loadJSONDocument(jsonString: string) {
 	const activeLayerID = paper.project.activeLayer.data.id;
 	paper.project.clear();
 	tools.setDefaultTool();
 	pgExport.setExportRect();
 
-	paper.project.importJSON(jsonString);
-	
+	paper.project.importJSON(deserializeJSON(jsonString));
+
 	layer.reinitLayers(activeLayerID);
 
-	const exportRect = guides.getExportRectGuide();
-	if (exportRect) {
-		pgExport.setExportRect(new paper.Rectangle(exportRect.data.exportRectBounds));
-	}
 	redrawAll();
 	undo.clear();
 	undo.snapshot('loadJSONDocument');

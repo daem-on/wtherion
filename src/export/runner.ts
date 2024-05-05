@@ -22,7 +22,7 @@ export function runWorker(data: ExportWorkerData) {
 		const worker = new Worker(new URL("./worker", import.meta.url), {
 			type: "module"
 		});
-		worker.postMessage(data);
+		worker.postMessage(JSON.stringify(data));
 		worker.onmessage = response => {
 			resolve(response.data);
 			worker.terminate();

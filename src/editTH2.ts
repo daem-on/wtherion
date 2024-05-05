@@ -99,7 +99,6 @@ const editTH2 = {
 				const s = getSettings(item as paper.SymbolItem);
 				if (s.className === "PointSettings") {
 					item.rotation = Math.floor(Math.random() * 360);
-					s.rotation = item.rotation;
 				}
 			}
 		}

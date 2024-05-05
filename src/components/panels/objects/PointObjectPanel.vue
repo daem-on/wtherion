@@ -10,6 +10,7 @@ import PanelSection from '../../common/PanelSection.vue';
 import PointSubtypeSection from '../fragments/PointSubtypeSection.vue';
 import { snapshot } from '../../../undo';
 import { drawPoint } from '../../../objectDefs';
+import ArbitrarySettingSection from '../fragments/ArbitrarySettingSection.vue';
 
 const props = defineProps<{
 	selection: paper.SymbolItem
@@ -65,9 +66,9 @@ onUnmounted(() => {
 			</PanelSection>
 			<PanelSection :label="$t(`clip.name`)">
 				<select v-model="settings.clip">
-					<option :value="0">{{ $t("default") }}</option>
-					<option :value="1">{{ $t("clip.on") }}</option>
-					<option :value="2">{{ $t("clip.off") }}</option>
+					<option :value="undefined">{{ $t("default") }}</option>
+					<option value="on">{{ $t("clip.on") }}</option>
+					<option value="off">{{ $t("clip.off") }}</option>
 				</select>
 			</PanelSection>
 			<PanelSection :label="$t(`scale`)">
@@ -81,23 +82,22 @@ onUnmounted(() => {
 			</PanelSection>
 			<PanelSection :label="$t(`place.name`)">
 				<select v-model="settings.place">
-					<option :value="2">{{ $t("top") }}</option>
-					<option :value="1">{{ $t("bottom") }}</option>
-					<option :value="0">{{ $t("default") }}</option>
+					<option value="top">{{ $t("top") }}</option>
+					<option value="bottom">{{ $t("bottom") }}</option>
+					<option :value="undefined">{{ $t("default") }}</option>
 				</select>
 			</PanelSection>
-			<PanelSection :label="$t(`otherSettings`)" column>
-				<textarea rows="2" v-model="settings.otherSettings" />
-			</PanelSection>
+			<h3>{{ $t(`otherSettings`) }}</h3>
+			<ArbitrarySettingSection
+				:editing="(settings as any)"
+				:exclude="['className', 'type', 'subtype', 'invisible', 'value', 'text', 'name', 'id', 'clip', 'scale', 'place']"
+			/>
 		</PanelFoldable>
 	</PanelContent>
 </template>
 
 <style scoped>
-textarea {
-	min-width: 100%;
-    max-width: 100%;
-	font-family: monospace;
-	height: auto;
+h3 {
+	margin: 8px 0;
 }
 </style>

@@ -1,7 +1,7 @@
 import { defineTool, setLocalOptions } from "../tools";
 import * as undo from "../undo";
 import getSettings from "../objectSettings/model/getSettings";
-import PointSettings from "../objectSettings/model/PointSettings";
+import { PointSettings } from "../objectSettings/model/PointSettings";
 import paper from "paper";
 import { markRaw, ref } from "vue";
 import PointPanel from "../components/panels/tools/PointPanel.vue";

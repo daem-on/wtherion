@@ -5,7 +5,7 @@ import { CustomRenderStyle } from "./render.ts";
 import * as config from "./filesio/configManagement.ts";
 import colorDefs from "./res/color-defs.json";
 import symbolList from "./res/symbol-list.json";
-import PointSettings from "./objectSettings/model/PointSettings.ts";
+import { PointSettings, pointSettingsFactory } from "./objectSettings/model/PointSettings.ts";
 import paper from "paper";
 
 const typeColors
@@ -219,10 +219,13 @@ export function getSymbol(name: string): paper.SymbolDefinition {
     return defaultSymbol();
 }
 
-export function createPoint(pos: paper.Point = new paper.Point(0, 0)): paper.SymbolItem {
+export function createPoint(
+    pos: paper.Point = new paper.Point(0, 0),
+    settings: PointSettings = pointSettingsFactory.defaultSettings()
+): paper.SymbolItem {
     const item = new paper.SymbolItem(getSymbol(""), pos);
     item.data.fixedScale = true;
     item.data.onlyRotateHandle = true;
-    item.data.therionData = PointSettings.defaultSettings();
+    item.data.therionData = settings;
     return item;
 }

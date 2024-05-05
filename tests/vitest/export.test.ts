@@ -1,11 +1,11 @@
 import { expect, test } from "vitest";
 import { processProject } from "../../src/export/processProject";
-import PointSettings from "../../src/objectSettings/model/PointSettings";
+import { PointSettings, pointSettingsFactory } from "../../src/objectSettings/model/PointSettings";
 import ScrapSettings from "../../src/objectSettings/model/ScrapSettings";
 import LineSettings from "../../src/objectSettings/model/LineSettings";
 
 function createStationSettings(): PointSettings {
-	const pointSettings = PointSettings.defaultSettings();
+	const pointSettings = pointSettingsFactory.defaultSettings();
 	pointSettings.type = "station";
 	pointSettings.name = "0";
 	return pointSettings;

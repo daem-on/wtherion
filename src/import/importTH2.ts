@@ -1,7 +1,7 @@
 import getSettings from "../objectSettings/model/getSettings";
 import LineSettings from "../objectSettings/model/LineSettings";
 import AreaSettings from "../objectSettings/model/AreaSettings";
-import PointSettings from "../objectSettings/model/PointSettings";
+import { pointSettingsFactory } from "../objectSettings/model/PointSettings";
 import ScrapSettings from "../objectSettings/model/ScrapSettings";
 import { activateDefaultLayer, addNewLayer } from "../layer";
 import { createPath, createPoint as createTH2Point, drawArea, drawLine, drawPoint } from "../objectDefs.ts";
@@ -281,46 +281,14 @@ function createScrap(line: string) {
 }
 				
 function createPoint(line: string) {
-	const point = createTH2Point();
 	const split = line.split(" ");
 	const options = getOptions(split.slice(4).join(" "));
 	options.type = split[3];
+	const point = createTH2Point(
+		new paper.Point(toPoint(split.slice(1, 3))),
+		pointSettingsFactory.fromParsed(options),
+	);
 	if ("orient" in options || "orientation" in options)
 		point.rotation = Number.parseFloat(options.orient || options.orientation);
-	point.position = new paper.Point(toPoint(split.slice(1, 3)));
-	savePointSettings(point, options);
 	drawPoint(point);
-}
-
-function savePointSettings(point: paper.SymbolItem, options: Record<string, string>) {
-	const o = options;
-	const s = getSettings(point) as PointSettings;
-
-	for (const key of PointSettings.stringSettings) {
-		if (key in options) {
-			s[key] = trimEnclosing(o[key]); delete o[key];
-		}
-	}
-
-	if (o.place) {
-		if (o.place === "bottom") s.place = 1;
-		if (o.place === "top") s.place = 2;
-		delete o.place;
-	}
-	if (o.clip) {
-		if (o.clip === "on") s.clip = 1;
-		if (o.clip === "off") s.clip = 2;
-		delete o.clip;
-	}
-	if (o.visibility === "off") {
-		s.invisible = true; delete o.visibility;
-	}
-	if (o.orient) delete o.orient;
-	if (o.orientation) delete o.orientation;
-
-	for (const key in o) {
-		if (Object.prototype.hasOwnProperty.call(o, key)) {
-			s.otherSettings += `-${key} ${o[key]}\n`;
-		}
-	}
 }

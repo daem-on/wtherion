@@ -8,6 +8,8 @@ import { triggers } from "./triggers";
 import { compressToUint8Array, decompressFromUint8Array } from "lz-string";
 import { get } from "./filesio/configManagement";
 import { activeToolRef } from "./tools";
+import editTH2 from "./editTH2";
+import { deserializeJSON } from "./document";
 
 type UndoState = {
 	type: string,
@@ -91,7 +93,7 @@ function restore(entry: UndoState) {
 	paper.project.clear();
 	paper.view.update();
 	const text = decompressFromUint8Array(entry.data);
-	paper.project.importJSON(text);
+	paper.project.importJSON(deserializeJSON(text));
 	layer.reinitLayers(activeLayerID);
 	updateWindow(true);
 	activeToolRef.value.emit("restore", undefined);

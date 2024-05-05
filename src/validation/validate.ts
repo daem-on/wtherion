@@ -2,7 +2,7 @@ import paper from "paper";
 import AreaSettings from "../objectSettings/model/AreaSettings.ts";
 import getSettings from "../objectSettings/model/getSettings.ts";
 import LineSettings from "../objectSettings/model/LineSettings.ts";
-import PointSettings from "../objectSettings/model/PointSettings.ts";
+import { validatePointSettings } from "../objectSettings/model/PointSettings.ts";
 import ScrapSettings from "../objectSettings/model/ScrapSettings.ts";
 import { addDialog } from "../modal.ts";
 import ValidationDialog from "../components/dialogs/ValidationDialog.vue";
@@ -51,7 +51,7 @@ function* validateProject(): ValidationResult {
 							LineSettings.validate(itemSettings, assertValid);
 							break;
 						case "PointSettings":
-							PointSettings.validate(itemSettings, assertValid);
+							validatePointSettings(itemSettings, assertValid);
 							break;
 						case "AreaSettings":
 							AreaSettings.validate(itemSettings, assertValid);

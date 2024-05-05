@@ -45,11 +45,19 @@ function loadCustomKeybinds() {
 	if (config.exists("keybinds")) {
 		const keybindsConfig = config.get("keybinds");
 		currentBinds.clear();
-		for (const bind of keybindsConfig) {
-			if (keySpecIsValid(bind.key))
-				currentBinds.set(bind.key, bind.command);
+		for (const [key, commands] of keybindsConfig) {
+			if (keySpecIsValid(key) && Array.isArray(commands)) {
+				currentBinds.set(key, new Set(commands));
+			}
 		}
 	}
+}
+
+export function persistCustomKeybinds() {
+	const keybinds = Array.from(currentBinds.entries()).map(([key, commands]) => {
+		return [key, Array.from(commands)];
+	});
+	config.set("keybinds", keybinds);
 }
 
 const keySpecRegex = /^(ctrl-)?(shift-)?([a-z0-9]+)(-up)?$/;

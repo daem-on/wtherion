@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { DialogData } from '../../modal';
-import { KeySpec, currentBinds, getActionList, getKeySpec } from '../../input';
-import { computed, onUnmounted, ref } from 'vue';
+import { KeySpec, currentBinds, getActionList, getKeySpec, persistCustomKeybinds } from '../../input';
+import { computed, onUnmounted, ref, watch } from 'vue';
 
 defineProps<{ data: DialogData<void> }>();
 
@@ -42,6 +42,10 @@ const actionDisplayNames = computed(() => {
 		map.set(action, parts.map(camelCaseToTitleCase).join(' > '));
 	}
 	return map;
+});
+
+watch(currentBinds, () => {
+	persistCustomKeybinds();
 });
 
 const modifiers = ['Shift', 'Control', 'Alt', 'Meta'];

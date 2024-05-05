@@ -43,15 +43,6 @@ for (const key in options.value) {
 
 <template>
 	<div>
-		<PanelSection :label="$t(`config.showSegmentOptionPanel`)">
-			<BooleanInput v-model="options.showSegmentOptionPanel" ></BooleanInput>
-		</PanelSection>
-		<PanelSection :label="$t(`config.lockLayerNames`)">
-			<BooleanInput v-model="options.lockLayerNames" ></BooleanInput>
-		</PanelSection>
-		<PanelSection :label="$t(`config.githubToken.name`)">
-			<input type="text" v-model="options.githubToken" />
-		</PanelSection>
 		<PanelSection :label="$t(`config.inspectTolerance`)">
 			<IntInput v-model="options.inspectTolerance" ></IntInput>
 		</PanelSection>

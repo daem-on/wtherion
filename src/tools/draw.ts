@@ -6,7 +6,7 @@ import { markRaw, ref } from "vue";
 import { defineTool } from "../../src/tools";
 import DrawPanel from "../components/panels/tools/DrawPanel.vue";
 import * as math from "../math";
-import LineSettings from "../objectSettings/model/LineSettings";
+import { LineSettings } from "../objectSettings/model/LineSettings";
 import { default as getSettings } from "../objectSettings/model/getSettings";
 import * as undo from "../undo";
 import { createPath, drawLine } from "../objectDefs";

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import PointSettings from '../../../objectSettings/model/PointSettings';
+import type { PointSettings } from '../../../objectSettings/model/PointSettings';
 import getSettings from '../../../objectSettings/model/getSettings';
 import NullableBooleanInput from '../../common/NullableBooleanInput.vue';
 import PanelContent from '../../common/PanelContent.vue';

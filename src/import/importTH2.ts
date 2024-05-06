@@ -1,7 +1,7 @@
 import getSettings from "../objectSettings/model/getSettings";
-import LineSettings from "../objectSettings/model/LineSettings";
+import { LineSettings, lineSettingsFromParsed } from "../objectSettings/model/LineSettings";
 import AreaSettings from "../objectSettings/model/AreaSettings";
-import { pointSettingsFactory } from "../objectSettings/model/PointSettings";
+import { pointSettingsFromParsed } from "../objectSettings/model/PointSettings";
 import ScrapSettings from "../objectSettings/model/ScrapSettings";
 import { activateDefaultLayer, addNewLayer } from "../layer";
 import { createPath, createPoint as createTH2Point, drawArea, drawLine, drawPoint } from "../objectDefs.ts";
@@ -105,53 +105,7 @@ export function createProject(source: string, loadEmbedded: (settings: string[])
 function addSegment(line: string) {
 	_currentSegments.push(line.split(" "));
 }
-				
-function saveLineSettings() {
-	const o = _parsedOptions;
-	const s = getSettings(_currentPath) as LineSettings;
-	if (o.subtype) {
-		s.subtype = trimEnclosing(o.subtype); delete o.subtype;
-	}
-	if (o.text) {
-		s.text = trimEnclosing(o.text); delete o.text;
-	}
-	if (o.close === "on") {
-		_closeLine = true; delete o.close;
-	}
-	if (o.reverse === "on") {
-		s.reverse = true; delete o.reverse;
-	}
-	if (o.place) {
-		if (o.place === "bottom") s.place = 1;
-		if (o.place === "top") s.place = 2;
-		delete o.place;
-	}
-	if (o.clip) {
-		if (o.clip === "on") s.clip = 1;
-		if (o.clip === "off") s.clip = 2;
-		delete o.clip;
-	}
-	if (o.visibility === "off") {
-		s.invisible = true; delete o.visibility;
-	}
-	if (o.outline) {
-		if (o.outline === "in") s.outline = 1;
-		if (o.outline === "out") s.outline = 2;
-		if (o.outline === "none") s.outline = 3;
-		delete o.outline;
-	}
-	if (o.id) {
-		_linesWithIds[o.id] = _currentPath;
-		s.id = o.id; delete o.id;
-	}
-				
-	for (const key in o) {
-		if (Object.prototype.hasOwnProperty.call(o, key)) {
-			s.otherSettings += `-${key} ${o[key]}\n`;
-		}
-	}
-}
-				
+
 function endLine() {
 	const segments = _currentSegments;
 	let lastpoint: string[];
@@ -172,9 +126,10 @@ function endLine() {
 			lastpoint = segment.slice(4, 6);
 		}
 	}
-				
-	saveLineSettings();
-				
+	
+	if (_parsedOptions.close) _closeLine = true;
+	if (_parsedOptions.id) _linesWithIds[_parsedOptions.id] = _currentPath;
+
 	if (_closeLine) {
 		_currentPath.closed = true;
 		if (_currentPath.lastSegment.point.equals(_currentPath.firstSegment.point)) {
@@ -213,10 +168,11 @@ function createLine(line: string) {
 	_subtypes = {};
 	_segmentOptions = {};
 
-	const lineSettings = getSettings(_currentPath) as LineSettings;
-	lineSettings.type = split[1];
-					
 	_parsedOptions = getOptions(split.slice(2).join(" "));
+
+	const settings = lineSettingsFromParsed(_parsedOptions);
+	_currentPath.data.therionData = settings;
+	settings.type = split[1];
 }
 
 function createArea(line: string) {
@@ -286,7 +242,7 @@ function createPoint(line: string) {
 	options.type = split[3];
 	const point = createTH2Point(
 		new paper.Point(toPoint(split.slice(1, 3))),
-		pointSettingsFactory.fromParsed(options),
+		pointSettingsFromParsed(options),
 	);
 	if ("orient" in options || "orientation" in options)
 		point.rotation = Number.parseFloat(options.orient || options.orientation);

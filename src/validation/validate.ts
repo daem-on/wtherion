@@ -1,7 +1,7 @@
 import paper from "paper";
 import AreaSettings from "../objectSettings/model/AreaSettings.ts";
 import getSettings from "../objectSettings/model/getSettings.ts";
-import LineSettings from "../objectSettings/model/LineSettings.ts";
+import { validateLineSettings } from "../objectSettings/model/LineSettings.ts";
 import { validatePointSettings } from "../objectSettings/model/PointSettings.ts";
 import ScrapSettings from "../objectSettings/model/ScrapSettings.ts";
 import { addDialog } from "../modal.ts";
@@ -48,7 +48,7 @@ function* validateProject(): ValidationResult {
 				try {
 					switch (itemSettings.className) {
 						case "LineSettings":
-							LineSettings.validate(itemSettings, assertValid);
+							validateLineSettings(itemSettings, assertValid);
 							break;
 						case "PointSettings":
 							validatePointSettings(itemSettings, assertValid);

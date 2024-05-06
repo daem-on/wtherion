@@ -6,17 +6,19 @@ import getSettings from '../../../objectSettings/model/getSettings';
 import { computed, onUnmounted, ref, watch } from 'vue';
 import BooleanInput from '../../common/BooleanInput.vue';
 import PanelSection from '../../common/PanelSection.vue';
-import LineSettings from '../../../objectSettings/model/LineSettings';
+import { LineSettings } from '../../../objectSettings/model/LineSettings';
 import { wallTypes } from "../../../res/wallTypes";
 import LineSubtypeSection from '../fragments/LineSubtypeSection.vue';
 import { snapshot } from '../../../undo';
 import { drawLine } from '../../../objectDefs';
+import { ReactiveMap } from 'src/objectSettings/reactiveMap';
+import ArbitrarySettingSection from '../fragments/ArbitrarySettingSection.vue';
 
 const props = defineProps<{
 	selection: paper.Path
 }>();
 
-const settings = computed(() => getSettings(props.selection) as LineSettings);
+const settings = computed(() => getSettings(props.selection) as ReactiveMap<LineSettings>);
 const dirty = ref(false);
 
 watch(settings, () => {
@@ -49,10 +51,10 @@ onUnmounted(() => {
 		</PanelSection>
 		<PanelSection :label="$t(`outline.name`)">
 			<select v-model="settings.outline">
-				<option :value="0">{{ $t(`default`) }}</option>
-				<option :value="1">{{ $t(`outline.in`) }}</option>
-				<option :value="2">{{ $t(`outline.out`) }}</option>
-				<option :value="3">{{ $t(`outline.none`) }}</option>
+				<option :value="undefined">{{ $t(`default`) }}</option>
+				<option value="in">{{ $t(`outline.in`) }}</option>
+				<option value="out">{{ $t(`outline.out`) }}</option>
+				<option value="none">{{ $t(`outline.none`) }}</option>
 			</select>
 		</PanelSection>
 
@@ -65,30 +67,29 @@ onUnmounted(() => {
 			</PanelSection>
 			<PanelSection :label="$t(`clip.name`)">
 				<select v-model="settings.clip">
-					<option :value="0">{{ $t(`default`) }}</option>
-					<option :value="1">{{ $t(`clip.on`) }} ✂</option>
-					<option :value="2">{{ $t(`clip.off`) }}</option>
+					<option value="undefined">{{ $t(`default`) }}</option>
+					<option value="on">{{ $t(`clip.on`) }} ✂</option>
+					<option value="off">{{ $t(`clip.off`) }}</option>
 				</select>
 			</PanelSection>
 			<PanelSection :label="$t(`place.name`)">
 				<select v-model="settings.place">
-					<option :value="0">{{ $t(`default`) }} ⦿</option>
-					<option :value="1">{{ $t(`bottom`) }} ▼</option>
-					<option :value="2">{{ $t(`top`) }} ▲</option>
+					<option :value="undefined">{{ $t(`default`) }} ⦿</option>
+					<option value="bottom">{{ $t(`bottom`) }} ▼</option>
+					<option value="top">{{ $t(`top`) }} ▲</option>
 				</select>
 			</PanelSection>
-			<PanelSection :label="$t(`otherSettings`)" column>
-				<textarea rows="2" v-model="settings.otherSettings" />
-			</PanelSection>
+			<h3>{{ $t(`otherSettings`) }}</h3>
+			<ArbitrarySettingSection
+				:editing="settings"
+				:exclude="['className', 'type', 'subtype', 'text', 'reverse', 'invisible', 'size', 'outline', 'id', 'clip', 'place', 'subtypes', 'segmentSettings', 'visibility']"
+			/>
 		</PanelFoldable>
 	</PanelContent>
 </template>
 
 <style scoped>
-textarea {
-	min-width: 100%;
-    max-width: 100%;
-	font-family: monospace;
-	height: auto;
+h3 {
+	margin: 8px 0;
 }
 </style>

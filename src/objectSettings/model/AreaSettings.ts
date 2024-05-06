@@ -1,5 +1,5 @@
 import type { AssertFunction } from "../../validation/assertTypes.ts";
-import LineSettings from "./LineSettings";
+import { LineSettings, validateLineSettings } from "./LineSettings";
 
 export default class AreaSettings {
 	readonly className = "AreaSettings";
@@ -15,7 +15,7 @@ export default class AreaSettings {
 	}
 
 	static validate(s: AreaSettings, assertValid: AssertFunction) {
-		LineSettings.validate(s.lineSettings, assertValid);
+		validateLineSettings(s.lineSettings, assertValid);
 		assertValid(!(s.type == null), `Missing type`, s);
 		assertValid(!(s.invisible == null), `Missing invisible`, s);
 	}

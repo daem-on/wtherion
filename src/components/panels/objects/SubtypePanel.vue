@@ -4,7 +4,7 @@ import PanelSection from "../../common/PanelSection.vue";
 import CustomList from "../../common/CustomList.vue";
 import getSettings from "../../../objectSettings/model/getSettings";
 import { computed } from "vue";
-import LineSettings from "../../../objectSettings/model/LineSettings";
+import { LineSettings } from "../../../objectSettings/model/LineSettings";
 import subtypes from "../../../res/subtype-list.json";
 import BooleanInput from "../../common/BooleanInput.vue";
 import { drawLine } from "../../../objectDefs";

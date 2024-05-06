@@ -3,7 +3,7 @@
 
 import paper from "paper";
 import { markRaw, ref } from "vue";
-import LineSettings from "../../src/objectSettings/model/LineSettings";
+import { LineSettings } from "../../src/objectSettings/model/LineSettings";
 import getSettings from "../../src/objectSettings/model/getSettings";
 import BezierPanel from "../components/panels/tools/BezierPanel.vue";
 import { clearSelection } from "../selection";

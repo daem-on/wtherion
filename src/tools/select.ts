@@ -16,7 +16,7 @@ import * as menu from "../menu";
 import * as undo from "../undo";
 import * as selection from "../selection";
 import paper from "paper";
-import LineSettings from "../../src/objectSettings/model/LineSettings";
+import { LineSettings } from "../../src/objectSettings/model/LineSettings";
 import { defineTool } from "../tools";
 import { triggers } from "../triggers";
 import { ToolAction } from "../toolMenu";

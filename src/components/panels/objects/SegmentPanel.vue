@@ -3,7 +3,7 @@ import PanelContent from "../../common/PanelContent.vue";
 import PanelSection from "../../common/PanelSection.vue";
 import getSettings from "../../../objectSettings/model/getSettings";
 import { computed } from "vue";
-import LineSettings from "../../../objectSettings/model/LineSettings";
+import { LineSettings } from "../../../objectSettings/model/LineSettings";
 
 const props = defineProps<{
 	selection: paper.Path,

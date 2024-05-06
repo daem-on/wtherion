@@ -1,11 +1,11 @@
-import LineSettings from "./objectSettings/model/LineSettings.ts";
+import { LineSettings, defaultLineSettings } from "./objectSettings/model/LineSettings.ts";
 import getSettings, { PaperItemType } from "./objectSettings/model/getSettings.ts";
 import AreaSettings from "./objectSettings/model/AreaSettings.ts";
 import { CustomRenderStyle } from "./render.ts";
 import * as config from "./filesio/configManagement.ts";
 import colorDefs from "./res/color-defs.json";
 import symbolList from "./res/symbol-list.json";
-import { PointSettings, pointSettingsFactory } from "./objectSettings/model/PointSettings.ts";
+import { PointSettings, defaultPointSettings } from "./objectSettings/model/PointSettings.ts";
 import paper from "paper";
 
 const typeColors
@@ -84,7 +84,7 @@ export function createPath() {
     path.strokeColor = new paper.Color(0, 0, 0);
     path.strokeWidth = 2;
     path.data = {
-        therionData: LineSettings.defaultSettings()
+        therionData: defaultLineSettings()
     };
     return path;
 }
@@ -221,7 +221,7 @@ export function getSymbol(name: string): paper.SymbolDefinition {
 
 export function createPoint(
     pos: paper.Point = new paper.Point(0, 0),
-    settings: PointSettings = pointSettingsFactory.defaultSettings()
+    settings: PointSettings = defaultPointSettings()
 ): paper.SymbolItem {
     const item = new paper.SymbolItem(getSymbol(""), pos);
     item.data.fixedScale = true;

@@ -89,8 +89,8 @@ onUnmounted(() => {
 			</PanelSection>
 			<h3>{{ $t(`otherSettings`) }}</h3>
 			<ArbitrarySettingSection
-				:editing="(settings as any)"
-				:exclude="['className', 'type', 'subtype', 'invisible', 'value', 'text', 'name', 'id', 'clip', 'scale', 'place']"
+				:editing="settings"
+				:exclude="['className', 'type', 'subtype', 'invisible', 'value', 'text', 'name', 'id', 'clip', 'scale', 'place', 'visibility']"
 			/>
 		</PanelFoldable>
 	</PanelContent>

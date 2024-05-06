@@ -12,6 +12,7 @@ import PanelFoldable from '../../common/PanelFoldable.vue';
 import LineSubtypeSection from '../fragments/LineSubtypeSection.vue';
 import { snapshot } from '../../../undo';
 import { drawArea } from '../../../objectDefs';
+import ArbitrarySettingSection from '../fragments/ArbitrarySettingSection.vue';
 
 const props = defineProps<{
 	selection: paper.Path
@@ -50,9 +51,11 @@ onUnmounted(() => {
 			<PanelSection :label="$t(`id`)">
 				<input type="text" v-model="settings.lineSettings.id" />
 			</PanelSection>
-			<PanelSection :label="$t(`otherSettings`)" column>
-				<textarea rows="2" v-model="settings.lineSettings.otherSettings"></textarea>
-			</PanelSection>
+			<h3>{{ $t(`otherSettings`) }}</h3>
+			<ArbitrarySettingSection
+				:editing="(settings.lineSettings as any)"
+				:exclude="['className', 'type', 'subtype', 'text', 'reverse', 'invisible', 'size', 'outline', 'id', 'clip', 'place', 'visibility']"
+			/>
 		</PanelFoldable>
 	</PanelContent>
 </template>

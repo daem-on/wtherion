@@ -1,11 +1,11 @@
 import { expect, test } from "vitest";
 import { processProject } from "../../src/export/processProject";
-import { PointSettings, pointSettingsFactory } from "../../src/objectSettings/model/PointSettings";
+import { PointSettings, defaultPointSettings } from "../../src/objectSettings/model/PointSettings";
 import ScrapSettings from "../../src/objectSettings/model/ScrapSettings";
-import LineSettings from "../../src/objectSettings/model/LineSettings";
+import { defaultLineSettings } from "../../src/objectSettings/model/LineSettings";
 
 function createStationSettings(): PointSettings {
-	const pointSettings = pointSettingsFactory.defaultSettings();
+	const pointSettings = defaultPointSettings();
 	pointSettings.type = "station";
 	pointSettings.name = "0";
 	return pointSettings;
@@ -74,7 +74,7 @@ test("export with all scrap settings", () => {
 });
 
 test("export closed line", () => {
-	const lineSettings = LineSettings.defaultSettings();
+	const lineSettings = defaultLineSettings();
 	lineSettings.type = "wall";
 
 	const result = processProject([

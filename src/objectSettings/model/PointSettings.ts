@@ -19,41 +19,36 @@ export type PointSettings = {
 const exportStringSettings = ["subtype", "name", "text", "value", "id", "scale", "place", "clip"];
 const stringSettings = ["type", ...exportStringSettings];
 
-export const pointSettingsFactory = {
-	exportStringSettings,
-	stringSettings,
+export function defaultPointSettings(): ReactiveMap<PointSettings> {
+	return reactiveMap<PointSettings>({
+		className: "PointSettings",
+		type: "station",
+		invisible: false,
+	});
+}
 
-	defaultSettings(): ReactiveMap<PointSettings> {
-		return reactiveMap<PointSettings>({
-			className: "PointSettings",
-			type: "station",
-			invisible: false,
-		});
-	},
-
-	fromParsed(parsed: Record<string, string>): ReactiveMap<PointSettings> {
-		const settings = pointSettingsFactory.defaultSettings();
-		for (const [key, value] of Object.entries(parsed)) {
-			if (stringSettings.includes(key)) {
-				settings[key] = trimEnclosing(value);
-			} else {
-				switch (key) {
-					case "visibility":
-						delete settings.invisible;
-						settings.invisible = value === "off";
-						break;
-					case "orient":
-					case "orientation":
-						break;
-					default:
-						settings[key] = value;
-						break;
-				}
+export function pointSettingsFromParsed(parsed: Record<string, string>): ReactiveMap<PointSettings> {
+	const settings = defaultPointSettings();
+	for (const [key, value] of Object.entries(parsed)) {
+		if (stringSettings.includes(key)) {
+			settings[key] = trimEnclosing(value);
+		} else {
+			switch (key) {
+				case "visibility":
+					delete settings.invisible;
+					settings.invisible = value === "off";
+					break;
+				case "orient":
+				case "orientation":
+					break;
+				default:
+					settings[key] = value;
+					break;
 			}
 		}
-		return settings;
 	}
-};
+	return settings;
+}
 
 export function validatePointSettings(s: PointSettings, assertValid: AssertFunction) {
 	for (const setting of stringSettings) {

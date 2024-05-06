@@ -1,4 +1,4 @@
-import { pointSettingsFactory, pointSettingsToString } from "../objectSettings/model/PointSettings";
+import { pointSettingsToString } from "../objectSettings/model/PointSettings";
 import { Matrix, SymbolItemExportData } from "./models";
 import { toGlobal } from "./processProject";
 import { ExportFormatter, getSettingsInExport } from "./util";

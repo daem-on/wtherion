@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import LineSettings from '../../../objectSettings/model/LineSettings';
+import { LineSettings } from '../../../objectSettings/model/LineSettings';
 import getSettings from '../../../objectSettings/model/getSettings';
 import subtypeList from "../../../res/subtype-list.json";
 import NullableBooleanInput from '../../common/NullableBooleanInput.vue';

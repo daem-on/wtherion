@@ -1,4 +1,4 @@
-import LineSettings from "../objectSettings/model/LineSettings";
+import { LineSettings, lineSettingsToString } from "../objectSettings/model/LineSettings";
 import { toGlobal } from "./processProject";
 import { CompoundPathExportData, CurvedSegment, PathExportData, Segment } from "./models";
 import { getSettingsInExport, ExportFormatter } from "./util";
@@ -18,38 +18,9 @@ export function processLine(item: PathExportData, format: ExportFormatter, setti
 	const subtypes = lineSettings.subtypes;
 	const segmentSettings = lineSettings.segmentSettings;
 
-	let optionsString = "";
-	{
-		const s = lineSettings;
-		const o = [];
-		o.push(s.type);
-		if (item.closed)
-			o.push("-close on");
-		if (s.id !== "")
-			o.push("-id " + s.id);
-		if (s.subtype !== "")
-			o.push(`-subtype ${s.subtype}`);
-		if (s.text !== "")
-			o.push(`-text "${s.text}"`);
-		if (s.clip !== 0)
-			o.push("-clip " + ["", "on", "off"][s.clip]);
-		if (s.invisible === true)
-			o.push("-visibility off");
-		if (s.reverse === true)
-			o.push("-reverse on");
-		if (s.outline !== 0)
-			o.push("-outline " + ["", "in", "out", "none"][s.outline]);
-		if (s.place !== 0)
-			o.push("-place " + ["", "bottom", "top"][s.place]);
-		// // not sure what's up with this, apparently can't be set here
-		// if (s.size !== undefined && s.size !== 0)
-		// 	o.push("-size " + s.size);
-		if (s.otherSettings !== "")
-			o.push(s.otherSettings.replace(/\n/g, " "));
-		optionsString = o.join(" ");
-	}
-
-	state.push("line " + optionsString);
+	const optionsString = lineSettingsToString(lineSettings);
+	const closedString = item.closed ? " -close on" : "";
+	state.push(`line ${lineSettings.type}${closedString} ${optionsString}`.trim());
 
 	const toGlobalF = (global: number[], local = [0, 0]) => toGlobal(global, local, format);
 	const addStartCurve = item.closed && !format.skipStartCurve;

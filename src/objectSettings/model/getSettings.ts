@@ -1,11 +1,11 @@
 import { ReactiveMap } from "../reactiveMap";
-import AreaSettings from "./AreaSettings";
+import { AreaSettings } from "./AreaSettings";
 import { LineSettings } from "./LineSettings";
 import { PointSettings } from "./PointSettings";
 import { ScrapSettings } from "./ScrapSettings";
 
 type SettingType<T> = 
-	T extends paper.Path ? (ReactiveMap<LineSettings> | AreaSettings) :
+	T extends paper.Path ? (ReactiveMap<LineSettings> | ReactiveMap<AreaSettings>) :
 	T extends paper.SymbolItem ? ReactiveMap<PointSettings> :
 	T extends paper.Layer ? ReactiveMap<ScrapSettings> :
 	never;

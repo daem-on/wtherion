@@ -1,22 +1,33 @@
 import type { AssertFunction } from "../../validation/assertTypes.ts";
+import { ReactiveMap, reactiveMap } from "../reactiveMap.ts";
 import { LineSettings, validateLineSettings } from "./LineSettings";
 
-export default class AreaSettings {
-	readonly className = "AreaSettings";
-	type: string;
-	lineSettings: LineSettings;
+export type AreaSettings = {
+	className: "AreaSettings";
+	type?: string;
+	lineSettings?: LineSettings;
 	invisible: boolean;
+};
 
-	static defaultSettings(): AreaSettings {
-		const as = new AreaSettings();
-		as.type = "water";
-		as.invisible = false;
-		return as;
-	}
+export function defaultAreaSettings(): ReactiveMap<AreaSettings> {
+	return reactiveMap({
+		className: "AreaSettings",
+		invisible: false,
+	});
+}
 
-	static validate(s: AreaSettings, assertValid: AssertFunction) {
-		validateLineSettings(s.lineSettings, assertValid);
-		assertValid(!(s.type == null), `Missing type`, s);
-		assertValid(!(s.invisible == null), `Missing invisible`, s);
-	}
+export function validateAreaSettings(s: AreaSettings, assertValid: AssertFunction) {
+	validateLineSettings(s.lineSettings, assertValid);
+	assertValid(!(s.type == null), `Missing type`, s);
+	assertValid(!(s.invisible == null), `Missing invisible`, s);
+}
+
+export function areaSettingsToString(s: AreaSettings): string {
+	return Object.entries(s)
+		.map(([key, value]) => {
+			if (key === "className" || value == null || value === "") return "";
+			return `-${key} ${value}`;
+		})
+		.filter((x) => x !== "")
+		.join(" ");
 }

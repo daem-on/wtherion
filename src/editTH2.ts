@@ -1,5 +1,4 @@
 import { isPathItem } from "./item";
-import AreaSettings from "./objectSettings/model/AreaSettings";
 import getSettings, { PaperItemType } from "./objectSettings/model/getSettings";
 import { getSelectedItems } from "./selection";
 import * as config from "./filesio/configManagement";
@@ -10,6 +9,7 @@ import { reactive } from "vue";
 import { i18n } from "./i18n";
 import { drawArea, drawLine, drawObject } from "./objectDefs.ts";
 import { triggers } from "./triggers.ts";
+import { defaultAreaSettings } from "./objectSettings/model/AreaSettings.ts";
 
 const editTH2 = {
 	updateInactiveScraps: function() {
@@ -40,7 +40,7 @@ const editTH2 = {
 
 		const oldSettings = settings;
 		const lineData = reactive(line.data);
-		lineData.therionData = AreaSettings.defaultSettings();
+		lineData.therionData = defaultAreaSettings();
 		lineData.therionData.lineSettings = oldSettings;
 		lineData.therionData.type = "water";
 		drawArea(line as paper.Path);

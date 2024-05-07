@@ -1,4 +1,4 @@
-import AreaSettings from "../objectSettings/model/AreaSettings.ts";
+import type { AreaSettings } from "../objectSettings/model/AreaSettings.ts";
 import type { LineSettings } from "../objectSettings/model/LineSettings.ts";
 import type { PointSettings } from "../objectSettings/model/PointSettings.ts";
 import type { ScrapSettings } from "../objectSettings/model/ScrapSettings.ts";

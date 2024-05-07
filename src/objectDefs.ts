@@ -1,6 +1,6 @@
 import { LineSettings, defaultLineSettings } from "./objectSettings/model/LineSettings.ts";
 import getSettings, { PaperItemType } from "./objectSettings/model/getSettings.ts";
-import AreaSettings from "./objectSettings/model/AreaSettings.ts";
+import { AreaSettings } from "./objectSettings/model/AreaSettings.ts";
 import { CustomRenderStyle } from "./render.ts";
 import * as config from "./filesio/configManagement.ts";
 import colorDefs from "./res/color-defs.json";

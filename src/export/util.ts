@@ -1,4 +1,4 @@
-import AreaSettings from "../objectSettings/model/AreaSettings";
+import type { AreaSettings } from "../objectSettings/model/AreaSettings";
 import type { LineSettings } from "../objectSettings/model/LineSettings";
 import type { PointSettings } from "../objectSettings/model/PointSettings";
 import type { ScrapSettings } from "../objectSettings/model/ScrapSettings";

@@ -1,11 +1,11 @@
 import getSettings from "../objectSettings/model/getSettings";
 import { LineSettings, lineSettingsFromParsed } from "../objectSettings/model/LineSettings";
-import AreaSettings from "../objectSettings/model/AreaSettings";
 import { pointSettingsFromParsed } from "../objectSettings/model/PointSettings";
 import { activateDefaultLayer, addNewLayer } from "../layer";
 import { createPath, createPoint as createTH2Point, drawArea, drawLine, drawPoint } from "../objectDefs.ts";
 import paper from "paper";
 import { scrapSettingsFromParsed } from "../objectSettings/model/ScrapSettings.ts";
+import { defaultAreaSettings } from "../objectSettings/model/AreaSettings.ts";
 
 function toPoint(global: string[], global2: string[] = undefined) {
 	if (global2) return new paper.Point([
@@ -205,7 +205,7 @@ function applyAreas() {
 					console.warn("Seems like one line is included in multiple areas.");
 					continue;
 				}
-				line.data.therionData = AreaSettings.defaultSettings();
+				line.data.therionData = defaultAreaSettings();
 				line.data.therionData.lineSettings = oldSettings;
 				line.data.therionData.type = area.type;
 				drawArea(line);

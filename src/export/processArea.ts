@@ -1,4 +1,4 @@
-import AreaSettings from "../objectSettings/model/AreaSettings";
+import { AreaSettings, areaSettingsToString } from "../objectSettings/model/AreaSettings";
 import { processLine } from "./processLine";
 import { PathExportData } from "./models";
 import { ExportFormatter, getSettingsInExport } from "./util";
@@ -14,10 +14,11 @@ export function processArea(item: PathExportData, format: ExportFormatter): stri
 	if (lineSettings.id === "")
 		lineSettings.id = generateId();
 	const linesResult = processLine(item, format, lineSettings);
+	const optionsString = areaSettingsToString(areaSettings);
 
 	return [
 		...linesResult,
-		`area ${areaSettings.type}`,
+		`area ${areaSettings.type} ${optionsString}`.trim(),
 		`\t${lineSettings.id}`,
 		"endarea"
 	];

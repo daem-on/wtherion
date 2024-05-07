@@ -5,7 +5,7 @@ import PanelContent from '../../common/PanelContent.vue';
 import getSettings from '../../../objectSettings/model/getSettings';
 import BooleanInput from '../../common/BooleanInput.vue';
 import PanelSection from '../../common/PanelSection.vue';
-import AreaSettings from '../../../objectSettings/model/AreaSettings';
+import { AreaSettings } from '../../../objectSettings/model/AreaSettings';
 import { wallTypes } from "../../../res/wallTypes";
 import areaList from "../../../res/area-list.json";
 import PanelFoldable from '../../common/PanelFoldable.vue';
@@ -13,12 +13,14 @@ import LineSubtypeSection from '../fragments/LineSubtypeSection.vue';
 import { snapshot } from '../../../undo';
 import { drawArea } from '../../../objectDefs';
 import ArbitrarySettingSection from '../fragments/ArbitrarySettingSection.vue';
+import { ReactiveMap } from 'src/objectSettings/reactiveMap';
+import { LineSettings } from 'src/objectSettings/model/LineSettings';
 
 const props = defineProps<{
 	selection: paper.Path
 }>();
 
-const settings = computed(() => getSettings(props.selection) as AreaSettings);
+const settings = computed(() => getSettings(props.selection) as ReactiveMap<AreaSettings>);
 const dirty = ref(false);
 
 watch(settings, () => {
@@ -51,10 +53,15 @@ onUnmounted(() => {
 			<PanelSection :label="$t(`id`)">
 				<input type="text" v-model="settings.lineSettings.id" />
 			</PanelSection>
-			<h3>{{ $t(`otherSettings`) }}</h3>
+			<h3>{{ $t(`otherSettings`) }} - Line</h3>
 			<ArbitrarySettingSection
-				:editing="(settings.lineSettings as any)"
+				:editing="(settings.lineSettings as ReactiveMap<LineSettings>)"
 				:exclude="['className', 'type', 'subtype', 'text', 'reverse', 'invisible', 'size', 'outline', 'id', 'clip', 'place', 'visibility']"
+			/>
+			<h3>{{ $t(`otherSettings`) }} - Area</h3>
+			<ArbitrarySettingSection
+				:editing="settings"
+				:exclude="['className', 'type', 'lineSettings', 'invisible']"
 			/>
 		</PanelFoldable>
 	</PanelContent>

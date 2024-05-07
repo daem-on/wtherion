@@ -1,8 +1,8 @@
 import { expect, test } from "vitest";
 import { processProject } from "../../src/export/processProject";
-import { PointSettings, defaultPointSettings } from "../../src/objectSettings/model/PointSettings";
-import ScrapSettings from "../../src/objectSettings/model/ScrapSettings";
 import { defaultLineSettings } from "../../src/objectSettings/model/LineSettings";
+import { PointSettings, defaultPointSettings } from "../../src/objectSettings/model/PointSettings";
+import { defaultScrapSettings } from "../../src/objectSettings/model/ScrapSettings";
 
 function createStationSettings(): PointSettings {
 	const pointSettings = defaultPointSettings();
@@ -12,7 +12,7 @@ function createStationSettings(): PointSettings {
 }
 
 test("export scrap with 1 station", () => {
-	const scrapSettings = ScrapSettings.defaultSettings();
+	const scrapSettings = defaultScrapSettings();
 
 	const result = processProject([
 		["dictionary", []],
@@ -40,13 +40,13 @@ test("export scrap with 1 station", () => {
 });
 
 test("export with all scrap settings", () => {
-	const scrapSettings = ScrapSettings.defaultSettings();
-	scrapSettings.projection = "elevation 100";
+	const scrapSettings = defaultScrapSettings();
 	scrapSettings.scale = "0 0 39.3701 0 0 0 1 0 m";
+	scrapSettings.projection = "elevation 100";
 	scrapSettings.author = `2021.08.01 "Author Name"`;
 	scrapSettings.copyright = `2021.08.01 "Author Name"`;
 	scrapSettings.stationNames = "prefix1 suffix1";
-	scrapSettings.otherSettings = `-walls on`;
+	scrapSettings.map.set("walls", "on");
 
 	const result = processProject([
 		["dictionary", []],
@@ -92,7 +92,7 @@ test("export closed line", () => {
 				}]
 			],
 			name: "scrap1",
-			data: { therionData: ScrapSettings.defaultSettings() }
+			data: { therionData: defaultScrapSettings() }
 		}]
 	]);
 

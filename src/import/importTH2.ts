@@ -2,10 +2,10 @@ import getSettings from "../objectSettings/model/getSettings";
 import { LineSettings, lineSettingsFromParsed } from "../objectSettings/model/LineSettings";
 import AreaSettings from "../objectSettings/model/AreaSettings";
 import { pointSettingsFromParsed } from "../objectSettings/model/PointSettings";
-import ScrapSettings from "../objectSettings/model/ScrapSettings";
 import { activateDefaultLayer, addNewLayer } from "../layer";
 import { createPath, createPoint as createTH2Point, drawArea, drawLine, drawPoint } from "../objectDefs.ts";
 import paper from "paper";
+import { scrapSettingsFromParsed } from "../objectSettings/model/ScrapSettings.ts";
 
 function toPoint(global: string[], global2: string[] = undefined) {
 	if (global2) return new paper.Point([
@@ -216,24 +216,13 @@ function applyAreas() {
 				
 function createScrap(line: string) {
 	const split = line.split(" ");
-	const nl = addNewLayer(split[1], true);
-	nl.data.therionData.createdFrom = line;
-
-	const settings = getSettings(nl);
 	const options = getOptions(split.slice(2).join(" "));
-
-	for (const key of ScrapSettings.stringSettings) {
-		if (key in options) {
-			settings[key] = trimEnclosing(options[key]);
-			delete options[key];
-		}
-	}
-
-	for (const key in options) {
-		if (Object.prototype.hasOwnProperty.call(options, key)) {
-			settings.otherSettings += `-${key} ${options[key]}\n`;
-		}
-	}
+	addNewLayer(
+		split[1],
+		true,
+		undefined,
+		scrapSettingsFromParsed(options)
+	);
 }
 				
 function createPoint(line: string) {

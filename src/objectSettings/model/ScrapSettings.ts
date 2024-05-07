@@ -1,42 +1,55 @@
 import type { AssertFunction } from "../../validation/assertTypes.ts";
+import { ReactiveMap, reactiveMap } from "../reactiveMap.ts";
+import { trimEnclosing, wrapIfNeeded } from "../util.ts";
 
-export default class ScrapSettings {
-	
-	static readonly rawStringeSettings: ReadonlyArray<string> = 
-		["author", "copyright"];
-	static readonly bracketSettings: ReadonlyArray<string> = 
-		["scale", "projection"];
-	static readonly stringSettings = [...ScrapSettings.rawStringeSettings, ...ScrapSettings.bracketSettings];
+const rawStringSettings: ReadonlyArray<string> = ["author", "copyright"];
+const bracketSettings: ReadonlyArray<string> = ["scale", "projection"];
+const stringSettings = [...rawStringSettings, ...bracketSettings];
 
-	readonly className = "ScrapSettings";
-	projection: string;
-	scale: string;
-	author: string;
-	copyright: string;
-	stationNames: string;
-	otherSettings: string;
+export type ScrapSettings = {
+	className: "ScrapSettings";
+	projection?: string;
+	scale?: string;
+	author?: string;
+	copyright?: string;
+	stationNames?: string;
+};
 
-	static defaultSettings(): ScrapSettings {
-		const s = new ScrapSettings();
-		s.projection = "";
-		s.scale = "";
-		s.author = "";
-		s.copyright = "";
-		s.stationNames = "";
-		s.otherSettings = "";
-		return s;
+export function defaultScrapSettings(): ReactiveMap<ScrapSettings> {
+	return reactiveMap<ScrapSettings>({
+		className: "ScrapSettings",
+	});
+}
+
+export function scrapSettingsFromParsed(parsed: Record<string, string>): ReactiveMap<ScrapSettings> {
+	const settings = defaultScrapSettings();
+	for (const key in parsed) {
+		settings[key] = trimEnclosing(parsed[key]);
+	}
+	return settings;
+}
+
+export function validateScrapSettings(s: ScrapSettings, assertValid: AssertFunction) {
+	for (const setting of stringSettings) {
+		assertValid(!(s[setting] == null), `Missing ${setting}`, s);
 	}
 
-	static validate(s: ScrapSettings, assertValid: AssertFunction) {
-		for (const setting of this.stringSettings) {
-			assertValid(!(s[setting] == null), `Missing ${setting}`, s);
-		}
-		assertValid(!(s.otherSettings == null), `Missing otherSettings`, s);
+	const dateAndStringformat = /^[0-9-.]+ (".+"|[^ ]+)$/g;
+	if (s.author.trim())
+		assertValid(dateAndStringformat.test(s.author.trim()), `Invalid author`, s);
+	if (s.copyright.trim())
+		assertValid(dateAndStringformat.test(s.copyright.trim()), `Invalid copyright`, s);
+}
 
-		const dateAndStringformat = /^[0-9-.]+ (".+"|[^ ]+)$/g;
-		if (s.author.trim())
-			assertValid(dateAndStringformat.test(s.author.trim()), `Invalid author`, s);
-		if (s.copyright.trim())
-			assertValid(dateAndStringformat.test(s.copyright.trim()), `Invalid copyright`, s);
-	}
+export function scrapSettingsToString(s: ScrapSettings): string {
+	return Object.entries(s)
+		.map(([key, value]) => {
+			if (value == null || value === "") return "";
+			if (bracketSettings.includes(key)) return `-${key} ${wrapIfNeeded(value, true)}`;
+			if (key === "stationNames") return `-station-names ${value}`;
+			if (key === "className") return "";
+			return `-${key} ${value}`;
+		})
+		.filter((x) => x !== "")
+		.join(" ");
 }

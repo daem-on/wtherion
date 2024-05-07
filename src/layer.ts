@@ -1,7 +1,7 @@
 import paper from "paper";
-import ScrapSettings from "./objectSettings/model/ScrapSettings";
 import { triggers } from "./triggers";
 import { COLOR_GUIDE_PRIMARY } from "./colors";
+import { defaultScrapSettings } from "./objectSettings/model/ScrapSettings";
 
 export function setup() {
 	const defaultLayer = addNewLayer('Scrap 1');
@@ -54,11 +54,11 @@ function getUniqueLayerName() {
 	return name;
 }
 
-export function addNewLayer(layerName: string = null, setActive = true, elementsToAdd: paper.Item[] = null) {
+export function addNewLayer(layerName: string = null, setActive = true, elementsToAdd: paper.Item[] = null, scrapSettings = defaultScrapSettings()) {
 	const newLayer = new paper.Layer();
 	
 	newLayer.data.id = getUniqueLayerID();
-	newLayer.data.therionData = ScrapSettings.defaultSettings();
+	newLayer.data.therionData = scrapSettings;
 	
 	newLayer.name = layerName ?? getUniqueLayerName();
 	

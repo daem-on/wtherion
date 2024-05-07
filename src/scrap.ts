@@ -1,10 +1,11 @@
 import paper from "paper";
 import { ref } from "vue";
-import ScrapSettings from "./objectSettings/model/ScrapSettings";
+import { ScrapSettings } from "./objectSettings/model/ScrapSettings";
 import getSettings from "./objectSettings/model/getSettings";
+import { ReactiveMap } from "./objectSettings/reactiveMap";
 import { triggers } from "./triggers";
 
-export const currentScrap = ref<{ name: string, settings: ScrapSettings } | null>(null);
+export const currentScrap = ref<{ name: string, settings: ReactiveMap<ScrapSettings> } | null>(null);
 
 function handleLayerChange() {
 	if (!paper.project) return;

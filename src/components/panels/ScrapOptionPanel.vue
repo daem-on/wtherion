@@ -4,6 +4,7 @@ import PanelContent from "../../components/common/PanelContent.vue";
 import CustomList from "../common/CustomList.vue";
 import PanelSection from "../common/PanelSection.vue";
 import Foldable from "../common/Foldable.vue";
+import ArbitrarySettingSection from "./fragments/ArbitrarySettingSection.vue";
 
 const scrap = currentScrap;
 </script>
@@ -29,9 +30,10 @@ const scrap = currentScrap;
 			<PanelSection :label="$t(`scrap.stationNames`)">
 				<input type="text" v-model="scrap.settings.stationNames" />
 			</PanelSection>
-			<PanelSection :label="$t(`otherSettings`)" column>
-				<textarea rows="2" v-model="scrap.settings.otherSettings"></textarea>
-			</PanelSection>
+			<h3>{{ $t(`otherSettings`) }}</h3>
+			<ArbitrarySettingSection
+				:editing="scrap.settings"
+				:exclude="['projection', 'scale', 'author', 'copyright', 'stationNames']" />
 		</PanelContent>
 	</Foldable>
 </template>

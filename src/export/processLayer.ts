@@ -1,9 +1,9 @@
-import ScrapSettings from "../objectSettings/model/ScrapSettings";
 import { processPoint } from "./processPoint";
 import { processArea } from "./processArea";
 import { processLine, processCompoundPath } from "./processLine";
 import { LayerExportData } from "./models";
 import { getSettingsInExport, ExportFormatter } from "./util";
+import { scrapSettingsToString } from "../objectSettings/model/ScrapSettings";
 
 function wrapIfNeeded(value: string, brackets: boolean): string {
 	if (!value.includes(" ")) return value;
@@ -18,28 +18,7 @@ export function processLayer(layer: LayerExportData, format: ExportFormatter): s
 	const state: string[] = [];
 
 	const settings = getSettingsInExport(layer);
-
-	let optionsString = "";
-	{
-		const s = settings;
-		const o = [];
-
-		for (const setting of ScrapSettings.bracketSettings) {
-			if (s[setting])
-				o.push(`-${setting} ${wrapIfNeeded(s[setting], true)}`);
-		}
-		for (const setting of ScrapSettings.rawStringeSettings) {
-			if (s[setting])
-				o.push(`-${setting} ${s[setting]}`);
-		}
-		
-		if (s.stationNames !== "")
-			o.push(`-station-names ${s.stationNames}`);
-
-		if (s.otherSettings !== "")
-			o.push(s.otherSettings.replace(/\n/g, " "));
-		optionsString = o.join(" ");
-	}
+	const optionsString = scrapSettingsToString(settings);
 
 	const scrapLine = `scrap ${layer.name.replace(/ /g, "_")} ${optionsString}`;
 	state.push(scrapLine);

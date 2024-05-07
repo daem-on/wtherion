@@ -1,11 +1,11 @@
 import paper from "paper";
+import ValidationDialog from "../components/dialogs/ValidationDialog.vue";
+import { addDialog } from "../modal.ts";
 import AreaSettings from "../objectSettings/model/AreaSettings.ts";
-import getSettings from "../objectSettings/model/getSettings.ts";
 import { validateLineSettings } from "../objectSettings/model/LineSettings.ts";
 import { validatePointSettings } from "../objectSettings/model/PointSettings.ts";
-import ScrapSettings from "../objectSettings/model/ScrapSettings.ts";
-import { addDialog } from "../modal.ts";
-import ValidationDialog from "../components/dialogs/ValidationDialog.vue";
+import { validateScrapSettings } from "../objectSettings/model/ScrapSettings.ts";
+import getSettings from "../objectSettings/model/getSettings.ts";
 import { AnySettings } from "./assertTypes.ts";
 
 function isExportableChild(item: paper.Item) {
@@ -34,7 +34,7 @@ function* validateProject(): ValidationResult {
 		if (!layer.children.some(isExportableChild)) continue;
 
 		try {
-			ScrapSettings.validate(getSettings(layer), assertValid);
+			validateScrapSettings(getSettings(layer), assertValid);
 		} catch (e) {
 			if (e instanceof ValidationError) yield [e, layer];
 			else throw e;

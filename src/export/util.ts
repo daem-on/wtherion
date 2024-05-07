@@ -1,7 +1,7 @@
 import AreaSettings from "../objectSettings/model/AreaSettings";
 import type { LineSettings } from "../objectSettings/model/LineSettings";
 import type { PointSettings } from "../objectSettings/model/PointSettings";
-import ScrapSettings from "../objectSettings/model/ScrapSettings";
+import type { ScrapSettings } from "../objectSettings/model/ScrapSettings";
 import { LayerExportData, PathExportData, SymbolItemExportData } from "./models";
 
 type SettingType<T> = 

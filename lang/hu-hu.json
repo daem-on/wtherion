@@ -33,7 +33,13 @@
 			"name": "Tárhely"
 		},
 		"showSegmentOptionPanel": "Minden szegmensnél beállítások panel",
-		"drawSymbols": "Pontok megjelenítése teljes szimbólumként"
+		"drawSymbols": "Pontok megjelenítése teljes szimbólumként",
+		"exportFormat": {
+			"default": "Alapértelmezett",
+			"name": "Exportálás formátuma",
+			"xtherion": "XTherion kompatibilis"
+		},
+		"undoBufferSize": "Visszavonáshoz megjegyzett akciók száma"
 	},
 	"configTitle": "Konfiguráció",
 	"copy": "Másolás",
@@ -183,7 +189,9 @@
 		"notSupported": "Ezt a funkciót csak a Chrome böngésző támogatja.",
 		"saveFileName": "Mentés neve",
 		"untitled": "Nincs mentve",
-		"updateFileMessage": "Fájl frissítve:"
+		"updateFileMessage": "Fájl frissítve:",
+		"unknownVersion": "ismeretlen",
+		"versionMismatch": "Ez a mentés a wtherion egy másik verziójával készült ({ version }). A megnyitása, szerkesztése vagy exportálása nem biztos, hogy fog működni. Folytatja?"
 	},
 	"scale": "Méretezés",
 	"scrap": {
@@ -258,5 +266,10 @@
 	"translationCredits": "Fordította: Zih Csongor",
 	"type": "Típus",
 	"value": "Érték",
-	"zoom": "Zoom"
+	"zoom": "Zoom",
+	"bezier": {
+		"menu": {
+			"finish": "Befejezés"
+		}
+	}
 }

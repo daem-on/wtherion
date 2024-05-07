@@ -194,7 +194,9 @@
 		"notSupported": "This feature is not supported by browsers except Chrome.",
 		"saveFileName": "Save file name",
 		"untitled": "Untitled project",
-		"updateFileMessage": "Update file"
+		"updateFileMessage": "Update file",
+		"versionMismatch": "This save was created with a different version of wtherion ({ version }). Opening, editing or exporting it might not be possible with this version. Do you want to continue?",
+		"unknownVersion": "unknown"
 	},
 	"scale": "Scale",
 	"scrap": {

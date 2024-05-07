@@ -1,16 +1,16 @@
 import saveAs from "file-saver";
 import paper from "paper";
 
+import versionConfig from "../versionconfig.json";
 import * as pgExport from "./export";
-import * as guides from "./guides";
 import * as hover from "./hover";
+import { i18n } from "./i18n";
 import * as layer from "./layer";
+import { redrawAll } from "./objectDefs";
+import { reactiveMap } from "./objectSettings/reactiveMap";
 import * as selection from "./selection";
 import * as tools from "./tools";
 import * as undo from "./undo";
-import { redrawAll } from "./objectDefs";
-import editTH2 from "./editTH2";
-import { reactiveMap } from "./objectSettings/reactiveMap";
 
 let center: paper.Point;
 let clipboard = [];
@@ -75,21 +75,34 @@ export function deserializeJSON(jsonString: string): any {
 	});
 }
 
-export function loadJSONDocument(jsonString: string) {
+function promptVersionMismatch(version: string): boolean {
+	return confirm(i18n.global.t(`save.versionMismatch`, {
+		version: version ?? i18n.global.t("save.unknownVersion"),
+	}));
+}
+
+export function loadJSONDocument(jsonString: string): boolean {
 	const activeLayerID = paper.project.activeLayer.data.id;
+
+	const value = deserializeJSON(jsonString);
+
+	const version = value?.meta?.version;
+	if (version !== versionConfig.saveFileVersion)
+		if (!promptVersionMismatch(version)) return false;
+
 	paper.project.clear();
 	tools.setDefaultTool();
 	pgExport.setExportRect();
 
-	paper.project.importJSON(deserializeJSON(jsonString));
+	paper.project.importJSON(value?.content);
 
 	layer.reinitLayers(activeLayerID);
 
 	redrawAll();
 	undo.clear();
 	undo.snapshot('loadJSONDocument');
+	return true;
 }
-
 
 export function saveJSONDocument() {
 	const fileName = prompt("Name your file", "export.json");
@@ -102,10 +115,14 @@ export function saveJSONDocument() {
 	}
 }
 
-export function documentAsJSON() {
+export function documentAsJSON(): string {
 	hover.clearHoveredItem();
 	selection.clearSelection();
 	paper.view.update();
 
-	return paper.project.exportJSON({ asString: true });
+	const content = paper.project.exportJSON({ asString: false }) as any;
+	return JSON.stringify({
+		meta: { version: versionConfig.saveFileVersion },
+		content,
+	});
 }

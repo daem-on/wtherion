@@ -3,7 +3,7 @@ import { ReactiveMap, getEntryRef } from '../../../objectSettings/reactiveMap';
 import { WritableComputedRef, computed, defineProps, ref } from 'vue';
 
 const props = defineProps<{
-	editing: ReactiveMap<Record<any, any>>,
+	editing: ReactiveMap<Record<string, any>>,
 	exclude: string[],
 }>();
 

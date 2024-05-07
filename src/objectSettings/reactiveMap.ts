@@ -1,6 +1,6 @@
 import { WritableComputedRef, computed, reactive } from "vue";
 
-export type ReactiveMap<T> = T & { readonly map: Map<keyof T, T[keyof T]> };
+export type ReactiveMap<T> = T & { readonly map: Map<string, string | T[keyof T]> };
 
 export function reactiveMap<T extends Record<string, any>>(initial: T): ReactiveMap<T> {
 	const map = reactive(new Map(Object.entries(initial)));
@@ -32,7 +32,7 @@ export function reactiveMap<T extends Record<string, any>>(initial: T): Reactive
 	}) as ReactiveMap<T>;
 }
 
-export function getEntryRef<T, K extends keyof T>(rm: ReactiveMap<T>, key: K): WritableComputedRef<T[K]> {
+export function getEntryRef<T extends Record<string, any>, K extends string>(rm: ReactiveMap<T>, key: K): WritableComputedRef<T[K]> {
 	return computed<T[K]>({
 		get: () => rm.map.get(key) as T[K],
 		set: value => rm.map.set(key, value),

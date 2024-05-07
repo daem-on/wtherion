@@ -42,10 +42,12 @@ onUnmounted(() => {
 			<CustomList v-model="settings.lineSettings.type" :options="wallTypes" :imageRoot="`assets/rendered`" />
 		</PanelSection>
 		<LineSubtypeSection :type="settings.lineSettings.type" v-model="settings.lineSettings.subtype" />
-		<PanelSection :label="$t(`invisible`)">
+		<PanelSection>
+			<template #label>{{ $t(`invisible`) }} - {{ $t(`areaOptions.outline`) }}</template>
 			<BooleanInput v-model="settings.lineSettings.invisible" />
 		</PanelSection>
-		<PanelSection :label="$t(`invisible`)">
+		<PanelSection>
+			<template #label>{{ $t(`invisible`) }} - {{ $t(`areaOptions.area`) }}</template>
 			<BooleanInput v-model="settings.invisible" />
 		</PanelSection>
 		<PanelFoldable>
@@ -53,12 +55,12 @@ onUnmounted(() => {
 			<PanelSection :label="$t(`id`)">
 				<input type="text" v-model="settings.lineSettings.id" />
 			</PanelSection>
-			<h3>{{ $t(`otherSettings`) }} - Line</h3>
+			<h3>{{ $t(`otherSettings`) }} - {{ $t(`areaOptions.outline`) }}</h3>
 			<ArbitrarySettingSection
 				:editing="(settings.lineSettings as ReactiveMap<LineSettings>)"
 				:exclude="['className', 'type', 'subtype', 'text', 'reverse', 'invisible', 'size', 'outline', 'id', 'clip', 'place', 'visibility']"
 			/>
-			<h3>{{ $t(`otherSettings`) }} - Area</h3>
+			<h3>{{ $t(`otherSettings`) }} - {{ $t(`areaOptions.area`) }}</h3>
 			<ArbitrarySettingSection
 				:editing="settings"
 				:exclude="['className', 'type', 'lineSettings', 'invisible']"

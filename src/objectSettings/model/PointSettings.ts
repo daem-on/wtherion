@@ -65,21 +65,23 @@ export function validatePointSettings(s: PointSettings, assertValid: AssertFunct
 
 export function pointSettingsToString(s: PointSettings): string {
 	return Object.entries(s)
+		.filter(([key, value]) => {
+			return value != null
+				&& value !== ""
+				&& key !== "type"
+				&& key !== "className"
+				&& !(key === "invisible" && !value);
+		})
 		.map(([key, value]) => {
-			if (value == null || value === "") return "";
 			if (exportStringSettings.includes(key)) {
 				return `-${key} ${wrapIfNeeded(value as string, false)}`;
 			}
 			switch (key) {
 				case "invisible":
-					return value ? "-visibility off" : "";
-				case "type":
-				case "className":
-					return "";
+					return "-visibility off";
 				default:
 					return `-${key} ${value}`;
 			}
 		})
-		.filter((s) => s !== "")
 		.join(" ");
 }

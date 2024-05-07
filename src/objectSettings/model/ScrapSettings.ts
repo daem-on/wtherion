@@ -43,13 +43,13 @@ export function validateScrapSettings(s: ScrapSettings, assertValid: AssertFunct
 
 export function scrapSettingsToString(s: ScrapSettings): string {
 	return Object.entries(s)
+		.filter(([key, value]) => {
+			return value != null && value !== "" && key !== "className";
+		})
 		.map(([key, value]) => {
-			if (value == null || value === "") return "";
 			if (bracketSettings.includes(key)) return `-${key} ${wrapIfNeeded(value, true)}`;
 			if (key === "stationNames") return `-station-names ${value}`;
-			if (key === "className") return "";
 			return `-${key} ${value}`;
 		})
-		.filter((x) => x !== "")
 		.join(" ");
 }

@@ -60,25 +60,27 @@ export function validateLineSettings(s: LineSettings, assertValid: AssertFunctio
 
 export function lineSettingsToString(s: LineSettings): string {
 	return Object.entries(s)
+		.filter(([key, value]) => {
+			return value != null
+				&& value !== ""
+				&& key !== "type"
+				&& key !== "className"
+				&& key !== "subtypes"
+				&& key !== "segmentSettings"
+				&& !(!value && (key === "invisible" || key === "reverse"));
+		})
 		.map(([key, value]) => {
-			if (value == null || value === "") return "";
 			if (stringSettings.includes(key)) {
 				return `-${key} ${wrapIfNeeded(value as string, false)}`;
 			}
 			switch (key) {
 				case "invisible":
-					return value ? "-visibility off" : "";
+					return "-visibility off";
 				case "reverse":
-					return value ? "-reverse on" : "";
-				case "type":
-				case "className":
-				case "subtypes":
-				case "segmentSettings":
-					return "";
+					return "-reverse on";
 				default:
 					return `-${key} ${value}`;
 			}
 		})
-		.filter((s) => s !== "")
 		.join(" ");
 }

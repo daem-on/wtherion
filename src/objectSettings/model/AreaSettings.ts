@@ -24,10 +24,11 @@ export function validateAreaSettings(s: AreaSettings, assertValid: AssertFunctio
 
 export function areaSettingsToString(s: AreaSettings): string {
 	return Object.entries(s)
+		.filter(([key, value]) => {
+			return value != null && value !== "" && key !== "className";
+		})
 		.map(([key, value]) => {
-			if (key === "className" || value == null || value === "") return "";
 			return `-${key} ${value}`;
 		})
-		.filter((x) => x !== "")
 		.join(" ");
 }

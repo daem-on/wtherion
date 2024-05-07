@@ -127,7 +127,7 @@ function endLine() {
 		}
 	}
 	
-	if (_parsedOptions.close) _closeLine = true;
+	if (_parsedOptions.close === "on") _closeLine = true;
 	if (_parsedOptions.id) _linesWithIds[_parsedOptions.id] = _currentPath;
 
 	if (_closeLine) {

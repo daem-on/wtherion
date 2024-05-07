@@ -17,8 +17,8 @@ export function processPoint(item: SymbolItemExportData, format: ExportFormatter
 	let options = "";
 	options += settings.type;
 
-	const rotation = matrixToRotation(shape.matrix);
-	if (rotation !== 0) options += ` -orientation ${rotation}`;
+	const rotation = (matrixToRotation(shape.matrix));
+	if (rotation !== 0) options += ` -orientation ${format.formatNumber(rotation)}`;
 
 	const result = pointSettingsToString(settings);
 	if (result !== "") options += ` ${result}`;

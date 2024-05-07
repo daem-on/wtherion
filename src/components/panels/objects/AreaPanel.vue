@@ -70,10 +70,7 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-textarea {
-	min-width: 100%;
-	max-width: 100%;
-	font-family: monospace;
-	height: auto;
+h3 {
+	margin: 8px 0;
 }
 </style>

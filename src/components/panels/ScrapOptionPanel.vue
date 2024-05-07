@@ -33,7 +33,7 @@ const scrap = currentScrap;
 			<h3>{{ $t(`otherSettings`) }}</h3>
 			<ArbitrarySettingSection
 				:editing="scrap.settings"
-				:exclude="['projection', 'scale', 'author', 'copyright', 'stationNames']" />
+				:exclude="['className', 'projection', 'scale', 'author', 'copyright', 'stationNames']" />
 		</PanelContent>
 	</Foldable>
 </template>
@@ -51,6 +51,10 @@ h2 {
 	margin: 8px 0;
 	font-weight: bold;
 	word-wrap: break-word;
+}
+
+h3 {
+	margin: 8px 0;
 }
 
 .content {

@@ -8,8 +8,7 @@ const props = defineProps<{
 }>();
 
 const models = computed(() => {
-	return Array.from(props.editing.map.entries())
-		.map(([key]) => key)
+	return Array.from(props.editing.map.keys())
 		.filter(key => !props.exclude.includes(key))
 		.map<[string, WritableComputedRef<string>]>(key => {
 			return [key, getEntryRef(props.editing, key)];

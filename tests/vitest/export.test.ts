@@ -3,6 +3,7 @@ import { processProject } from "../../src/export/processProject";
 import { defaultLineSettings } from "../../src/objectSettings/model/LineSettings";
 import { PointSettings, defaultPointSettings } from "../../src/objectSettings/model/PointSettings";
 import { defaultScrapSettings } from "../../src/objectSettings/model/ScrapSettings";
+import { defaultAreaSettings } from "../../src/objectSettings/model/AreaSettings";
 
 function createStationSettings(): PointSettings {
 	const pointSettings = defaultPointSettings();
@@ -106,6 +107,51 @@ test("export closed line", () => {
 		"		-520 119 -523 94 -524 90",
 		"		-525 86 -578 87 -580 92",
 		"	endline",
+		"endscrap"
+	]);
+});
+
+test("export area", () => {
+	const lineSettings = defaultLineSettings();
+	lineSettings.type = "border";
+	lineSettings.id = "border1";
+	const areaSettings = defaultAreaSettings();
+	areaSettings.type = "water";
+	areaSettings.lineSettings = lineSettings;
+	areaSettings.invisible = true;
+
+	const result = processProject([
+		["Layer", {
+			children: [
+				["Path", {
+					segments: [
+						[[-580, -92], [2, 5], [-2, -5]],
+						[[-566, -125], [-14, 3], [14, -3]],
+						[[-524, -126], [-4, -7], [4, 7]],
+						[[-524, -90], [1, -4], [-1, 4]]
+					],
+					closed: true,
+					data: { therionData: areaSettings }
+				}]
+			],
+			name: "scrap1",
+			data: { therionData: defaultScrapSettings() }
+		}]
+	]);
+
+	expect(result).toEqual([
+		"encoding utf-8",
+		"scrap scrap1 ",
+		"	line border -close on -id border1",
+		"		-525 86 -578 87 -580 92",
+		"		-582 97 -580 122 -566 125",
+		"		-552 128 -528 133 -524 126",
+		"		-520 119 -523 94 -524 90",
+		"		-525 86 -578 87 -580 92",
+		"	endline",
+		"	area water -visibility off",
+		"		border1",
+		"	endarea",
 		"endscrap"
 	]);
 });

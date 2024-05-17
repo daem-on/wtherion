@@ -25,9 +25,17 @@ export function validateAreaSettings(s: AreaSettings, assertValid: AssertFunctio
 export function areaSettingsToString(s: AreaSettings): string {
 	return Object.entries(s)
 		.filter(([key, value]) => {
-			return value != null && value !== "" && key !== "className";
+			return value != null
+				&& value !== ""
+				&& key !== "type"
+				&& key !== "className"
+				&& key !== "lineSettings"
+				&& !(!value && key !== "invisible");
 		})
 		.map(([key, value]) => {
+			if (key === "invisible") {
+				return "-visibility off";
+			}
 			return `-${key} ${value}`;
 		})
 		.join(" ");

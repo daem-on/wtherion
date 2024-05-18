@@ -235,7 +235,7 @@ export function splitPathRetainSelection(path: paper.Path, index: number, desele
 	const newPath = split(path, index, 0);
 	if(!newPath) return;
 	if (path.data && path.data.therionData)
-			newPath.data = JSON.parse(JSON.stringify(path.data));
+			newPath.data = pgDocument.deserializeJSON(JSON.stringify(path.data));
 	
 	// reselect all of the newPaths segments that are in the exact same location
 	// as the ones that are stored in selectedPoints
@@ -271,7 +271,7 @@ export function cloneSelection() {
 		const item = selectedItems[i];
 		const cloned = item.clone();
 		if (item.data && item.data.therionData)
-			cloned.data = JSON.parse(JSON.stringify(item.data));
+			cloned.data = pgDocument.deserializeJSON(JSON.stringify(item.data));
 		item.selected = false;
 	}
 	undo.snapshot('cloneSelection');

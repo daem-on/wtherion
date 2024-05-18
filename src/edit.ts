@@ -3,6 +3,7 @@ import { getActiveLayer } from "./layer";
 import { clearSelection, getSelectedItems } from "./selection";
 import { snapshot } from "./undo";
 import * as wtConf from "./filesio/configManagement";
+import { deserializeJSON } from "./document";
 
 const MIME = "web application/json+wtherion";
 
@@ -40,7 +41,7 @@ export async function pasteObjectsFromClipboard() {
 		items.push(...localClipboard);
 	}
 	for (const item of items) {
-		const created = paper.project.importJSON(item);
+		const created = paper.project.importJSON(deserializeJSON(item));
 		if (!created) continue;
 		created.selected = true;
 		const placedItem = getActiveLayer().addChild(created);

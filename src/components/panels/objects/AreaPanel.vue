@@ -13,8 +13,8 @@ import LineSubtypeSection from '../fragments/LineSubtypeSection.vue';
 import { snapshot } from '../../../undo';
 import { drawArea } from '../../../objectDefs';
 import ArbitrarySettingSection from '../fragments/ArbitrarySettingSection.vue';
-import { ReactiveMap } from 'src/objectSettings/reactiveMap';
-import { LineSettings } from 'src/objectSettings/model/LineSettings';
+import { ReactiveMap } from '../../../objectSettings/reactiveMap';
+import { LineSettings } from '../../../objectSettings/model/LineSettings';
 
 const props = defineProps<{
 	selection: paper.Path

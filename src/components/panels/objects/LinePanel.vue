@@ -11,7 +11,7 @@ import { wallTypes } from "../../../res/wallTypes";
 import LineSubtypeSection from '../fragments/LineSubtypeSection.vue';
 import { snapshot } from '../../../undo';
 import { drawLine } from '../../../objectDefs';
-import { ReactiveMap } from 'src/objectSettings/reactiveMap';
+import { ReactiveMap } from '../../../objectSettings/reactiveMap';
 import ArbitrarySettingSection from '../fragments/ArbitrarySettingSection.vue';
 
 const props = defineProps<{

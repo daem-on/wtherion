@@ -1,5 +1,5 @@
 import defaultConfig from "../res/default-config.json";
-import { overrideColors } from "../objectDefs.ts";
+import { initColors } from "../objectDefs.ts";
 import versionConfig from "../../versionconfig.json";
 let config: Record<string, any> = {};
 
@@ -43,7 +43,7 @@ export function setup() {
 
 	if (localStorage["wt.colors"] != null) {
 		try {
-			overrideColors(JSON.parse(localStorage["wt.colors"]));
+			initColors(JSON.parse(localStorage["wt.colors"]));
 		} catch (e) {
 			console.error("Error while reading colors:", e);
 		}

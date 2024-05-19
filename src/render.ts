@@ -10,6 +10,12 @@ export function setCustomRender(enable: boolean) {
 	enableCustomRender = enable;
 }
 
+let customRenderStrokeStyle = "black";
+
+export function setCustomRenderStrokeStyle(style: string) {
+	customRenderStrokeStyle = style;
+}
+
 function drawSpikyLine(path: paper.Path, context: CanvasRenderingContext2D, reverse: boolean) {
 	const length = reverse ? -8 : 8;
 	context.beginPath();
@@ -79,7 +85,8 @@ function drawSegmentDetails(path: paper.Path, context: CanvasRenderingContext2D)
 		context.strokeText(text, x, y);
 		context.fillText(text, x, y);
 	}
-	context.strokeStyle = "black";
+	context.strokeStyle = customRenderStrokeStyle;
+	context.lineWidth = 1;
 }
 
 function drawSymbol(item: paper.Item, context: CanvasRenderingContext2D) {
@@ -113,6 +120,7 @@ export function setupCustomRenderer() {
 
 	function renderCallback() {
 		if (!enableCustomRender) return;
+		context.strokeStyle = customRenderStrokeStyle;
 		paper.view.matrix.applyToContext(context);
 		for (const item of itemsToDraw) {
 			switch (item.data.customRenderStyle) {

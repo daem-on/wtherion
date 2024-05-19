@@ -1,27 +1,58 @@
 {
-	"typeColors": {
-		"default": "#000",
-		"rock-border": "rgb(80,62,102)",
-		"rock-edge": "rgb(80,62,102)",
-		"contour": "rgb(63,112,64)",
-		"border": "rgb(69,180,171)",
-		"pit": "rgb(175,35,156)",
-		"wall": "#001d7a",
-		"slope": "rgb(223,197,47)",
-		"floor-meander": "#69cedb",
-		"ceiling-meander": "#69cedb"
+	"light": {
+		"lineColors": {
+			"default": "#000",
+			"rock-border": "rgb(80,62,102)",
+			"rock-edge": "rgb(80,62,102)",
+			"contour": "rgb(63,112,64)",
+			"border": "rgb(69,180,171)",
+			"pit": "rgb(175,35,156)",
+			"wall": "#001d7a",
+			"slope": "rgb(223,197,47)",
+			"floor-meander": "#69cedb",
+			"ceiling-meander": "#69cedb"
+		},
+		"pointColors": {
+			"default": "#418a29",
+			"station": "#eba800",
+			"categories": {
+				"passage ends": "#388f5d",
+				"symbolic passage fills": "#82ab74"
+			}
+		},
+		"areaColors": {
+			"default": "#4444",
+			"sand": "#bdac7d44",
+			"water": "rgba(28, 110, 186, 0.2)"
+		},
+		"customRender": "black"
 	},
-	"pointColors": {
-		"default": "#418a29",
-		"station": "#eba800",
-		"categories": {
-			"passage ends": "#388f5d",
-			"symbolic passage fills": "#82ab74"
-		}
-	},
-	"areaColors": {
-		"default": "#4444",
-		"sand": "#bdac7d44",
-		"water": "rgba(28, 110, 186, 0.2)"
+	"dark": {
+		"lineColors": {
+			"default": "#fff",
+			"rock-border": "#9575bd",
+			"rock-edge": "#9575bd",
+			"contour": "#519153",
+			"border": "rgb(69,180,171)",
+			"pit": "rgb(175,35,156)",
+			"wall": "#4e75f2",
+			"slope": "rgb(223,197,47)",
+			"floor-meander": "#69cedb",
+			"ceiling-meander": "#69cedb"
+		},
+		"pointColors": {
+			"default": "#418a29",
+			"station": "#eba800",
+			"categories": {
+				"passage ends": "#388f5d",
+				"symbolic passage fills": "#82ab74"
+			}
+		},
+		"areaColors": {
+			"default": "#4444",
+			"sand": "#bdac7d44",
+			"water": "rgba(28, 110, 186, 0.2)"
+		},
+		"customRender": "white"
 	}
 }

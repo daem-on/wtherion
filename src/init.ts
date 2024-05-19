@@ -28,6 +28,8 @@ import * as pgDocument from "./document";
 import paper from "paper";
 import {setup as configSetup} from "./filesio/configManagement";
 import { setupCustomRenderer } from "./render";
+import { initColors } from "./objectDefs.js";
+import colorDefs from "./res/color-defs.json";
 
 // functions related to initializing pg
 
@@ -70,6 +72,7 @@ export default {
 		i18n.setup();
 		pgDocument.setup();
 		setupCustomRenderer();
+		initColors(colorDefs);
 	},
 };
 

@@ -138,6 +138,9 @@ const editTH2 = {
 	},
 };
 
-triggers.on("LayersChanged", () => editTH2.updateInactiveScraps());
+triggers.onAny(
+	["LayersChanged", "LayerAdded", "LayerRemoved"],
+	() => editTH2.updateInactiveScraps()
+);
 
 export default editTH2;

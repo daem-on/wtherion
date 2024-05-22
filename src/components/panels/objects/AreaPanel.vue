@@ -58,7 +58,7 @@ onUnmounted(() => {
 			<h3>{{ $t(`otherSettings`) }} - {{ $t(`areaOptions.outline`) }}</h3>
 			<ArbitrarySettingSection
 				:editing="(settings.lineSettings as ReactiveMap<LineSettings>)"
-				:exclude="['className', 'type', 'subtype', 'text', 'reverse', 'invisible', 'size', 'outline', 'id', 'clip', 'place', 'visibility']"
+				:exclude="['className', 'type', 'subtype', 'text', 'reverse', 'invisible', 'size', 'outline', 'id', 'clip', 'place', 'subtypes', 'segmentSettings', 'visibility']"
 			/>
 			<h3>{{ $t(`otherSettings`) }} - {{ $t(`areaOptions.area`) }}</h3>
 			<ArbitrarySettingSection

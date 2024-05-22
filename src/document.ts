@@ -68,7 +68,7 @@ export function getAllSelectableItems() {
 
 export function deserializeJSON(jsonString: string): any {
 	return JSON.parse(jsonString, (key, value) => {
-		if (key === "therionData") {
+		if (key === "therionData" || key === "lineSettings") { // TODO: rename lineSettings
 			return reactiveMap(value);
 		}
 		return value;

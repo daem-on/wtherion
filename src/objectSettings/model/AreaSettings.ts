@@ -30,7 +30,7 @@ export function areaSettingsToString(s: AreaSettings): string {
 				&& key !== "type"
 				&& key !== "className"
 				&& key !== "lineSettings"
-				&& !(!value && key !== "invisible");
+				&& !(!value && key === "invisible");
 		})
 		.map(([key, value]) => {
 			if (key === "invisible") {

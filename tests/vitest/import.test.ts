@@ -1,4 +1,4 @@
-import { beforeEach, expect, test, vi } from "vitest";
+import { beforeAll, beforeEach, expect, test, vi } from "vitest";
 import { createProject } from "../../src/import/importTH2";
 import paper from "paper";
 import type { LineSettings } from "../../src/objectSettings/model/LineSettings";
@@ -6,6 +6,7 @@ import type { ReactiveMap } from "../../src/objectSettings/reactiveMap";
 import type { AreaSettings } from "../../src/objectSettings/model/AreaSettings";
 import type { PointSettings } from "../../src/objectSettings/model/PointSettings";
 import type { ScrapSettings } from "../../src/objectSettings/model/ScrapSettings";
+import { initColors } from "../../src/objectDefs";
 
 vi.mock("../../src/triggers.ts", () => ({
 	triggers: {
@@ -17,6 +18,18 @@ vi.mock("../../src/triggers.ts", () => ({
 		offAny: () => {},
 	}
 }));
+
+vi.mock("../../src/darkMode.ts", () => ({
+	isDarkMode: { value: false }
+}));
+
+beforeAll(() => {
+	initColors({ light: {
+		areaColors: { default: "black" },
+		lineColors: { default: "black" },
+		pointColors: { default: "black", categories: {} },
+	} });
+});
 
 beforeEach(() => {
 	paper.setup('paperCanvas');

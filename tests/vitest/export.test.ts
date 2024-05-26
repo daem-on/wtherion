@@ -1,9 +1,14 @@
-import { expect, test } from "vitest";
+import { expect, test, vi } from "vitest";
 import { processProject } from "../../src/export/processProject";
 import { defaultLineSettings } from "../../src/objectSettings/model/LineSettings";
 import { PointSettings, defaultPointSettings } from "../../src/objectSettings/model/PointSettings";
 import { defaultScrapSettings } from "../../src/objectSettings/model/ScrapSettings";
 import { defaultAreaSettings } from "../../src/objectSettings/model/AreaSettings";
+
+const randomId = Math.random().toString(36).substring(7);
+vi.stubGlobal("crypto", {
+	randomUUID: () => randomId
+});
 
 function createStationSettings(): PointSettings {
 	const pointSettings = defaultPointSettings();
@@ -156,10 +161,9 @@ test("export invisible area", () => {
 	]);
 });
 
-test("export area", () => {
+test("export area with generated id", () => {
 	const lineSettings = defaultLineSettings();
 	lineSettings.type = "border";
-	lineSettings.id = "border1";
 	const areaSettings = defaultAreaSettings();
 	areaSettings.type = "water";
 	areaSettings.lineSettings = lineSettings;
@@ -186,7 +190,7 @@ test("export area", () => {
 	expect(result).toEqual([
 		"encoding utf-8",
 		"scrap scrap1 ",
-		"	line border -close on -id border1",
+		`	line border -close on -id ${randomId}`,
 		"		-525 86 -578 87 -580 92",
 		"		-582 97 -580 122 -566 125",
 		"		-552 128 -528 133 -524 126",
@@ -194,7 +198,7 @@ test("export area", () => {
 		"		-525 86 -578 87 -580 92",
 		"	endline",
 		"	area water",
-		"		border1",
+		`		${randomId}`,
 		"	endarea",
 		"endscrap"
 	]);

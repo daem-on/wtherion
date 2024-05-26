@@ -11,7 +11,7 @@ export function processArea(item: PathExportData, format: ExportFormatter): stri
 	const areaSettings = getSettingsInExport(item) as AreaSettings;
 	const lineSettings = areaSettings.lineSettings;
 
-	if (lineSettings.id === "")
+	if (!lineSettings.id)
 		lineSettings.id = generateId();
 	const linesResult = processLine(item, format, lineSettings);
 	const optionsString = areaSettingsToString(areaSettings);

@@ -1,4 +1,4 @@
-import { addDialog } from "./modal";
+import { addDialog } from "grapht/modal";
 import ConfigDialog from "./components/dialogs/ConfigDialog.vue";
 
 export function show() {

@@ -7,15 +7,15 @@ import * as configEditor from "./configEditor";
 import * as pgDocument from "./document";
 import * as exporter from "./export";
 import * as github from "./filesio/saveManagement/github";
-import * as saves from "./filesio/saveManagement/saveManagement";
 import * as importer from "./import";
-import * as modal from "./modal";
 import { openSearchDialog } from "./search";
 import * as undo from "./undo";
 import { showValidationWindow } from "./validation/validate.ts";
 import * as view from "./view";
 import { i18n } from "./i18n";
 import HistoryDialog from "./components/dialogs/HistoryDialog.vue";
+import { addDialog } from "grapht/modal";
+import { exportTH2, saveManager } from "./filesio/saveManagement/saveManagement.ts";
 
 const t = i18n.global.t;
 
@@ -38,13 +38,15 @@ export const handlers = {
 	
 	about: showAboutModal,
 
-	saveJSON: saves.save,
+	saveJSON: saveManager.save,
 
-	open: saves.open,
+	saveAs: saveManager.saveAs,
+
+	open: saveManager.open,
 
 	downloadJSON: pgDocument.saveJSONDocument,
 
-	exportTH2: saves.exportTH2,
+	exportTH2: exportTH2,
 			
 	importImageFromURL: function() {
 		const url = prompt(`${t("import.imageURL")} (jpg, png, gif)`, "http://");
@@ -80,8 +82,7 @@ export const handlers = {
 
 	clearDocument: function() {
 		if (confirm(t("clearDocument"))) {
-			pgDocument.clear();
-			saves.clearSaveFileName();
+			saveManager.clear();
 		}
 	},
 
@@ -94,7 +95,7 @@ export const handlers = {
 	loadFromGitHub: github.showGitHubLoadModal,
 
 	historyPanel: () => {
-		modal.addDialog(HistoryDialog, { id: "historyDialog", content: undefined, title: "menu.historyPanel", style: { "justify-self": "flex-end" } });
+		addDialog(HistoryDialog, { id: "historyDialog", content: undefined, title: "menu.historyPanel", style: { "justify-self": "flex-end" } });
 	},
 
 	searchDialog: openSearchDialog,
@@ -102,11 +103,11 @@ export const handlers = {
 	validate: showValidationWindow,
 
 	openKeybindEditor: function() {
-		modal.addDialog(KeybindEditorDialog, { id: "keybindEditor", content: undefined, title: "keybinds.title" });
+		addDialog(KeybindEditorDialog, { id: "keybindEditor", content: undefined, title: "keybinds.title" });
 	},
 };
 
 function showAboutModal() {
-	modal.addDialog(AboutDialog, { id: "aboutDialog", content: undefined, title: "menu.about" });
+	addDialog(AboutDialog, { id: "aboutDialog", content: undefined, title: "menu.about" });
 }
 

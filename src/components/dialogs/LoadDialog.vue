@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { deleteFromStorage } from '../../filesio/saveManagement/localStorageSaves';
-import { DialogData, removeDialog } from '../../modal';
+import { DialogData, removeDialog } from 'grapht/modal';
 
 const props = defineProps<{
 	data: DialogData<{
@@ -25,7 +25,7 @@ function deleteFile(filename: string) {
 	<ul>
 		<li v-for="save in filenames" :key="save">
 			<a @click="data.content.callback(save); close()">
-				{{ save.substring(9) }}
+				{{ save }}
 			</a>
 			<button @click="deleteFile(save)">&times;</button>
 		</li>

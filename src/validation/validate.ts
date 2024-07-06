@@ -1,6 +1,6 @@
 import paper from "paper";
 import ValidationDialog from "../components/dialogs/ValidationDialog.vue";
-import { addDialog } from "../modal.ts";
+import { addDialog } from "grapht/modal";
 import { validateAreaSettings } from "../objectSettings/model/AreaSettings.ts";
 import { validateLineSettings } from "../objectSettings/model/LineSettings.ts";
 import { validatePointSettings } from "../objectSettings/model/PointSettings.ts";

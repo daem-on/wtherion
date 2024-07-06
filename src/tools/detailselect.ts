@@ -9,7 +9,7 @@ import * as compoundPath from "../compoundPath";
 import * as math from "../math";
 import * as undo from "../undo";
 import * as selection from "../selection";
-import { defineTool } from "../tools";
+import { defineTool } from "grapht/tools";
 import { ToolAction } from "../toolMenu";
 import selectAllUrl from "../../assets/ui/select_all.svg";
 import linearScaleUrl from "../../assets/ui/linear_scale.svg";

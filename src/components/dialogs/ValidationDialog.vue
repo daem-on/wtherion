@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ValidationResult } from '../../validation/validate.ts';
-import { DialogData } from '../../modal';
+import { DialogData } from 'grapht/modal';
 import { clearSelection, focusItem } from '../../selection';
 import { setActiveLayer } from '../../layer';
 import { computed } from 'vue';

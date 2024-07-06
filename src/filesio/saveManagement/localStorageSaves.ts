@@ -1,45 +1,9 @@
+import { SaveProvider } from "grapht/filesio";
 import LoadDialog from "../../components/dialogs/LoadDialog.vue";
 import { i18n } from "../../i18n";
-import { addDialog } from "../../modal";
-import { SaveHandler, setWindowTitle } from "./saveManagement";
+import { addDialog } from "grapht/modal";
 
 const t = i18n.global.t;
-
-let saveFileName: string;
-
-function save(clearName = false, json: string) {
-	if (!saveFileName || clearName) {
-		setSaveFileName(prompt(t("save.saveFileName")));
-		if (saveFileName == null) return;
-	}
-
-	localStorage.setItem("wt.saves." + saveFileName, json);
-}
-
-function showLoadSelect(callback: (key: string) => void) {
-	addDialog(LoadDialog, {
-		content: {
-			filenames: Object.keys(localStorage).filter(key => key.startsWith("wt.saves.")),
-			callback: callback
-		},
-		id: "loadWindow",
-		title: "load.title",
-	});
-
-	return;
-}
-
-function setSaveFileName(name: string | undefined) {
-	saveFileName = name;
-	setWindowTitle(name);
-}
-
-export function loadFromStorage(name: string) {
-	const fileName = name.substring(9);
-	setWindowTitle(fileName);
-	saveFileName = fileName;
-	return localStorage.getItem(name);
-}
 
 export function deleteFromStorage(name: string): boolean {
 	if (confirm(t("save.deletePrompt", { filename: name.substring(9) }))) {
@@ -49,12 +13,43 @@ export function deleteFromStorage(name: string): boolean {
 	return false;
 }
 
-export const handler: SaveHandler = {
-	save,
-	open: () => new Promise((resolve, reject) => {
-		showLoadSelect((key) => {
-			resolve(loadFromStorage(key));
+function getKey(name: string): string {
+	return "wt.saves." + name;
+}
+
+function listSaves(): string[] {
+	return Object.keys(localStorage).filter(key => key.startsWith("wt.saves.")).map(key => key.substring(9));
+}
+
+export const localStorageSaves: SaveProvider<string, string> = {
+	async createInitialSave(document) {
+		const name = prompt(t("save.saveFileName"));
+		if (name == null) return null;
+		localStorage.setItem(getKey(name), document);
+		return name;
+	},
+	save(state, document) {
+		localStorage.setItem(getKey(state), document);
+	},
+	open() {
+		return new Promise((resolve, reject) => {
+			addDialog(LoadDialog, {
+				content: {
+					filenames: listSaves(),
+					callback: key => resolve([
+						key,
+						localStorage.getItem(getKey(key))
+					])
+				},
+				id: "loadWindow",
+				title: "load.title",
+			});
 		});
-	}),
-	clearSaveFile: () => saveFileName = undefined,
+	},
+	getDisplayName(state) {
+		return state;
+	},
+	async reload(state) {
+		return localStorage.getItem(getKey(state));
+	},
 };

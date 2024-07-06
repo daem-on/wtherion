@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DialogData } from '../../modal';
+import { DialogData } from 'grapht/modal';
 
 const props = defineProps<{
 	data: DialogData<ErrorEvent>;

@@ -2,7 +2,7 @@
 // adapted from http://sketch.paperjs.org/
 import paper from "paper";
 import { zoomBy } from "../view";
-import { defineTool } from "../tools";
+import { defineTool } from "grapht/tools";
 import { triggers } from "../triggers";
 
 function onWheel(updateInfo: WheelEvent) {

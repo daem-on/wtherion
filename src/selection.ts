@@ -9,12 +9,12 @@ import * as groups from "./group";
 import * as items from "./item";
 import { setActiveLayer } from "./layer";
 import getSettings from "./objectSettings/model/getSettings";
-import * as tools from "./tools";
 import * as undo from "./undo";
 import { triggers } from "./triggers";
+import { getActiveTool } from "grapht/tools";
 
 export function getSelectionMode(): "Segment" | "Item" | undefined {
-	const activeToolId = tools.getActiveTool()?.definition.id;
+	const activeToolId = getActiveTool()?.definition.id;
 	if (activeToolId === "detailselect") {
 		return 'Segment';
 	} else if (activeToolId === "select") {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DialogData } from '../../modal';
+import { DialogData } from 'grapht/modal';
 import { headRef, moveHeadTo, statesRef, undo, redo } from '../../undo';
 import MenuButton from '../common/MenuButton.vue';
 

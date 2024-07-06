@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { activeDialogList, removeDialog } from '../../modal';
+import { activeDialogList, removeDialog } from 'grapht/modal';
 </script>
 
 <template>

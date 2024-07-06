@@ -1,60 +1,21 @@
-import * as pgDocument from "../../document";
-import { DialogData, addDialog } from "../../modal";
-import { handler as localStorageSaves } from "./localStorageSaves";
-import { handler as fileSystemExports } from "./fileSystemExports";
-import { handler as fileSystemSaves } from "./fileSystemSaves";
-import * as wtConfig from "../configManagement";
+import { createSaveManager } from "grapht/filesio";
+import { DialogData, addDialog } from "grapht/modal";
 import MultipleFileSelectDialog from "../../components/dialogs/MultipleFileSelectDialog.vue";
+import * as pgDocument from "../../document";
 import { i18n } from "../../i18n";
+import { fileSystemSaves } from "./fileSystemSaves";
+import { localStorageSaves } from "./localStorageSaves";
 
-export interface SaveHandler {
-	save: (saveAs: boolean, json: string) => void;
-	open: () => Promise<string>;
-	clearSaveFile: () => void;
-}
+export const saveManager = createSaveManager({
+	getDocumentState: () => pgDocument.documentAsJSON(),
+	setDisplayName: name => document.title = name,
+	untitledName: i18n.global.t("save.untitled"),
+	setDocumentState: json => pgDocument.loadJSONDocument(json),
+	createEmptyDocument: pgDocument.createEmptyDocument,
+	providers: { localStorageSaves, fileSystemSaves },
+});
 
-export interface ExportHandler {
-	export: (exportAs: boolean) => Promise<void>;
-}
-
-export function setWindowTitle(name: string) {
-	document.title = name || i18n.global.t("save.untitled");
-}
-
-function getSaveHandler() {
-	const saveHandler = wtConfig.get("saveHandler");
-	if (saveHandler === "fileSystem") {
-		return fileSystemSaves;
-	} else {
-		return localStorageSaves;
-	}
-}
-
-function getExportHandler() {
-	return fileSystemExports;
-}
-
-export function save(saveAs = false) {
-	const json = pgDocument.documentAsJSON();
-	getSaveHandler().save(saveAs, json);
-}
-
-export async function open() {
-	// TODO: warn if document is not empty
-	const json = await getSaveHandler().open();
-	if (json) {
-		pgDocument.loadJSONDocument(json);
-	}
-}
-
-export function clearSaveFileName() {
-	getSaveHandler().clearSaveFile();
-	document.title = i18n.global.t("save.untitled");
-}
-
-export function exportTH2(exportAs = false) {
-	getExportHandler().export(exportAs);
-}
+export { exportTH2 } from "./fileSystemExports";
 
 export type MultipleFileSelectDialogData = DialogData<{
 	filenames: string[];

@@ -4,7 +4,7 @@ import * as selection from "../selection";
 import * as menu from "../menu";
 import * as hover from "../hover";
 import * as config from "../filesio/configManagement";
-import { defineTool } from "../tools";
+import { defineTool } from "grapht/tools";
 import { i18n } from "../i18n";
 import { ref } from "vue";
 

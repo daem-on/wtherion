@@ -1,4 +1,4 @@
-import { addDialog } from "./modal";
+import { addDialog } from "grapht/modal";
 import getSettings from "./objectSettings/model/getSettings";
 import paper from "paper";
 import SearchDialog from "./components/dialogs/SearchDialog.vue";

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { DialogData, removeDialog } from '../../modal';
+import { DialogData, removeDialog } from 'grapht/modal';
 import { searchResults, search } from '../../search';
 import { focusItem } from '../../selection';
 

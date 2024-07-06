@@ -7,7 +7,7 @@ import { updateWindow } from "./objectSettings/objectOptionPanel";
 import { triggers } from "./triggers";
 import { compressToUint8Array, decompressFromUint8Array } from "lz-string";
 import { get } from "./filesio/configManagement";
-import { activeToolRef } from "./tools";
+import { activeToolRef } from "grapht/tools";
 import editTH2 from "./editTH2";
 import { deserializeJSON } from "./document";
 

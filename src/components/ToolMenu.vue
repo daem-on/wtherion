@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { activeToolRef } from '../tools';
+import { activeToolRef } from 'grapht/tools';
 import ToolButton from './common/ToolButton.vue';
 
 const buttonsWithIcon = computed(() => {

@@ -1,12 +1,13 @@
 import { openSearchDialog } from "./search";
-import { save, exportTH2 } from "./filesio/saveManagement/saveManagement";
+import { saveManager, exportTH2 } from "./filesio/saveManagement/saveManagement";
 import * as config from "./filesio/configManagement";
-import { activeToolRef, getActiveTool, switchToolById, unduckTool } from "./tools";
+import { activeToolRef, getActiveTool, unduckTool } from "grapht/tools";
 import { resetZoom } from "./view";
 import { redo, undo } from "./undo";
 import editTH2 from "./editTH2";
 import { reactive } from "vue";
 import paper from "paper";
+import { switchToolById } from "./tools";
 
 export function setup() {
 	setupKeyboard();
@@ -122,7 +123,7 @@ function setupKeyboard() {
 	registerAction("global.undo", undo, "ctrl-z");
 	registerAction("global.redo", redo, "ctrl-shift-z");
 	registerAction("global.search", openSearchDialog, "ctrl-f");
-	registerAction("global.save", save, "ctrl-s");
+	registerAction("global.save", saveManager.save, "ctrl-s");
 	registerAction("global.export", exportTH2, "ctrl-e");
 
 	registerAction("th2.lineToArea", () => editTH2.lineToArea(), "ctrl-h");

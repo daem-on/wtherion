@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { activeToolRef } from "../tools";
+import { activeToolRef } from "grapht/tools";
 import { computed } from "vue";
 import Foldable from "./common/Foldable.vue";
 import MenuButton from "./common/MenuButton.vue";

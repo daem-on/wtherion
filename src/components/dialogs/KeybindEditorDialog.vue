@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DialogData } from '../../modal';
+import { DialogData } from 'grapht/modal';
 import { KeySpec, currentBinds, getActionList, getKeySpec, persistCustomKeybinds } from '../../input';
 import { computed, onUnmounted, ref, watch } from 'vue';
 

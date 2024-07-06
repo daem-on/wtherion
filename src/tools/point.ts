@@ -1,4 +1,4 @@
-import { defineTool, setLocalOptions } from "../tools";
+import { defineTool } from "grapht/tools";
 import * as undo from "../undo";
 import getSettings from "../objectSettings/model/getSettings";
 import { PointSettings } from "../objectSettings/model/PointSettings";
@@ -69,5 +69,4 @@ function increaseStationNumber() {
 	} else {
 		options.stationName = increment(options.stationName);
 	}
-	setLocalOptions(options);
 }

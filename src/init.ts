@@ -1,7 +1,6 @@
 import * as layer from "./layer";
 import * as pgExport from "./export.js";
 import * as menu from "./menu";
-import * as modal from "./modal.js";
 import * as tools from "./tools";
 import * as input from "./input";
 import * as undo from "./undo";
@@ -37,7 +36,6 @@ export default {
 	layer: layer,
 	export: pgExport,
 	menu: menu,
-	modal: modal,
 	tools: tools,
 	input: input,
 	undo: undo,

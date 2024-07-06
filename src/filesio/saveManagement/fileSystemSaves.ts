@@ -1,38 +1,34 @@
-import { acceptTypeDefs, openSingleFile, pickSaveFile, supportsFilesystem, writeOrDownloadBlob } from "./fileSystemUtils";
-import { SaveHandler, setWindowTitle } from "./saveManagement";
+import { SaveProvider } from "grapht/filesio";
+import { openSingleFile, pickSaveFile, supportsFilesystem, writeOrDownloadBlob } from "grapht/filesio";
+import { acceptTypeDefs } from "./fileSystemUtils";
 
-let saveFileHandle: FileSystemFileHandle;
-
-async function save(clearHandle : boolean, json: string) {
-	if (clearHandle) saveFileHandle = null;
-
-	if (supportsFilesystem && !saveFileHandle) {
-		saveFileHandle = await pickSaveFile([acceptTypeDefs.wth]);
-		if (!saveFileHandle) return;
-	}
-
-	setWindowTitle(saveFileHandle.name);
-
-	const blob = new Blob([json], {type: "application/json+wtherion"});
-	await writeOrDownloadBlob(blob, saveFileHandle, "save.wth");
+async function saveString(content: string, handle: FileSystemFileHandle) {
+	const blob = new Blob([content], {type: "application/json+wtherion"});
+	await writeOrDownloadBlob(blob, handle, "save.wth");
 }
 
-async function open(): Promise<string> {
-	if (supportsFilesystem) {
-		const handle = (await openSingleFile([acceptTypeDefs.wth]))[0];
+export const fileSystemSaves: SaveProvider<FileSystemFileHandle, string> = {
+	async createInitialSave(document) {
+		const handle = await pickSaveFile([acceptTypeDefs.wth]);
+		if (!handle) return null;
+		await saveString(document, handle);
+		return handle;
+	},
+	save(handle, document) {
+		saveString(document, handle);
+	},
+	async reload(handle) {
+		const file = await handle.getFile();
+		return await file.text();
+	},
+	async open() {
+		const handle = await openSingleFile([acceptTypeDefs.wth]);
 		if (!handle) return null;
 		const file = await handle.getFile();
 		const text = await file.text();
-		saveFileHandle = handle;
-		setWindowTitle(saveFileHandle.name);
-		return text;
-	} else {
-		// TODO: Implement file picker for non-filesystem browsers
-	}
-}
-
-export const handler: SaveHandler = {
-	save,
-	open,
-	clearSaveFile: () => saveFileHandle = null,
+		return [handle, text];
+	},
+	getDisplayName(handle) {
+		return handle.name;
+	},
 };

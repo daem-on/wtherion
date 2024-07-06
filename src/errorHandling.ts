@@ -1,5 +1,5 @@
 import ErrorDialog from "./components/dialogs/ErrorDialog.vue";
-import { addDialog } from "./modal";
+import { addDialog } from "grapht/modal";
 
 export function showErrorWindow(e: ErrorEvent) {
 	addDialog(ErrorDialog, {

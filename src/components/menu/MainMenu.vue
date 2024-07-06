@@ -21,7 +21,7 @@ import Foldable from "../common/Foldable.vue";
 				<li class="space"></li>
 				<div class="horizontal">
 					<MenuButton @click="handlers.saveJSON()">{{ $t(`menu.save`) }}</MenuButton>
-					<MenuButton @click="handlers.saveJSON(true)">{{ $t(`menu.saveAs`) }}</MenuButton>
+					<MenuButton @click="handlers.saveAs()">{{ $t(`menu.saveAs`) }}</MenuButton>
 				</div>
 				<li class="space"></li>
 				<MenuButton @click="handlers.historyPanel()">{{ $t(`menu.historyPanel`) }}</MenuButton>

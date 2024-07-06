@@ -17,7 +17,7 @@ import * as undo from "../undo";
 import * as selection from "../selection";
 import paper from "paper";
 import { LineSettings } from "../../src/objectSettings/model/LineSettings";
-import { defineTool } from "../tools";
+import { defineTool } from "grapht/tools";
 import { triggers } from "../triggers";
 import { ToolAction } from "../toolMenu";
 import editTH2 from "../editTH2";

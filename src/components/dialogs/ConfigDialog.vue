@@ -4,7 +4,7 @@ import { loadConfig, exists, get, assign } from '../../filesio/configManagement'
 import BooleanInput from '../common/BooleanInput.vue';
 import IntInput from '../common/IntInput.vue';
 import PanelSection from '../common/PanelSection.vue';
-import { removeDialog } from '../../modal';
+import { removeDialog } from 'grapht/modal';
 import { i18n } from '../../i18n';
 import { redrawAll } from '../../objectDefs';
 import { undoBufferSize } from '../../undo';

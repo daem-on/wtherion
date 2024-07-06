@@ -18,10 +18,10 @@ const toolMenuContent = computed(() => {
 				<slot></slot>
 			</div>
 		</template>
-		<template #default="{ close }">
+		<template #default="{ close, update }">
 			<Card shadow scroll class="context-menu">
 				<template v-if="toolMenuContent">
-					<Foldable v-for="subMenu in toolMenuContent" :key="subMenu.name" fullWidth noMargin noBorder>
+					<Foldable v-for="subMenu in toolMenuContent" :key="subMenu.name" fullWidth noMargin noBorder @toggle="update">
 						<template #title>
 							{{ $t(subMenu.name) }}
 						</template>

@@ -43,6 +43,6 @@ defineProps<{
 }
 
 .shadow {
-	box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 0 4px var(--shadow-color);
 }
 </style>

@@ -8,11 +8,13 @@ defineProps<{
 	noMargin?: boolean;
 	noBorder?: boolean;
 }>();
+
+defineEmits(['toggle']);
 </script>
 
 <template>
 	<div class="foldable" :class="{ fullWidth, noMargin, noBorder }">
-		<h2 @click.stop="open = !open" tabindex="0">
+		<h2 @click.stop="open = !open; $emit('toggle')" tabindex="0">
 			<slot name="title"></slot>
 			{{ open ? "⯅" : "⯆" }}
 		</h2>

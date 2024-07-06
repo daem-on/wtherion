@@ -9,7 +9,7 @@ function close() {
 }
 
 function toggleBelow(event: MouseEvent) {
-	if (popoutRef.value?.position) {
+	if (popoutRef.value?.isOpen) {
 		close();
 	} else {
 		popoutRef.value?.openBelow(event.target as HTMLElement);

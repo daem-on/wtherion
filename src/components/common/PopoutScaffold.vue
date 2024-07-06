@@ -1,62 +1,125 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { arrow, autoUpdate, flip, offset, ReferenceElement, shift, useFloating, VirtualElement } from "@floating-ui/vue";
+import { ref, watch, computed } from "vue";
+import { StyleValue } from "vue/dist/vue.js";
 
 type Position = { x: number, y: number };
-const position = ref<Position | null>(null);
+const isOpen = ref(false);
+
+const anchor = ref<ReferenceElement | null>(null);
+const floating = ref<HTMLElement | null>(null);
+const animated = ref<HTMLElement | null>(null);
+const arrowRef = ref<HTMLElement | null>(null);
+
+const { floatingStyles, placement, middlewareData, update } = useFloating(anchor, floating, {
+	open: isOpen,
+	middleware: [
+		offset(8),
+		flip(),
+		shift({ padding: 8 }),
+		arrow({ element: arrowRef }),
+	]
+});
 
 async function close() {
 	await animateClose();
-	position.value = null;
+	isOpen.value = false;
+}
+
+function createVirtualElement(p: Position): VirtualElement {
+	return {
+		getBoundingClientRect: () => ({
+			x: p.x,
+			y: p.y,
+			top: p.y,
+			left: p.x,
+			bottom: p.y,
+			right: p.x,
+			width: 0,
+			height: 0,
+		}),
+	};
+}
+
+function _open(el: ReferenceElement) {
+	anchor.value = el;
+	isOpen.value = true;
 }
 
 function open(p: Position) {
-	position.value = p;
+	_open(createVirtualElement(p));
 }
 
 function openBelow(e: HTMLElement) {
-	const rect = e.getBoundingClientRect();
-	open({ x: rect.left, y: rect.bottom });
+	_open(e);
 }
 
-defineExpose({ position, close, open, openBelow });
+defineExpose({ isOpen, close, open, openBelow });
 
 defineProps<{ omitBlocker?: true }>();
 
-function fitInBounds(p: Position, e: HTMLElement): void {
-	if (p.y + e.clientHeight > window.innerHeight || p.x + e.clientWidth > window.innerWidth) {
-		const x = Math.min(p.x, window.innerWidth - e.clientWidth);
-		const y = Math.min(p.y, window.innerHeight - e.clientHeight);
-		position.value = { x, y };
-	}
-}
-
-const elementRef = ref<HTMLElement | null>(null);
-
-watch(elementRef, value => {
+watch(animated, value => {
 	if (value) {
-		fitInBounds(position.value!, value);
 		value.animate([
 			{ opacity: 0, transform: "scale(0.9)" },
 			{ opacity: 1, transform: "scale(1)" },
 		], { duration: 150, easing: "ease-out"});
+		isOpen.value = true;
 	}
 });
 
 function animateClose(): Promise<Animation> {
-	if (!elementRef.value) return;
-	return elementRef.value.animate([
+	if (!animated.value) return;
+	return animated.value.animate([
 		{ opacity: 1, transform: "scale(1)" },
 		{ opacity: 0, transform: "scale(0.9)" },
 	], { duration: 150, easing: "ease" }).finished;
 }
+
+const arrowStyles = computed<StyleValue>(() => {
+	const element = arrowRef.value;
+	if (!element) return {};
+	const data = middlewareData.value?.arrow;
+	if (!data) return {};
+
+	const place = placement.value.split("-")[0];
+	const staticSide = {
+		top: "bottom",
+		right: "left",
+		bottom: "top",
+		left: "right",
+	}[place];
+
+	const transform = {
+		top: "rotate(180deg)",
+		right: "rotate(270deg)",
+		bottom: "",
+		left: "rotate(90deg)",
+	}[place];
+	
+	return {
+		position: "absolute",
+		left: data.x != null ? `${data.x}px` : "",
+		top: data.y != null ? `${data.y}px` : "",
+		[staticSide]: "-8px",
+		transform,
+	};
+});
 </script>
 
 <template>
 	<slot name="source" :close :open :openBelow></slot>
-	<Teleport to="body" v-if="position">
+	<Teleport to="body" v-if="isOpen">
 		<div class="blocker" v-if="!omitBlocker" @click="close" @contextmenu.prevent="close"></div>
-		<div class="popout" :style="{ left: `${position.x}px`, top: `${position.y}px` }" ref="elementRef">
-			<slot :close :open :openBelow></slot>
+		<div class="popout" :style="floatingStyles" ref="floating">
+			<div class="animated" ref="animated">
+				<div class="arrow" :style="arrowStyles" ref="arrowRef">
+					<svg xmlns="http://www.w3.org/2000/svg" width="12" height="9" viewBox="0 0 12 9">
+						<path d="M0 9L6 0l6 9" fill="var(--background-color)" stroke="var(--border-color)"/>
+					</svg>
+				</div>
+				<slot :close :open :openBelow :update></slot>
+			</div>
 		</div>
 	</Teleport>
 </template>
@@ -72,8 +135,20 @@ function animateClose(): Promise<Animation> {
 }
 
 .popout {
-	position: fixed;
-	z-index: 200;
-	transform-origin: top left;
+	z-index: 199;
+}
+
+.animated {
+	transform-origin: top;
+}
+
+.arrow {
+	width: 12px;
+	height: 9px;
+	z-index: 1;
+}
+
+.arrow svg {
+	display: block;
 }
 </style>

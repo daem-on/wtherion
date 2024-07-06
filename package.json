@@ -13,6 +13,7 @@
   "author": "daem-on <daem_on@icloud.com>",
   "license": "MIT",
   "dependencies": {
+    "@floating-ui/vue": "^1.1.1",
     "@octokit/rest": "^19.0.4",
     "file-saver": "^2.0.5",
     "grapht": "file:..\\grapht",

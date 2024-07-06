@@ -88,13 +88,10 @@ const currentCategory = computed(() => {
 	flex-direction: column;
 	gap: 8px;
 	padding: 8px;
-	position: absolute;
 	background-color: var(--background-color);
 	border-radius: 4px;
 	border: var(--border-color) 1px solid;
-	top: 100%;
-	left: 0;
-	z-index: 99;
+	/* z-index: 99; */
 	max-height: 50vh;
 	overflow-y: auto;
 }

@@ -1,4 +1,4 @@
-import { SaveProvider } from "grapht/filesio";
+import { SaveProvider } from "grapht/io";
 import LoadDialog from "../../components/dialogs/LoadDialog.vue";
 import { i18n } from "../../i18n";
 import { addDialog } from "grapht/modal";

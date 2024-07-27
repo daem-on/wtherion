@@ -7,7 +7,6 @@ import PanelSection from '../common/PanelSection.vue';
 import { removeDialog } from 'grapht/modal';
 import { i18n } from '../../i18n';
 import { redrawAll } from '../../objectDefs';
-import { undoBufferSize } from '../../undo';
 
 const options = ref({
 	showSegmentOptionPanel: false,
@@ -19,7 +18,7 @@ const options = ref({
 	enableAsyncClipboard: false,
 	language: i18n.global.locale,
 	drawSymbols: false,
-	undoBufferSize: undoBufferSize.value,
+	undoBufferSize: 40,
 	exportFormat: "default",
 });
 
@@ -28,7 +27,6 @@ function save() {
 	removeDialog("configDialog");
 	redrawAll();
 	i18n.global.locale = options.value.language;
-	undoBufferSize.value = options.value.undoBufferSize;
 }
 
 loadConfig();

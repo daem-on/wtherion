@@ -1,5 +1,5 @@
-import { SaveProvider } from "grapht/filesio";
-import { openSingleFile, pickSaveFile, supportsFilesystem, writeOrDownloadBlob } from "grapht/filesio";
+import { SaveProvider } from "grapht/io";
+import { openSingleFile, pickSaveFile, supportsFilesystem, writeOrDownloadBlob } from "grapht/io";
 import { acceptTypeDefs } from "./fileSystemUtils";
 
 async function saveString(content: string, handle: FileSystemFileHandle) {

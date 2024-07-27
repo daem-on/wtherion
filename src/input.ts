@@ -1,110 +1,30 @@
 import { openSearchDialog } from "./search";
 import { saveManager, exportTH2 } from "./filesio/saveManagement/saveManagement";
 import * as config from "./filesio/configManagement";
-import { activeToolRef, getActiveTool, unduckTool } from "grapht/tools";
+import { activeToolRef, getActiveTool, loadCustomKeybinds, registerAction, serializeCustomKeybinds, setupInput, unduckTool } from "grapht/tools";
 import { resetZoom } from "./view";
 import { redo, undo } from "./undo";
 import editTH2 from "./editTH2";
-import { reactive } from "vue";
 import paper from "paper";
 import { switchToolById } from "./tools";
 
 export function setup() {
-	setupKeyboard();
+	setupInput(paper);
+	setupKeybinds();
 	setupMouse();
-	loadCustomKeybinds();
-}
 
-const keys = [
-	'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
-	'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
-	'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
-	'enter', 'backspace', 'delete', 'escape', 'space', 'control'
-] as const;
-
-type Key = typeof keys[number];
-export type KeySpec = `${'ctrl-' | ''}${'shift-' | ''}${Key}${'-up' | ''}`;
-
-export const currentBinds = reactive(new Map<KeySpec, Set<string>>());
-const actionCallbacks = new Map<string, () => void>();
-
-export function registerAction(name: string, callback: () => void, defaultBind?: KeySpec) {
-	actionCallbacks.set(name, callback);
-	if (defaultBind) {
-		if (!currentBinds.has(defaultBind)) {
-			currentBinds.set(defaultBind, new Set());
-		}
-		currentBinds.get(defaultBind).add(name);
-	}
-}
-
-export function getActionList(): string[] {
-	return Array.from(actionCallbacks.keys());
-}
-
-function loadCustomKeybinds() {
 	if (config.exists("keybinds")) {
 		const keybindsConfig = config.get("keybinds");
-		currentBinds.clear();
-		for (const [key, commands] of keybindsConfig) {
-			if (keySpecIsValid(key) && Array.isArray(commands)) {
-				currentBinds.set(key, new Set(commands));
-			}
-		}
+		loadCustomKeybinds(keybindsConfig);
 	}
 }
 
 export function persistCustomKeybinds() {
-	const keybinds = Array.from(currentBinds.entries()).map(([key, commands]) => {
-		return [key, Array.from(commands)];
-	});
+	const keybinds = serializeCustomKeybinds();
 	config.set("keybinds", keybinds);
 }
 
-const keySpecRegex = /^(ctrl-)?(shift-)?([a-z0-9]+)(-up)?$/;
-function keySpecIsValid(input: string): input is KeySpec {
-	const match = keySpecRegex.exec(input);
-	if (!match) return false;
-	if (!keys.includes(match[3] as Key)) return false;
-	return true;
-}
-
-export function getKeySpec(event: KeyboardEvent, up: boolean): KeySpec {
-	let spec = "";
-	if (event.ctrlKey || event.metaKey) spec += "ctrl-";
-	if (event.shiftKey) spec += "shift-";
-	const key = event.key === " " ? "space" : event.key.toLowerCase();
-	spec += key;
-	if (up) spec += "-up";
-	return spec as KeySpec;
-}
-
-function setupKeyboard() {
-	function handleKeyEvent(event: KeyboardEvent, up: boolean) {
-		if (event.key === "Escape") {
-			blurCurrent();
-			return;
-		}
-		if (userIsTyping(event)) return;
-		if (event.repeat) return;
-		const spec = getKeySpec(event, up);
-		if (currentBinds.has(spec)) {
-			const actions = currentBinds.get(spec);
-			for (const action of actions) {
-				actionCallbacks.get(action)();
-			}
-			event.preventDefault();
-		}
-	}
-
-	window.addEventListener("keydown", event => {
-		handleKeyEvent(event, false);
-	});
-
-	window.addEventListener("keyup", event => {
-		handleKeyEvent(event, true);
-	});
-
+function setupKeybinds() {
 	registerAction("global.tool.select", () => switchToolById("select"), "v");
 	registerAction("global.tool.detailselect", () => switchToolById("detailselect"), "a");
 	registerAction("global.tool.draw", () => switchToolById("draw"), "d");
@@ -130,18 +50,6 @@ function setupKeyboard() {
 	registerAction("th2.areaToLine", () => editTH2.areaToLine(), "ctrl-shift-h");
 }
 
-export function textIsSelected() {
-	if (window.getSelection().toString()) {
-		return true;
-	}
-
-	return false;
-}
-
-export function userIsTyping(event: KeyboardEvent) {
-	return event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement;
-}
-
 function viewgrabDown() {
 	if (document.activeElement instanceof HTMLButtonElement
 		|| document.activeElement instanceof HTMLAnchorElement
@@ -158,11 +66,6 @@ function viewgrabUp() {
 	}
 }
 
-function blurCurrent() {
-	const active = document.activeElement;
-	if (active instanceof HTMLElement) active.blur();
-}
-
 // mouse stuff
 
 const setupMouse = function() {
@@ -176,8 +79,6 @@ const setupMouse = function() {
 		}
 		getActiveTool().emit("wheel", event);
 	}, { passive: false });
-
-	paper.view.onMouseDown = () => blurCurrent();
 };
 
 function unduckViewzoom() {

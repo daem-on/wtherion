@@ -1,4 +1,4 @@
-import { createSaveManager } from "grapht/filesio";
+import { createSaveManager } from "grapht/io";
 import { DialogData, addDialog } from "grapht/modal";
 import MultipleFileSelectDialog from "../../components/dialogs/MultipleFileSelectDialog.vue";
 import * as pgDocument from "../../document";

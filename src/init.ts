@@ -65,7 +65,7 @@ export default {
 		this.menu.setup();
 		this.tools.setup();
 		this.input.setup();
-		this.undo.setup();
+		this.undo.snapshot("init");
 		launchQueue.setup();
 		i18n.setup();
 		pgDocument.setup();

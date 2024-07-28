@@ -2,43 +2,26 @@
 import paper from "paper";
 import * as compoundPath from "./compoundPath";
 import * as geometry from "./geometry";
-import * as hover from "./hover";
 import * as math from "./math";
 import * as pgDocument from "./document";
 import * as groups from "./group";
 import * as items from "./item";
 import { setActiveLayer } from "./layer";
-import getSettings from "./objectSettings/model/getSettings";
 import * as undo from "./undo";
 import { triggers } from "./triggers";
-import { getActiveTool } from "grapht/tools";
-
-export function getSelectionMode(): "Segment" | "Item" | undefined {
-	const activeToolId = getActiveTool()?.definition.id;
-	if (activeToolId === "detailselect") {
-		return 'Segment';
-	} else if (activeToolId === "select") {
-		return 'Item';
-	}
-	return;
-}
-
 
 export function selectAllItems() {
 	const items = pgDocument.getAllSelectableItems();
-	
-	for(let i=0; i<items.length; i++) {
-		setItemSelection(items[i], true);
-	}
+	for (const item of items) setItemSelection(item, true);
 }
 
 
 export function selectRandomItems() {
 	const items = pgDocument.getAllSelectableItems();
 	
-	for(let i=0; i<items.length; i++) {
-		if(math.getRandomBoolean()) {
-			setItemSelection(items[i], true);
+	for (const item of items) {
+		if (math.getRandomBoolean()) {
+			setItemSelection(item, true);
 		}
 	}
 }
@@ -55,28 +38,23 @@ export function focusItem(item: paper.Item): void {
 
 export function selectAllSegments() {
 	const items = pgDocument.getAllSelectableItems();
-	
-	for(let i=0; i<items.length; i++) {
-		selectItemSegments(items[i], true);
-	}
+	for (const item of items) selectItemSegments(item, true);
 }
 
 
-export function selectItemSegments(item, state) {
-	if(item.children) {
-		for(let i=0; i<item.children.length; i++) {
-			const child = item.children[i];
-			if(child.children && child.children.length > 0) {
+export function selectItemSegments(item: paper.Item, state: boolean) {
+	if (item.children) {
+		for (const child of item.children) {
+			if (!items.isPathItem(child)) continue;
+			if (child.children && child.children.length > 0) {
 				selectItemSegments(child, state);
 			} else {
 				child.fullySelected = state;
 			}
 		}
-		
 	} else {
-		for(let i=0; i<item.segments.length; i++) {
-			item.segments[i].selected = state;
-		}
+		if (!items.isPathItem(item)) return;
+		for (const segment of item.segments) segment.selected = state;
 	}
 }
 
@@ -84,46 +62,29 @@ export function selectItemSegments(item, state) {
 export function clearSelection() {
 	paper.project.deselectAll();
 	
-	hover.clearHoveredItem();
 	triggers.emit("SelectionChanged");
 }
 
 
 export function invertItemSelection() {
 	const items = pgDocument.getAllSelectableItems();
-	
-	for(let i=0; i<items.length; i++) {
-		items[i].selected = !items[i].selected;
-	}
-	
+	for (const item of items) item.selected = !item.selected;	
 	triggers.emit("SelectionChanged");
 }
 
 
 export function invertSegmentSelection() {
-	const items = pgDocument.getAllSelectableItems();
-	
-	for(let i=0; i<items.length; i++) {
-		const item = items[i] as paper.Item & paper.Path;
-		if (!item.segments) continue;
-		for(let j=0; j<item.segments.length; j++) {
-			const segment = item.segments[j];
-			segment.selected = !segment.selected;
-		}
+	const list = pgDocument.getAllSelectableItems();
+
+	for (const item of list) {
+		if (!items.isPathItem(item) || !item.segments) continue;
+		for (const segment of item.segments) segment.selected = !segment.selected;
 	}
-	
-	//triggers.emit("SelectionChanged");
 }
 
 
-export function deleteSelection() {
-	const selectionMode = getSelectionMode();
-	
-	if (selectionMode === 'Segment') {
-		deleteSegmentSelection();
-	} else {
-		deleteItemSelection();
-	}
+export function deleteItemSelection() {
+	for (const item of getSelectedItems()) item.remove();
 	
 	triggers.emitAll(["DeleteItems", "SelectionChanged"]);
 	paper.project.view.update();
@@ -131,74 +92,17 @@ export function deleteSelection() {
 }
 
 
-export function deleteItemSelection() {
-	const items = getSelectedItems();
-	for (let i=0; i<items.length; i++) {
-		items[i].remove();
-	}
-}
-
-
-export function deleteSegmentSelection() {
-	const items = getSelectedItems();
-	for (let i=0; i<items.length; i++) {
-		deleteSegments(items[i]);
-	}
-}
-
-
-export function deleteSegments(item) {
-	if(item.children) {
-		for(let i=0; i<item.children.length; i++) {
-			const child = item.children[i];
-			deleteSegments(child);
-		}
-	} else {
-		const segments = item.segments;
-		for(let j=0; j<segments.length; j++) {
-			const segment = segments[j];
-			if(segment.selected) {
-				if(item.closed ||
-					(segment.next && 
-					!segment.next.selected &&
-					segment.previous &&
-					!segment.previous.selected) ) {
-
-					splitPathRetainSelection(item, j);
-					deleteSelection();
-					return;
-
-				} else if(!item.closed) {
-					segment.remove();
-					j--; // decrease counter if we removed one from the loop
-				}
-
-			}
-		}
-	}
-	// remove items with no segments left
-	if(item.segments.length <= 0) {
-		item.remove();
-	}
-}
-
-
 export function splitPathAtSelectedSegments() {
 	const items = getSelectedItems() as paper.Path[];
-	for(let i=0; i<items.length; i++) {
-		const item = items[i];
-		const segments = item.segments;
-		for(let j=0; j<segments.length; j++) {
-			const segment = segments[j];
-			if(segment.selected) {
-				if(item.closed ||
+	for (const item of items) {
+		for (const segment of [...item.segments]) {
+			if (segment.selected) {
+				if (item.closed ||
 					(segment.next && 
 					!segment.next.selected &&
 					segment.previous &&
-					!segment.previous.selected) ) {
-					splitPathRetainSelection(item, j, true);
-					splitPathAtSelectedSegments();
-					return;
+					!segment.previous.selected)) {
+					splitPathRetainSelection(segment, false);
 				}
 			}
 		}
@@ -206,10 +110,10 @@ export function splitPathAtSelectedSegments() {
 }
 
 /**
- * This function is borrowed straight from an older version
- * of Paper.js, for some reason they just removed it.
- * But we need it for splitting by segment index, so here it is.
- */
+	* This function is borrowed straight from an older version
+	* of Paper.js, for some reason they just removed it.
+	* But we need it for splitting by segment index, so here it is.
+	*/
 function split(path: paper.Path, index: number, time: number) {
 	let curve: paper.Curve;
 	const location = time === undefined ? index
@@ -218,190 +122,94 @@ function split(path: paper.Path, index: number, time: number) {
 	return location != null ? path.splitAt(location) : null;
 }
 
-export function splitPathRetainSelection(path: paper.Path, index: number, deselectSplitSegments?: boolean): void {
-	const selectedPoints = [];
-	
-	// collect points of selected segments, so we can reselect them
-	// once the path is split.
-	for(let i=0; i<path.segments.length; i++) {
-		const seg = path.segments[i];
-		if(seg.selected) {
-			if(deselectSplitSegments && i === index) {
-				continue;
-			}
-			selectedPoints.push(seg.point);
-		}
+function copyData(source: paper.Item, target: paper.Item) {
+	if (source.data) {
+		target.data = pgDocument.deserializeJSON(JSON.stringify(source.data));
 	}
+}
+
+export function splitPathRetainSelection(segment: paper.Segment, deselectSplitSegments?: boolean): void {
+	const { path, index } = segment;
+	const selectedSegments = path.segments.filter(seg => seg.selected && !(deselectSplitSegments && seg.index === index));
 	const newPath = split(path, index, 0);
-	if(!newPath) return;
-	if (path.data && path.data.therionData)
-			newPath.data = pgDocument.deserializeJSON(JSON.stringify(path.data));
+	if (!newPath) return;
+	copyData(path, newPath);
 	
-	// reselect all of the newPaths segments that are in the exact same location
-	// as the ones that are stored in selectedPoints
-	for(let i=0; i<newPath.segments.length; i++) {
-		const seg = newPath.segments[i];
-		for(let j=0; j<selectedPoints.length; j++) {
-			const point = selectedPoints[j];
-			if(point.x === seg.point.x && point.y === seg.point.y) {
-				seg.selected = true;
-			}
-		}
-	}
-	
-	// only do this if path and newPath are different
-	// (split at more than one point)
-	if(path !== newPath) {
-		for(let i=0; i<path.segments.length; i++) {
-			const seg = path.segments[i];
-			for(let j=0; j<selectedPoints.length; j++) {
-				const point = selectedPoints[j];
-				if(point.x === seg.point.x && point.y === seg.point.y) {
-					seg.selected = true;
-				}
-			}
-		}
-	}
+	for (const seg of selectedSegments) seg.selected = true;
 }
 
 
 export function cloneSelection() {
 	const selectedItems = getSelectedItems();
-	for(let i = 0; i < selectedItems.length; i++) {
-		const item = selectedItems[i];
+	for (const item of selectedItems) {
 		const cloned = item.clone();
-		if (item.data && item.data.therionData)
-			cloned.data = pgDocument.deserializeJSON(JSON.stringify(item.data));
+		copyData(item, cloned);
 		item.selected = false;
 	}
-	undo.snapshot('cloneSelection');
 
+	undo.snapshot('cloneSelection');
 }
 
 
 export function setItemSelection(item: paper.Item, state: boolean) {
 	if (item.layer !== paper.project.activeLayer) return;
-	const parentGroup = groups.getItemsGroup(item);
-	const itemsCompoundPath = compoundPath.getItemsCompoundPath(item);
 	
 	// if selection is in a group, select group not individual items
-	if(parentGroup) {
+	if (item.parent && (groups.isGroup(item.parent) || items.isCompoundPathItem(item.parent))) {
 		// do it recursive
-		setItemSelection(parentGroup, state);
-
-	} else if(itemsCompoundPath) {
-		setItemSelection(itemsCompoundPath, state);
-
+		setItemSelection(item.parent, state);
 	} else {
-		if(item.data && item.data.noSelect) {
-			return;
-		}
+		if (item.data && item.data.noSelect) return;
 		// fully selected segments need to be unselected first
-		(item as any).fullySelected = false; 
+		if (items.isPathItem(item)) item.fullySelected = false;
 		// then the item can be normally selected
 		item.selected = state;
 		// deselect children of compound-path or group for cleaner item selection
-		if(compoundPath.isCompoundPath(item) || groups.isGroup(item)) {
-			
-			const children = item.children;
-			if(children) {
-				for(let i=0; i<children.length; i++) {
-					const child = children[i];
-					child.selected = !state;
-				}
-			}
+		if (compoundPath.isCompoundPath(item) || groups.isGroup(item)) {
+			for (const child of item.children) child.selected = false;
 		}
 	}
 	
 	triggers.emit("SelectionChanged");
-	
 }
 
-
-// this gets all selected non-grouped items and groups
-// (alternative to paper.project.selectedItems, which includes 
-// group children in addition to the group)
+/**
+	* this gets all selected non-grouped items and groups
+	* (alternative to paper.project.selectedItems, which includes 
+	* group children in addition to the group)
+	*/
 export function getSelectedItems() {
 	const allItems = paper.project.selectedItems;
-	const itemsAndGroups: paper.Item[] = [];
-
-	for(let i=0; i<allItems.length; i++) {
-		const item = allItems[i];
-		if(items.isLayer(item)) {
-			continue;
-		}
-		if(groups.isGroup(item) &&
-			!groups.isGroup(item.parent) ||
-			!groups.isGroup(item.parent)) {
-			if(item.data && !item.data.isSelectionBound) {
-				itemsAndGroups.push(item);
+	const itemsAndGroups: paper.Item[] = allItems.filter(item => {
+		if (items.isLayer(item)) return false;
+		if (!groups.isGroup(item.parent)) {
+			if (!item.data || !item.data.isSelectionBound) {
+				return true;
 			}
 		}
-	}
+		return false;
+	});
 	// sort items by index (0 at bottom)
-	itemsAndGroups.sort(function(a, b) {
-			return a.index - b.index;
+	itemsAndGroups.sort((a, b) => {
+		return a.index - b.index;
 	});
 	return itemsAndGroups;
 }
 
-const TypeNames = {
-	"LineSettings": "Line",
-	"AreaSettings": "Area",
-	"PointSettings": "Point",
-	"ScrapSettings": "Scrap"
-};
-
-export function getSelectionType(): string {
+export function getSelectionType(): string | undefined {
 	const selection = getSelectedItems();
-	if(selection.length === 0) {
-		return null;
+	if (selection.length === 0) return;
+	const first = selection[0];
+	if (items.isPathItem(first) && first.segments.some(seg => seg.selected)) {
+		return "Segment";
 	}
-	
-	let selectionType = "";
-	let lastSelectionType = "";
-	for (let i=0; i<selection.length; i++) {
-		const item = selection[i];
-		if(getSelectionMode() === "Segment") {
-			//todo: differentiate between segment, curve and handle
-			return "Segment";
-		}
-		
-		if(item.data.isPGTextItem) {
-			selectionType = "Text";
-		} else {
-			const settings = getSettings(item as any);
-			if (settings != null) {
-				selectionType = TypeNames[settings.className];
-			} else {
-				selectionType = item.className;
-			}
-		}
-		
-		if(selectionType === lastSelectionType || lastSelectionType === "") {
-			lastSelectionType = selectionType;
-			
-		} else {
-			return "Mixed";
-		}
-	}
-	return selectionType;
-
+	return selection.some(item => item.className !== first.className) ? "Mixed" : first.className;
 }
 
 
 // only returns paths, no compound paths, groups or any other stuff
 export function getSelectedPaths(): paper.Path[] {
-	const allPaths = getSelectedItems();
-	const paths = [];
-
-	for(let i=0; i<allPaths.length; i++) {
-		const path = allPaths[i];
-		if(path.className === 'Path') {
-			paths.push(path);
-		}
-	}
-	return paths;
+	return getSelectedItems().filter(items.isPathItem);
 }
 
 export function smoothHandles() {
@@ -409,14 +217,10 @@ export function smoothHandles() {
 }
 
 export function switchSelectedHandles(mode?: "linear" | "smooth") {
-	const items = getSelectedItems() as paper.Path[];
-	for(let i=0; i<items.length; i++) {
-		const segments = items[i].segments;
-		for(let j=0; j<segments.length; j++) {
-			const seg = segments[j];
-			if(!seg.selected) continue;
-
-			geometry.switchHandle(seg, mode);
+	for (const item of getSelectedItems()) {
+		if (!items.isPathItem(item)) continue;
+		for (const segment of item.segments) {
+			if (segment.selected) geometry.switchHandle(segment, mode);
 		}
 	}
 	undo.snapshot('switchSelectedHandles');
@@ -424,46 +228,26 @@ export function switchSelectedHandles(mode?: "linear" | "smooth") {
 
 
 export function removeSelectedSegments() {
-	undo.snapshot('removeSelectedSegments');
-	
-	const items = getSelectedItems() as paper.Path[];
-	const segmentsToRemove: paper.Segment[] = [];
-	
-	for(let i=0; i<items.length; i++) {
-		const segments = items[i].segments;
-		for(let j=0; j < segments.length; j++) {
-			const seg = segments[j];
-			if(seg.selected) {
-				segmentsToRemove.push(seg);
-			}
+	for (const item of getSelectedItems()) {
+		if (!items.isPathItem(item)) continue;
+		for (const segment of [...item.segments]) {
+			if (segment.selected) segment.remove();
 		}
 	}
-	
-	for(let i=0; i<segmentsToRemove.length; i++) {
-		const seg = segmentsToRemove[i];
-		seg.remove();
-	}
+	undo.snapshot('removeSelectedSegments');
 }
 
 
-export function processRectangularSelection(event: paper.Event, rect: paper.PathItem, mode?: string) {
-	const allItems = pgDocument.getAllSelectableItems();
-	
-	itemLoop:
-	for(let i=0; i<allItems.length; i++) {
-		const item = allItems[i];
-		if(mode === 'detail' && items.isPGTextItem(items.getRootItem(item))) {
-			continue itemLoop;
-		}
+export function processRectangularSelection(invert: boolean, rect: paper.PathItem, mode?: "detail") {	
+	for (const item of pgDocument.getAllSelectableItems()) {
 		// check for item segment points inside selectionRect
-		if(groups.isGroup(item) || items.isCompoundPathItem(item)) {
-			if(!rectangularSelectionGroupLoop(item, rect, item, event, mode)) {
-				continue itemLoop;
+		if (groups.isGroup(item) || items.isCompoundPathItem(item)) {
+			if (!handleRectangularSelectionGroup(item, rect, invert, mode)) {
+				continue;
 			}
-			
 		} else {
-			if(!handleRectangularSelectionItems(item, event, rect, mode)) {
-				continue itemLoop;
+			if (!handleRectangularSelectionItem(item, invert, rect, mode)) {
+				continue;
 			}
 		}
 	}
@@ -471,15 +255,12 @@ export function processRectangularSelection(event: paper.Event, rect: paper.Path
 
 
 // if the rectangular selection found a group, drill into it recursively
-export function rectangularSelectionGroupLoop(group: paper.Group | paper.CompoundPath, rect: paper.PathItem, root: paper.Group | paper.CompoundPath, event: paper.Event, mode?: string) {
-	for(let i=0; i<group.children.length; i++) {
-		const child = group.children[i];
-		
-		if(groups.isGroup(child) || items.isCompoundPathItem(child)) {
-			rectangularSelectionGroupLoop(child, rect, root, event, mode);
-			
+function handleRectangularSelectionGroup(group: paper.Group | paper.CompoundPath, rect: paper.PathItem, invert: boolean, mode?: "detail") {
+	for (const child of group.children) {
+		if (groups.isGroup(child) || items.isCompoundPathItem(child)) {
+			handleRectangularSelectionGroup(child, rect, invert, mode);
 		} else {
-			if(!handleRectangularSelectionItems(child, event, rect, mode)) {
+			if (!handleRectangularSelectionItem(child, invert, rect, mode)) {
 				return false;
 			}
 		}
@@ -488,30 +269,23 @@ export function rectangularSelectionGroupLoop(group: paper.Group | paper.Compoun
 }
 
 
-export function handleRectangularSelectionItems(item: paper.Item, event: paper.Event, rect: paper.PathItem, mode?: string) {
+function handleRectangularSelectionItem(item: paper.Item, invert: boolean, rect: paper.PathItem, mode?: "detail") {
 	if (item.layer !== paper.project.activeLayer) return;
-	if(items.isPathItem(item)) {
+	if (items.isPathItem(item)) {
 		let segmentMode = false;
 		
 		// first round checks for segments inside the selectionRect
-		for(let j=0; j<item.segments.length; j++) {
-			const seg = item.segments[j];
-			if( rect.contains(seg.point)) {
-				if(mode === 'detail') {
-					if(event.modifiers.shift && seg.selected) {
+		for (const seg of item.segments) {
+			if (rect.contains(seg.point)) {
+				if (mode === 'detail') {
+					if (invert && seg.selected) {
 						seg.selected = false;
 					} else {
 						seg.selected = true;
 					}
 					segmentMode = true;
-
 				} else {
-					if(event.modifiers.shift && item.selected) {
-						setItemSelection(item,false);
-
-					} else {
-						setItemSelection(item,true);
-					}
+					setItemSelection(item, !invert || !item.selected);
 					return false;
 				}
 			}
@@ -519,20 +293,15 @@ export function handleRectangularSelectionItems(item: paper.Item, event: paper.E
 
 		// second round checks for path intersections
 		const intersections = item.getIntersections(rect);
-		if( intersections.length > 0 && !segmentMode) {
+		if (intersections.length > 0 && !segmentMode) {
 			// if in detail select mode, select the curves that intersect
 			// with the selectionRect
-			if(mode === 'detail') {
-				for(let k=0; k<intersections.length; k++) {
-					const curve = intersections[k].curve;
-					// intersections contains every curve twice because
-					// the selectionRect intersects a circle always at
-					// two points. so we skip every other curve
-					if(k % 2 === 1) {
-						continue;
-					}
-
-					if(event.modifiers.shift) {
+			if (mode === 'detail') {
+				// intersections contains every curve twice because
+				// the selectionRect intersects a circle always at
+				// two points. so we skip every other curve
+				for (const { curve } of intersections.filter((_, i) => i % 2 === 0)) {
+					if (invert) {
 						curve.selected = !curve.selected;
 					} else {
 						curve.selected = true;
@@ -540,51 +309,37 @@ export function handleRectangularSelectionItems(item: paper.Item, event: paper.E
 				}
 
 			} else {
-				if(event.modifiers.shift && item.selected) {
-					setItemSelection(item,false);
-
-				} else {
-					setItemSelection(item,true);
-				}
+				setItemSelection(item, !invert || !item.selected);
 				return false;
 			}
 		}
-
-	} else if(items.isBoundsItem(item)) {
-		if(checkBoundsItem(rect, item, event)) {
+	} else if (items.isBoundsItem(item)) {
+		if (handleRectangularSelectionBoundsItem(rect, item, invert)) {
 			return false;
 		}
 	}
 	return true;
 }	
 
+function createItemBoundsPath(item: paper.Item): paper.Path {
+	const b = item.internalBounds;
+	return new paper.Path(
+		[b.topLeft, b.topRight, b.bottomRight, b.bottomLeft]
+		.map(point => item.localToGlobal(point))
+	);
+}
 
-export function checkBoundsItem(selectionRect, item, event) {
-	const itemBounds = new paper.Path([
-		item.localToGlobal(item.internalBounds.topLeft),
-		item.localToGlobal(item.internalBounds.topRight),
-		item.localToGlobal(item.internalBounds.bottomRight),
-		item.localToGlobal(item.internalBounds.bottomLeft)
-	]);
+function handleRectangularSelectionBoundsItem(selectionRect: paper.PathItem, item: paper.Item, invert: boolean) {
+	const itemBounds = createItemBoundsPath(item);
 	itemBounds.closed = true;
 	itemBounds["guide"] = true;
 
-	for(let i=0; i<itemBounds.segments.length; i++) {
-		const seg = itemBounds.segments[i];
-		if( selectionRect.contains(seg.point) ||
-			(i === 0 && selectionRect.getIntersections(itemBounds).length > 0)) {
-			if(event.modifiers.shift && item.selected) {
-				setItemSelection(item,false);
-
-			} else {
-				setItemSelection(item,true);
-			}
-			itemBounds.remove();
-			return true;
-			
-		}
+	const isIntersecting = selectionRect.intersects(itemBounds);
+	if (isIntersecting || itemBounds.segments.some(seg => selectionRect.contains(seg.point))) {
+		setItemSelection(item, !invert || !item.selected);
+		itemBounds.remove();
+		return true;
 	}
-
 	itemBounds.remove();
 }
 

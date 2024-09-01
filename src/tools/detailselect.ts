@@ -300,7 +300,7 @@ export const detailselect = defineTool({
 			if (event.event.button > 0) return; // only first mouse button
 		
 			if (doRectSelection && selectionRect) {
-				selection.processRectangularSelection(event, selectionRect, "detail");
+				selection.processRectangularSelection(event.event.shiftKey, selectionRect, "detail");
 				selectionRect.remove();
 				
 			} else {

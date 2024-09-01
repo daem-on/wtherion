@@ -74,7 +74,7 @@ const actions: ToolAction[] = [
 	},
 	{
 		name: "delete",
-		callback: () => selection.deleteSelection(),
+		callback: () => selection.deleteItemSelection(),
 		category: "menu.edit",
 		defaultKey: "delete",
 		icon: deleteUrl,
@@ -394,7 +394,7 @@ export const select = defineTool({
 			if (event.event.button > 0) return; // only first mouse button
 			
 			finalize: if (mode === 'rectSelection' && selectionRect) {
-				selection.processRectangularSelection(event, selectionRect);
+				selection.processRectangularSelection(event.event.shiftKey, selectionRect);
 				selectionRect.remove();
 				
 			} else if (mode === 'move' || mode === 'cloneMove') {

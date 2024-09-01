@@ -4,42 +4,26 @@ import { clearSelection, getSelectedItems } from "./selection";
 import { snapshot } from "./undo";
 import * as wtConf from "./filesio/configManagement";
 import { deserializeJSON } from "./document";
+import { useAsyncClipboard, useLocalClipboard } from "grapht/clipboard";
 
 const MIME = "web application/json+wtherion";
 
-let localClipboard = [];
+const provider = wtConf.get("enableAsyncClipboard")
+	? useAsyncClipboard(MIME)
+	: useLocalClipboard();
 
 export function copySelectionToClipboard() {
 	const selectedItems = getSelectedItems();
 	const values = selectedItems
 		.map(item => item.exportJSON());
-
-	if (wtConf.get("enableAsyncClipboard")) {
-		const clipboardItems = values.map(json => {
-			const blob = new Blob([json], { type: MIME });
-			return new ClipboardItem({ [MIME]: blob });
-		});
-		navigator.clipboard.write(clipboardItems);
-	} else {
-		localClipboard = values;
-	}
+	provider.copy(values);
 }
 
 export async function pasteObjectsFromClipboard() {
 	snapshot('pasteObjectsFromClipboard');
 	clearSelection();
 	
-	const items: string[] = [];
-	if (wtConf.get("enableAsyncClipboard")) {
-		const clipboard = await navigator.clipboard.read();
-		for (const item of clipboard) {
-			if (!item.types.includes(MIME)) continue;
-			const blob = await item.getType(MIME);
-			items.push(await blob.text());
-		}
-	} else {
-		items.push(...localClipboard);
-	}
+	const items = await provider.paste();
 	for (const item of items) {
 		const created = paper.project.importJSON(deserializeJSON(item));
 		if (!created) continue;

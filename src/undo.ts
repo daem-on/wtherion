@@ -1,4 +1,4 @@
-import { createUndoBuffer } from "grapht/undo";
+import { createUndoBuffer } from "@daem-on/graphite/undo";
 import { compressToUint8Array, decompressFromUint8Array } from "lz-string";
 import paper from "paper";
 import { deserializeJSON } from "./document";

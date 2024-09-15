@@ -1,4 +1,4 @@
-import { addDialog } from "grapht/modal";
+import { addDialog } from "@daem-on/graphite/modal";
 import getSettings from "./objectSettings/model/getSettings";
 import paper from "paper";
 import SearchDialog from "./components/dialogs/SearchDialog.vue";

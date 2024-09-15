@@ -1,5 +1,5 @@
 import ErrorDialog from "./components/dialogs/ErrorDialog.vue";
-import { addDialog } from "grapht/modal";
+import { addDialog } from "@daem-on/graphite/modal";
 
 export function showErrorWindow(e: ErrorEvent) {
 	addDialog(ErrorDialog, {

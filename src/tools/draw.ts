@@ -3,7 +3,7 @@
 
 import paper from "paper";
 import { markRaw, ref } from "vue";
-import { defineTool } from "grapht/tools";
+import { defineTool } from "@daem-on/graphite/tools";
 import DrawPanel from "../components/panels/tools/DrawPanel.vue";
 import * as math from "../math";
 import { LineSettings } from "../objectSettings/model/LineSettings";

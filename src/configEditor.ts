@@ -1,4 +1,4 @@
-import { addDialog } from "grapht/modal";
+import { addDialog } from "@daem-on/graphite/modal";
 import ConfigDialog from "./components/dialogs/ConfigDialog.vue";
 
 export function show() {

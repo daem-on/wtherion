@@ -1,7 +1,7 @@
-import { SaveProvider } from "grapht/io";
+import { SaveProvider } from "@daem-on/graphite/io";
 import LoadDialog from "../../components/dialogs/LoadDialog.vue";
 import { i18n } from "../../i18n";
-import { addDialog } from "grapht/modal";
+import { addDialog } from "@daem-on/graphite/modal";
 
 const t = i18n.global.t;
 

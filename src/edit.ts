@@ -4,7 +4,7 @@ import { clearSelection, getSelectedItems } from "./selection";
 import { snapshot } from "./undo";
 import * as wtConf from "./filesio/configManagement";
 import { deserializeJSON } from "./document";
-import { useAsyncClipboard, useLocalClipboard } from "grapht/clipboard";
+import { useAsyncClipboard, useLocalClipboard } from "@daem-on/graphite/clipboard";
 
 const MIME = "web application/json+wtherion";
 

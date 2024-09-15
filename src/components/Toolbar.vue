@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
-import { activeToolRef, switchTool, duckedToolRef } from "grapht/tools";
-import { toolsRef } from "grapht/tools";
+import { activeToolRef, switchTool, duckedToolRef } from "@daem-on/graphite/tools";
+import { toolsRef } from "@daem-on/graphite/tools";
 import ToolButton from "./common/ToolButton.vue";
 import compareUrl from "../../assets/ui/compare.svg";
 import { setCustomRender } from "../render";

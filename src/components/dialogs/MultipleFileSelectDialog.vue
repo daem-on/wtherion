@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { MultipleFileSelectDialogData } from '../../filesio/saveManagement/saveManagement';
-import { removeDialog } from 'grapht/modal';
+import { removeDialog } from '@daem-on/graphite/modal';
 import { ref } from 'vue';
 
 const props = defineProps<{

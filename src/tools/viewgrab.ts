@@ -1,7 +1,7 @@
 // view pan tool
 // adapted from http://sketch.paperjs.org/
 import paper from "paper";
-import { defineTool } from "grapht/tools";
+import { defineTool } from "@daem-on/graphite/tools";
 
 export const viewgrab = defineTool({
 	definition: {

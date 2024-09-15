@@ -7,7 +7,7 @@ import { LineSettings } from "../../src/objectSettings/model/LineSettings";
 import getSettings from "../../src/objectSettings/model/getSettings";
 import BezierPanel from "../components/panels/tools/BezierPanel.vue";
 import { clearSelection } from "../selection";
-import { defineTool } from "grapht/tools";
+import { defineTool } from "@daem-on/graphite/tools";
 import * as undo from "../undo";
 import { createPath, drawLine } from "../objectDefs";
 

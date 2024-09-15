@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { activeDialogList, removeDialog } from 'grapht/modal';
+import { activeDialogList, removeDialog } from '@daem-on/graphite/modal';
 </script>
 
 <template>

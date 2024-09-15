@@ -1,4 +1,4 @@
-import { createToolRegistry, createToolSwitcher, initializeTools } from "grapht/tools";
+import { createToolRegistry, createToolSwitcher, initializeTools } from "@daem-on/graphite/tools";
 import { bezier } from "./tools/bezier";
 import { detailselect } from "./tools/detailselect";
 import { draw } from "./tools/draw";

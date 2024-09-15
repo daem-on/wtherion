@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, type Component } from 'vue';
-import { activeToolRef } from 'grapht/tools';
+import { activeToolRef } from '@daem-on/graphite/tools';
 import ObjectOptionPanel from './panels/ObjectOptionPanel.vue';
 import MainMenu from './menu/MainMenu.vue';
 import ScrapPanel from './panels/ScrapPanel.vue';

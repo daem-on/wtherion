@@ -1,5 +1,5 @@
-import { SaveProvider } from "grapht/io";
-import { openSingleFile, pickSaveFile, supportsFilesystem, writeOrDownloadBlob } from "grapht/io";
+import { SaveProvider } from "@daem-on/graphite/io";
+import { openSingleFile, pickSaveFile, supportsFilesystem, writeOrDownloadBlob } from "@daem-on/graphite/io";
 import { acceptTypeDefs } from "./fileSystemUtils";
 
 async function saveString(content: string, handle: FileSystemFileHandle) {

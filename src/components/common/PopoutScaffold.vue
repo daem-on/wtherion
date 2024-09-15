@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { arrow, autoUpdate, flip, offset, ReferenceElement, shift, useFloating, VirtualElement } from "@floating-ui/vue";
-import { ref, watch, computed } from "vue";
-import { StyleValue } from "vue/dist/vue.js";
+import { ref, watch, computed, StyleValue } from "vue";
 
 type Position = { x: number, y: number };
 const isOpen = ref(false);

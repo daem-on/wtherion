@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { deleteFromStorage } from '../../filesio/saveManagement/localStorageSaves';
-import { DialogData, removeDialog } from 'grapht/modal';
+import { DialogData, removeDialog } from '@daem-on/graphite/modal';
 
 const props = defineProps<{
 	data: DialogData<{

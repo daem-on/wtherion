@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DialogData } from 'grapht/modal';
+import { DialogData } from '@daem-on/graphite/modal';
 
 const props = defineProps<{
 	data: DialogData<ErrorEvent>;

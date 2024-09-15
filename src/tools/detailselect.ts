@@ -9,7 +9,7 @@ import * as compoundPath from "../compoundPath";
 import * as math from "../math";
 import * as undo from "../undo";
 import * as selection from "../selection";
-import { defineTool, ToolAction } from "grapht/tools";
+import { defineTool, ToolAction } from "@daem-on/graphite/tools";
 import selectAllUrl from "../../assets/ui/select_all.svg";
 import linearScaleUrl from "../../assets/ui/linear_scale.svg";
 import callSplitUrl from "../../assets/ui/call_split.svg";

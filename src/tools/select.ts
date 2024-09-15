@@ -17,7 +17,7 @@ import * as undo from "../undo";
 import * as selection from "../selection";
 import paper from "paper";
 import { LineSettings } from "../../src/objectSettings/model/LineSettings";
-import { defineTool, ToolAction } from "grapht/tools";
+import { defineTool, ToolAction } from "@daem-on/graphite/tools";
 import { triggers } from "../triggers";
 import editTH2 from "../editTH2";
 import { bringSelectionToFront, sendSelectionToBack } from "../order";

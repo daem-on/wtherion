@@ -14,7 +14,7 @@ import { showValidationWindow } from "./validation/validate.ts";
 import * as view from "./view";
 import { i18n } from "./i18n";
 import HistoryDialog from "./components/dialogs/HistoryDialog.vue";
-import { addDialog } from "grapht/modal";
+import { addDialog } from "@daem-on/graphite/modal";
 import { exportTH2, saveManager } from "./filesio/saveManagement/saveManagement.ts";
 
 const t = i18n.global.t;

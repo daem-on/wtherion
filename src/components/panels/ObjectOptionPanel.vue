@@ -3,7 +3,7 @@ import { computed } from 'vue';
 import getSettings, { PaperItemType } from '../../objectSettings/model/getSettings';
 import { selectedObjects, selectedSegments } from '../../objectSettings/objectOptionPanel';
 import LinePanel from './objects/LinePanel.vue';
-import { activeToolRef } from 'grapht/tools';
+import { activeToolRef } from '@daem-on/graphite/tools';
 import SubtypePanel from './objects/SubtypePanel.vue';
 import AreaPanel from './objects/AreaPanel.vue';
 import PointObjectPanel from './objects/PointObjectPanel.vue';

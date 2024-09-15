@@ -1,4 +1,4 @@
-import useSelection from "grapht/selection";
+import useSelection from "@daem-on/graphite/selection";
 import paper from "paper";
 import { deserializeJSON } from "./document";
 import { triggers } from "./triggers";

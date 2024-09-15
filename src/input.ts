@@ -1,7 +1,7 @@
 import { openSearchDialog } from "./search";
 import { saveManager, exportTH2 } from "./filesio/saveManagement/saveManagement";
 import * as config from "./filesio/configManagement";
-import { activeToolRef, getActiveTool, loadCustomKeybinds, registerAction, serializeCustomKeybinds, setupInput, unduckTool } from "grapht/tools";
+import { activeToolRef, getActiveTool, loadCustomKeybinds, registerAction, serializeCustomKeybinds, setupInput, unduckTool } from "@daem-on/graphite/tools";
 import { resetZoom } from "./view";
 import { redo, undo } from "./undo";
 import editTH2 from "./editTH2";

@@ -1,3 +1,5 @@
+import { createCustomRenderer } from "@daem-on/graphite/render";
+import { getActiveTool } from "@daem-on/graphite/tools";
 import paper from "paper";
 
 export enum CustomRenderStyle {
@@ -97,53 +99,34 @@ function drawSymbol(item: paper.Item, context: CanvasRenderingContext2D) {
 }
 
 export function setupCustomRenderer() {
-	const originalUpdate = paper.view.update;
-	paper.view.update = function() {
-		const updated = originalUpdate.bind(this)();
-		if (updated) renderCallback();
-		return updated;
-	};
-
-	const context = paper.view.element.getContext("2d");
-	context.lineWidth = 1;
-	let itemsToDraw: paper.Item[] = [];
-
-	paper.view.on("frame", event => {
-		if (!enableCustomRender) return;
-		if (event.count % 20 !== 0) return;
-		itemsToDraw = paper.project.getItems({
-			recursive: true,
-			match: item => item.layer?.visible && item.data?.customRenderStyle != null,
-			overlapping: paper.view.bounds
-		});
-	});
-
-	function renderCallback() {
-		if (!enableCustomRender) return;
-		context.strokeStyle = customRenderStrokeStyle;
-		paper.view.matrix.applyToContext(context);
-		for (const item of itemsToDraw) {
-			switch (item.data.customRenderStyle) {
-				case CustomRenderStyle.Spiky:
-					drawSpikyLine(item as paper.Path, context, item.data.therionData.reverse);
-					break;
-				case CustomRenderStyle.Triangle:
-					drawTriangleLine(item as paper.Path, context, item.data.therionData.reverse);
-					break;
-				case CustomRenderStyle.Notched:
-					drawNotchedLine(item as paper.Path, context, item.data.therionData.reverse);
-					break;
-				case CustomRenderStyle.Contour:
-					drawLineWithContour(item as paper.Path, context, item.data.therionData.reverse);
-					break;
-				case CustomRenderStyle.SegmentDetails:
-					drawSegmentDetails(item as paper.Path, context);
-					break;
-				case CustomRenderStyle.Symbol:
-					drawSymbol(item, context);
-					break;
+	createCustomRenderer({
+		getActiveTool,
+		scope: paper,
+		renderCallback(items, context) {
+			if (!enableCustomRender) return;
+			context.strokeStyle = customRenderStrokeStyle;
+			for (const item of items) {
+				switch (item.data.customRenderStyle) {
+					case CustomRenderStyle.Spiky:
+						drawSpikyLine(item as paper.Path, context, item.data.therionData.reverse);
+						break;
+					case CustomRenderStyle.Triangle:
+						drawTriangleLine(item as paper.Path, context, item.data.therionData.reverse);
+						break;
+					case CustomRenderStyle.Notched:
+						drawNotchedLine(item as paper.Path, context, item.data.therionData.reverse);
+						break;
+					case CustomRenderStyle.Contour:
+						drawLineWithContour(item as paper.Path, context, item.data.therionData.reverse);
+						break;
+					case CustomRenderStyle.SegmentDetails:
+						drawSegmentDetails(item as paper.Path, context);
+						break;
+					case CustomRenderStyle.Symbol:
+						drawSymbol(item, context);
+						break;
+				}
 			}
-		}
-		context.resetTransform();
-	}
+		},
+	});
 }

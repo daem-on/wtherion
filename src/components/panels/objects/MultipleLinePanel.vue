@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, watch } from 'vue';
+import { empty, useMultipleEditing } from '../../../multipleEditing';
+import { drawLine } from '../../../objectDefs';
 import { LineSettings } from '../../../objectSettings/model/LineSettings';
 import getSettings from '../../../objectSettings/model/getSettings';
 import subtypeList from "../../../res/subtype-list.json";
+import { wallTypes } from '../../../res/wallTypes';
+import { snapshot } from '../../../undo';
+import BooleanInput from '../../common/BooleanInput.vue';
+import CustomList from '../../common/CustomList.vue';
 import NullableBooleanInput from '../../common/NullableBooleanInput.vue';
 import PanelContent from '../../common/PanelContent.vue';
 import PanelSection from '../../common/PanelSection.vue';
-import CustomList from '../../common/CustomList.vue';
-import BooleanInput from '../../common/BooleanInput.vue';
-import { wallTypes } from '../../../res/wallTypes';
-import { drawLine } from '../../../objectDefs';
-import { snapshot } from '../../../undo';
 
 const props = defineProps<{
 	selection: paper.Path[]
@@ -18,52 +19,28 @@ const props = defineProps<{
 
 type Options = {
 	type: string;
-	subtype: string;
-	reverse: boolean | undefined;
-	invisible: boolean | undefined;
+	subtype?: string;
+	reverse?: boolean | typeof empty;
+	invisible?: boolean | typeof empty;
 };
 
-const stringOptions = ["type", "subtype"];
+const multipleEditing = useMultipleEditing<Options>({
+	type: "" ,
+	subtype: "",
+	reverse: empty,
+	invisible: empty,
+});
 
-function createDefaultOptions(from: LineSettings[]): Options {
-	const first = from[0];
-	return {
-		type: from.every(p => p.type === first.type) ? first.type : "",
-		subtype: from.every(p => p.subtype === first.subtype) ? first.subtype : "",
-		reverse: from.every(p => p.reverse === first.reverse) ? first.reverse : undefined,
-		invisible: from.every(p => p.invisible === first.invisible) ? first.invisible : undefined,
-	};
-}
-
-const optionsCache = ref<Options | undefined>(undefined);
-const reverseCanBeNull = ref<boolean>(false);
-const invisibleCanBeNull = ref<boolean>(false);
+const { optionsCache } = multipleEditing;
 
 watch(() => props.selection, () => {
-	optionsCache.value = createDefaultOptions(props.selection.map(p => getSettings(p) as LineSettings));
-	reverseCanBeNull.value = optionsCache.value.reverse === undefined;
-	invisibleCanBeNull.value = optionsCache.value.invisible === undefined;
+	multipleEditing.createDefaultOptions(props.selection.map(p => getSettings(p) as LineSettings));
 }, { immediate: true });
 
 const lineSettingsArray = computed(() => props.selection.map(p => getSettings(p) as LineSettings));
 
 function modifyObject() {
-	if (!optionsCache.value) return;
-	const options = optionsCache.value;
-	for (const option of stringOptions) {
-		if (options[option] !== "") {
-			for (const line of lineSettingsArray.value)
-				line[option] = options[option];
-		}
-	}
-	if (options.reverse !== undefined) {
-		for (const line of lineSettingsArray.value)
-			line.reverse = options.reverse;
-	}
-	if (options.invisible !== undefined) {
-		for (const line of lineSettingsArray.value)
-			line.invisible = options.invisible;
-	}
+	multipleEditing.modifyItems(lineSettingsArray.value);
 	for (const line of props.selection) drawLine(line);
 	snapshot("editMultipleLine");
 }
@@ -83,11 +60,11 @@ const canHaveSubtype = computed(() => {
 			<CustomList v-model="optionsCache.subtype" :options="subtypeList[optionsCache.type]" :imageRoot="`assets/rendered/subtype`" :placeholder="$t(`mixed`)" />
 		</PanelSection>
 		<PanelSection :label="$t(`reverse`)">
-			<NullableBooleanInput v-if="reverseCanBeNull" v-model="optionsCache.reverse" />
+			<NullableBooleanInput v-if="multipleEditing.wasEmpty.value.reverse" :third="empty" v-model="optionsCache.reverse" />
 			<BooleanInput v-else v-model="optionsCache.reverse" />
 		</PanelSection>
 		<PanelSection :label="$t(`invisible`)">
-			<NullableBooleanInput v-if="invisibleCanBeNull" v-model="optionsCache.invisible" />
+			<NullableBooleanInput v-if="multipleEditing.wasEmpty.value.invisible" :third="empty" v-model="optionsCache.invisible" />
 			<BooleanInput v-else v-model="optionsCache.invisible" />
 		</PanelSection>
 		<PanelSection column>

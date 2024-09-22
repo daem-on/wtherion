@@ -1,17 +1,19 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T">
 import { computed } from 'vue';
 
-const model = defineModel<boolean | undefined>();
+const model = defineModel<boolean | T>();
 
-const indeterminate = computed(() => model.value === undefined);
+const { third } = defineProps<{ third: T; }>();
+
+const indeterminate = computed(() => model.value === third);
 
 function toggleState() {
-	if (model.value === undefined) {
+	if (model.value === third) {
 		model.value = true;
 	} else if (model.value === true) {
 		model.value = false;
 	} else {
-		model.value = undefined;
+		model.value = third;
 	}
 }
 </script>

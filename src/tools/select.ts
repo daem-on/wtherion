@@ -328,6 +328,7 @@ export const select = defineTool({
 			if (rectSelection.rect) {
 				const { x, y, width, height } = rectSelection.rect;
 				context.setLineDash([3 * zoom, 3 * zoom]);
+				context.lineWidth = zoom;
 				context.strokeStyle = guideColor;
 				context.strokeRect(x, y, width, height);
 				context.setLineDash([]);

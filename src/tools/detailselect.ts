@@ -1,19 +1,20 @@
 // select tool
 // adapted from resources on http://paperjs.org and 
 // https://github.com/memononen/stylii
-import { updateWindow } from "../../src/objectSettings/objectOptionPanel";
-import paper from "paper";
-import * as hover from "../hover";
-import * as guides from "../guides";
-import * as compoundPath from "../compoundPath";
-import * as math from "../math";
-import * as undo from "../undo";
-import * as selection from "../selection";
+import { useDoubleClick, useRectangularSelection } from "@daem-on/graphite/interactions";
+import { notifyViewChanged } from "@daem-on/graphite/render";
 import { defineTool, ToolAction } from "@daem-on/graphite/tools";
-import selectAllUrl from "../../assets/ui/select_all.svg";
-import linearScaleUrl from "../../assets/ui/linear_scale.svg";
+import paper from "paper";
 import callSplitUrl from "../../assets/ui/call_split.svg";
 import deleteUrl from "../../assets/ui/delete.svg";
+import linearScaleUrl from "../../assets/ui/linear_scale.svg";
+import selectAllUrl from "../../assets/ui/select_all.svg";
+import { updateWindow } from "../../src/objectSettings/objectOptionPanel";
+import * as compoundPath from "../compoundPath";
+import * as hover from "../hover";
+import * as math from "../math";
+import * as selection from "../selection";
+import * as undo from "../undo";
 
 const actions: ToolAction[] = [
 	{
@@ -92,13 +93,11 @@ export const detailselect = defineTool({
 		actions
 	},
 	setup(on) {
-		let doRectSelection = false;
-		let selectionRect: paper.Path.Rectangle;
+		const detectDoubleClick = useDoubleClick({ threshold: 250 });
+		const rectSelection = useRectangularSelection(paper);
 		
+		let mode: "none" | "select" | "move" = "none";
 		let hitType: "fill" | "point" | "curve" | "handle-in" | "handle-out" | null = null;
-		
-		let lastEvent = null;
-		let selectionDragged = false;
 
 		const origPositions = new Map<paper.Item | paper.Segment, paper.Point>();
 
@@ -107,31 +106,25 @@ export const detailselect = defineTool({
 		on("mousedown", event => {
 			if (event.event.button > 0) return; // only first mouse button
 			
-			selectionDragged = false;
+			mode = "none";
 			
-			let doubleClicked = false;
-			
-			if (lastEvent) {
-				if ((event.event.timeStamp - lastEvent.event.timeStamp) < 250) {
-					doubleClicked = true;
-					if (!event.modifiers.shift) {
-						selection.clearSelection();
-					}
-				} else {
-					doubleClicked = false;
-				}
+			const doubleClicked = detectDoubleClick(event);
+
+			if (doubleClicked && !event.modifiers.shift) {
+				selection.clearSelection();
 			}
-			lastEvent = event;
 			
 			hitType = null;
 			hover.clearHoveredItem();
-			hitOptions.tolerance = 6 / paper.view.zoom;
-			const hitResult = paper.project.hitTest(event.point, hitOptions);
+
+			const hitResult = paper.project.hitTest(event.point, { ...hitOptions, tolerance: 6 / paper.view.zoom });
+
 			if (!hitResult) {
 				if (!event.modifiers.shift) {
 					selection.clearSelection();
 				}
-				doRectSelection = true;
+				mode = "select";
+				rectSelection.start(event.downPoint);
 				return;
 			}
 				
@@ -164,22 +157,17 @@ export const detailselect = defineTool({
 					paper.project.deselectAll();
 					hitResult.segment.selected = true;
 				}
-			} else if (
-				hitResult.type === "stroke" || 
-				hitResult.type === "curve") {
+			} else if (hitResult.type === "stroke" || hitResult.type === "curve") {
 				hitType = "curve";
 
 				const curve = hitResult.location.curve;
 				if (event.modifiers.shift) {
 					curve.selected = !curve.selected;
-
 				} else if (!curve.selected) {
 					paper.project.deselectAll();
 					curve.selected = true;
 				}
-			} else if (
-				hitResult.type === "handle-in" || 
-				hitResult.type === "handle-out") {
+			} else if (hitResult.type === "handle-in" || hitResult.type === "handle-out") {
 				hitType = hitResult.type;
 
 				if (!event.modifiers.shift) {
@@ -192,30 +180,26 @@ export const detailselect = defineTool({
 		});
 		
 		on("mousemove", event => {
-			hover.handleHoveredItem(hitOptions, event);
+			hover.handleHoveredItem({ ...hitOptions, tolerance: 6 / paper.view.zoom }, event);
 		});
 		
 		on("mousedrag", event => {
 			if (event.event.button > 0) return; // only first mouse button
 			
-			if (doRectSelection) {
-				selectionRect = guides.rectSelect(event);
-				// Remove this rect on the next drag and up event
-				selectionRect.removeOnDrag();
-
+			if (mode === "select") {
+				rectSelection.update(event.point, event.downPoint);
+				notifyViewChanged(paper);
 			} else {
-				doRectSelection = false;
-				selectionDragged = true;
+				mode = "move";
 				
-				const selectedItems = selection.getSelectedItems();
-				const dragVector = (event.point.subtract(event.downPoint));
+				const selectedItems = selection.getSelectedItems() as paper.Path[];
+				const dragVector = event.point.subtract(event.downPoint);
 				
-				for (let i=0; i < selectedItems.length; i++) {
-					const item = selectedItems[i] as paper.Path;
+				for (const item of selectedItems) {
 
 					if (hitType === "fill" || !("segments" in item)) {
 						
-						// if the item has a compound path as a parent, don"t move its
+						// if the item has a compound path as a parent, don't move its
 						// own item, as it would lead to double movement
 						if (item.parent && compoundPath.isCompoundPath(item.parent)) {
 							continue;
@@ -232,7 +216,6 @@ export const detailselect = defineTool({
 							item.position = origPos.add(
 								math.snapDeltaToAngle(dragVector, Math.PI*2/8)
 							);
-
 						} else {
 							item.position = item.position.add(event.delta);
 						}
@@ -262,28 +245,20 @@ export const detailselect = defineTool({
 									}
 								}
 
-							} else if (seg.handleOut.selected && 
-								hitType === "handle-out"){
-								//if option is pressed or handles have been split, 
-								//they"re no longer parallel and move independently
-								if (event.modifiers.option ||
-									!seg.handleOut.isCollinear(seg.handleIn)) {
+							} else if (seg.handleOut.selected && hitType === "handle-out"){
+								// if option is pressed or handles have been split, 
+								// they're no longer parallel and move independently
+								if (event.modifiers.option || !seg.handleOut.isCollinear(seg.handleIn)) {
 									seg.handleOut = seg.handleOut.add(event.delta);
-
 								} else {
 									seg.handleIn = seg.handleIn.subtract(event.delta);
 									seg.handleOut = seg.handleOut.add(event.delta);
 								}
-
-							} else if (seg.handleIn.selected && 
-								hitType === "handle-in") {
-
-								//if option is pressed or handles have been split, 
-								//they"re no longer parallel and move independently
-								if (event.modifiers.option ||
-									!seg.handleOut.isCollinear(seg.handleIn)) {
+							} else if (seg.handleIn.selected && hitType === "handle-in") {
+								// if option is pressed or handles have been split, 
+								// they're no longer parallel and move independently
+								if (event.modifiers.option || !seg.handleOut.isCollinear(seg.handleIn)) {
 									seg.handleIn = seg.handleIn.add(event.delta);
-
 								} else {
 									seg.handleIn = seg.handleIn.add(event.delta);
 									seg.handleOut = seg.handleOut.subtract(event.delta);
@@ -299,22 +274,19 @@ export const detailselect = defineTool({
 		on("mouseup", event => {
 			if (event.event.button > 0) return; // only first mouse button
 		
-			if (doRectSelection && selectionRect) {
-				selection.processRectangularSelection(event.event.shiftKey, selectionRect, "detail");
-				selectionRect.remove();
-				
+			if (mode === "select") {
+				selection.processRectangularSelection(event.event.shiftKey, rectSelection.rect, "detail");
+				rectSelection.end();
 			} else {
 				
-				if (selectionDragged) {
+				if (mode === "move") {
 					undo.snapshot("moveSelection");
-					selectionDragged = false;
 				}
 				
 				// resetting the items and segments origin points for the next usage
-				const selectedItems = selection.getSelectedItems();
+				const selectedItems = selection.getSelectedItems() as paper.Path[];
 
-				for (let i=0; i < selectedItems.length; i++) {
-					const item = selectedItems[i] as paper.Path;
+				for (const item of selectedItems) {
 					// for the item
 					origPositions.delete(item);
 					// and for all segments of the item
@@ -324,14 +296,26 @@ export const detailselect = defineTool({
 				}
 			}
 			
-			doRectSelection = false;
-			selectionRect = null;
+			mode = "none";
 			
 			updateWindow(true);
 		});
 		
 		on("deactivate", () => {
 			hover.clearHoveredItem();
+		});
+
+		const guideColor = "#59c99c";
+
+		on("drawImmediate", ({ context }) => {
+			const zoom = 1 / paper.view.zoom;
+			if (rectSelection.rect) {	
+				const { x, y, width, height } = rectSelection.rect;
+				context.setLineDash([3 * zoom, 3 * zoom]);
+				context.strokeStyle = guideColor;
+				context.strokeRect(x, y, width, height);
+				context.setLineDash([]);
+			}
 		});
 	},
 	

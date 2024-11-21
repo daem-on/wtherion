@@ -32,7 +32,6 @@ export function getUniqueLayerID() {
 	}
 	return biggestID + 1;
 }
-	
 
 export function ensureGuideLayer() {
 	if (!getGuideLayer()) {
@@ -155,6 +154,9 @@ export function changeLayerOrderByIDArray(order) {
 
 
 export function reinitLayers(activeLayerID: number) {
+	if (paper.project.layers.length === 0) {
+		addNewLayer("Scrap 1");
+	}
 	for (let i=0; i<paper.project.layers.length; i++) {
 		const layer = paper.project.layers[i];
 		if (layer.data.id === activeLayerID) {
@@ -162,6 +164,7 @@ export function reinitLayers(activeLayerID: number) {
 			break;
 		}
 	}
+	ensureGuideLayer();
 	triggers.emit("LayersChanged");
 }
 

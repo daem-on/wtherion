@@ -128,6 +128,8 @@ export function documentAsJSON(): string {
 }
 
 export function createEmptyDocument(): string {
-	const project = new paper.Project(new paper.Size(1, 1));
-	return project.exportJSON();
+	return JSON.stringify({
+		meta: { version: versionConfig.saveFileVersion },
+		content: {}
+	});
 }

@@ -19,8 +19,7 @@ const editTH2 = {
 		for (const layer of paper.project.layers) {
 			const isActive = layer === paper.project.activeLayer;
 			if (layer.visible
-				&& layer.data.activeWhenLastDrawn !== isActive
-				&& !layer.data.isGuideLayer) {
+				&& layer.data.activeWhenLastDrawn !== isActive) {
 
 				for (const item of layer.children) {
 					drawObject(item as PaperItemType);

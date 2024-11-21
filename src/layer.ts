@@ -5,9 +5,6 @@ import { defaultScrapSettings } from "./objectSettings/model/ScrapSettings";
 
 export function setup() {
 	const defaultLayer = addNewLayer('Scrap 1');
-	
-	ensureGuideLayer();
-	
 	defaultLayer.activate();
 }
 
@@ -31,16 +28,6 @@ export function getUniqueLayerID() {
 		}
 	}
 	return biggestID + 1;
-}
-
-export function ensureGuideLayer() {
-	if (!getGuideLayer()) {
-		const guideLayer = addNewLayer('pg.internalGuideLayer');
-		guideLayer.data.isGuideLayer = true;
-		guideLayer.data.id = getUniqueLayerID();
-		guideLayer.bringToFront();
-		triggers.emit("LayersChanged");
-	}
 }
 
 function getUniqueLayerName() {
@@ -71,10 +58,6 @@ export function addNewLayer(layerName: string = null, setActive = true, elements
 	
 	newLayer.selectedColor = COLOR_GUIDE_PRIMARY;
 	
-	const guideLayer = getGuideLayer();
-	if (guideLayer) {
-		guideLayer.bringToFront();
-	}
 	triggers.emit("LayerAdded");
 	return newLayer;
 }
@@ -130,25 +113,10 @@ export function activateDefaultLayer() {
 }
 
 
-export function getGuideLayer(): paper.Layer {
-	return paper.project.layers.find(layer => layer.data.isGuideLayer);
-}
-
-
-export function getAllUserLayers() {
-	return paper.project.layers.filter(layer => !layer.data?.isGuideLayer);
-}
-
-
 export function changeLayerOrderByIDArray(order) {
 	order.reverse();
 	for (let i=0; i<order.length; i++) {
 		getLayerByID(order[i]).bringToFront();
-	}
-	// guide layer is always top
-	const guideLayer = getGuideLayer();
-	if (guideLayer) {
-		guideLayer.bringToFront();
 	}
 }
 
@@ -164,7 +132,6 @@ export function reinitLayers(activeLayerID: number) {
 			break;
 		}
 	}
-	ensureGuideLayer();
 	triggers.emit("LayersChanged");
 }
 

@@ -19,19 +19,10 @@ export function selectedItemsToJSONString() {
 }
 
 
-export function getAllPaperItems(includeGuides) {
-	includeGuides = includeGuides || false;
+export function getAllPaperItems() {
 	const allItems = [];
-	for (let i=0; i<paper.project.layers.length; i++) {
-		const layer = paper.project.layers[i];
-		if (!includeGuides && layer.data && layer.data.isGuideLayer)
-			continue;
-		for (let j=0; j<layer.children.length; j++) {
-			const child = layer.children[j];
-			// don't give guides back
-			if (!includeGuides && (child as any).guide) {
-				continue;
-			}
+	for (const layer of paper.project.layers) {
+		for (const child of layer.children) {
 			allItems.push(child);
 		}
 	}
@@ -40,7 +31,7 @@ export function getAllPaperItems(includeGuides) {
 	
 
 export function getPaperItemsByLayerID(id) {
-	const allItems = getAllPaperItems(false);
+	const allItems = getAllPaperItems();
 	const foundItems = [];
 	for (const item of allItems) {
 		if (item.layer.data.id === id) {
@@ -52,7 +43,7 @@ export function getPaperItemsByLayerID(id) {
 
 
 export function getPaperItemsByTags(tags) {
-	const allItems = getAllPaperItems(true);
+	const allItems = getAllPaperItems();
 	const foundItems = [];
 	for (const item of allItems) {
 		for (const tag of tags) {
@@ -66,7 +57,7 @@ export function getPaperItemsByTags(tags) {
 
 
 export function removePaperItemsByDataTags(tags) {
-	const allItems = getAllPaperItems(true);
+	const allItems = getAllPaperItems();
 	for (const item of allItems) {
 		for (const tag of tags) {
 			if (item.data && item.data[tag]) {
@@ -78,7 +69,7 @@ export function removePaperItemsByDataTags(tags) {
 
 
 export function removePaperItemsByTags(tags) {
-	const allItems = getAllPaperItems(true);
+	const allItems = getAllPaperItems();
 	for (const item of allItems) {
 		for (const tag of tags) {
 			if (item[tag]) {

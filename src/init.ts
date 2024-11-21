@@ -5,7 +5,6 @@ import * as tools from "./tools";
 import * as input from "./input";
 import * as undo from "./undo";
 import * as selection from "./selection";
-import * as guides from "./guides.js";
 import * as helper from "./helper.js";
 import * as hover from "./hover.js";
 import editTH2 from "./editTH2";
@@ -40,7 +39,6 @@ export default {
 	input: input,
 	undo: undo,
 	selection: selection,
-	guides: guides,
 	helper: helper,
 	hover: hover,
 	editTH2: editTH2,

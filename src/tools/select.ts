@@ -5,8 +5,6 @@
 import { default as getSettings } from "../../src/objectSettings/model/getSettings";
 import { updateWindow } from "../../src/objectSettings/objectOptionPanel";
 import * as hover from "../hover";
-import * as layer from "../layer";
-import * as guides from "../guides";
 import * as edit from "../edit";
 import * as compoundPath from "../compoundPath";
 import * as group from "../group";

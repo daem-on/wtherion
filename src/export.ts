@@ -4,7 +4,7 @@ import { resetPan, resetZoom } from "./view";
 import paper from "paper";
 import { clearHoveredItem } from "./hover";
 import { clearSelection } from "./selection";
-import { getActiveLayer, getGuideLayer } from "./layer";
+import { getActiveLayer } from "./layer";
 
 let exportRect;
 let canvas: HTMLCanvasElement;
@@ -37,12 +37,6 @@ export function exportAndPromptImage() {
 		clearSelection();
 		const activeLayer = getActiveLayer();
 		
-		// backup guide layer, then remove it (with all children) before export
-		const guideLayer = getGuideLayer() || null;
-		const guideLayerBackup = guideLayer.exportJSON();
-		guideLayer.remove();
-		paper.view.update();
-		
 		if (exportRect) {
 			resetZoom();
 			resetPan();
@@ -65,11 +59,6 @@ export function exportAndPromptImage() {
 			context.putImageData(imgData,0,0);
 			tempCanvas.toBlob(blob => {
 				saveAs(blob, fileNameNoExtension+'.png');
-					
-				// restore guide layer (with all items) after export
-				paper.project.importJSON(guideLayerBackup);
-				
-				// then reactivate the active layer
 				activeLayer.activate();
 			});
 
@@ -80,11 +69,6 @@ export function exportAndPromptImage() {
 			const fileNameNoExtension = fileName.split(".png")[0];
 			canvas.toBlob(blob => {
 				saveAs(blob, fileNameNoExtension+'.png');
-				
-				// restore guide layer (with all items) after export
-				paper.project.importJSON(guideLayerBackup);
-				
-				// then reactivate the active layer
 				activeLayer.activate();
 			});
 		}
@@ -103,21 +87,11 @@ export function exportAndPromptSVG() {
 		
 		const fileNameNoExtension = fileName.split(".svg")[0];
 		
-		// backup guide layer, then remove it (with all children) before export
-		const guideLayer = getGuideLayer() || null;
-		const guideLayerBackup = guideLayer.exportJSON();
-		guideLayer.remove();
-		paper.view.update();
-		
 		// export data, create blob  and save as file on users device
 		const exportData = paper.project.exportSVG({ asString: true, bounds: exportRect });
 		const blob = new Blob([exportData.toString()], {type: "image/svg+xml;charset=" + document.characterSet});
 		saveAs(blob, fileNameNoExtension+'.svg');
 		
-		// restore guide layer (with all items) after export
-		paper.project.importJSON(guideLayerBackup);
-		
-		// then reactivate the active layer
 		activeLayer.activate();
 	}
 }

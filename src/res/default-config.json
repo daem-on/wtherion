@@ -1,1 +1,14 @@
-{}
+{
+	"showSegmentOptionPanel": false,
+	"lockLayerNames": false,
+	"githubToken": "",
+	"inspectTolerance": 8,
+	"colorInactive": false,
+	"saveHandler": "localStorage",
+	"enableAsyncClipboard": false,
+	"language": "en",
+	"drawSymbols": false,
+	"undoBufferSize": 40,
+	"exportFormat": "default",
+	"moveInstantly": true
+}

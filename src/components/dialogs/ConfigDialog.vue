@@ -7,26 +7,15 @@ import PanelSection from '../common/PanelSection.vue';
 import { removeDialog } from '@daem-on/graphite/modal';
 import { i18n } from '../../i18n';
 import { redrawAll } from '../../objectDefs';
+import defaultConfig from "../../res/default-config.json";
 
-const options = ref({
-	showSegmentOptionPanel: false,
-	lockLayerNames: false,
-	githubToken: "",
-	inspectTolerance: 8,
-	colorInactive: false,
-	saveHandler: "localStorage",
-	enableAsyncClipboard: false,
-	language: i18n.global.locale,
-	drawSymbols: false,
-	undoBufferSize: 40,
-	exportFormat: "default",
-});
+const options = ref(defaultConfig);
 
 function save() {
 	assign(options.value);
 	removeDialog("configDialog");
 	redrawAll();
-	i18n.global.locale = options.value.language;
+	i18n.global.locale = options.value.language as any;
 }
 
 loadConfig();

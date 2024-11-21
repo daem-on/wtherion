@@ -40,6 +40,7 @@ for (const key in options.value) {
 
 // workaround for getting wrong context inside tabs
 const t = i18n.global.t;
+const availableLocales = i18n.global.availableLocales;
 
 </script>
 
@@ -74,7 +75,7 @@ const t = i18n.global.t;
 				</PanelDetailSection>
 				<PanelSection :label="t(`config.language`)">
 					<select v-model="options.language">
-						<option v-for="locale in $i18n.availableLocales" :key="`locale-${locale}`" :value="locale">{{ locale }}</option>
+						<option v-for="locale in availableLocales" :key="`locale-${locale}`" :value="locale">{{ locale }}</option>
 					</select>
 				</PanelSection>
 			</div>

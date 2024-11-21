@@ -287,5 +287,8 @@
 		"menu": {
 			"finish": "Befejezés"
 		}
+	},
+	"objectOptionPanel": {
+		"mixedSelection": "Különböző objektumok kijelölve"
 	}
 }

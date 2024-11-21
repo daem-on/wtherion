@@ -65,7 +65,7 @@ const isSingleSegment = computed(() => {
 			</template>
 			<template v-else>
 				<PanelContent>
-					Mixed selection
+					{{ $t(`objectOptionPanel.mixedSelection`) }}
 				</PanelContent>
 			</template>
 		</template>

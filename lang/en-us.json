@@ -287,5 +287,8 @@
 	"translationCredits": "",
 	"type": "Type",
 	"value": "Value",
-	"zoom": "Zoom"
+	"zoom": "Zoom",
+	"objectOptionPanel": {
+		"mixedSelection": "Mixed selection"
+	}
 }

@@ -1,6 +1,7 @@
 import { createCustomRenderer } from "@daem-on/graphite/render";
 import { getActiveTool } from "@daem-on/graphite/tools";
 import paper from "paper";
+import { hoverState } from "./hover";
 
 export enum CustomRenderStyle {
 	Spiky, Triangle, Notched, Contour, SegmentDetails, Symbol
@@ -98,11 +99,32 @@ function drawSymbol(item: paper.Item, context: CanvasRenderingContext2D) {
 	context.fill(path);
 }
 
+function drawHoverGraphics(context: CanvasRenderingContext2D) {
+	if (hoverState) {
+		context.strokeStyle = "#59c99c";
+		context.lineWidth = 1/paper.view.zoom;
+		if (hoverState.type === "path") {
+			const path = hoverState.item;
+			context.beginPath();
+			context.moveTo(path.firstSegment.point.x, path.firstSegment.point.y);
+			for (const curve of path.curves) {
+				const v = curve.values;
+				context.bezierCurveTo(v[2], v[3], v[4], v[5], v[6], v[7]);
+			}
+			context.stroke();
+		} else if (hoverState.type === "bounds") {
+			const bounds = hoverState.rect;
+			context.strokeRect(bounds.x, bounds.y, bounds.width, bounds.height);
+		}
+	}
+}
+
 export function setupCustomRenderer() {
 	createCustomRenderer({
 		getActiveTool,
 		scope: paper,
 		renderCallback(items, context) {
+			drawHoverGraphics(context);
 			if (!enableCustomRender) return;
 			context.strokeStyle = customRenderStrokeStyle;
 			for (const item of items) {

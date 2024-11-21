@@ -1,34 +1,29 @@
+import { notifyViewChanged } from "@daem-on/graphite/render";
 import paper from "paper";
 import { isGroupChild } from "./group";
-import { hoverBounds, hoverItem } from "./guides";
-import { getRootItem, isBoundsItem } from "./item";
+import { getRootItem, isBoundsItem, isPathItem } from "./item";
 
-let hoveredItem;
-let hitResultItem;
-export function handleHoveredItem(hitOptions, event) {
+type HoverState = { type: "path", item: paper.Path; } | { type: "bounds", rect: paper.Rectangle; };
+export let hoverState: HoverState | null = null;
+
+export function handleHoveredItem(hitOptions: HitOptions, event: paper.ToolEvent) {
 	const hitResult = paper.project.hitTest(event.point, hitOptions);
-	if(hitResult) {
-		if(
-			(hitResult.item.data && hitResult.item.data.noHover)
-			|| hitResult.item.layer !== paper.project.activeLayer
-		) {
+	if (hitResult) {
+		if (hitResult.item.data?.noHover || hitResult.item.layer !== paper.project.activeLayer) {
 			clearHoveredItem();
 			return;
 		}
-		if(hitResult !== hoveredItem) {
-			clearHoveredItem();
-		}
-		if(	hoveredItem === undefined && hitResult.item.selected === false) {
-			hitResultItem = hitResult.item;
-			if(isBoundsItem(hitResult.item)) {
-				hoveredItem = hoverBounds(hitResult.item);
-
-			} else if(isGroupChild(hitResult.item)) {
-				hoveredItem = hoverBounds(getRootItem(hitResult.item));
-				
+		if (hitResult.item.selected === false) {
+			if (isBoundsItem(hitResult.item)) {
+				hoverState = { type: "bounds", rect: hitResult.item.bounds };
+			} else if (isGroupChild(hitResult.item)) {
+				hoverState = { type: "bounds", rect: getRootItem(hitResult.item).bounds };
 			} else {
-				hoveredItem = hoverItem(hitResult);
+				if (isPathItem(hitResult.item)) {
+					hoverState = { type: "path", item: hitResult.item };
+				}
 			}
+			notifyViewChanged(paper);
 		}
 	} else {
 		clearHoveredItem();
@@ -36,10 +31,6 @@ export function handleHoveredItem(hitOptions, event) {
 }
 
 export function clearHoveredItem() {
-	hitResultItem = undefined;
-	if(hoveredItem !== undefined) {
-		hoveredItem.remove();
-		hoveredItem = undefined;
-	}
-	paper.view.update();
+	hoverState = null;
+	notifyViewChanged(paper);
 }

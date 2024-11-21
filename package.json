@@ -16,7 +16,7 @@
     "@floating-ui/vue": "^1.1.1",
     "@octokit/rest": "^19.0.4",
     "file-saver": "^2.0.5",
-    "@daem-on/graphite": "0.0.6",
+    "@daem-on/graphite": "0.0.7",
     "lz-string": "^1.5.0",
     "paper": "^0.12.15",
     "vue": "^3.4.21",

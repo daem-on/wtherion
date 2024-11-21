@@ -37,9 +37,9 @@ function useRotationHandle(config: { distance: number }) {
 
 	return {
 		show(item: paper.Item, zoom: number) {
-			const center = item.bounds.center;
-			const bc = item.bounds.bottomCenter;
-			point = bc.add(bc.subtract(center).normalize(config.distance / zoom));
+			const radius = item.bounds.width / 2;
+			const offset = -(radius + config.distance / zoom);
+			point = item.matrix.transform(new paper.Point(0, offset));
 		},
 		hide() {
 			point = null;
@@ -349,10 +349,10 @@ export const select = defineTool({
 
 		on("drawImmediate", ({ context }) => {
 			const zoom = 1/paper.view.zoom;
+			context.lineWidth = zoom;
 			if (rectSelection.rect) {
 				const { x, y, width, height } = rectSelection.rect;
 				context.setLineDash([3 * zoom, 3 * zoom]);
-				context.lineWidth = zoom;
 				context.strokeStyle = guideColor;
 				context.strokeRect(x, y, width, height);
 				context.setLineDash([]);
@@ -364,7 +364,6 @@ export const select = defineTool({
 				const { rect: { x, y, width, height }, scalePoints } = bounds.state;
 				rotPoint = bounds.state.rotPoint;
 				context.strokeStyle = guideColor;
-				context.fillStyle = "white";
 				context.strokeRect(x, y, width, height);
 				context.fillStyle = guideColor;
 				for (const [index, point] of scalePoints.entries()) {
@@ -375,7 +374,9 @@ export const select = defineTool({
 			if (rotPoint) {
 				context.beginPath();
 				context.arc(rotPoint.x, rotPoint.y, 5 * zoom, 0, 2 * Math.PI);
+				context.strokeStyle = guideColor;
 				context.stroke();
+				context.fillStyle = "white";
 				context.fill();
 			}
 			const currentSelection = selection.getSelectedItems();

@@ -29,6 +29,7 @@ import lockUrl from "../../assets/ui/lock.svg";
 import lockOpenUrl from "../../assets/ui/lock_open.svg";
 import { useBounds, useMoving, useRectangularSelection, useRotatation, useScaling } from "@daem-on/graphite/interactions";
 import { notifyViewChanged } from "@daem-on/graphite/render";
+import { get } from "../filesio/configManagement";
 
 const actions: ToolAction[] = [
 	{
@@ -221,12 +222,15 @@ export const select = defineTool({
 				if (event.modifiers.shift && hitResult.item.selected) {
 					selection.setItemSelection(hitResult.item, false);
 				} else {
+					const wasSelected = hitResult.item.selected;
 					selection.setItemSelection(hitResult.item, true);
-					if (event.modifiers.alt) {
-						mode = "cloneMove";
-						selection.cloneSelection();
-					} else {
-						mode = "move";
+					if (wasSelected || get("moveInstantly")) {
+						if (event.modifiers.alt) {
+							mode = "cloneMove";
+							selection.cloneSelection();
+						} else {
+							mode = "move";
+						}
 					}
 				}
 				hideBounds();

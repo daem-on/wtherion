@@ -273,7 +273,7 @@ export const select = defineTool({
 		});
 
 		on("mousemove", event => {
-			hover.handleHoveredItem(hitOptions, event);
+			hover.handleHoveredItem({ ...hitOptions, tolerance: 8 / paper.view.zoom }, event);
 		});
 
 		

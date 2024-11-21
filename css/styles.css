@@ -19,6 +19,7 @@ body {
 	body {
 		--background-color: #121212;
 		--text-color: #ffffff;
+		--text-color-secondary: #c2c2c2;
 		--card-color: #313131;
 		--border-color: #333333;
 		--shadow-color: rgba(0, 0, 0, 0.5);
@@ -29,6 +30,7 @@ body {
 	body {
 		--background-color: #ffffff;
 		--text-color: #000000;
+		--text-color-secondary: #313d37;
 		--card-color: #f5f5f5;
 		--border-color: #e0e0e0;
 		--shadow-color: rgba(0, 0, 0, 0.1);
@@ -76,6 +78,10 @@ input[type=checkbox] {
 	min-width: 16px;
 	cursor: pointer;
 	accent-color: #35a36e;
+}
+
+input[type=range] {
+	accent-color: #338860;
 }
 
 pre {

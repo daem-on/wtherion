@@ -24,7 +24,7 @@
 			"name": "GitHub token",
 			"tooltip": "Egy GitHub Personal Access Token a 'repo' hozzáféréssel"
 		},
-		"inspectTolerance": "Vizsgálat érzékenysége",
+		"inspectTolerance": "Érzékenység",
 		"language": "Nyelv",
 		"lockLayerNames": "Scrap nevek zárolása",
 		"saveHandler": {
@@ -33,13 +33,28 @@
 			"name": "Tárhely"
 		},
 		"showSegmentOptionPanel": "Minden szegmensnél beállítások panel",
-		"drawSymbols": "Pontok megjelenítése teljes szimbólumként",
+		"drawSymbols": "Pontok megjelenítése",
 		"exportFormat": {
 			"default": "Alapértelmezett",
 			"name": "Exportálás formátuma",
-			"xtherion": "XTherion kompatibilis"
+			"xtherion": "XTherion kompatibilis",
+			"hint": "Az XTherion kompatibilis módban az exportált fájlok a lehető legközelebb lesznek az XTherion által használt formázáshoz."
 		},
-		"undoBufferSize": "Visszavonáshoz megjegyzett akciók száma"
+		"undoBufferSize": "Visszavonáshoz megjegyzett akciók száma",
+		"appearanceTab": "Megjelenés",
+		"asyncClipboardHint": "Csak támogatott böngészőkben. Engedélyt fog kérni. Ennek a bekapcsolásával másolni lehet böngészőlapok vagy alkalmazások között.",
+		"drawSymbolsHint": "Teljes szimbólumokat használva lassabb lehet az alkalmazás.",
+		"drawSymbolsOff": "egyszerűen",
+		"drawSymbolsOn": "szimbólumként",
+		"functionalityTab": "Működés",
+		"inspectSection": "Vizsgálat eszköz",
+		"selectSection": "Elem kijelölés eszköz",
+		"moveInstantly": "Mozgatás kattintással és húzással",
+		"moveInstantlyOff": "Csak a kijelölt objektumoknál",
+		"moveInstantlyOn": "Bármilyen objektumnál",
+		"moveInstantlyHint": "Választhat, hogy az objektumokat először kijelöli és aztán mozgatja, vagy bármilyen objektumot rögtön mozgat.",
+		"toolsTab": "Eszközök",
+		"undoBufferSizeHint": "Nagyobb értékek nagyobb memóriahasználattal járnak."
 	},
 	"configTitle": "Konfiguráció",
 	"copy": "Másolás",
@@ -153,7 +168,8 @@
 		"xvi": "XVI",
 		"xviEdit": "XVI szerkesztési mód",
 		"zoomIn": "Nagyítás",
-		"zoomOut": "Kicsinyítés"
+		"zoomOut": "Kicsinyítés",
+		"cancel": "Mégse"
 	},
 	"mixed": "(különböző)",
 	"none": "semmi",

@@ -29,7 +29,7 @@
 			"name": "GitHub token",
 			"tooltip": "A GitHub Personal Access Token with the 'repo' scope"
 		},
-		"inspectTolerance": "Inspect tolerance",
+		"inspectTolerance": "Tolerance",
 		"language": "Language",
 		"lockLayerNames": "Lock layer names",
 		"saveHandler": {
@@ -38,13 +38,28 @@
 			"name": "Save handler"
 		},
 		"showSegmentOptionPanel": "Generic segment option panel",
-		"drawSymbols": "Draw points as full symbols",
+		"drawSymbols": "Show points as",
 		"undoBufferSize": "Max number of undos",
 		"exportFormat": {
 			"name": "Export format",
 			"default": "Default",
-			"xtherion": "XTherion compatibility"
-		}
+			"xtherion": "XTherion compatibility",
+			"hint": "Use the XTherion compatibility option if you would like to keep exports as close as possible to the output of XTherion. This only affects th2 file formatting."
+		},
+		"moveInstantly": "Click and drag to move",
+		"moveInstantlyOn": "Any object",
+		"moveInstantlyOff": "Only selected objects",
+		"moveInstantlyHint": "You can choose to select objects first and then move them, or to start moving any object on the first click and drag.",
+		"inspectSection": "Inspect tool",
+		"toolsTab": "Tools",
+		"appearanceTab": "Appearance",
+		"functionalityTab": "Functionality",
+		"drawSymbolsHint": "Using full symbols may lead to worse performance.",
+		"drawSymbolsOff": "simple shapes",
+		"drawSymbolsOn": "full symbols",
+		"asyncClipboardHint": "Only in supported browsers. Will ask for permission. Enable this to copy and paste across browser tabs or different apps.",
+		"undoBufferSizeHint": "Larger values lead to more memory usage.",
+		"selectSection": "Select tool"
 	},
 	"configTitle": "Configuration",
 	"copy": "Copy",
@@ -158,7 +173,8 @@
 		"xvi": "XVI",
 		"xviEdit": "XVI edit mode",
 		"zoomIn": "Zoom in",
-		"zoomOut": "Zoom out"
+		"zoomOut": "Zoom out",
+		"cancel": "Cancel"
 	},
 	"mixed": "(mixed)",
 	"none": "none",

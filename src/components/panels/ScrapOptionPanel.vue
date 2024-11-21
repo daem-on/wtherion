@@ -10,7 +10,7 @@ const scrap = currentScrap;
 </script>
 
 <template>
-	<Foldable fullWidth noBorder>
+	<Foldable fullWidth noBorder v-if="scrap">
 		<template #title>
 			<h2>{{ $t("scrapSettingsTitle") }} - {{ scrap.name }}</h2>
 		</template>

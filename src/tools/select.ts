@@ -31,6 +31,25 @@ import { useBounds, useMoving, useRectangularSelection, useRotatation, useScalin
 import { notifyViewChanged } from "@daem-on/graphite/render";
 import { get } from "../filesio/configManagement";
 
+/// Same as the rotation part of `useBounds`, used for `Point` items
+function useRotationHandle(config: { distance: number }) {
+	let point: paper.Point | null = null;
+
+	return {
+		show(item: paper.Item, zoom: number) {
+			const center = item.bounds.center;
+			const bc = item.bounds.bottomCenter;
+			point = bc.add(bc.subtract(center).normalize(config.distance / zoom));
+		},
+		hide() {
+			point = null;
+		},
+		get point(): Readonly<paper.Point> | null {
+			return point;
+		}
+	};
+}
+
 const actions: ToolAction[] = [
 	{
 		name: "selectAll",
@@ -168,10 +187,11 @@ export const select = defineTool({
 		const rotation = useRotatation({ snapAngle: 45 });
 		const rectSelection = useRectangularSelection(paper);
 		const bounds = useBounds({ rotationHandleDistance: 10 });
+		const singleRotHandle = useRotationHandle({ distance: 10 });
 
 		let mode: "none" | "scale" | "rotate" | "move" | "cloneMove" | "rectSelection" = "none";
 
-		const hideBounds = () => bounds.hide();
+		const hideBounds = () => { bounds.hide(); singleRotHandle.hide(); };
 		on("activate", () => {
 			preProcessSelection();
 			showBounds();
@@ -184,11 +204,19 @@ export const select = defineTool({
 			hover.clearHoveredItem();
 
 			const tolerance = 8 / paper.view.zoom;
+			const currentSelection = selection.getSelectedItems();
 
-			if (bounds.state) {
+			if (singleRotHandle.point) {
+				if (singleRotHandle.point.isClose(event.point, tolerance)) {
+					mode = "rotate";
+					rotation.start(currentSelection, currentSelection[0].bounds.center, event.point);
+					singleRotHandle.hide();
+					return;
+				}
+			} else if (bounds.state) {
 				if (bounds.state.rotPoint.isClose(event.point, tolerance)) {
 					mode = "rotate";
-					rotation.start(selection.getSelectedItems(), bounds.state.rect.center, event.point);
+					rotation.start(currentSelection, bounds.state.rect.center, event.point);
 					bounds.hide();
 					return;
 				}
@@ -196,7 +224,7 @@ export const select = defineTool({
 					if (point.isClose(event.point, tolerance)) {
 						mode = "scale";
 	
-						scaling.start(selection.getSelectedItems(), bounds.state.rect.center, point);
+						scaling.start(currentSelection, bounds.state.rect.center, point);
 						bounds.hide();
 						return;
 					}
@@ -234,12 +262,10 @@ export const select = defineTool({
 					}
 				}
 				hideBounds();
-				guides.removeHelperItems();
 				return;
 			} else {
 				if (!event.modifiers.shift) {
 					hideBounds();
-					guides.removeHelperItems();
 					selection.clearSelection();
 				}
 				mode = "rectSelection";
@@ -304,7 +330,6 @@ export const select = defineTool({
 			rectSelection.end();
 			
 			hideBounds();
-			guides.removeHelperItems();
 			if (selection.getSelectedItems().length > 0) {
 				showBounds();
 			}
@@ -312,7 +337,6 @@ export const select = defineTool({
 
 		on("deactivate", () => {
 			hover.clearHoveredItem();
-			guides.removeHelperItems();
 			triggers.offAny(["DeleteItems", "Undo", "Redo", "Grouped", "Ungrouped", "SelectionChanged"], triggerHandler);
 		});
 
@@ -333,21 +357,41 @@ export const select = defineTool({
 				context.strokeRect(x, y, width, height);
 				context.setLineDash([]);
 			}
-			if (bounds.state) {
-				const { rect: { x, y, width, height }, rotPoint, scalePoints } = bounds.state;
+			let rotPoint: paper.Point | null = null;
+			if (singleRotHandle.point) {
+				rotPoint = singleRotHandle.point;
+			} else if (bounds.state) {
+				const { rect: { x, y, width, height }, scalePoints } = bounds.state;
+				rotPoint = bounds.state.rotPoint;
 				context.strokeStyle = guideColor;
 				context.fillStyle = "white";
 				context.strokeRect(x, y, width, height);
-				if (rotPoint) {
-					context.beginPath();
-					context.arc(rotPoint.x, rotPoint.y, 5 * zoom, 0, 2 * Math.PI);
-					context.stroke();
-					context.fill();
-				}
 				context.fillStyle = guideColor;
 				for (const [index, point] of scalePoints.entries()) {
 					const size = (index % 2 ? 4 : 6) * zoom;
 					context.fillRect(point.x - size / 2, point.y - size / 2, size, size);
+				}
+			}
+			if (rotPoint) {
+				context.beginPath();
+				context.arc(rotPoint.x, rotPoint.y, 5 * zoom, 0, 2 * Math.PI);
+				context.stroke();
+				context.fill();
+			}
+			const currentSelection = selection.getSelectedItems();
+			if (currentSelection.length === 1) {
+				const selected = currentSelection[0];
+				if (item.isPathItem(selected) && getSettings(selected).className === "LineSettings") {
+					const settings = getSettings(selected) as LineSettings;
+					const reverse = settings.reverse ? -1 : 1;
+					const normal = selected.getNormalAt(0).multiply(10 * reverse);
+					const from = selected.firstSegment.point;
+					const to = from.add(normal);
+					context.beginPath();
+					context.moveTo(from.x, from.y);
+					context.lineTo(to.x, to.y);
+					context.strokeStyle = "#fcba03";
+					context.stroke();
 				}
 			}
 		});
@@ -356,20 +400,14 @@ export const select = defineTool({
 			const items = selection.getSelectedItems();
 			if (items.length <= 0) return;
 
-			// If there are items with noDrawHandle, don't draw regular handles0
-			if (items.some(item => (item.data?.noDrawHandle))) {
-				return;
-			}
-			
 			if (items.length === 1 && items[0].data?.onlyRotateHandle) {
-				showRotateHandle(items[0]);
+				singleRotHandle.show(items[0], paper.view.zoom);
 				return;
 			}
 
-			if (items.length === 1 && item.isPathItem(items[0])) {
-				const settings = getSettings(items[0]);
-				if (settings.className === "LineSettings")
-					showLineDirectionTick(items[0], settings);
+			// If there are items with noDrawHandle, don't draw regular handles
+			if (items.some(item => (item.data?.noDrawHandle || item.data?.onlyRotateHandle))) {
+				return;
 			}
 
 			bounds.show(items, paper.view.zoom);
@@ -391,38 +429,4 @@ function preProcessSelection() {
 			selection.setItemSelection(cp, true);
 		}
 	}
-}
-
-function showLineDirectionTick(line: paper.Path, settings: LineSettings) {
-	if (line.segments.length < 2) return;
-	const reverse = settings.reverse ? -1 : 1;
-	const normal = line.getNormalAt(0).multiply(10 * reverse);
-	const directionIndicator = new paper.Path([
-		line.firstSegment.point,
-		line.firstSegment.point.add(normal)
-	]);
-	directionIndicator.strokeColor = new paper.Color("#fcba03");
-	directionIndicator.data.isHelperItem = true;
-	directionIndicator["guide"] = true;
-	directionIndicator.parent = layer.getGuideLayer() || null;
-}
-
-function showRotateHandle(item: paper.Item) {
-	const thPointRotHandle =
-		new paper.Path.Line({
-			data: {
-				isRotHandle: true,
-				isHelperItem: true,
-				noSelect: true,
-				noHover: true
-			},
-			from: item.position
-				.subtract(new paper.Point(0, 6)),
-			to: item.position
-				.subtract(new paper.Point(0, 10 + (paper.view.zoom / 60))),
-			strokeColor: guides.getGuideColor("blue"),
-			strokeWidth: 4 / paper.view.zoom,
-			parent: layer.getGuideLayer()
-		});
-	thPointRotHandle.rotate(item.rotation, item.position);
 }

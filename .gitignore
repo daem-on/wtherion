@@ -5,6 +5,7 @@ node_modules
 dist/
 js/lib/
 yarn.lock
+deno.lock
 /test-results/
 /playwright-report/
 /playwright/.cache/

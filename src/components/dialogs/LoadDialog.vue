@@ -30,6 +30,9 @@ function deleteFile(filename: string) {
 			<button @click="deleteFile(save)">&times;</button>
 		</li>
 	</ul>
+	<p v-if="!filenames.length">
+		{{ $t('load.empty') }}
+	</p>
 </template>
 
 <style scoped>

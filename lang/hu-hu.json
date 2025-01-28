@@ -120,7 +120,8 @@
 	"lines": "Vonalak",
 	"lineSubtype": "Vonal altípusa",
 	"load": {
-		"title": "Mentett fájlok"
+		"title": "Mentett fájlok",
+		"empty": "Ebben a böngészőben nincsenek elmentett projektek. Ha egy .th2 fájlt szeretne megnyitni, használja az Importálás funkciót."
 	},
 	"loading": "Betöltés ...",
 	"menu": {
@@ -291,5 +292,15 @@
 	},
 	"objectOptionPanel": {
 		"mixedSelection": "Különböző objektumok kijelölve"
+	},
+	"getStarted": {
+		"title": "Kezdőlap",
+		"description": "Üdv a wtherionban! Mit szeretne tenni?",
+		"showAtStartup": "Jelenjen meg ez az ablak indításkor",
+		"open": "Projekt megnyitása",
+		"new": "Új projekt kezdése",
+		"importTh2": ".th2 fájl importálása",
+		"docsHref": "https://github.com/daem-on/wtherion/wiki",
+		"docs": "Dokumentáció megnyitása"
 	}
 }

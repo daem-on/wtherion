@@ -125,7 +125,8 @@
 	"lines": "Lines",
 	"lineSubtype": "Line subtype",
 	"load": {
-		"title": "Saved files"
+		"title": "Saved files",
+		"empty": "You have no projects saved in this browser. To work on an existing .th2 file, import it first."
 	},
 	"loading": "Loading ...",
 	"menu": {
@@ -291,5 +292,15 @@
 	"zoom": "Zoom",
 	"objectOptionPanel": {
 		"mixedSelection": "Mixed selection"
+	},
+	"getStarted": {
+		"title": "Get started",
+		"description": "Welcome to wtherion! What would you like to do?",
+		"showAtStartup": "Show this on startup",
+		"open": "Open a project",
+		"new": "Start a new project",
+		"importTh2": "Import a .th2 file",
+		"docsHref": "https://github.com/daem-on/wtherion/wiki",
+		"docs": "Read the documentation"
 	}
 }

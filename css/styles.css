@@ -84,6 +84,15 @@ input[type=range] {
 	accent-color: #338860;
 }
 
+a {
+	color: var(--primary-color);
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
 pre {
 	font-family: monospace;
 	user-select: all;

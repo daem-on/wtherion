@@ -28,6 +28,7 @@ import {setup as configSetup} from "./filesio/configManagement";
 import { setupCustomRenderer } from "./render";
 import { initColors } from "./objectDefs.js";
 import colorDefs from "./res/color-defs.json";
+import { maybeShowGetStartedDialog } from "./getStarted";
 
 // functions related to initializing pg
 
@@ -69,6 +70,8 @@ export default {
 		pgDocument.setup();
 		setupCustomRenderer();
 		initColors(colorDefs);
+
+		maybeShowGetStartedDialog();
 	},
 };
 

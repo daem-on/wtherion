@@ -328,9 +328,7 @@ export const select = defineTool({
 			rectSelection.end();
 			
 			hideBounds();
-			if (selection.getSelectedItems().length > 0) {
-				showBounds();
-			}
+			showBounds();
 		});
 
 		on("deactivate", () => {
@@ -339,6 +337,7 @@ export const select = defineTool({
 		});
 
 		function triggerHandler() {
+			hideBounds();
 			showBounds();
 			updateWindow();
 		}

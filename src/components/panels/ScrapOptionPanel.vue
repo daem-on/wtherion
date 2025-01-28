@@ -33,7 +33,14 @@ const scrap = currentScrap;
 			<h3>{{ $t(`otherSettings`) }}</h3>
 			<ArbitrarySettingSection
 				:editing="scrap.settings"
-				:exclude="['className', 'projection', 'scale', 'author', 'copyright', 'stationNames']" />
+				:exclude="['className', 'projection', 'scale', 'author', 'copyright', 'stationNames', 'xthSettings']" />
+			<div v-if="scrap.settings.xthSettings" class="xth-settings">
+				<p>{{ $t(`scrap.xthSettings`) }}</p>
+				<pre>{{ scrap.settings.xthSettings.join("\n") }}</pre>
+				<button @click="scrap.settings.xthSettings = undefined">
+					{{ $t(`delete`) }}
+				</button>
+			</div>
 		</PanelContent>
 	</Foldable>
 </template>
@@ -59,5 +66,15 @@ h3 {
 
 .content {
 	padding: 8px;
+}
+
+.xth-settings {
+	margin: 8px 0;
+}
+
+.xth-settings pre {
+	margin: 8px 0;
+	width: 100%;
+	overflow-x: auto;
 }
 </style>

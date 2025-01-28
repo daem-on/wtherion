@@ -219,7 +219,8 @@
 		"author": "Author",
 		"copyright": "Copyright",
 		"projection": "Projection",
-		"stationNames": "Station names"
+		"stationNames": "Station names",
+		"xthSettings": "This scrap contains the following XTherion information:"
 	},
 	"scraps": {
 		"add": "Add",

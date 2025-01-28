@@ -13,6 +13,7 @@ export type ScrapSettings = {
 	author?: string;
 	copyright?: string;
 	stationNames?: string;
+	xthSettings?: string[];
 };
 
 export function defaultScrapSettings(): ReactiveMap<ScrapSettings> {
@@ -42,9 +43,12 @@ export function validateScrapSettings(s: ScrapSettings, assertValid: AssertFunct
 }
 
 export function scrapSettingsToString(s: ScrapSettings): string {
-	return Object.entries(s)
+	return (Object.entries(s) as [string, string][])
 		.filter(([key, value]) => {
-			return value != null && value !== "" && key !== "className";
+			return value != null
+				&& value !== ""
+				&& key !== "className"
+				&& key !== "xthSettings";
 		})
 		.map(([key, value]) => {
 			if (bracketSettings.includes(key)) return `-${key} ${wrapIfNeeded(value, true)}`;

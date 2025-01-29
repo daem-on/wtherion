@@ -90,11 +90,6 @@ export const draw = defineTool({
 				return;
 			}
 
-			let group: paper.Group;
-			if (lineCount > 1) {
-				group = new paper.Group();
-			}
-
 			const nearStart = math.checkPointsClose(paths[0].firstSegment.point, event.point, 30);
 			const options = drawOptions.value;
 			for (let i=0; i < lineCount; i++) {
@@ -107,10 +102,6 @@ export const draw = defineTool({
 				}
 				if (options.smoothPath) path.smooth();
 				if (options.simplifyPath) path.simplify();
-				
-				if (lineCount > 1) {
-					group.addChild(path);
-				}
 			}
 
 			paths = [];

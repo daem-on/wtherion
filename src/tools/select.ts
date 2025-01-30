@@ -301,9 +301,7 @@ export const select = defineTool({
 			}
 		});
 
-		on("mouseup", event => {
-			if (event.event.button > 0) return;
-			
+		on("mouseup", event => {			
 			switch (mode) {
 				case "rectSelection":
 					if (rectSelection.rect) {

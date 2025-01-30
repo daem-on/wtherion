@@ -141,4 +141,10 @@ label.checkbox-wrapper {
 	display: flex;
 	align-items: center;
 }
+
+@media (prefers-color-scheme: dark) {
+	img {
+		filter: invert(1);
+	}
+}
 </style>

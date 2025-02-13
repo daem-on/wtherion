@@ -67,6 +67,7 @@ export function lineSettingsToString(s: LineSettings): string {
 				&& key !== "className"
 				&& key !== "subtypes"
 				&& key !== "segmentSettings"
+				&& key !== "size"
 				&& !(!value && (key === "invisible" || key === "reverse"));
 		})
 		.map(([key, value]) => {

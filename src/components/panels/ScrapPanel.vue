@@ -121,6 +121,7 @@ h2 {
 	outline: 2px solid;
 	outline-offset: -2px;
 	outline-color: var(--primary-color);
+	background-color: var(--hover-color);
 }
 
 .xvi {

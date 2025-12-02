@@ -28,6 +28,7 @@ import lockOpenUrl from "../../assets/ui/lock_open.svg";
 import { useBounds, useMoving, useRectangularSelection, useRotatation, useScaling } from "@daem-on/graphite/interactions";
 import { notifyViewChanged } from "@daem-on/graphite/render";
 import { get } from "../filesio/configManagement";
+import { setActiveLayer } from "../layer";
 
 /// Same as the rotation part of `useBounds`, used for `Point` items
 function useRotationHandle(config: { distance: number }) {
@@ -230,7 +231,12 @@ export const select = defineTool({
 			}
 			
 			const hitResult = paper.project.hitTest(event.point, { ...hitOptions, tolerance });
-			if (hitResult && hitResult.item.layer === paper.project.activeLayer) {
+			if (hitResult){
+
+				if (hitResult.item.layer !== paper.project.activeLayer) {
+					setActiveLayer(hitResult.item.layer);
+				}
+
 				const root = item.getRootItem(hitResult.item);
 				// deselect all by default if the shift key isn't pressed
 				// also needs some special love for compound paths and groups,

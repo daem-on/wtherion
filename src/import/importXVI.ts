@@ -130,6 +130,7 @@ function createAreaShot(list: string[]) {
 }
 
 function createSketchLine(color: string, positions: string[]) {
+	positions = positions.filter(p => p !== "");
 	const segments: [number, number][] = [];
 	for (let i = 0; i < positions.length; i += 2) {
 		segments.push([

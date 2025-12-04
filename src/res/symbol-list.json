@@ -65,7 +65,9 @@
 		"stalactite-stalagmite",
 		"stalactites-stalagmites",
 		"stalactite",
+		"stalactites",
 		"stalagmite",
+		"stalagmites",
 		"volcano",
 		"wall-calcite"
 	],
@@ -76,6 +78,7 @@
 		"camp",
 		"fixed-ladder",
 		"gate",
+		"handrail",
 		"masonry",
 		"nameplate",
 		"no-equipment",
@@ -84,6 +87,7 @@
 		"rope",
 		"steps",
 		"traverse",
+    	"via-ferrata",
 		"walkway",
 		"wheelchair"
 	],
